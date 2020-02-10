@@ -1,5 +1,5 @@
 module MortalKombat {
-    export class Boot extends Fabrique.State {
+    export class Boot extends Phaser.State {
         public static Name: string = 'booter';
         public name: string = Boot.Name;
         
