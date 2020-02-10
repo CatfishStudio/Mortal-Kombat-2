@@ -1,0 +1,26 @@
+{
+  "name": "mortalkombat",
+  "title": "MortalKombat",
+  "author": "MortalKombat",
+  "version": "2.0.0",
+  "description": "This is the game Mortal Kombat",
+  "contributors": [
+    {
+      "name": "Evgeniy Somov",
+      "email": "somov@i.ua"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CatfishStudio/Street-Fighter-Cards"
+  },
+  "private": true,
+  "devDependencies": {
+	"phaser-ce": "^2.9.4",
+    "typescript": "^2.0.x",
+    "node-static": "^0.7.10"
+  },
+  "engines": {
+    "node": "5.x.x"
+  }
+}
