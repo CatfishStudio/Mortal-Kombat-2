@@ -1,0 +1,4 @@
+.idea
+/nbproject/
+/www/server/node_modules
+/www/server/package-lock.json
