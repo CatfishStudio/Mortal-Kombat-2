@@ -1,12 +1,17 @@
 <!DOCTYPE html>
 <html>
-       <head>
-               <title>Simple game</title>
-               <script src="js/phaser.js"></script>
-               <script src="js/game.js"></script>
-       </head>
-       <body>
-               <h1>Simple game</h1>
-               <div id="content"></div>
-       </body>
+<head>
+        <title>MortalKombat</title>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="css/default.css" type="text/css" />
+        <script src="phaser/phaser.min.js"></script>
+        <script src="game.js"></script>
+</head>
+<body>
+        <div id="content"></div>
+	<script type="text/javascript">
+		var game = new MortalKombat.Game.getInstance();
+		game.start();
+	</script>
+</body>
 </html>
