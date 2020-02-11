@@ -29,6 +29,7 @@ var MortalKombat;
             _this.state.add(MortalKombat.Boot.Name, MortalKombat.Boot, false);
             _this.state.add(MortalKombat.Preloader.Name, MortalKombat.Preloader, false);
             _this.state.add(MortalKombat.Menu.Name, MortalKombat.Menu, false);
+            _this.state.add(MortalKombat.Fighters.Name, MortalKombat.Fighters, false);
             return _this;
         }
         Game.getInstance = function () {
@@ -307,6 +308,40 @@ var Fabrique;
     }(Phaser.Group));
     Fabrique.Settings = Settings;
 })(Fabrique || (Fabrique = {}));
+var Fabrique;
+(function (Fabrique) {
+    var Title = /** @class */ (function (_super) {
+        __extends(Title, _super);
+        function Title(game, x, y, text) {
+            var _this = _super.call(this, game, x, y, Images.Title) || this;
+            _this.posX = 0;
+            _this.posY = 0;
+            _this.text = text;
+            _this.posX = ((Constants.GAME_WIDTH / 2) - (_this.width / 2));
+            _this.posY = Constants.GAME_HEIGHT / 10;
+            if (x >= 0)
+                _this.x = _this.posX;
+            if (y >= 0)
+                _this.y = _this.posY;
+            _this.updateTransform();
+            _this.init();
+            return _this;
+        }
+        Title.prototype.init = function () {
+            var size = 12 * this.text.length;
+            var posX = (this.width / 2) - (size / 2);
+            var titleText = this.game.add.text(posX, 20, this.text, { font: "18px Georgia", fill: "#FFFFFF", align: "left" });
+            this.addChild(titleText);
+        };
+        Title.prototype.show = function () {
+            var tween = this.game.add.tween(this);
+            tween.to({ x: this.posX, y: this.posY }, 500, 'Linear');
+            tween.start();
+        };
+        return Title;
+    }(Phaser.Sprite));
+    Fabrique.Title = Title;
+})(Fabrique || (Fabrique = {}));
 var MortalKombat;
 (function (MortalKombat) {
     var Boot = /** @class */ (function (_super) {
@@ -477,7 +512,7 @@ var MortalKombat;
             switch (event.name) {
                 case 'start':
                     {
-                        //this.game.state.start(Store.Name, true, false);
+                        this.game.state.start(MortalKombat.Fighters.Name, true, false);
                         break;
                     }
                 case 'continue':
@@ -522,6 +557,123 @@ var MortalKombat;
     }(Phaser.State));
     MortalKombat.Menu = Menu;
 })(MortalKombat || (MortalKombat = {}));
+var MortalKombat;
+(function (MortalKombat) {
+    var Tutorial = Fabrique.Tutorial;
+    var Settings = Fabrique.Settings;
+    var Title = Fabrique.Title;
+    var Fighters = /** @class */ (function (_super) {
+        __extends(Fighters, _super);
+        function Fighters() {
+            var _this = _super.call(this) || this;
+            _this.name = MortalKombat.Menu.Name;
+            return _this;
+        }
+        Fighters.prototype.create = function () {
+            this.groupFighters = new Phaser.Group(this.game, this.stage);
+            this.fightersSprite = new Phaser.Sprite(this.game, -5, -5, Images.FightersImage);
+            this.fightersSprite.scale.set(1.025);
+            this.groupFighters.addChild(this.fightersSprite);
+            this.tween = this.game.add.tween(this.fightersSprite);
+            this.tween.to({ x: -200, y: -5 }, 20000, 'Linear');
+            this.tween.to({ x: 0, y: 0 }, 20000, 'Linear');
+            this.tween.onComplete.add(this.onTweenComplete, this);
+            this.videoSprite = new Phaser.Sprite(this.game, 0, 0, Atlases.Video2, 0);
+            this.videoSprite.scale.set(2.6, 2.6);
+            this.groupFighters.addChild(this.videoSprite);
+            var anim = this.videoSprite.animations.add(Atlases.Video2);
+            anim.onComplete.add(this.onCompleteVideo, this);
+            anim.play(15, false, true);
+            this.createContent();
+            this.groupFighters.addChild(new Phaser.Sprite(this.game, 0, 0, Images.BackgroundImage));
+        };
+        Fighters.prototype.shutdown = function () {
+            this.tween.stop();
+            this.tween = null;
+            this.groupFighters.removeChildren();
+            this.groupFighters.removeAll();
+            this.game.stage.removeChildren();
+        };
+        Fighters.prototype.onCompleteVideo = function () {
+            this.tween.start();
+            this.title.show();
+            if (Config.settintTutorial === true)
+                this.tutorial.show((Constants.GAME_WIDTH / 2), (Constants.GAME_HEIGHT - 175));
+            this.backMenuButton = new Phaser.Button(this.game, -25, 5, Sheet.ButtonBackMenuMini, this.onButtonClick, this, 1, 2, 2, 2);
+            this.backMenuButton.name = 'back_menu';
+            this.groupFighters.addChild(this.backMenuButton);
+            this.settingsButton = new Phaser.Button(this.game, (Constants.GAME_WIDTH / 2) - (255 / 2), 5, Sheet.ButtonSettings, this.onButtonClick, this, 1, 2, 2, 2);
+            this.settingsButton.name = 'settings';
+            this.groupFighters.addChild(this.settingsButton);
+            this.backHalpButton = new Phaser.Button(this.game, Constants.GAME_WIDTH - 230, 5, Sheet.ButtonHelpMini, this.onButtonClick, this, 1, 2, 2, 2);
+            this.backHalpButton.name = 'help';
+            this.groupFighters.addChild(this.backHalpButton);
+            this.selectButton = new Phaser.Button(this.game, (Constants.GAME_WIDTH / 2) - (255 / 2), (Constants.GAME_HEIGHT - 50), Sheet.ButtonSelectFighter, this.onButtonClick, this, 1, 2, 2, 2);
+            this.selectButton.name = 'select_fighter';
+            this.groupFighters.addChild(this.selectButton);
+        };
+        Fighters.prototype.onTweenComplete = function (event) {
+            this.tween.start();
+        };
+        Fighters.prototype.createContent = function () {
+            /* title */
+            this.title = new Title(this.game, 0, -50, 'ВЫБОР БОЙЦА');
+            this.groupFighters.addChild(this.title);
+            /* tutorial */
+            this.tutorial = new Tutorial(this.game, "Нажмите начать игру\nчтобы вступить в турнир.");
+            this.tutorial.x = Constants.GAME_WIDTH;
+            this.tutorial.y = (Constants.GAME_HEIGHT - 175);
+            this.groupFighters.addChild(this.tutorial);
+        };
+        Fighters.prototype.onButtonClick = function (event) {
+            switch (event.name) {
+                case 'back_menu':
+                    {
+                        this.game.state.start(MortalKombat.Menu.Name, true, false);
+                        break;
+                    }
+                case 'settings':
+                    {
+                        this.settingsCreate();
+                        break;
+                    }
+                case 'setting_close':
+                    {
+                        this.settingsClose();
+                        break;
+                    }
+                case 'help':
+                    {
+                        break;
+                    }
+                case 'select_fighter':
+                    {
+                        break;
+                    }
+                default:
+                    break;
+            }
+        };
+        Fighters.prototype.settingsCreate = function () {
+            this.tutorial.x = Constants.GAME_WIDTH;
+            this.tutorial.y = (Constants.GAME_HEIGHT - 175);
+            this.settings = new Settings(this.game, this.groupFighters);
+            this.settings.event.add(this.onButtonClick.bind(this));
+        };
+        Fighters.prototype.settingsClose = function () {
+            this.settings.removeAll();
+            this.groupFighters.removeChild(this.settings);
+            if (Config.settintTutorial === true) {
+                var tweenTutorial = this.game.add.tween(this.tutorial);
+                tweenTutorial.to({ x: (Constants.GAME_WIDTH / 2), y: (Constants.GAME_HEIGHT - 175) }, 500, 'Linear');
+                tweenTutorial.start();
+            }
+        };
+        Fighters.Name = "fighters";
+        return Fighters;
+    }(Phaser.State));
+    MortalKombat.Fighters = Fighters;
+})(MortalKombat || (MortalKombat = {}));
 /// <reference path="..\node_modules\phaser-ce\typescript\phaser.d.ts" />
 /// <reference path="Data\Constants.ts" />
 /// <reference path="Data\Config.ts" />
@@ -531,7 +683,9 @@ var MortalKombat;
 /// <reference path="Data\Game.ts" />
 /// <reference path="Fabrique\Objects\Tutorial.ts" />
 /// <reference path="Fabrique\Objects\Settings.ts" />
+/// <reference path="Fabrique\Objects\Title.ts" />
 /// <reference path="States\Boot.ts" />
 /// <reference path="States\Preloader.ts" />
 /// <reference path="States\Menu.ts" />
+/// <reference path="States\Fighters.ts" />
 /// <reference path="app.ts" />

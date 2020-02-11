@@ -87,8 +87,6 @@ module MortalKombat {
                 if(Config.settintTutorial === true) this.tutorial.show((Constants.GAME_WIDTH / 2), (Constants.GAME_HEIGHT - 175));
             }, this);
             tweenButtons.start();
-            
-            
         }
 
         private onTweenComplete(event:any):void {
@@ -100,7 +98,7 @@ module MortalKombat {
             switch (event.name) {
                 case 'start':
                     {
-                        //this.game.state.start(Store.Name, true, false);
+                        this.game.state.start(Fighters.Name, true, false);
                         break;
                     }
                 case 'continue':
