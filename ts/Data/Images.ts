@@ -11,6 +11,20 @@ class Images {
     public static Title: string = 'title.png';
     public static ButtonLeft: string = 'button_left.png';
     public static ButtonRight: string ='button_right.png';
+    public static BarakaIcon:string = 'baraka.png';
+    public static GoroIcon:string = 'goro.png';
+    public static JaxIcon:string = 'jax.png';
+    public static JohnnyCageIcon:string = 'johnnycage.png';
+    public static KitanaIcon:string = 'kitana.png';
+    public static KungLaoIcon:string = 'kunglao.png';
+    public static LiuKangIcon:string = 'liukang.png';
+    public static MileenaIcon:string = 'mileena.png';
+    public static RaidenIcon:string = 'raiden.png';
+    public static ReptileIcon:string = 'reptile.png';
+    public static ScorpionIcon:string = 'scorpion.png';
+    public static ShangTsungIcon:string = 'shangtsung.png';
+    public static ShaoKahnIcon:string = 'shaokahn.png';
+    public static SubZeroIcon:string = 'subzero.png';
     
     public static preloadList:Array<string> = [
         Images.BackgroundImage,
