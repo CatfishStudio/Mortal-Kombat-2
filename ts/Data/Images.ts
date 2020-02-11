@@ -36,6 +36,20 @@ class Images {
         Images.ButtonOff,
         Images.Title,
         Images.ButtonLeft,
-        Images.ButtonRight
+        Images.ButtonRight,
+        Images.BarakaIcon,
+        Images.GoroIcon,
+        Images.JaxIcon,
+        Images.JohnnyCageIcon,
+        Images.KitanaIcon,
+        Images.KungLaoIcon,
+        Images.LiuKangIcon,
+        Images.MileenaIcon,
+        Images.RaidenIcon,
+        Images.ReptileIcon,
+        Images.ScorpionIcon,
+        Images.ShangTsungIcon,
+        Images.ShangTsungIcon,
+        Images.SubZeroIcon
     ]; 
 }

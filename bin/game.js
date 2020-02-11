@@ -75,6 +75,20 @@ var Images = /** @class */ (function () {
     Images.Title = 'title.png';
     Images.ButtonLeft = 'button_left.png';
     Images.ButtonRight = 'button_right.png';
+    Images.BarakaIcon = 'baraka.png';
+    Images.GoroIcon = 'goro.png';
+    Images.JaxIcon = 'jax.png';
+    Images.JohnnyCageIcon = 'johnnycage.png';
+    Images.KitanaIcon = 'kitana.png';
+    Images.KungLaoIcon = 'kunglao.png';
+    Images.LiuKangIcon = 'liukang.png';
+    Images.MileenaIcon = 'mileena.png';
+    Images.RaidenIcon = 'raiden.png';
+    Images.ReptileIcon = 'reptile.png';
+    Images.ScorpionIcon = 'scorpion.png';
+    Images.ShangTsungIcon = 'shangtsung.png';
+    Images.ShaoKahnIcon = 'shaokahn.png';
+    Images.SubZeroIcon = 'subzero.png';
     Images.preloadList = [
         Images.BackgroundImage,
         Images.MenuImage,
@@ -85,7 +99,21 @@ var Images = /** @class */ (function () {
         Images.ButtonOff,
         Images.Title,
         Images.ButtonLeft,
-        Images.ButtonRight
+        Images.ButtonRight,
+        Images.BarakaIcon,
+        Images.GoroIcon,
+        Images.JaxIcon,
+        Images.JohnnyCageIcon,
+        Images.KitanaIcon,
+        Images.KungLaoIcon,
+        Images.LiuKangIcon,
+        Images.MileenaIcon,
+        Images.RaidenIcon,
+        Images.ReptileIcon,
+        Images.ScorpionIcon,
+        Images.ShangTsungIcon,
+        Images.ShangTsungIcon,
+        Images.SubZeroIcon
     ];
     return Images;
 }());
@@ -342,6 +370,17 @@ var Fabrique;
     }(Phaser.Sprite));
     Fabrique.Title = Title;
 })(Fabrique || (Fabrique = {}));
+var Fabrique;
+(function (Fabrique) {
+    var Icon = /** @class */ (function (_super) {
+        __extends(Icon, _super);
+        function Icon(game, x, y, image) {
+            return _super.call(this, game, x, y, image) || this;
+        }
+        return Icon;
+    }(Phaser.Sprite));
+    Fabrique.Icon = Icon;
+})(Fabrique || (Fabrique = {}));
 var MortalKombat;
 (function (MortalKombat) {
     var Boot = /** @class */ (function (_super) {
@@ -562,6 +601,7 @@ var MortalKombat;
     var Tutorial = Fabrique.Tutorial;
     var Settings = Fabrique.Settings;
     var Title = Fabrique.Title;
+    var Icon = Fabrique.Icon;
     var Fighters = /** @class */ (function (_super) {
         __extends(Fighters, _super);
         function Fighters() {
@@ -616,9 +656,37 @@ var MortalKombat;
             this.tween.start();
         };
         Fighters.prototype.createContent = function () {
+            var _this = this;
             /* title */
             this.title = new Title(this.game, 0, -50, 'ВЫБОР БОЙЦА');
             this.groupFighters.addChild(this.title);
+            /* Icons 90x120*/
+            this.icons = [
+                [
+                    new Icon(this.game, 0, 0, Images.LiuKangIcon),
+                    new Icon(this.game, 95, 0, Images.KungLaoIcon),
+                    new Icon(this.game, 190, 0, Images.JohnnyCageIcon),
+                    new Icon(this.game, 290, 0, Images.ReptileIcon)
+                ],
+                [
+                    new Icon(this.game, 0, 125, Images.SubZeroIcon),
+                    new Icon(this.game, 95, 125, Images.ShangTsungIcon),
+                    new Icon(this.game, 190, 125, Images.KitanaIcon),
+                    new Icon(this.game, 290, 125, Images.JaxIcon)
+                ],
+                [
+                    new Icon(this.game, 0, 250, Images.MileenaIcon),
+                    new Icon(this.game, 95, 250, Images.BarakaIcon),
+                    new Icon(this.game, 190, 250, Images.ScorpionIcon),
+                    new Icon(this.game, 290, 250, Images.RaidenIcon)
+                ]
+            ];
+            this.groupIcons = new Phaser.Group(this.game, this.groupFighters);
+            this.icons.forEach(function (iconsLine) {
+                iconsLine.forEach(function (icon) {
+                    _this.groupIcons.addChild(icon);
+                });
+            });
             /* tutorial */
             this.tutorial = new Tutorial(this.game, "Нажмите начать игру\nчтобы вступить в турнир.");
             this.tutorial.x = Constants.GAME_WIDTH;
@@ -684,6 +752,7 @@ var MortalKombat;
 /// <reference path="Fabrique\Objects\Tutorial.ts" />
 /// <reference path="Fabrique\Objects\Settings.ts" />
 /// <reference path="Fabrique\Objects\Title.ts" />
+/// <reference path="Fabrique\Objects\Icon.ts" />
 /// <reference path="States\Boot.ts" />
 /// <reference path="States\Preloader.ts" />
 /// <reference path="States\Menu.ts" />
