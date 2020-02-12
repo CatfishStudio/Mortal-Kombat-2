@@ -16,6 +16,8 @@ module Fabrique {
 
         public showPersonage(atlas:string, prefix:string):void{
             this.animPersonage = new AnimationFighter(this.game, Atlases.LiukangAnimation, 0);
+            this.animPersonage.x = (this.width - this.animPersonage.width) / 3;
+            this.animPersonage.y = (this.height - this.animPersonage.height) / 4;
             this.animPersonage.scale.x = 1.5;
             this.animPersonage.scale.y = 1.5;
             this.addChild(this.animPersonage);

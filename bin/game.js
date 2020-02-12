@@ -414,8 +414,6 @@ var Fabrique;
             return _this;
         }
         AnimationFighter.prototype.init = function () {
-            this.x = (205 - this.width) / 3;
-            this.y = (254 - this.height) / 4;
             this.animation = this.animations.add('personage', [
                 'liukang_stance_left_to_right_01.png',
                 'liukang_stance_left_to_right_02.png',
@@ -480,6 +478,8 @@ var Fabrique;
         };
         WindowPersonage.prototype.showPersonage = function (atlas, prefix) {
             this.animPersonage = new Fabrique.AnimationFighter(this.game, Atlases.LiukangAnimation, 0);
+            this.animPersonage.x = (this.width - this.animPersonage.width) / 3;
+            this.animPersonage.y = (this.height - this.animPersonage.height) / 4;
             this.animPersonage.scale.x = 1.5;
             this.animPersonage.scale.y = 1.5;
             this.addChild(this.animPersonage);

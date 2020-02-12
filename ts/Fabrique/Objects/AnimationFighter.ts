@@ -9,8 +9,6 @@ module Fabrique {
         }
 
         private init(): void {
-            this.x = (205 - this.width) / 3;
-            this.y = (254 - this.height) / 4;
             this.animation = this.animations.add('personage', [
                 'liukang_stance_left_to_right_01.png',
                 'liukang_stance_left_to_right_02.png',
