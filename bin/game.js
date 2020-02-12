@@ -381,6 +381,55 @@ var Fabrique;
     }(Phaser.Sprite));
     Fabrique.Icon = Icon;
 })(Fabrique || (Fabrique = {}));
+var Fabrique;
+(function (Fabrique) {
+    var PanelIcons = /** @class */ (function (_super) {
+        __extends(PanelIcons, _super);
+        function PanelIcons(game, parent) {
+            var _this = _super.call(this, game, parent) || this;
+            _this.updateTransform();
+            _this.init();
+            return _this;
+        }
+        PanelIcons.prototype.init = function () {
+            var _this = this;
+            this.icons = [
+                [
+                    new Fabrique.Icon(this.game, 0, 0, Images.LiuKangIcon),
+                    new Fabrique.Icon(this.game, 95, 0, Images.KungLaoIcon),
+                    new Fabrique.Icon(this.game, 190, 0, Images.JohnnyCageIcon),
+                    new Fabrique.Icon(this.game, 285, 0, Images.ReptileIcon)
+                ],
+                [
+                    new Fabrique.Icon(this.game, 0, 125, Images.SubZeroIcon),
+                    new Fabrique.Icon(this.game, 95, 125, Images.ShangTsungIcon),
+                    new Fabrique.Icon(this.game, 190, 125, Images.KitanaIcon),
+                    new Fabrique.Icon(this.game, 285, 125, Images.JaxIcon)
+                ],
+                [
+                    new Fabrique.Icon(this.game, 0, 250, Images.MileenaIcon),
+                    new Fabrique.Icon(this.game, 95, 250, Images.BarakaIcon),
+                    new Fabrique.Icon(this.game, 190, 250, Images.ScorpionIcon),
+                    new Fabrique.Icon(this.game, 285, 250, Images.RaidenIcon)
+                ]
+            ];
+            this.x = -350;
+            this.y = 150;
+            this.icons.forEach(function (iconsLine) {
+                iconsLine.forEach(function (icon) {
+                    _this.addChild(icon);
+                });
+            });
+        };
+        PanelIcons.prototype.show = function () {
+            var tween = this.game.add.tween(this);
+            tween.to({ x: 250, y: 150 }, 500, 'Linear');
+            tween.start();
+        };
+        return PanelIcons;
+    }(Phaser.Group));
+    Fabrique.PanelIcons = PanelIcons;
+})(Fabrique || (Fabrique = {}));
 var MortalKombat;
 (function (MortalKombat) {
     var Boot = /** @class */ (function (_super) {
@@ -601,7 +650,7 @@ var MortalKombat;
     var Tutorial = Fabrique.Tutorial;
     var Settings = Fabrique.Settings;
     var Title = Fabrique.Title;
-    var Icon = Fabrique.Icon;
+    var PanelIcons = Fabrique.PanelIcons;
     var Fighters = /** @class */ (function (_super) {
         __extends(Fighters, _super);
         function Fighters() {
@@ -651,47 +700,17 @@ var MortalKombat;
             this.selectButton = new Phaser.Button(this.game, (Constants.GAME_WIDTH / 2) - (255 / 2), (Constants.GAME_HEIGHT - 50), Sheet.ButtonSelectFighter, this.onButtonClick, this, 1, 2, 2, 2);
             this.selectButton.name = 'select_fighter';
             this.groupFighters.addChild(this.selectButton);
-            var tweenIcons = this.game.add.tween(this.groupIcons);
-            tweenIcons.to({ x: 250, y: 150 }, 500, 'Linear');
-            tweenIcons.start();
+            this.panelIcons.show();
         };
         Fighters.prototype.onTweenComplete = function (event) {
             this.tween.start();
         };
         Fighters.prototype.createContent = function () {
-            var _this = this;
             /* title */
             this.title = new Title(this.game, 0, -50, 'ВЫБОР БОЙЦА');
             this.groupFighters.addChild(this.title);
-            /* Icons 90x120*/
-            this.icons = [
-                [
-                    new Icon(this.game, 0, 0, Images.LiuKangIcon),
-                    new Icon(this.game, 95, 0, Images.KungLaoIcon),
-                    new Icon(this.game, 190, 0, Images.JohnnyCageIcon),
-                    new Icon(this.game, 285, 0, Images.ReptileIcon)
-                ],
-                [
-                    new Icon(this.game, 0, 125, Images.SubZeroIcon),
-                    new Icon(this.game, 95, 125, Images.ShangTsungIcon),
-                    new Icon(this.game, 190, 125, Images.KitanaIcon),
-                    new Icon(this.game, 285, 125, Images.JaxIcon)
-                ],
-                [
-                    new Icon(this.game, 0, 250, Images.MileenaIcon),
-                    new Icon(this.game, 95, 250, Images.BarakaIcon),
-                    new Icon(this.game, 190, 250, Images.ScorpionIcon),
-                    new Icon(this.game, 285, 250, Images.RaidenIcon)
-                ]
-            ];
-            this.groupIcons = new Phaser.Group(this.game, this.groupFighters);
-            this.groupIcons.x = -350;
-            this.groupIcons.y = 150;
-            this.icons.forEach(function (iconsLine) {
-                iconsLine.forEach(function (icon) {
-                    _this.groupIcons.addChild(icon);
-                });
-            });
+            /* panel icons */
+            this.panelIcons = new PanelIcons(this.game, this.groupFighters);
             /* tutorial */
             this.tutorial = new Tutorial(this.game, "Нажмите начать игру\nчтобы вступить в турнир.");
             this.tutorial.x = Constants.GAME_WIDTH;
@@ -758,6 +777,7 @@ var MortalKombat;
 /// <reference path="Fabrique\Objects\Settings.ts" />
 /// <reference path="Fabrique\Objects\Title.ts" />
 /// <reference path="Fabrique\Objects\Icon.ts" />
+/// <reference path="Fabrique\Objects\PanelIcons.ts" />
 /// <reference path="States\Boot.ts" />
 /// <reference path="States\Preloader.ts" />
 /// <reference path="States\Menu.ts" />

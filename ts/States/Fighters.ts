@@ -3,7 +3,7 @@ module MortalKombat {
     import Tutorial = Fabrique.Tutorial;
     import Settings = Fabrique.Settings;
     import Title = Fabrique.Title;
-    import Icon = Fabrique.Icon;
+    import PanelIcons = Fabrique.PanelIcons;
 
     export class Fighters extends Phaser.State{
         public static Name: string = "fighters";
@@ -21,8 +21,7 @@ module MortalKombat {
         private backHalpButton:Phaser.Button;
         private selectButton:Phaser.Button;
 
-        private groupIcons:Phaser.Group;
-        private icons:Icon[][];
+        private panelIcons:PanelIcons;
 
         constructor(){
             super();
@@ -82,9 +81,7 @@ module MortalKombat {
             this.selectButton.name = 'select_fighter';
             this.groupFighters.addChild(this.selectButton);
 
-            let tweenIcons:Phaser.Tween = this.game.add.tween(this.groupIcons);
-            tweenIcons.to({x: 250, y: 150}, 500, 'Linear');
-            tweenIcons.start();
+            this.panelIcons.show();
         }
 
         private onTweenComplete(event:any){
@@ -96,36 +93,9 @@ module MortalKombat {
             this.title = new Title(this.game, 0, -50, 'ВЫБОР БОЙЦА');
             this.groupFighters.addChild(this.title);
 
-            /* Icons */
-            this.icons = [
-                [
-                    new Icon(this.game, 0, 0, Images.LiuKangIcon), 
-                    new Icon(this.game, 95, 0, Images.KungLaoIcon), 
-                    new Icon(this.game, 190, 0, Images.JohnnyCageIcon), 
-                    new Icon(this.game, 285, 0, Images.ReptileIcon)
-                ],
-                [
-                    new Icon(this.game, 0, 125, Images.SubZeroIcon), 
-                    new Icon(this.game, 95, 125, Images.ShangTsungIcon), 
-                    new Icon(this.game, 190, 125, Images.KitanaIcon), 
-                    new Icon(this.game, 285, 125, Images.JaxIcon)
-                ],
-                [
-                    new Icon(this.game, 0, 250, Images.MileenaIcon), 
-                    new Icon(this.game, 95, 250, Images.BarakaIcon), 
-                    new Icon(this.game, 190, 250, Images.ScorpionIcon), 
-                    new Icon(this.game, 285, 250, Images.RaidenIcon)
-                ]
-            ];
-            this.groupIcons = new Phaser.Group(this.game, this.groupFighters);
-            this.groupIcons.x = -350;
-            this.groupIcons.y = 150;
-            this.icons.forEach((iconsLine: Icon[]) => {
-                iconsLine.forEach((icon: Icon) => {
-                    this.groupIcons.addChild(icon);
-                });
-            });
-            
+            /* panel icons */
+            this.panelIcons = new PanelIcons(this.game, this.groupFighters);
+                        
             /* tutorial */
             this.tutorial = new Tutorial(this.game, "Нажмите начать игру\nчтобы вступить в турнир.");
             this.tutorial.x = Constants.GAME_WIDTH;
