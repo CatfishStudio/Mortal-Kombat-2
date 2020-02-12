@@ -793,6 +793,8 @@ var MortalKombat;
             this.tween = null;
             this.groupFighters.removeChildren();
             this.groupFighters.removeAll();
+            this.panelIcons.removeChildren();
+            this.panelIcons.removeAll();
             this.game.stage.removeChildren();
         };
         Fighters.prototype.onCompleteVideo = function () {
