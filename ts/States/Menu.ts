@@ -60,15 +60,15 @@ module MortalKombat {
             this.groupButtons.addChild(new Phaser.Sprite(this.game, 35, 80, Images.LogoImage));
             
             let buttonStart = new Phaser.Button(this.game, 75, 400, Sheet.ButtonStartNewGame, this.onButtonClick, this, 1, 2);
-            buttonStart.name = 'start';
+            buttonStart.name = Constants.START;
             this.groupButtons.addChild(buttonStart);
             
             let buttonSettings = new Phaser.Button(this.game, 75, 475, Sheet.ButtonSettings, this.onButtonClick, this, 1, 2, 2, 2);
-            buttonSettings.name = 'settings';
+            buttonSettings.name = Constants.SETTINGS;
             this.groupButtons.addChild(buttonSettings);
             
             let buttonInvite = new Phaser.Button(this.game, 75, 550, Sheet.ButtonInvite, this.onButtonClick, this, 1, 2, 2, 2);
-            buttonInvite.name = 'invite';
+            buttonInvite.name = Constants.INVITE;
             this.groupButtons.addChild(buttonInvite);
 
             this.tutorial = new Tutorial(this.game, 'Нажмите "начать игру"\nчтобы сразиться в турнир.');
@@ -96,27 +96,27 @@ module MortalKombat {
         
         private onButtonClick(event) {
             switch (event.name) {
-                case 'start':
+                case Constants.START:
                     {
                         this.game.state.start(Fighters.Name, true, false);
                         break;
                     }
-                case 'continue':
+                case Constants.CONTINUE:
                     {
                         
                         break;
                     }
-                case 'settings':
+                case Constants.SETTINGS:
                     {
                         this.settingsCreate();
                         break;
                     }
-                case 'setting_close':
+                case Constants.SETTINGS_CLOSE:
                     {
                         this.settingsClose();
                         break;
                     }
-                case 'invite':
+                case Constants.INVITE:
                     {
                         
                         break;

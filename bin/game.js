@@ -51,6 +51,17 @@ var Constants = /** @class */ (function () {
     }
     Constants.GAME_WIDTH = 860;
     Constants.GAME_HEIGHT = 730;
+    Constants.START = 'start';
+    Constants.BACK_MENU = 'back_menu';
+    Constants.SETTINGS = 'settings';
+    Constants.SETTINGS_CLOSE = 'settings_close';
+    Constants.HELP = 'help';
+    Constants.SELECT_FIGHTER = 'select_fighter';
+    Constants.SOUND = 'sound';
+    Constants.MUSIC = 'music';
+    Constants.TUTORIAL = 'tutorial';
+    Constants.INVITE = 'invite';
+    Constants.CONTINUE = 'continue';
     return Constants;
 }());
 var Config = /** @class */ (function () {
@@ -239,7 +250,7 @@ var Fabrique;
                 buttonSound = new Phaser.Button(this.game, startX + 25, startY + 50, Images.ButtonOn, this.onButtonClick, this);
             else
                 buttonSound = new Phaser.Button(this.game, startX + 25, startY + 50, Images.ButtonOff, this.onButtonClick, this);
-            buttonSound.name = 'sound';
+            buttonSound.name = Constants.SOUND;
             this.addChild(buttonSound);
             var labelSound = new Phaser.Text(this.game, startX + 90, startY + 55, "Звук", { font: "18px Georgia", fill: "#FFFFFF", align: "left" });
             this.addChild(labelSound);
@@ -249,7 +260,7 @@ var Fabrique;
                 buttonMusic = new Phaser.Button(this.game, startX + 155, startY + 50, Images.ButtonOn, this.onButtonClick, this);
             else
                 buttonMusic = new Phaser.Button(this.game, startX + 155, startY + 50, Images.ButtonOff, this.onButtonClick, this);
-            buttonMusic.name = 'music';
+            buttonMusic.name = Constants.MUSIC;
             this.addChild(buttonMusic);
             var labelMusic = new Phaser.Text(this.game, startX + 220, startY + 55, "Музыка", { font: "18px Georgia", fill: "#FFFFFF", align: "left" });
             this.addChild(labelMusic);
@@ -259,13 +270,13 @@ var Fabrique;
                 buttonTutorial = new Phaser.Button(this.game, startX + 25, startY + 100, Images.ButtonOn, this.onButtonClick, this);
             else
                 buttonTutorial = new Phaser.Button(this.game, startX + 25, startY + 100, Images.ButtonOff, this.onButtonClick, this);
-            buttonTutorial.name = 'tutorial';
+            buttonTutorial.name = Constants.TUTORIAL;
             this.addChild(buttonTutorial);
             var labelTutorial = new Phaser.Text(this.game, startX + 90, startY + 105, "Обучение в игре", { font: "18px Georgia", fill: "#FFFFFF", align: "left" });
             this.addChild(labelTutorial);
             /* button close */
             var buttonClose = new Phaser.Button(this.game, startX + 25, startY + 150, Sheet.ButtonClose, this.onButtonCloseClick, this, 1, 2);
-            buttonClose.name = 'setting_close';
+            buttonClose.name = Constants.SETTINGS_CLOSE;
             this.addChild(buttonClose);
             this.updateTransform();
         };
@@ -274,56 +285,56 @@ var Fabrique;
         };
         Settings.prototype.onButtonClick = function (event) {
             switch (event.name) {
-                case 'sound':
+                case Constants.SOUND:
                     {
                         if (Config.settintSound === true) {
                             Config.settintSound = false;
                             this.removeChild(event);
                             event = new Phaser.Button(this.game, event.x, event.y, Images.ButtonOff, this.onButtonClick, this);
-                            event.name = 'sound';
+                            event.name = Constants.SOUND;
                             this.addChild(event);
                         }
                         else {
                             Config.settintSound = true;
                             this.removeChild(event);
                             event = new Phaser.Button(this.game, event.x, event.y, Images.ButtonOn, this.onButtonClick, this);
-                            event.name = 'sound';
+                            event.name = Constants.SOUND;
                             this.addChild(event);
                         }
                         break;
                     }
-                case 'music':
+                case Constants.MUSIC:
                     {
                         if (Config.settintMusic === true) {
                             Config.settintMusic = false;
                             this.removeChild(event);
                             event = new Phaser.Button(this.game, event.x, event.y, Images.ButtonOff, this.onButtonClick, this);
-                            event.name = 'music';
+                            event.name = Constants.MUSIC;
                             this.addChild(event);
                         }
                         else {
                             Config.settintMusic = true;
                             this.removeChild(event);
                             event = new Phaser.Button(this.game, event.x, event.y, Images.ButtonOn, this.onButtonClick, this);
-                            event.name = 'music';
+                            event.name = Constants.MUSIC;
                             this.addChild(event);
                         }
                         break;
                     }
-                case 'tutorial':
+                case Constants.TUTORIAL:
                     {
                         if (Config.settintTutorial === true) {
                             Config.settintTutorial = false;
                             this.removeChild(event);
                             event = new Phaser.Button(this.game, event.x, event.y, Images.ButtonOff, this.onButtonClick, this);
-                            event.name = 'tutorial';
+                            event.name = Constants.TUTORIAL;
                             this.addChild(event);
                         }
                         else {
                             Config.settintTutorial = true;
                             this.removeChild(event);
                             event = new Phaser.Button(this.game, event.x, event.y, Images.ButtonOn, this.onButtonClick, this);
-                            event.name = 'tutorial';
+                            event.name = Constants.TUTORIAL;
                             this.addChild(event);
                         }
                         break;
@@ -568,13 +579,13 @@ var MortalKombat;
             this.groupButtons.visible = false;
             this.groupButtons.addChild(new Phaser.Sprite(this.game, 35, 80, Images.LogoImage));
             var buttonStart = new Phaser.Button(this.game, 75, 400, Sheet.ButtonStartNewGame, this.onButtonClick, this, 1, 2);
-            buttonStart.name = 'start';
+            buttonStart.name = Constants.START;
             this.groupButtons.addChild(buttonStart);
             var buttonSettings = new Phaser.Button(this.game, 75, 475, Sheet.ButtonSettings, this.onButtonClick, this, 1, 2, 2, 2);
-            buttonSettings.name = 'settings';
+            buttonSettings.name = Constants.SETTINGS;
             this.groupButtons.addChild(buttonSettings);
             var buttonInvite = new Phaser.Button(this.game, 75, 550, Sheet.ButtonInvite, this.onButtonClick, this, 1, 2, 2, 2);
-            buttonInvite.name = 'invite';
+            buttonInvite.name = Constants.INVITE;
             this.groupButtons.addChild(buttonInvite);
             this.tutorial = new Tutorial(this.game, 'Нажмите "начать игру"\nчтобы сразиться в турнир.');
             this.tutorial.x = Constants.GAME_WIDTH;
@@ -598,26 +609,26 @@ var MortalKombat;
         };
         Menu.prototype.onButtonClick = function (event) {
             switch (event.name) {
-                case 'start':
+                case Constants.START:
                     {
                         this.game.state.start(MortalKombat.Fighters.Name, true, false);
                         break;
                     }
-                case 'continue':
+                case Constants.CONTINUE:
                     {
                         break;
                     }
-                case 'settings':
+                case Constants.SETTINGS:
                     {
                         this.settingsCreate();
                         break;
                     }
-                case 'setting_close':
+                case Constants.SETTINGS_CLOSE:
                     {
                         this.settingsClose();
                         break;
                     }
-                case 'invite':
+                case Constants.INVITE:
                     {
                         break;
                     }
@@ -689,16 +700,16 @@ var MortalKombat;
             if (Config.settintTutorial === true)
                 this.tutorial.show((Constants.GAME_WIDTH / 2), (Constants.GAME_HEIGHT - 175));
             this.backMenuButton = new Phaser.Button(this.game, -25, 5, Sheet.ButtonBackMenuMini, this.onButtonClick, this, 1, 2, 2, 2);
-            this.backMenuButton.name = 'back_menu';
+            this.backMenuButton.name = Constants.BACK_MENU;
             this.groupFighters.addChild(this.backMenuButton);
             this.settingsButton = new Phaser.Button(this.game, (Constants.GAME_WIDTH / 2) - (255 / 2), 5, Sheet.ButtonSettings, this.onButtonClick, this, 1, 2, 2, 2);
-            this.settingsButton.name = 'settings';
+            this.settingsButton.name = Constants.SETTINGS;
             this.groupFighters.addChild(this.settingsButton);
             this.backHalpButton = new Phaser.Button(this.game, Constants.GAME_WIDTH - 230, 5, Sheet.ButtonHelpMini, this.onButtonClick, this, 1, 2, 2, 2);
-            this.backHalpButton.name = 'help';
+            this.backHalpButton.name = Constants.HELP;
             this.groupFighters.addChild(this.backHalpButton);
             this.selectButton = new Phaser.Button(this.game, (Constants.GAME_WIDTH / 2) - (255 / 2), (Constants.GAME_HEIGHT - 50), Sheet.ButtonSelectFighter, this.onButtonClick, this, 1, 2, 2, 2);
-            this.selectButton.name = 'select_fighter';
+            this.selectButton.name = Constants.SELECT_FIGHTER;
             this.groupFighters.addChild(this.selectButton);
             this.panelIcons.show();
         };
@@ -719,26 +730,26 @@ var MortalKombat;
         };
         Fighters.prototype.onButtonClick = function (event) {
             switch (event.name) {
-                case 'back_menu':
+                case Constants.BACK_MENU:
                     {
                         this.game.state.start(MortalKombat.Menu.Name, true, false);
                         break;
                     }
-                case 'settings':
+                case Constants.SETTINGS:
                     {
                         this.settingsCreate();
                         break;
                     }
-                case 'setting_close':
+                case Constants.SETTINGS_CLOSE:
                     {
                         this.settingsClose();
                         break;
                     }
-                case 'help':
+                case Constants.HELP:
                     {
                         break;
                     }
-                case 'select_fighter':
+                case Constants.SELECT_FIGHTER:
                     {
                         break;
                     }
