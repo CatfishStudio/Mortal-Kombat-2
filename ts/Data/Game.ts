@@ -1,7 +1,19 @@
 module Game {
-    export interface IFighter {
+    export interface IPersonage {
         id:number;
         name:string;
-        frame:string;
+        animBlock:string[];
+        animDamage:string[];
+        animHitHand:string[];
+        animHitLeg:string[];
+        animLose:string[];
+        animStance:string[];
+        animWin:string[];
+    }
+
+    export class Data {
+        public static initPersonages(game: Phaser.Game):void {
+            
+        }
     }
 }

@@ -4,11 +4,13 @@ class Atlases {
     public static Video2: string = 'video2';
     public static Video3: string = 'video3';
     public static VideoHelp: string = 'video_help';
+    public static LiukangAnimation: string = 'liukang';
     
     public static preloadList:Array<string> = [
         Atlases.Video1,
         Atlases.Video2,
         Atlases.Video3,
         Atlases.VideoHelp,
+        Atlases.LiukangAnimation
     ];
 }

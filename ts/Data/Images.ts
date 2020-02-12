@@ -11,6 +11,9 @@ class Images {
     public static Title: string = 'title.png';
     public static ButtonLeft: string = 'button_left.png';
     public static ButtonRight: string ='button_right.png';
+    public static WindowBackground: string = 'window_background.png';
+    public static WindowBorder: string = 'window_border.png';
+
     public static BarakaIcon:string = 'baraka.png';
     public static GoroIcon:string = 'goro.png';
     public static JaxIcon:string = 'jax.png';
@@ -37,6 +40,9 @@ class Images {
         Images.Title,
         Images.ButtonLeft,
         Images.ButtonRight,
+        Images.WindowBackground,
+        Images.WindowBorder,
+
         Images.BarakaIcon,
         Images.GoroIcon,
         Images.JaxIcon,

@@ -2,6 +2,7 @@ module Fabrique {
     export class PanelIcons extends Phaser.Group {
 
         private icons:Icon[][];
+        private winPersonage:WindowPersonage;
 
         constructor(game:Phaser.Game, parent:any){
             super(game, parent);
@@ -39,6 +40,10 @@ module Fabrique {
             });
 
             this.icons[0][0].select();
+
+            this.winPersonage = new WindowPersonage(this.game, -225, 50);
+            this.winPersonage.showPersonage(Atlases.LiukangAnimation, 'liukang_stance_left_to_right_');
+            this.addChild(this.winPersonage);
         }
 
         public show():void{

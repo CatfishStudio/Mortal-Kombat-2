@@ -62,6 +62,12 @@ var Constants = /** @class */ (function () {
     Constants.TUTORIAL = 'tutorial';
     Constants.INVITE = 'invite';
     Constants.CONTINUE = 'continue';
+    Constants.ANIMATION_TYPE_STANCE = "animation_type_stance";
+    Constants.ANIMATION_TYPE_BLOCK = "animation_type_block";
+    Constants.ANIMATION_TYPE_HIT = "animation_type_hit";
+    Constants.ANIMATION_TYPE_DAMAGE = "animation_type_damage";
+    Constants.ANIMATION_TYPE_LOSE = "animation_type_lose";
+    Constants.ANIMATION_TYPE_WIN = "animation_type_win";
     return Constants;
 }());
 var Config = /** @class */ (function () {
@@ -86,6 +92,8 @@ var Images = /** @class */ (function () {
     Images.Title = 'title.png';
     Images.ButtonLeft = 'button_left.png';
     Images.ButtonRight = 'button_right.png';
+    Images.WindowBackground = 'window_background.png';
+    Images.WindowBorder = 'window_border.png';
     Images.BarakaIcon = 'baraka.png';
     Images.GoroIcon = 'goro.png';
     Images.JaxIcon = 'jax.png';
@@ -111,6 +119,8 @@ var Images = /** @class */ (function () {
         Images.Title,
         Images.ButtonLeft,
         Images.ButtonRight,
+        Images.WindowBackground,
+        Images.WindowBorder,
         Images.BarakaIcon,
         Images.GoroIcon,
         Images.JaxIcon,
@@ -136,11 +146,13 @@ var Atlases = /** @class */ (function () {
     Atlases.Video2 = 'video2';
     Atlases.Video3 = 'video3';
     Atlases.VideoHelp = 'video_help';
+    Atlases.LiukangAnimation = 'liukang';
     Atlases.preloadList = [
         Atlases.Video1,
         Atlases.Video2,
         Atlases.Video3,
         Atlases.VideoHelp,
+        Atlases.LiukangAnimation
     ];
     return Atlases;
 }());
@@ -165,6 +177,17 @@ var Sheet = /** @class */ (function () {
     ];
     return Sheet;
 }());
+var Game;
+(function (Game) {
+    var Data = /** @class */ (function () {
+        function Data() {
+        }
+        Data.initPersonages = function (game) {
+        };
+        return Data;
+    }());
+    Game.Data = Data;
+})(Game || (Game = {}));
 var Fabrique;
 (function (Fabrique) {
     var Tutorial = /** @class */ (function (_super) {
@@ -383,6 +406,37 @@ var Fabrique;
 })(Fabrique || (Fabrique = {}));
 var Fabrique;
 (function (Fabrique) {
+    var AnimationFighter = /** @class */ (function (_super) {
+        __extends(AnimationFighter, _super);
+        function AnimationFighter(game, atlas, frame) {
+            var _this = _super.call(this, game, 0, 0, atlas, frame) || this;
+            _this.init();
+            return _this;
+        }
+        AnimationFighter.prototype.init = function () {
+            this.x = (205 - this.width) / 3;
+            this.y = (254 - this.height) / 4;
+            this.animation = this.animations.add('personage', [
+                'liukang_stance_left_to_right_01.png',
+                'liukang_stance_left_to_right_02.png',
+                'liukang_stance_left_to_right_03.png',
+                'liukang_stance_left_to_right_04.png',
+                'liukang_stance_left_to_right_05.png',
+                'liukang_stance_left_to_right_06.png',
+                'liukang_stance_left_to_right_07.png'
+            ], 15, true);
+            this.animation.onComplete.add(this.onComplete, this);
+            this.animation.play(15, true, false);
+        };
+        AnimationFighter.prototype.onComplete = function (sprite, animation) {
+            //console.log( (sprite as AnimationFighter).animation);
+        };
+        return AnimationFighter;
+    }(Phaser.Sprite));
+    Fabrique.AnimationFighter = AnimationFighter;
+})(Fabrique || (Fabrique = {}));
+var Fabrique;
+(function (Fabrique) {
     var Icon = /** @class */ (function (_super) {
         __extends(Icon, _super);
         function Icon(game, x, y, image) {
@@ -409,8 +463,31 @@ var Fabrique;
             this.graphics.drawRect(0, 0, 90, 120);
         };
         return Icon;
-    }(Phaser.Sprite));
+    }(Phaser.Button));
     Fabrique.Icon = Icon;
+})(Fabrique || (Fabrique = {}));
+var Fabrique;
+(function (Fabrique) {
+    var WindowPersonage = /** @class */ (function (_super) {
+        __extends(WindowPersonage, _super);
+        function WindowPersonage(game, x, y) {
+            var _this = _super.call(this, game, x, y, Images.WindowBackground) || this;
+            _this.init();
+            return _this;
+        }
+        WindowPersonage.prototype.init = function () {
+            this.border = new Phaser.Sprite(this.game, 0, 0, Images.WindowBorder);
+        };
+        WindowPersonage.prototype.showPersonage = function (atlas, prefix) {
+            this.animPersonage = new Fabrique.AnimationFighter(this.game, Atlases.LiukangAnimation, 0);
+            this.animPersonage.scale.x = 1.5;
+            this.animPersonage.scale.y = 1.5;
+            this.addChild(this.animPersonage);
+            this.addChild(this.border);
+        };
+        return WindowPersonage;
+    }(Phaser.Sprite));
+    Fabrique.WindowPersonage = WindowPersonage;
 })(Fabrique || (Fabrique = {}));
 var Fabrique;
 (function (Fabrique) {
@@ -452,6 +529,9 @@ var Fabrique;
                 });
             });
             this.icons[0][0].select();
+            this.winPersonage = new Fabrique.WindowPersonage(this.game, -225, 50);
+            this.winPersonage.showPersonage(Atlases.LiukangAnimation, 'liukang_stance_left_to_right_');
+            this.addChild(this.winPersonage);
         };
         PanelIcons.prototype.show = function () {
             var tween = this.game.add.tween(this);
@@ -808,7 +888,9 @@ var MortalKombat;
 /// <reference path="Fabrique\Objects\Tutorial.ts" />
 /// <reference path="Fabrique\Objects\Settings.ts" />
 /// <reference path="Fabrique\Objects\Title.ts" />
+/// <reference path="Fabrique\Objects\AnimationFighter.ts" />
 /// <reference path="Fabrique\Objects\Icon.ts" />
+/// <reference path="Fabrique\Objects\WindowPersonage.ts" />
 /// <reference path="Fabrique\Objects\PanelIcons.ts" />
 /// <reference path="States\Boot.ts" />
 /// <reference path="States\Preloader.ts" />
