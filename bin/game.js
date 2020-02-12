@@ -179,7 +179,7 @@ var Fabrique;
             graphics.drawRect(0, 0, 400, 116);
             graphics.endFill();
             this.addChild(graphics);
-            var messageText = this.game.add.text(175, 10, this.text, { font: "18px Georgia", fill: "#FFFFFF", align: "left" });
+            var messageText = this.game.add.text(175, 10, this.text, { font: "18px Georgia", fill: "#AAAAAA", align: "left" });
             this.addChild(messageText);
             var anim = this.animations.add(Atlases.VideoHelp);
             anim.onComplete.add(this.onCompleteVideo, this);
@@ -576,7 +576,7 @@ var MortalKombat;
             var buttonInvite = new Phaser.Button(this.game, 75, 550, Sheet.ButtonInvite, this.onButtonClick, this, 1, 2, 2, 2);
             buttonInvite.name = 'invite';
             this.groupButtons.addChild(buttonInvite);
-            this.tutorial = new Tutorial(this.game, "Нажмите начать игру\nчтобы вступить в турнир.");
+            this.tutorial = new Tutorial(this.game, 'Нажмите "начать игру"\nчтобы сразиться в турнир.');
             this.tutorial.x = Constants.GAME_WIDTH;
             this.tutorial.y = (Constants.GAME_HEIGHT - 175);
             this.groupMenu.addChild(this.tutorial);
@@ -712,7 +712,7 @@ var MortalKombat;
             /* panel icons */
             this.panelIcons = new PanelIcons(this.game, this.groupFighters);
             /* tutorial */
-            this.tutorial = new Tutorial(this.game, "Нажмите начать игру\nчтобы вступить в турнир.");
+            this.tutorial = new Tutorial(this.game, 'Нажмите на бойца\nи на кнопку\n"Выбрать бойца".');
             this.tutorial.x = Constants.GAME_WIDTH;
             this.tutorial.y = (Constants.GAME_HEIGHT - 175);
             this.groupFighters.addChild(this.tutorial);

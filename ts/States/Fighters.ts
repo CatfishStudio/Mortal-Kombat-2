@@ -14,14 +14,13 @@ module MortalKombat {
         private videoSprite:Phaser.Sprite;
         private fightersSprite:Phaser.Sprite;
         private title:Title;
+        private panelIcons:PanelIcons;
         private tutorial:Tutorial;
         private settings:Settings;
         private backMenuButton:Phaser.Button;
         private settingsButton:Phaser.Button;
         private backHalpButton:Phaser.Button;
         private selectButton:Phaser.Button;
-
-        private panelIcons:PanelIcons;
 
         constructor(){
             super();
@@ -97,7 +96,7 @@ module MortalKombat {
             this.panelIcons = new PanelIcons(this.game, this.groupFighters);
                         
             /* tutorial */
-            this.tutorial = new Tutorial(this.game, "Нажмите начать игру\nчтобы вступить в турнир.");
+            this.tutorial = new Tutorial(this.game, 'Нажмите на бойца\nи на кнопку\n"Выбрать бойца".');
             this.tutorial.x = Constants.GAME_WIDTH;
             this.tutorial.y = (Constants.GAME_HEIGHT - 175);
             this.groupFighters.addChild(this.tutorial);

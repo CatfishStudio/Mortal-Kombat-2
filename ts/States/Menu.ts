@@ -71,7 +71,7 @@ module MortalKombat {
             buttonInvite.name = 'invite';
             this.groupButtons.addChild(buttonInvite);
 
-            this.tutorial = new Tutorial(this.game, "Нажмите начать игру\nчтобы вступить в турнир.");
+            this.tutorial = new Tutorial(this.game, 'Нажмите "начать игру"\nчтобы сразиться в турнир.');
             this.tutorial.x = Constants.GAME_WIDTH;
             this.tutorial.y = (Constants.GAME_HEIGHT - 175);
             this.groupMenu.addChild(this.tutorial);

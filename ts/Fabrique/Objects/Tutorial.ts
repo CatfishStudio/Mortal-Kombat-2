@@ -29,7 +29,7 @@ module Fabrique {
 
             this.addChild(graphics);
 
-            let messageText: Phaser.Text = this.game.add.text(175, 10, this.text, { font: "18px Georgia", fill: "#FFFFFF", align: "left" });
+            let messageText: Phaser.Text = this.game.add.text(175, 10, this.text, { font: "18px Georgia", fill: "#AAAAAA", align: "left" });
             this.addChild(messageText);
 
             let anim: Phaser.Animation = this.animations.add(Atlases.VideoHelp);
