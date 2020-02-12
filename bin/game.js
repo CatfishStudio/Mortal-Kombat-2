@@ -651,6 +651,9 @@ var MortalKombat;
             this.selectButton = new Phaser.Button(this.game, (Constants.GAME_WIDTH / 2) - (255 / 2), (Constants.GAME_HEIGHT - 50), Sheet.ButtonSelectFighter, this.onButtonClick, this, 1, 2, 2, 2);
             this.selectButton.name = 'select_fighter';
             this.groupFighters.addChild(this.selectButton);
+            var tweenIcons = this.game.add.tween(this.groupIcons);
+            tweenIcons.to({ x: 250, y: 150 }, 500, 'Linear');
+            tweenIcons.start();
         };
         Fighters.prototype.onTweenComplete = function (event) {
             this.tween.start();
@@ -666,22 +669,24 @@ var MortalKombat;
                     new Icon(this.game, 0, 0, Images.LiuKangIcon),
                     new Icon(this.game, 95, 0, Images.KungLaoIcon),
                     new Icon(this.game, 190, 0, Images.JohnnyCageIcon),
-                    new Icon(this.game, 290, 0, Images.ReptileIcon)
+                    new Icon(this.game, 285, 0, Images.ReptileIcon)
                 ],
                 [
                     new Icon(this.game, 0, 125, Images.SubZeroIcon),
                     new Icon(this.game, 95, 125, Images.ShangTsungIcon),
                     new Icon(this.game, 190, 125, Images.KitanaIcon),
-                    new Icon(this.game, 290, 125, Images.JaxIcon)
+                    new Icon(this.game, 285, 125, Images.JaxIcon)
                 ],
                 [
                     new Icon(this.game, 0, 250, Images.MileenaIcon),
                     new Icon(this.game, 95, 250, Images.BarakaIcon),
                     new Icon(this.game, 190, 250, Images.ScorpionIcon),
-                    new Icon(this.game, 290, 250, Images.RaidenIcon)
+                    new Icon(this.game, 285, 250, Images.RaidenIcon)
                 ]
             ];
             this.groupIcons = new Phaser.Group(this.game, this.groupFighters);
+            this.groupIcons.x = -350;
+            this.groupIcons.y = 150;
             this.icons.forEach(function (iconsLine) {
                 iconsLine.forEach(function (icon) {
                     _this.groupIcons.addChild(icon);
