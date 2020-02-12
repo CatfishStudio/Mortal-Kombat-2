@@ -386,8 +386,28 @@ var Fabrique;
     var Icon = /** @class */ (function (_super) {
         __extends(Icon, _super);
         function Icon(game, x, y, image) {
-            return _super.call(this, game, x, y, image) || this;
+            var _this = _super.call(this, game, x, y, image) || this;
+            _this.init();
+            return _this;
         }
+        Icon.prototype.init = function () {
+            this.graphics = this.game.add.graphics(0, 0);
+            this.graphics.beginFill(0x000000, 0);
+            this.graphics.lineStyle(2, 0x000000, 1);
+            this.graphics.drawRect(0, 0, 90, 120);
+            this.graphics.endFill();
+            this.addChild(this.graphics);
+        };
+        Icon.prototype.select = function () {
+            this.graphics.lineStyle(2, 0xFFFFFF, 1);
+            this.graphics.drawRect(0, 0, 90, 120);
+            this.graphics.lineStyle(1, 0x000000, 1);
+            this.graphics.drawRect(0, 0, 90, 120);
+        };
+        Icon.prototype.unselect = function () {
+            this.graphics.lineStyle(2, 0x000000, 1);
+            this.graphics.drawRect(0, 0, 90, 120);
+        };
         return Icon;
     }(Phaser.Sprite));
     Fabrique.Icon = Icon;
@@ -424,13 +444,14 @@ var Fabrique;
                     new Fabrique.Icon(this.game, 285, 250, Images.RaidenIcon)
                 ]
             ];
-            this.x = -350;
+            this.x = -400;
             this.y = 150;
             this.icons.forEach(function (iconsLine) {
                 iconsLine.forEach(function (icon) {
                     _this.addChild(icon);
                 });
             });
+            this.icons[0][0].select();
         };
         PanelIcons.prototype.show = function () {
             var tween = this.game.add.tween(this);

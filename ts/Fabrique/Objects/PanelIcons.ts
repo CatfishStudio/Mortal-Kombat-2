@@ -30,13 +30,15 @@ module Fabrique {
                     new Icon(this.game, 285, 250, Images.RaidenIcon)
                 ]
             ];
-            this.x = -350;
+            this.x = -400;
             this.y = 150;
             this.icons.forEach((iconsLine: Icon[]) => {
                 iconsLine.forEach((icon: Icon) => {
                     this.addChild(icon);
                 });
             });
+
+            this.icons[0][0].select();
         }
 
         public show():void{
