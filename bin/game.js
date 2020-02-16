@@ -459,21 +459,14 @@ var Fabrique;
 (function (Fabrique) {
     var AnimationFighter = /** @class */ (function (_super) {
         __extends(AnimationFighter, _super);
-        function AnimationFighter(game, atlas, frame) {
-            var _this = _super.call(this, game, 0, 0, atlas, frame) || this;
+        function AnimationFighter(game, personageiD, personageAnim) {
+            var _this = _super.call(this, game, 0, 0, personageiD, 1) || this;
+            _this.personageAnimation = personageAnim;
             _this.init();
             return _this;
         }
         AnimationFighter.prototype.init = function () {
-            this.animation = this.animations.add('personage', [
-                'liukang_stance_left_to_right_01.png',
-                'liukang_stance_left_to_right_02.png',
-                'liukang_stance_left_to_right_03.png',
-                'liukang_stance_left_to_right_04.png',
-                'liukang_stance_left_to_right_05.png',
-                'liukang_stance_left_to_right_06.png',
-                'liukang_stance_left_to_right_07.png'
-            ], 15, true);
+            this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animStance);
             this.animation.onComplete.add(this.onComplete, this);
             this.animation.play(15, true, false);
         };
@@ -528,7 +521,7 @@ var Fabrique;
             this.border = new Phaser.Sprite(this.game, 0, 0, Images.WindowBorder);
         };
         WindowPersonage.prototype.showPersonage = function (atlas, prefix) {
-            this.animPersonage = new Fabrique.AnimationFighter(this.game, Atlases.LiukangAnimation, 0);
+            this.animPersonage = new Fabrique.AnimationFighter(this.game, GameData.Data.personages[0].id, GameData.Data.personages[0]);
             this.animPersonage.x = (this.width - this.animPersonage.width) / 3;
             this.animPersonage.y = (this.height - this.animPersonage.height) / 4;
             this.animPersonage.scale.x = 1.5;

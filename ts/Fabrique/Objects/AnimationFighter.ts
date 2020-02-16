@@ -4,21 +4,15 @@ module Fabrique {
         private personageAnimation: GameData.IPersonage;
 
 
-        constructor(game: Phaser.Game, atlas: string, frame:string|number) {
-            super(game, 0, 0, atlas, frame);
+        constructor(game: Phaser.Game, personageiD: string, personageAnim: GameData.IPersonage) {
+            super(game, 0, 0, personageiD, 1);
+            this.personageAnimation = personageAnim;
             this.init();
         }
 
         private init(): void {
-            this.animation = this.animations.add('personage', [
-                'liukang_stance_left_to_right_01.png',
-                'liukang_stance_left_to_right_02.png',
-                'liukang_stance_left_to_right_03.png',
-                'liukang_stance_left_to_right_04.png',
-                'liukang_stance_left_to_right_05.png',
-                'liukang_stance_left_to_right_06.png',
-                'liukang_stance_left_to_right_07.png'
-            ], 15, true);
+
+            this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animStance);
             this.animation.onComplete.add(this.onComplete, this);
             this.animation.play(15, true, false);
         }

@@ -1,6 +1,6 @@
 module GameData {
     export interface IPersonage {
-        id:number;
+        id:string;
         name:string;
 
         hand:number;
