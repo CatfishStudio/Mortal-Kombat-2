@@ -1,6 +1,7 @@
 module Fabrique {
     export class AnimationFighter extends Phaser.Sprite {
         private animation: Phaser.Animation;
+        private personageAnimation: GameData.IPersonage;
 
 
         constructor(game: Phaser.Game, atlas: string, frame:string|number) {

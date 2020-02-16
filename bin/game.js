@@ -68,16 +68,60 @@ var Constants = /** @class */ (function () {
     Constants.ANIMATION_TYPE_DAMAGE = "animation_type_damage";
     Constants.ANIMATION_TYPE_LOSE = "animation_type_lose";
     Constants.ANIMATION_TYPE_WIN = "animation_type_win";
+    Constants.HAND = 3;
+    Constants.LEG = 5;
+    Constants.BLOCK = 3;
+    Constants.UPPERCUT = 6;
+    Constants.TWIST = 10;
     return Constants;
 }());
 var Config = /** @class */ (function () {
     function Config() {
     }
+    Config.buildDev = true;
     Config.settintSound = true;
     Config.settintMusic = true;
     Config.settintTutorial = true;
     return Config;
 }());
+var Utilits;
+(function (Utilits) {
+    var Data = /** @class */ (function () {
+        function Data() {
+        }
+        /* Debug отладка */
+        Data.debugLog = function (title, value) {
+            if (Config.buildDev)
+                console.log(title, value);
+        };
+        /* Проверка четности и нечетности */
+        Data.checkEvenOrOdd = function (n) {
+            if (n & 1) {
+                return false; // odd (нечетное число)
+            }
+            else {
+                return true; // even (четное число)
+            }
+        };
+        /* Генератор случайных чисел */
+        Data.getRandomIndex = function () {
+            var index = Math.round(Math.random() / 0.1);
+            return index;
+        };
+        /* Генератор случайных чисел из диапазона чисел мин/макс */
+        Data.getRandomRangeIndex = function (min, max) {
+            max -= min;
+            var index = (Math.random() * ++max) + min;
+            return Math.floor(index);
+        };
+        /* Функция перемешивает элементы массива */
+        Data.compareRandom = function (a, b) {
+            return Math.random() - 0.5;
+        };
+        return Data;
+    }());
+    Utilits.Data = Data;
+})(Utilits || (Utilits = {}));
 var Images = /** @class */ (function () {
     function Images() {
     }
@@ -177,17 +221,24 @@ var Sheet = /** @class */ (function () {
     ];
     return Sheet;
 }());
-var Game;
-(function (Game) {
-    var Data = /** @class */ (function () {
-        function Data() {
-        }
-        Data.initPersonages = function (game) {
-        };
-        return Data;
-    }());
-    Game.Data = Data;
-})(Game || (Game = {}));
+var Characteristics = /** @class */ (function () {
+    function Characteristics() {
+    }
+    Characteristics.liukangJson = 'liukang_json.json';
+    Characteristics.preloadList = [
+        Characteristics.liukangJson
+    ];
+    return Characteristics;
+}());
+var Animations = /** @class */ (function () {
+    function Animations() {
+    }
+    Animations.Liukang = 'liukang.json';
+    Animations.preloadList = [
+        Animations.Liukang,
+    ];
+    return Animations;
+}());
 var Fabrique;
 (function (Fabrique) {
     var Tutorial = /** @class */ (function (_super) {
@@ -578,6 +629,12 @@ var MortalKombat;
                     Sheet.preloadList.forEach(function (assetName) {
                         _this.game.load.spritesheet(assetName, 'assets/images/' + assetName, 255, 50);
                     });
+                    Animations.preloadList.forEach(function (assetName) {
+                        _this.game.load.json(assetName, 'assets/atlas/' + assetName);
+                    });
+                    Characteristics.preloadList.forEach(function (assetName) {
+                        _this.game.load.json(assetName, 'assets/data/' + assetName);
+                    });
                 }
             });
         };
@@ -628,6 +685,7 @@ var MortalKombat;
             }
         };
         Preloader.prototype.onLoadComplete = function () {
+            GameData.Data.initPersonages(this.game);
             this.logo.frameName = "load_" + this.loadPercent + ".png";
             this.game.stage.removeChildren();
             this.game.state.start(this.config.nextStage, true, false);
@@ -883,9 +941,12 @@ var MortalKombat;
 /// <reference path="..\node_modules\phaser-ce\typescript\phaser.d.ts" />
 /// <reference path="Data\Constants.ts" />
 /// <reference path="Data\Config.ts" />
+/// <reference path="Data\Utilits.ts" />
 /// <reference path="Data\Images.ts" />
 /// <reference path="Data\Atlases.ts" />
 /// <reference path="Data\Sheets.ts" />
+/// <reference path="Data\Characteristics.ts" />
+/// <reference path="Data\Animations.ts" />
 /// <reference path="Data\Game.ts" />
 /// <reference path="Fabrique\Objects\Tutorial.ts" />
 /// <reference path="Fabrique\Objects\Settings.ts" />
@@ -899,3 +960,90 @@ var MortalKombat;
 /// <reference path="States\Menu.ts" />
 /// <reference path="States\Fighters.ts" />
 /// <reference path="app.ts" />
+var GameData;
+(function (GameData) {
+    var Data = /** @class */ (function () {
+        function Data() {
+        }
+        /* инициализация персонажей */
+        Data.initPersonages = function (game) {
+            var _this = this;
+            GameData.Data.personages = [];
+            var personage;
+            Characteristics.preloadList.forEach(function (value) {
+                personage = {};
+                personage.id = game.cache.getJSON(value).id;
+                personage.name = game.cache.getJSON(value).name;
+                personage.hand = game.cache.getJSON(value).hand;
+                personage.uppercut = game.cache.getJSON(value).uppercut;
+                personage.leg = game.cache.getJSON(value).leg;
+                personage.twist = game.cache.getJSON(value).twist;
+                _this.loadAnimation(game, personage);
+                GameData.Data.personages.push(personage);
+            });
+            Utilits.Data.debugLog("PERSONAGES", GameData.Data.personages);
+        };
+        /* загрузка анимаций бойцов
+        hit1 - hit_leg
+        hit2 - hit_hand
+        hit3 - block
+        hit4 - hit_hand_uppercut
+        hit5 - hit_leg_twist
+        */
+        Data.loadAnimation = function (game, personage) {
+            try {
+                var json = game.cache.getJSON(personage.id + '.json');
+                var block = [];
+                var damage = [];
+                var hit_hand = [];
+                var hit_hand_uppercut = [];
+                var hit_leg = [];
+                var hit_leg_twist = [];
+                var lose = [];
+                var stance = [];
+                var win = [];
+                for (var key in json.frames) {
+                    if ('block' == key.substr(0, 5))
+                        block.push(key);
+                    if ('damage' == key.substr(0, 6))
+                        damage.push(key);
+                    if ('hit_hand' == key.substr(0, 8))
+                        hit_hand.push(key);
+                    if ('hit_hand_uppercut' == key.substr(0, 17))
+                        hit_hand_uppercut.push(key);
+                    if ('hit_leg' == key.substr(0, 7))
+                        hit_leg.push(key);
+                    if ('hit_leg_twist' == key.substr(0, 13))
+                        hit_leg_twist.push(key);
+                    if ('lose' == key.substr(0, 4))
+                        lose.push(key);
+                    if ('stance' == key.substr(0, 6))
+                        stance.push(key);
+                    if ('win' == key.substr(0, 3))
+                        win.push(key);
+                }
+                personage.animBlock = block;
+                personage.animDamage = damage;
+                personage.animHitHand = hit_hand;
+                personage.animHitHandUppercut = hit_hand_uppercut;
+                personage.animHitLeg = hit_leg;
+                personage.animHitLegTwist = hit_leg_twist;
+                personage.animLose = lose;
+                personage.animStance = stance;
+                personage.animWin = win;
+            }
+            catch (error) {
+                //console.log(error);
+            }
+        };
+        Data.tutorList = [
+            'Выберите бойца.\nНажмите "Выбрать"',
+            'Турнирная таблица.\nНажмите "Начать бой"',
+            'Положите карту в слот\nи нажмите "Ход"',
+            'Этот слот оппонента\nон вам недоступен',
+            'Недостаточно энергии\nдля этой карты'
+        ];
+        return Data;
+    }());
+    GameData.Data = Data;
+})(GameData || (GameData = {}));

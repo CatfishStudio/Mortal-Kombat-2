@@ -1,0 +1,116 @@
+{"frames": {
+
+"blood_01.png":
+{
+	"frame": {"x":232,"y":104,"w":20,"h":12},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":116,"y":71,"w":20,"h":12},
+	"sourceSize": {"w":255,"h":120}
+},
+"blood_02.png":
+{
+	"frame": {"x":430,"y":86,"w":48,"h":30},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":104,"y":54,"w":48,"h":30},
+	"sourceSize": {"w":255,"h":120}
+},
+"blood_03.png":
+{
+	"frame": {"x":590,"y":79,"w":62,"h":34},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":96,"y":50,"w":62,"h":34},
+	"sourceSize": {"w":255,"h":120}
+},
+"blood_04.png":
+{
+	"frame": {"x":764,"y":71,"w":96,"h":47},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":80,"y":36,"w":96,"h":47},
+	"sourceSize": {"w":255,"h":120}
+},
+"blood_05.png":
+{
+	"frame": {"x":764,"y":2,"w":130,"h":67},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":62,"y":22,"w":130,"h":67},
+	"sourceSize": {"w":255,"h":120}
+},
+"blood_06.png":
+{
+	"frame": {"x":430,"y":2,"w":158,"h":82},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":49,"y":14,"w":158,"h":82},
+	"sourceSize": {"w":255,"h":120}
+},
+"blood_07.png":
+{
+	"frame": {"x":232,"y":2,"w":196,"h":100},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":31,"y":10,"w":196,"h":100},
+	"sourceSize": {"w":255,"h":120}
+},
+"blood_08.png":
+{
+	"frame": {"x":2,"y":2,"w":228,"h":105},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":15,"y":8,"w":228,"h":105},
+	"sourceSize": {"w":255,"h":120}
+},
+"blood_09.png":
+{
+	"frame": {"x":590,"y":2,"w":172,"h":75},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":43,"y":9,"w":172,"h":75},
+	"sourceSize": {"w":255,"h":120}
+},
+"blood_10.png":
+{
+	"frame": {"x":896,"y":2,"w":202,"h":63},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":30,"y":11,"w":202,"h":63},
+	"sourceSize": {"w":255,"h":120}
+},
+"blood_11.png":
+{
+	"frame": {"x":1100,"y":2,"w":186,"h":60},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":37,"y":16,"w":186,"h":60},
+	"sourceSize": {"w":255,"h":120}
+},
+"blood_12.png":
+{
+	"frame": {"x":1100,"y":64,"w":170,"h":55},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":44,"y":28,"w":170,"h":55},
+	"sourceSize": {"w":255,"h":120}
+},
+"blood_13.png":
+{
+	"frame": {"x":862,"y":71,"w":178,"h":45},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":40,"y":41,"w":178,"h":45},
+	"sourceSize": {"w":255,"h":120}
+}},
+"meta": {
+	"app": "http://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "blood.png",
+	"format": "RGBA8888",
+	"size": {"w":1288,"h":121},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:f399a7f773cf6b131565edf737cfda26:ed865d3093579b3b339638423f623d44:8f9cd4ff13c68004178d68678c9928f0$"
+}
+}

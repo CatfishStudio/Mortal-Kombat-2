@@ -52,6 +52,7 @@ module MortalKombat {
         }
        
         private onLoadComplete() {
+            GameData.Data.initPersonages(this.game);
             this.logo.frameName = "load_" + this.loadPercent + ".png";
             this.game.stage.removeChildren();
             this.game.state.start(this.config.nextStage, true, false);

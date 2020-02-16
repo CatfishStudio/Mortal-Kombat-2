@@ -20,4 +20,10 @@ class Constants {
     public static ANIMATION_TYPE_DAMAGE     = "animation_type_damage";
     public static ANIMATION_TYPE_LOSE       = "animation_type_lose";
     public static ANIMATION_TYPE_WIN        = "animation_type_win";
+
+    public static HAND                  = 3;
+    public static LEG                   = 5;
+    public static BLOCK                 = 3;
+    public static UPPERCUT              = 6;
+    public static TWIST                 = 10;
 }

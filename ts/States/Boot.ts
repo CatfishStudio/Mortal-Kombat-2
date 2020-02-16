@@ -38,6 +38,14 @@ module MortalKombat {
                     Sheet.preloadList.forEach((assetName: string) => {
                         this.game.load.spritesheet(assetName, 'assets/images/' + assetName, 255, 50);
                     });
+
+                    Animations.preloadList.forEach((assetName: string) => {
+                        this.game.load.json(assetName, 'assets/atlas/'+ assetName);
+                    });
+
+                    Characteristics.preloadList.forEach((assetName: string) => {
+                        this.game.load.json(assetName, 'assets/data/'+ assetName);
+                    });
                 }
             });
         }

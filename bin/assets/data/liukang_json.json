@@ -1,0 +1,9 @@
+{
+    "id": "liukang",
+    "name": "Liu Kang",
+    "hand": 1,
+    "leg": 2,
+    "block": 1,
+    "uppercut": 1,
+    "twist": 2
+}
