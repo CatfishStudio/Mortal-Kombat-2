@@ -52,11 +52,15 @@ module GameData {
         }
 
         /* загрузка анимаций бойцов 
-        hit1 - hit_leg
-        hit2 - hit_hand
-        hit3 - block
-        hit4 - hit_hand_uppercut
-        hit5 - hit_leg_twist
+            damage  - damage
+            hit1 - hit_leg
+            hit2 - hit_hand
+            hit3 - block
+            hit4 - hit_hand_uppercut
+            hit5 - hit_leg_twist
+            lost - lose
+            stance - stance
+            victory - win
         */
         public static loadAnimation(game: Phaser.Game, personage: IPersonage):void {    // загрузка анимаций бойцов
             try {
