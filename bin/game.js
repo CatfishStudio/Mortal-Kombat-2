@@ -694,14 +694,31 @@ var Fabrique;
         WindowPersonage.prototype.init = function () {
             this.border = new Phaser.Sprite(this.game, 0, 0, Images.WindowBorder);
         };
-        WindowPersonage.prototype.showPersonage = function (atlas, prefix) {
-            this.animPersonage = new Fabrique.AnimationFighter(this.game, GameData.Data.personages[0].id, GameData.Data.personages[0]);
+        /*
+        public showPersonage(atlas:string, prefix:string):void{
+            this.animPersonage = new AnimationFighter(this.game, GameData.Data.personages[0].id, GameData.Data.personages[0]);
             this.animPersonage.x = (this.width - this.animPersonage.width) / 3;
             this.animPersonage.y = (this.height - this.animPersonage.height) / 4;
             this.animPersonage.scale.x = 1.5;
             this.animPersonage.scale.y = 1.5;
             this.addChild(this.animPersonage);
             this.addChild(this.border);
+        }
+        */
+        WindowPersonage.prototype.showPersonage = function (personageID) {
+            var _this = this;
+            GameData.Data.personages.forEach(function (personage) {
+                if (personage.id == personageID) {
+                    _this.animPersonage = new Fabrique.AnimationFighter(_this.game, personage.id, personage);
+                    _this.animPersonage.x = (_this.width - _this.animPersonage.width) / 3;
+                    _this.animPersonage.y = (_this.height - _this.animPersonage.height) / 4;
+                    _this.animPersonage.scale.x = 1.5;
+                    _this.animPersonage.scale.y = 1.5;
+                    _this.addChild(_this.animPersonage);
+                    _this.addChild(_this.border);
+                    return;
+                }
+            });
         };
         return WindowPersonage;
     }(Phaser.Sprite));
@@ -713,6 +730,7 @@ var Fabrique;
         __extends(PanelIcons, _super);
         function PanelIcons(game, parent) {
             var _this = _super.call(this, game, parent) || this;
+            _this.defaultFighterID = 'liukang';
             _this.updateTransform();
             _this.init();
             return _this;
@@ -747,9 +765,9 @@ var Fabrique;
                 });
             });
             this.icons[0][0].select();
-            this.winPersonage = new Fabrique.WindowPersonage(this.game, -225, 50);
-            this.winPersonage.showPersonage(Atlases.LiukangAnimation, 'liukang_stance_left_to_right_');
-            this.addChild(this.winPersonage);
+            this.windowPersonage = new Fabrique.WindowPersonage(this.game, -225, 50);
+            this.windowPersonage.showPersonage(this.defaultFighterID);
+            this.addChild(this.windowPersonage);
         };
         PanelIcons.prototype.show = function () {
             var tween = this.game.add.tween(this);

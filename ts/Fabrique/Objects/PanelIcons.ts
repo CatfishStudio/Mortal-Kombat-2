@@ -2,7 +2,8 @@ module Fabrique {
     export class PanelIcons extends Phaser.Group {
 
         private icons:Icon[][];
-        private winPersonage:WindowPersonage;
+        private windowPersonage:WindowPersonage;
+        private defaultFighterID:string = 'liukang';
 
         constructor(game:Phaser.Game, parent:any){
             super(game, parent);
@@ -41,9 +42,9 @@ module Fabrique {
 
             this.icons[0][0].select();
 
-            this.winPersonage = new WindowPersonage(this.game, -225, 50);
-            this.winPersonage.showPersonage(Atlases.LiukangAnimation, 'liukang_stance_left_to_right_');
-            this.addChild(this.winPersonage);
+            this.windowPersonage = new WindowPersonage(this.game, -225, 50);
+            this.windowPersonage.showPersonage(this.defaultFighterID);
+            this.addChild(this.windowPersonage);
         }
 
         public show():void{
