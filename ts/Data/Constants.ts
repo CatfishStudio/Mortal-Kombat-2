@@ -26,4 +26,19 @@ class Constants {
     public static BLOCK                 = 3;
     public static UPPERCUT              = 6;
     public static TWIST                 = 10;
+
+    public static ID_BARAKA = 'baraka';
+    public static ID_GORO = 'goro';
+    public static ID_JAX = 'jax';
+    public static ID_JOHNYCAGE = 'johnnycage';
+    public static ID_KITANA = 'kitana';
+    public static ID_KUNGLAO = 'kunglao';
+    public static ID_LIUKANG = 'liukang';
+    public static ID_MILEENA = 'mileena';
+    public static ID_RAIDEN = 'raiden';
+    public static ID_REPTILE = 'reptile';
+    public static ID_SCORPION = 'scorpion';
+    public static ID_SHANGTSUNG = 'shangtsung';
+    public static ID_SHAOKAHN = 'shaokahn';
+    public static ID_SUBZERO = 'subzero';
 }

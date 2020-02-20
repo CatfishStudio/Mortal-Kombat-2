@@ -2,9 +2,11 @@ module Fabrique {
 
     export class Icon extends Phaser.Button {
         private graphics:Phaser.Graphics;
+        private id:string;
 
-        constructor(game:Phaser.Game, x:number, y:number, image:string){
+        constructor(game:Phaser.Game, x:number, y:number, image:string, id:string){
             super(game, x, y, image);
+            this.id = id;
             this.init();
         }
 

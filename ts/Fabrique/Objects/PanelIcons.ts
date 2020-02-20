@@ -3,7 +3,7 @@ module Fabrique {
 
         private icons:Icon[][];
         private windowPersonage:WindowPersonage;
-        private defaultFighterID:string = 'liukang';
+        private defaultFighterID:string = Constants.ID_LIUKANG;
 
         constructor(game:Phaser.Game, parent:any){
             super(game, parent);
@@ -14,22 +14,22 @@ module Fabrique {
         private init():void{
             this.icons = [
                 [
-                    new Icon(this.game, 0, 0, Images.LiuKangIcon), 
-                    new Icon(this.game, 95, 0, Images.KungLaoIcon), 
-                    new Icon(this.game, 190, 0, Images.JohnnyCageIcon), 
-                    new Icon(this.game, 285, 0, Images.ReptileIcon)
+                    new Icon(this.game, 0, 0, Images.LiuKangIcon, Constants.ID_LIUKANG), 
+                    new Icon(this.game, 95, 0, Images.KungLaoIcon, Constants.ID_KUNGLAO), 
+                    new Icon(this.game, 190, 0, Images.JohnnyCageIcon, Constants.ID_JOHNYCAGE), 
+                    new Icon(this.game, 285, 0, Images.ReptileIcon, Constants.ID_REPTILE)
                 ],
                 [
-                    new Icon(this.game, 0, 125, Images.SubZeroIcon), 
-                    new Icon(this.game, 95, 125, Images.ShangTsungIcon), 
-                    new Icon(this.game, 190, 125, Images.KitanaIcon), 
-                    new Icon(this.game, 285, 125, Images.JaxIcon)
+                    new Icon(this.game, 0, 125, Images.SubZeroIcon, Constants.ID_SUBZERO), 
+                    new Icon(this.game, 95, 125, Images.ShangTsungIcon, Constants.ID_SHANGTSUNG), 
+                    new Icon(this.game, 190, 125, Images.KitanaIcon, Constants.ID_KITANA), 
+                    new Icon(this.game, 285, 125, Images.JaxIcon, Constants.ID_JAX)
                 ],
                 [
-                    new Icon(this.game, 0, 250, Images.MileenaIcon), 
-                    new Icon(this.game, 95, 250, Images.BarakaIcon), 
-                    new Icon(this.game, 190, 250, Images.ScorpionIcon), 
-                    new Icon(this.game, 285, 250, Images.RaidenIcon)
+                    new Icon(this.game, 0, 250, Images.MileenaIcon, Constants.ID_MILEENA), 
+                    new Icon(this.game, 95, 250, Images.BarakaIcon, Constants.ID_BARAKA), 
+                    new Icon(this.game, 190, 250, Images.ScorpionIcon, Constants.ID_SCORPION), 
+                    new Icon(this.game, 285, 250, Images.RaidenIcon, Constants.ID_RAIDEN)
                 ]
             ];
             this.x = -400;
