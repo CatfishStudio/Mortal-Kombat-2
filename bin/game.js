@@ -254,9 +254,35 @@ var Sheet = /** @class */ (function () {
 var Characteristics = /** @class */ (function () {
     function Characteristics() {
     }
+    Characteristics.barakaJson = 'baraka_json.json';
+    Characteristics.goroJson = 'goro_json.json';
+    Characteristics.jaxJson = 'jax_json.json';
+    Characteristics.johnnycageJson = 'johnnycage_json.json';
+    Characteristics.kitanaJson = 'kitana_json.json';
+    Characteristics.kunglaoJson = 'kunglao_json.json';
     Characteristics.liukangJson = 'liukang_json.json';
+    Characteristics.mileenaJson = 'mileena_json.json';
+    Characteristics.raidenJson = 'raiden_json.json';
+    Characteristics.reptileJson = 'reptile_json.json';
+    Characteristics.scorpionJson = 'scorpion_json.json';
+    Characteristics.shangtsungJson = 'shangtsung_json.json';
+    Characteristics.shaokahnJson = 'shaokahn_json.json';
+    Characteristics.subzeroJson = 'subzero_json.json';
     Characteristics.preloadList = [
-        Characteristics.liukangJson
+        Characteristics.barakaJson,
+        Characteristics.goroJson,
+        Characteristics.jaxJson,
+        Characteristics.johnnycageJson,
+        Characteristics.kitanaJson,
+        Characteristics.kunglaoJson,
+        Characteristics.liukangJson,
+        Characteristics.mileenaJson,
+        Characteristics.raidenJson,
+        Characteristics.reptileJson,
+        Characteristics.scorpionJson,
+        Characteristics.shangtsungJson,
+        Characteristics.shaokahnJson,
+        Characteristics.subzeroJson
     ];
     return Characteristics;
 }());
@@ -313,6 +339,7 @@ var GameData;
                 personage.uppercut = game.cache.getJSON(value).uppercut;
                 personage.leg = game.cache.getJSON(value).leg;
                 personage.twist = game.cache.getJSON(value).twist;
+                personage.life = game.cache.getJSON(value).life;
                 _this.loadAnimation(game, personage);
                 GameData.Data.personages.push(personage);
             });

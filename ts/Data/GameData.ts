@@ -9,6 +9,8 @@ module GameData {
         uppercut:number;
         twist:number;
 
+        life:number;
+
         animStance:string[];
         animHitHand:string[];
         animHitHandUppercut:string[];
@@ -43,6 +45,7 @@ module GameData {
                 personage.uppercut = game.cache.getJSON(value).uppercut;
                 personage.leg = game.cache.getJSON(value).leg;
                 personage.twist = game.cache.getJSON(value).twist;
+                personage.life = game.cache.getJSON(value).life;
 
                 this.loadAnimation(game, personage);
                 GameData.Data.personages.push(personage);
