@@ -1,4 +1,4 @@
-class Jsons { 
+class Animations { 
     public static BarakaJson: string = 'baraka.json';
     public static GoroJson: string = 'goro.json';
     public static JaxJson: string = 'jax.json';
@@ -15,19 +15,19 @@ class Jsons {
     public static SubzeroJson: string = 'subzero.json';
 
     public static preloadList:Array<string> = [
-        Jsons.BarakaJson,
-        Jsons.GoroJson,
-        Jsons.JaxJson,
-        Jsons.JohnnyCageJson,
-        Jsons.KitanaJson,
-        Jsons.KungLaoJson,
-        Jsons.LiuKangJson,
-        Jsons.MileenaJson,
-        Jsons.RaidenJson,
-        Jsons.ReptileJson,
-        Jsons.ScorpionJson,
-        Jsons.ShangtsungJson,
-        Jsons.ShaokahnJson,
-        Jsons.SubzeroJson
+        Animations.BarakaJson,
+        Animations.GoroJson,
+        Animations.JaxJson,
+        Animations.JohnnyCageJson,
+        Animations.KitanaJson,
+        Animations.KungLaoJson,
+        Animations.LiuKangJson,
+        Animations.MileenaJson,
+        Animations.RaidenJson,
+        Animations.ReptileJson,
+        Animations.ScorpionJson,
+        Animations.ShangtsungJson,
+        Animations.ShaokahnJson,
+        Animations.SubzeroJson
     ];
 }

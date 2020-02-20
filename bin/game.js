@@ -190,13 +190,43 @@ var Atlases = /** @class */ (function () {
     Atlases.Video2 = 'video2';
     Atlases.Video3 = 'video3';
     Atlases.VideoHelp = 'video_help';
-    Atlases.LiukangAnimation = 'liukang';
+    Atlases.BarakaAnimation = 'baraka';
+    Atlases.GoroAnimation = 'goro';
+    Atlases.JaxAnimation = 'jax';
+    Atlases.JohnnyCageAnimation = 'johnnycage';
+    Atlases.KitanaAnimation = 'kitana';
+    Atlases.KungLaoAnimation = 'kunglao';
+    Atlases.LiuKangAnimation = 'liukang';
+    Atlases.MileenaAnimation = 'mileena';
+    Atlases.RaidenAnimation = 'raiden';
+    Atlases.ReptileAnimation = 'reptile';
+    Atlases.ScorpionAnimation = 'scorpion';
+    Atlases.ShangtsungAnimation = 'shangtsung';
+    Atlases.ShaokahnAnimation = 'shaokahn';
+    Atlases.SubzeroAnimation = 'subzero';
+    Atlases.Blood = 'blood';
+    Atlases.Flash = 'flash';
     Atlases.preloadList = [
         Atlases.Video1,
         Atlases.Video2,
         Atlases.Video3,
         Atlases.VideoHelp,
-        Atlases.LiukangAnimation
+        Atlases.Blood,
+        Atlases.Flash,
+        Atlases.BarakaAnimation,
+        Atlases.GoroAnimation,
+        Atlases.JaxAnimation,
+        Atlases.JohnnyCageAnimation,
+        Atlases.KitanaAnimation,
+        Atlases.KungLaoAnimation,
+        Atlases.LiuKangAnimation,
+        Atlases.MileenaAnimation,
+        Atlases.RaidenAnimation,
+        Atlases.ReptileAnimation,
+        Atlases.ScorpionAnimation,
+        Atlases.ShangtsungAnimation,
+        Atlases.ShaokahnAnimation,
+        Atlases.SubzeroAnimation
     ];
     return Atlases;
 }());
@@ -233,12 +263,129 @@ var Characteristics = /** @class */ (function () {
 var Animations = /** @class */ (function () {
     function Animations() {
     }
-    Animations.Liukang = 'liukang.json';
+    Animations.BarakaJson = 'baraka.json';
+    Animations.GoroJson = 'goro.json';
+    Animations.JaxJson = 'jax.json';
+    Animations.JohnnyCageJson = 'johnnycage.json';
+    Animations.KitanaJson = 'kitana.json';
+    Animations.KungLaoJson = 'kunglao.json';
+    Animations.LiuKangJson = 'liukang.json';
+    Animations.MileenaJson = 'mileena.json';
+    Animations.RaidenJson = 'raiden.json';
+    Animations.ReptileJson = 'reptile.json';
+    Animations.ScorpionJson = 'scorpion.json';
+    Animations.ShangtsungJson = 'shangtsung.json';
+    Animations.ShaokahnJson = 'shaokahn.json';
+    Animations.SubzeroJson = 'subzero.json';
     Animations.preloadList = [
-        Animations.Liukang,
+        Animations.BarakaJson,
+        Animations.GoroJson,
+        Animations.JaxJson,
+        Animations.JohnnyCageJson,
+        Animations.KitanaJson,
+        Animations.KungLaoJson,
+        Animations.LiuKangJson,
+        Animations.MileenaJson,
+        Animations.RaidenJson,
+        Animations.ReptileJson,
+        Animations.ScorpionJson,
+        Animations.ShangtsungJson,
+        Animations.ShaokahnJson,
+        Animations.SubzeroJson
     ];
     return Animations;
 }());
+var GameData;
+(function (GameData) {
+    var Data = /** @class */ (function () {
+        function Data() {
+        }
+        /* инициализация персонажей */
+        Data.initPersonages = function (game) {
+            var _this = this;
+            GameData.Data.personages = [];
+            var personage;
+            Characteristics.preloadList.forEach(function (value) {
+                personage = {};
+                personage.id = game.cache.getJSON(value).id;
+                personage.name = game.cache.getJSON(value).name;
+                personage.hand = game.cache.getJSON(value).hand;
+                personage.uppercut = game.cache.getJSON(value).uppercut;
+                personage.leg = game.cache.getJSON(value).leg;
+                personage.twist = game.cache.getJSON(value).twist;
+                _this.loadAnimation(game, personage);
+                GameData.Data.personages.push(personage);
+            });
+            Utilits.Data.debugLog("PERSONAGES", GameData.Data.personages);
+        };
+        /* загрузка анимаций бойцов
+            damage  - damage
+            hit1 - hit_leg
+            hit2 - hit_hand
+            hit3 - block
+            hit4 - hit_hand_uppercut
+            hit5 - hit_leg_twist
+            lost - lose
+            stance - stance
+            victory - win
+        */
+        Data.loadAnimation = function (game, personage) {
+            try {
+                var json = game.cache.getJSON(personage.id + '.json');
+                var block = [];
+                var damage = [];
+                var hit_hand = [];
+                var hit_hand_uppercut = [];
+                var hit_leg = [];
+                var hit_leg_twist = [];
+                var lose = [];
+                var stance = [];
+                var win = [];
+                for (var key in json.frames) {
+                    if ('block' == key.substr(0, 5))
+                        block.push(key);
+                    if ('damage' == key.substr(0, 6))
+                        damage.push(key);
+                    if ('hit_hand' == key.substr(0, 8))
+                        hit_hand.push(key);
+                    if ('hit_hand_uppercut' == key.substr(0, 17))
+                        hit_hand_uppercut.push(key);
+                    if ('hit_leg' == key.substr(0, 7))
+                        hit_leg.push(key);
+                    if ('hit_leg_twist' == key.substr(0, 13))
+                        hit_leg_twist.push(key);
+                    if ('lose' == key.substr(0, 4))
+                        lose.push(key);
+                    if ('stance' == key.substr(0, 6))
+                        stance.push(key);
+                    if ('win' == key.substr(0, 3))
+                        win.push(key);
+                }
+                personage.animBlock = block;
+                personage.animDamage = damage;
+                personage.animHitHand = hit_hand;
+                personage.animHitHandUppercut = hit_hand_uppercut;
+                personage.animHitLeg = hit_leg;
+                personage.animHitLegTwist = hit_leg_twist;
+                personage.animLose = lose;
+                personage.animStance = stance;
+                personage.animWin = win;
+            }
+            catch (error) {
+                //console.log(error);
+            }
+        };
+        Data.tutorList = [
+            'Выберите бойца.\nНажмите "Выбрать"',
+            'Турнирная таблица.\nНажмите "Начать бой"',
+            'Положите карту в слот\nи нажмите "Ход"',
+            'Этот слот оппонента\nон вам недоступен',
+            'Недостаточно энергии\nдля этой карты'
+        ];
+        return Data;
+    }());
+    GameData.Data = Data;
+})(GameData || (GameData = {}));
 var Fabrique;
 (function (Fabrique) {
     var Tutorial = /** @class */ (function (_super) {
@@ -940,7 +1087,7 @@ var MortalKombat;
 /// <reference path="Data\Sheets.ts" />
 /// <reference path="Data\Characteristics.ts" />
 /// <reference path="Data\Animations.ts" />
-/// <reference path="Data\Game.ts" />
+/// <reference path="Data\GameData.ts" />
 /// <reference path="Fabrique\Objects\Tutorial.ts" />
 /// <reference path="Fabrique\Objects\Settings.ts" />
 /// <reference path="Fabrique\Objects\Title.ts" />
@@ -953,90 +1100,3 @@ var MortalKombat;
 /// <reference path="States\Menu.ts" />
 /// <reference path="States\Fighters.ts" />
 /// <reference path="app.ts" />
-var GameData;
-(function (GameData) {
-    var Data = /** @class */ (function () {
-        function Data() {
-        }
-        /* инициализация персонажей */
-        Data.initPersonages = function (game) {
-            var _this = this;
-            GameData.Data.personages = [];
-            var personage;
-            Characteristics.preloadList.forEach(function (value) {
-                personage = {};
-                personage.id = game.cache.getJSON(value).id;
-                personage.name = game.cache.getJSON(value).name;
-                personage.hand = game.cache.getJSON(value).hand;
-                personage.uppercut = game.cache.getJSON(value).uppercut;
-                personage.leg = game.cache.getJSON(value).leg;
-                personage.twist = game.cache.getJSON(value).twist;
-                _this.loadAnimation(game, personage);
-                GameData.Data.personages.push(personage);
-            });
-            Utilits.Data.debugLog("PERSONAGES", GameData.Data.personages);
-        };
-        /* загрузка анимаций бойцов
-        hit1 - hit_leg
-        hit2 - hit_hand
-        hit3 - block
-        hit4 - hit_hand_uppercut
-        hit5 - hit_leg_twist
-        */
-        Data.loadAnimation = function (game, personage) {
-            try {
-                var json = game.cache.getJSON(personage.id + '.json');
-                var block = [];
-                var damage = [];
-                var hit_hand = [];
-                var hit_hand_uppercut = [];
-                var hit_leg = [];
-                var hit_leg_twist = [];
-                var lose = [];
-                var stance = [];
-                var win = [];
-                for (var key in json.frames) {
-                    if ('block' == key.substr(0, 5))
-                        block.push(key);
-                    if ('damage' == key.substr(0, 6))
-                        damage.push(key);
-                    if ('hit_hand' == key.substr(0, 8))
-                        hit_hand.push(key);
-                    if ('hit_hand_uppercut' == key.substr(0, 17))
-                        hit_hand_uppercut.push(key);
-                    if ('hit_leg' == key.substr(0, 7))
-                        hit_leg.push(key);
-                    if ('hit_leg_twist' == key.substr(0, 13))
-                        hit_leg_twist.push(key);
-                    if ('lose' == key.substr(0, 4))
-                        lose.push(key);
-                    if ('stance' == key.substr(0, 6))
-                        stance.push(key);
-                    if ('win' == key.substr(0, 3))
-                        win.push(key);
-                }
-                personage.animBlock = block;
-                personage.animDamage = damage;
-                personage.animHitHand = hit_hand;
-                personage.animHitHandUppercut = hit_hand_uppercut;
-                personage.animHitLeg = hit_leg;
-                personage.animHitLegTwist = hit_leg_twist;
-                personage.animLose = lose;
-                personage.animStance = stance;
-                personage.animWin = win;
-            }
-            catch (error) {
-                //console.log(error);
-            }
-        };
-        Data.tutorList = [
-            'Выберите бойца.\nНажмите "Выбрать"',
-            'Турнирная таблица.\nНажмите "Начать бой"',
-            'Положите карту в слот\nи нажмите "Ход"',
-            'Этот слот оппонента\nон вам недоступен',
-            'Недостаточно энергии\nдля этой карты'
-        ];
-        return Data;
-    }());
-    GameData.Data = Data;
-})(GameData || (GameData = {}));
