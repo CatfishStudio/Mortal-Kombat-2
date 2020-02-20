@@ -1,0 +1,10 @@
+{
+    "id": "subzero",
+    "name": "Sub-Zero",
+    "leg": 2,
+    "hand": 2,
+    "block": 1,
+    "uppercut": 1,
+    "twist": 1,
+    "life": 0
+}

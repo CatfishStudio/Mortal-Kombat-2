@@ -1,9 +1,9 @@
 {
-    "id": "liukang",
-    "name": "Liu Kang",
+    "id": "raiden",
+    "name": "Raiden",
     "leg": 2,
     "hand": 1,
-    "block": 1,
+    "block": 2,
     "uppercut": 1,
     "twist": 2,
     "life": 0

@@ -1,0 +1,10 @@
+{
+    "id": "reptile",
+    "name": "Reptile",
+    "leg": 1,
+    "hand": 1,
+    "block": 1,
+    "uppercut": 2,
+    "twist": 2,
+    "life": 0
+}

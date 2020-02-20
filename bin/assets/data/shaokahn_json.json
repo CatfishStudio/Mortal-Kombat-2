@@ -1,0 +1,10 @@
+{
+    "id": "shaokahn",
+    "name": "Shao Kahn",
+    "leg": 2,
+    "hand": 2,
+    "block": 1,
+    "uppercut": 3,
+    "twist": 2,
+    "life": 1200
+}

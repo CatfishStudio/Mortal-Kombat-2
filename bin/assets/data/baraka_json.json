@@ -1,0 +1,10 @@
+{
+    "id": "baraka",
+    "name": "Baraka",
+    "leg": 1,
+    "hand": 1,
+    "block": 1,
+    "uppercut": 1,
+    "twist": 3,
+    "life": 0
+}

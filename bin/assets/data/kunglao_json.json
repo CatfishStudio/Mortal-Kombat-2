@@ -1,0 +1,10 @@
+{
+    "id": "kunglao",
+    "name": "Kung Lao",
+    "leg": 1,
+    "hand": 2,
+    "block": 1,
+    "uppercut": 2,
+    "twist": 1,
+    "life": 0
+}

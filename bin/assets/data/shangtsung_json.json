@@ -1,0 +1,10 @@
+{
+    "id": "shangtsung",
+    "name": "Shang Tsung",
+    "leg": 1,
+    "hand": 1,
+    "block": 1,
+    "uppercut": 3,
+    "twist": 1,
+    "life": 0
+}

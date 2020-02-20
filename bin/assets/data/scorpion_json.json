@@ -1,0 +1,10 @@
+{
+    "id": "scorpion",
+    "name": "Scorpion",
+    "leg": 3,
+    "hand": 1,
+    "block": 1,
+    "uppercut": 1,
+    "twist": 1,
+    "life": 0
+}
