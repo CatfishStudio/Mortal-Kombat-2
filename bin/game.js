@@ -376,11 +376,11 @@ var GameData;
             }
         };
         Data.tutorList = [
-            'Выберите бойца.\nНажмите "Выбрать"',
-            'Турнирная таблица.\nНажмите "Начать бой"',
-            'Положите карту в слот\nи нажмите "Ход"',
-            'Этот слот оппонента\nон вам недоступен',
-            'Недостаточно энергии\nдля этой карты'
+            'Нажмите на кнопку\n"начать игру"\nчтобы начать\nтурнир.',
+            'Нажмите на иконку\nбойца и на кнопку\n"Выбрать бойца',
+            '',
+            '',
+            ''
         ];
         return Data;
     }());
@@ -886,7 +886,7 @@ var MortalKombat;
             var buttonInvite = new Phaser.Button(this.game, 75, 550, Sheet.ButtonInvite, this.onButtonClick, this, 1, 2, 2, 2);
             buttonInvite.name = Constants.INVITE;
             this.groupButtons.addChild(buttonInvite);
-            this.tutorial = new Tutorial(this.game, 'Нажмите "начать игру"\nчтобы сразиться в турнир.');
+            this.tutorial = new Tutorial(this.game, GameData.Data.tutorList[0]);
             this.tutorial.x = Constants.GAME_WIDTH;
             this.tutorial.y = (Constants.GAME_HEIGHT - 175);
             this.groupMenu.addChild(this.tutorial);
@@ -1024,7 +1024,7 @@ var MortalKombat;
             /* panel icons */
             this.panelIcons = new PanelIcons(this.game, this.groupFighters);
             /* tutorial */
-            this.tutorial = new Tutorial(this.game, 'Нажмите на бойца\nи на кнопку\n"Выбрать бойца".');
+            this.tutorial = new Tutorial(this.game, GameData.Data.tutorList[1]);
             this.tutorial.x = Constants.GAME_WIDTH;
             this.tutorial.y = (Constants.GAME_HEIGHT - 175);
             this.groupFighters.addChild(this.tutorial);
