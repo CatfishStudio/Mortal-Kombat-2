@@ -73,6 +73,20 @@ var Constants = /** @class */ (function () {
     Constants.BLOCK = 3;
     Constants.UPPERCUT = 6;
     Constants.TWIST = 10;
+    Constants.ID_BARAKA = 'baraka';
+    Constants.ID_GORO = 'goro';
+    Constants.ID_JAX = 'jax';
+    Constants.ID_JOHNYCAGE = 'johnnycage';
+    Constants.ID_KITANA = 'kitana';
+    Constants.ID_KUNGLAO = 'kunglao';
+    Constants.ID_LIUKANG = 'liukang';
+    Constants.ID_MILEENA = 'mileena';
+    Constants.ID_RAIDEN = 'raiden';
+    Constants.ID_REPTILE = 'reptile';
+    Constants.ID_SCORPION = 'scorpion';
+    Constants.ID_SHANGTSUNG = 'shangtsung';
+    Constants.ID_SHAOKAHN = 'shaokahn';
+    Constants.ID_SUBZERO = 'subzero';
     return Constants;
 }());
 var Config = /** @class */ (function () {
@@ -633,19 +647,31 @@ var Fabrique;
 (function (Fabrique) {
     var AnimationFighter = /** @class */ (function (_super) {
         __extends(AnimationFighter, _super);
-        function AnimationFighter(game, personageiD, personageAnim) {
+        function AnimationFighter(game, personageiD, personage) {
             var _this = _super.call(this, game, 0, 0, personageiD, 1) || this;
-            _this.personageAnimation = personageAnim;
+            _this.personageAnimation = personage;
             _this.init();
             return _this;
         }
         AnimationFighter.prototype.init = function () {
+            this.animationType = Constants.ANIMATION_TYPE_STANCE;
             this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animStance);
             this.animation.onComplete.add(this.onComplete, this);
-            this.animation.play(15, true, false);
+            this.animation.play(10, true, false);
         };
         AnimationFighter.prototype.onComplete = function (sprite, animation) {
             //console.log( (sprite as AnimationFighter).animation);
+            if (this.animationType === Constants.ANIMATION_TYPE_STANCE)
+                return;
+        };
+        AnimationFighter.prototype.winAnimation = function () {
+            this.animation.stop();
+            this.animation.onComplete.removeAll();
+            this.animation.destroy();
+            this.animationType = Constants.ANIMATION_TYPE_STANCE;
+            this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animWin);
+            this.animation.onComplete.add(this.onComplete, this);
+            this.animation.play(15, true, false);
         };
         return AnimationFighter;
     }(Phaser.Sprite));
@@ -655,12 +681,16 @@ var Fabrique;
 (function (Fabrique) {
     var Icon = /** @class */ (function (_super) {
         __extends(Icon, _super);
-        function Icon(game, x, y, image) {
-            var _this = _super.call(this, game, x, y, image) || this;
+        function Icon(game, x, y, image, id) {
+            var _this = _super.call(this, game, x, y, image, function () {
+                _this.event.dispatch(Constants.SELECT_FIGHTER, _this.id);
+            }) || this;
+            _this.id = id;
             _this.init();
             return _this;
         }
         Icon.prototype.init = function () {
+            this.event = new Phaser.Signal();
             this.graphics = this.game.add.graphics(0, 0);
             this.graphics.beginFill(0x000000, 0);
             this.graphics.lineStyle(2, 0x000000, 1);
@@ -693,29 +723,36 @@ var Fabrique;
         }
         WindowPersonage.prototype.init = function () {
             this.border = new Phaser.Sprite(this.game, 0, 0, Images.WindowBorder);
+            this.fighter = new Phaser.Group(this.game, this);
         };
-        /*
-        public showPersonage(atlas:string, prefix:string):void{
-            this.animPersonage = new AnimationFighter(this.game, GameData.Data.personages[0].id, GameData.Data.personages[0]);
-            this.animPersonage.x = (this.width - this.animPersonage.width) / 3;
-            this.animPersonage.y = (this.height - this.animPersonage.height) / 4;
-            this.animPersonage.scale.x = 1.5;
-            this.animPersonage.scale.y = 1.5;
-            this.addChild(this.animPersonage);
-            this.addChild(this.border);
-        }
-        */
         WindowPersonage.prototype.showPersonage = function (personageID) {
             var _this = this;
             GameData.Data.personages.forEach(function (personage) {
-                if (personage.id == personageID) {
+                if (personage.id === personageID) {
                     _this.animPersonage = new Fabrique.AnimationFighter(_this.game, personage.id, personage);
                     _this.animPersonage.x = (_this.width - _this.animPersonage.width) / 3;
                     _this.animPersonage.y = (_this.height - _this.animPersonage.height) / 4;
                     _this.animPersonage.scale.x = 1.5;
                     _this.animPersonage.scale.y = 1.5;
-                    _this.addChild(_this.animPersonage);
+                    _this.fighter.addChild(_this.animPersonage);
                     _this.addChild(_this.border);
+                    return;
+                }
+            });
+        };
+        WindowPersonage.prototype.changePersonage = function (personageID) {
+            var _this = this;
+            GameData.Data.personages.forEach(function (personage) {
+                if (personage.id === personageID) {
+                    _this.animPersonage.destroy();
+                    _this.fighter.removeAll();
+                    _this.animPersonage = new Fabrique.AnimationFighter(_this.game, personage.id, personage);
+                    _this.animPersonage.x = (_this.width - _this.animPersonage.width) / 3;
+                    _this.animPersonage.y = (_this.height - _this.animPersonage.height) / 4;
+                    _this.animPersonage.scale.x = 1.5;
+                    _this.animPersonage.scale.y = 1.5;
+                    _this.fighter.addChild(_this.animPersonage);
+                    console.log(personage);
                     return;
                 }
             });
@@ -730,7 +767,7 @@ var Fabrique;
         __extends(PanelIcons, _super);
         function PanelIcons(game, parent) {
             var _this = _super.call(this, game, parent) || this;
-            _this.defaultFighterID = 'liukang';
+            _this.defaultFighterID = Constants.ID_LIUKANG;
             _this.updateTransform();
             _this.init();
             return _this;
@@ -739,28 +776,29 @@ var Fabrique;
             var _this = this;
             this.icons = [
                 [
-                    new Fabrique.Icon(this.game, 0, 0, Images.LiuKangIcon),
-                    new Fabrique.Icon(this.game, 95, 0, Images.KungLaoIcon),
-                    new Fabrique.Icon(this.game, 190, 0, Images.JohnnyCageIcon),
-                    new Fabrique.Icon(this.game, 285, 0, Images.ReptileIcon)
+                    new Fabrique.Icon(this.game, 0, 0, Images.LiuKangIcon, Constants.ID_LIUKANG),
+                    new Fabrique.Icon(this.game, 95, 0, Images.KungLaoIcon, Constants.ID_KUNGLAO),
+                    new Fabrique.Icon(this.game, 190, 0, Images.JohnnyCageIcon, Constants.ID_JOHNYCAGE),
+                    new Fabrique.Icon(this.game, 285, 0, Images.ReptileIcon, Constants.ID_REPTILE)
                 ],
                 [
-                    new Fabrique.Icon(this.game, 0, 125, Images.SubZeroIcon),
-                    new Fabrique.Icon(this.game, 95, 125, Images.ShangTsungIcon),
-                    new Fabrique.Icon(this.game, 190, 125, Images.KitanaIcon),
-                    new Fabrique.Icon(this.game, 285, 125, Images.JaxIcon)
+                    new Fabrique.Icon(this.game, 0, 125, Images.SubZeroIcon, Constants.ID_SUBZERO),
+                    new Fabrique.Icon(this.game, 95, 125, Images.ShangTsungIcon, Constants.ID_SHANGTSUNG),
+                    new Fabrique.Icon(this.game, 190, 125, Images.KitanaIcon, Constants.ID_KITANA),
+                    new Fabrique.Icon(this.game, 285, 125, Images.JaxIcon, Constants.ID_JAX)
                 ],
                 [
-                    new Fabrique.Icon(this.game, 0, 250, Images.MileenaIcon),
-                    new Fabrique.Icon(this.game, 95, 250, Images.BarakaIcon),
-                    new Fabrique.Icon(this.game, 190, 250, Images.ScorpionIcon),
-                    new Fabrique.Icon(this.game, 285, 250, Images.RaidenIcon)
+                    new Fabrique.Icon(this.game, 0, 250, Images.MileenaIcon, Constants.ID_MILEENA),
+                    new Fabrique.Icon(this.game, 95, 250, Images.BarakaIcon, Constants.ID_BARAKA),
+                    new Fabrique.Icon(this.game, 190, 250, Images.ScorpionIcon, Constants.ID_SCORPION),
+                    new Fabrique.Icon(this.game, 285, 250, Images.RaidenIcon, Constants.ID_RAIDEN)
                 ]
             ];
             this.x = -400;
             this.y = 150;
             this.icons.forEach(function (iconsLine) {
                 iconsLine.forEach(function (icon) {
+                    icon.event.add(_this.onChange, _this);
                     _this.addChild(icon);
                 });
             });
@@ -768,6 +806,17 @@ var Fabrique;
             this.windowPersonage = new Fabrique.WindowPersonage(this.game, -225, 50);
             this.windowPersonage.showPersonage(this.defaultFighterID);
             this.addChild(this.windowPersonage);
+        };
+        PanelIcons.prototype.onChange = function (target, id) {
+            //Utilits.Data.debugLog('Change [target/type]:', [target, id]);
+            this.icons.forEach(function (iconsLine) {
+                iconsLine.forEach(function (icon) {
+                    icon.unselect();
+                    if (icon.id === id)
+                        icon.select();
+                });
+            });
+            this.windowPersonage.changePersonage(id);
         };
         PanelIcons.prototype.show = function () {
             var tween = this.game.add.tween(this);

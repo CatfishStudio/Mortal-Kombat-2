@@ -32,10 +32,12 @@ module Fabrique {
                     new Icon(this.game, 285, 250, Images.RaidenIcon, Constants.ID_RAIDEN)
                 ]
             ];
+
             this.x = -400;
             this.y = 150;
             this.icons.forEach((iconsLine: Icon[]) => {
                 iconsLine.forEach((icon: Icon) => {
+                    icon.event.add(this.onChange, this);
                     this.addChild(icon);
                 });
             });
@@ -45,6 +47,19 @@ module Fabrique {
             this.windowPersonage = new WindowPersonage(this.game, -225, 50);
             this.windowPersonage.showPersonage(this.defaultFighterID);
             this.addChild(this.windowPersonage);
+        }
+
+        private onChange(target, id): void {
+            //Utilits.Data.debugLog('Change [target/type]:', [target, id]);
+
+            this.icons.forEach((iconsLine: Icon[]) => {
+                iconsLine.forEach((icon: Icon) => {
+                    icon.unselect();
+                    if(icon.id === id) icon.select()
+                });
+            });
+
+            this.windowPersonage.changePersonage(id);
         }
 
         public show():void{
