@@ -13,6 +13,13 @@ class Images {
     public static ButtonRight: string ='button_right.png';
     public static WindowBackground: string = 'window_background.png';
     public static WindowBorder: string = 'window_border.png';
+    public static WindowBackground2: string = 'window_2_background.png';
+    public static WindowBorder2: string = 'window_2_border.png';
+    public static capJax: string = 'jax_cap.png';
+    public static capMileena: string = 'mileena_cap.png';
+    public static capRaiden: string = 'raiden_cap.png';
+    public static capReptile: string = 'reptile_cap.png';
+    public static capShangTsung: string = 'shangtsung_cap.png';
 
     public static BarakaIcon:string = 'baraka.png';
     public static GoroIcon:string = 'goro.png';
@@ -42,6 +49,13 @@ class Images {
         Images.ButtonRight,
         Images.WindowBackground,
         Images.WindowBorder,
+        Images.WindowBackground2,
+        Images.WindowBorder2,
+        Images.capJax,
+        Images.capMileena,
+        Images.capRaiden,
+        Images.capReptile,
+        Images.capShangTsung,
 
         Images.BarakaIcon,
         Images.GoroIcon,

@@ -3,6 +3,7 @@ module Fabrique {
 
         private icons:Icon[][];
         private windowPersonage:WindowPersonage;
+        private windowCharacteristics:WindowCharacteristics;
         private defaultFighterID:string = Constants.ID_LIUKANG;
 
         constructor(game:Phaser.Game, parent:any){
@@ -44,9 +45,13 @@ module Fabrique {
 
             this.icons[0][0].select();
 
-            this.windowPersonage = new WindowPersonage(this.game, -225, 50);
+            this.windowPersonage = new WindowPersonage(this.game, -225, 122);
             this.windowPersonage.showPersonage(this.defaultFighterID);
             this.addChild(this.windowPersonage);
+
+            this.windowCharacteristics = new WindowCharacteristics(this.game, -225, 375);
+            this.windowCharacteristics.showCharacteristics(this.defaultFighterID);
+            this.addChild(this.windowCharacteristics);
         }
 
         private onChange(target, id): void {

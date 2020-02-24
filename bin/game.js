@@ -152,6 +152,13 @@ var Images = /** @class */ (function () {
     Images.ButtonRight = 'button_right.png';
     Images.WindowBackground = 'window_background.png';
     Images.WindowBorder = 'window_border.png';
+    Images.WindowBackground2 = 'window_2_background.png';
+    Images.WindowBorder2 = 'window_2_border.png';
+    Images.capJax = 'jax_cap.png';
+    Images.capMileena = 'mileena_cap.png';
+    Images.capRaiden = 'raiden_cap.png';
+    Images.capReptile = 'reptile_cap.png';
+    Images.capShangTsung = 'shangtsung_cap.png';
     Images.BarakaIcon = 'baraka.png';
     Images.GoroIcon = 'goro.png';
     Images.JaxIcon = 'jax.png';
@@ -179,6 +186,13 @@ var Images = /** @class */ (function () {
         Images.ButtonRight,
         Images.WindowBackground,
         Images.WindowBorder,
+        Images.WindowBackground2,
+        Images.WindowBorder2,
+        Images.capJax,
+        Images.capMileena,
+        Images.capRaiden,
+        Images.capReptile,
+        Images.capShangTsung,
         Images.BarakaIcon,
         Images.GoroIcon,
         Images.JaxIcon,
@@ -763,6 +777,25 @@ var Fabrique;
 })(Fabrique || (Fabrique = {}));
 var Fabrique;
 (function (Fabrique) {
+    var WindowCharacteristics = /** @class */ (function (_super) {
+        __extends(WindowCharacteristics, _super);
+        function WindowCharacteristics(game, x, y) {
+            var _this = _super.call(this, game, x, y, Images.WindowBackground2) || this;
+            _this.init();
+            return _this;
+        }
+        WindowCharacteristics.prototype.init = function () {
+            this.border = new Phaser.Sprite(this.game, 0, 0, Images.WindowBorder2);
+        };
+        WindowCharacteristics.prototype.showCharacteristics = function (personageID) {
+            this.addChild(this.border);
+        };
+        return WindowCharacteristics;
+    }(Phaser.Sprite));
+    Fabrique.WindowCharacteristics = WindowCharacteristics;
+})(Fabrique || (Fabrique = {}));
+var Fabrique;
+(function (Fabrique) {
     var PanelIcons = /** @class */ (function (_super) {
         __extends(PanelIcons, _super);
         function PanelIcons(game, parent) {
@@ -803,9 +836,12 @@ var Fabrique;
                 });
             });
             this.icons[0][0].select();
-            this.windowPersonage = new Fabrique.WindowPersonage(this.game, -225, 50);
+            this.windowPersonage = new Fabrique.WindowPersonage(this.game, -225, 122);
             this.windowPersonage.showPersonage(this.defaultFighterID);
             this.addChild(this.windowPersonage);
+            this.windowCharacteristics = new Fabrique.WindowCharacteristics(this.game, -225, 375);
+            this.windowCharacteristics.showCharacteristics(this.defaultFighterID);
+            this.addChild(this.windowCharacteristics);
         };
         PanelIcons.prototype.onChange = function (target, id) {
             //Utilits.Data.debugLog('Change [target/type]:', [target, id]);
@@ -1188,6 +1224,7 @@ var MortalKombat;
 /// <reference path="Fabrique\Objects\AnimationFighter.ts" />
 /// <reference path="Fabrique\Objects\Icon.ts" />
 /// <reference path="Fabrique\Objects\WindowPersonage.ts" />
+/// <reference path="Fabrique\Objects\WindowCharacteristics.ts" />
 /// <reference path="Fabrique\Objects\PanelIcons.ts" />
 /// <reference path="States\Boot.ts" />
 /// <reference path="States\Preloader.ts" />
