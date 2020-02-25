@@ -42,18 +42,18 @@ module Fabrique {
             this.cap5.scale.x = 0.8;
             this.cap5.scale.y = 0.8;
 
-            this.textCap1 = new Phaser.Text(this.game, 15, 110, "Удар ногой\n", {font: "12px Arial", fill: "#FFFFFF", align: "left"});
-            this.textValueCap1 = new Phaser.Text(this.game, 40, 125, Constants.LEG + " x", {font: "12px Arial", fill: "#FFFFFF", align: "left"});
-            this.textCap2 = new Phaser.Text(this.game, 90, 110, "Удар рукой\n", {font: "12px Arial", fill: "#FFFFFF", align: "left"});
-            this.textValueCap2 = new Phaser.Text(this.game, 115, 125, Constants.HAND +" x", {font: "12px Arial", fill: "#FFFFFF", align: "left"});
-            this.textCap3 = new Phaser.Text(this.game, 185, 110, "Блок\n", {font: "12px Arial", fill: "#FFFFFF", align: "left"});
-            this.textValueCap3 = new Phaser.Text(this.game, 195, 125, Constants.BLOCK + " x", {font: "12px Arial", fill: "#FFFFFF", align: "left"});
-            this.textCap4 = new Phaser.Text(this.game, 245, 110, "Апперкот\n", {font: "12px Arial", fill: "#FFFFFF", align: "left"});
-            this.textValueCap4 = new Phaser.Text(this.game, 265, 125, Constants.UPPERCUT + " x", {font: "12px Arial", fill: "#FFFFFF", align: "left"});
-            this.textCap5 = new Phaser.Text(this.game, 315, 110, "С разворота\n", {font: "12px Arial", fill: "#FFFFFF", align: "left"});
-            this.textValueCap5 = new Phaser.Text(this.game, 345, 125, Constants.TWIST + " x", {font: "12px Arial", fill: "#FFFFFF", align: "left"});
+            this.textCap1 = new Phaser.Text(this.game, 15, 110, "Удар ногой\n", {font: "12px Arial", fill: "#C4C4C4", align: "left"});
+            this.textValueCap1 = new Phaser.Text(this.game, 40, 125, Constants.LEG + " x", {font: "12px Arial", fill: "#C4C4C4", align: "left"});
+            this.textCap2 = new Phaser.Text(this.game, 90, 110, "Удар рукой\n", {font: "12px Arial", fill: "#C4C4C4", align: "left"});
+            this.textValueCap2 = new Phaser.Text(this.game, 115, 125, Constants.HAND +" x", {font: "12px Arial", fill: "#C4C4C4", align: "left"});
+            this.textCap3 = new Phaser.Text(this.game, 185, 110, "Блок\n", {font: "12px Arial", fill: "#C4C4C4", align: "left"});
+            this.textValueCap3 = new Phaser.Text(this.game, 195, 125, Constants.BLOCK + " x", {font: "12px Arial", fill: "#C4C4C4", align: "left"});
+            this.textCap4 = new Phaser.Text(this.game, 245, 110, "Апперкот\n", {font: "12px Arial", fill: "#C4C4C4", align: "left"});
+            this.textValueCap4 = new Phaser.Text(this.game, 265, 125, Constants.UPPERCUT + " x", {font: "12px Arial", fill: "#C4C4C4", align: "left"});
+            this.textCap5 = new Phaser.Text(this.game, 315, 110, "С разворота\n", {font: "12px Arial", fill: "#C4C4C4", align: "left"});
+            this.textValueCap5 = new Phaser.Text(this.game, 345, 125, Constants.TWIST + " x", {font: "12px Arial", fill: "#C4C4C4", align: "left"});
 
-            this.namePersonage = new Phaser.Text(this.game, 50, 15, "", {font: "22px Georgia", fill: "#FFFFFF", align: "left"});
+            this.namePersonage = new Phaser.Text(this.game, 50, 15, "", {font: "22px Georgia", fill: "#B7B7B7", align: "left"});
 
             this.addChild(this.namePersonage);
             this.addChild(this.cap1);
