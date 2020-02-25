@@ -65,11 +65,12 @@ module Fabrique {
             });
 
             this.windowPersonage.changePersonage(id);
+            this.windowCharacteristics.showCharacteristics(id);
         }
 
         public show():void{
             let tween:Phaser.Tween = this.game.add.tween(this);
-            tween.to({x: 250, y: 150}, 500, 'Linear');
+            tween.to({x: 245, y: 150}, 500, 'Linear');
             tween.start();
         }
     }

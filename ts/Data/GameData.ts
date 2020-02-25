@@ -42,8 +42,9 @@ module GameData {
                 personage.id = game.cache.getJSON(value).id;
                 personage.name = game.cache.getJSON(value).name;
                 personage.hand = game.cache.getJSON(value).hand;
-                personage.uppercut = game.cache.getJSON(value).uppercut;
                 personage.leg = game.cache.getJSON(value).leg;
+                personage.block = game.cache.getJSON(value).block;
+                personage.uppercut = game.cache.getJSON(value).uppercut;
                 personage.twist = game.cache.getJSON(value).twist;
                 personage.life = game.cache.getJSON(value).life;
 
