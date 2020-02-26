@@ -18,6 +18,7 @@ module MortalKombat {
             this.state.add(Preloader.Name, Preloader, false);
             this.state.add(Menu.Name, Menu, false);
             this.state.add(Fighters.Name, Fighters, false);
+            this.state.add(Tower.Name, Tower, false);
         }
 
         public static getInstance(): Game {

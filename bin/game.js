@@ -30,6 +30,7 @@ var MortalKombat;
             _this.state.add(MortalKombat.Preloader.Name, MortalKombat.Preloader, false);
             _this.state.add(MortalKombat.Menu.Name, MortalKombat.Menu, false);
             _this.state.add(MortalKombat.Fighters.Name, MortalKombat.Fighters, false);
+            _this.state.add(MortalKombat.Tower.Name, MortalKombat.Tower, false);
             return _this;
         }
         Game.getInstance = function () {
@@ -1246,6 +1247,7 @@ var MortalKombat;
                     }
                 case Constants.SELECT_FIGHTER:
                     {
+                        this.game.state.start(MortalKombat.Tower.Name, true, false);
                         break;
                     }
                 default:
@@ -1272,6 +1274,46 @@ var MortalKombat;
     }(Phaser.State));
     MortalKombat.Fighters = Fighters;
 })(MortalKombat || (MortalKombat = {}));
+var MortalKombat;
+(function (MortalKombat) {
+    var Tower = /** @class */ (function (_super) {
+        __extends(Tower, _super);
+        function Tower() {
+            var _this = _super.call(this) || this;
+            _this.name = Tower.Name;
+            return _this;
+        }
+        Tower.prototype.create = function () {
+            this.groupStore = new Phaser.Group(this.game, this.stage);
+            this.storeSprite = new Phaser.Sprite(this.game, -5, -5, Images.UpgradeImage);
+            this.storeSprite.scale.set(1.025);
+            this.groupStore.addChild(this.storeSprite);
+            this.tween = this.game.add.tween(this.storeSprite);
+            this.tween.to({ x: -200, y: -5 }, 20000, 'Linear');
+            this.tween.to({ x: 0, y: 0 }, 20000, 'Linear');
+            this.tween.onComplete.add(this.onTweenComplete, this);
+            this.videoSprite = new Phaser.Sprite(this.game, 0, 0, Atlases.Video3, 0);
+            this.videoSprite.scale.set(2.6, 2.6);
+            this.groupStore.addChild(this.videoSprite);
+            var anim = this.videoSprite.animations.add(Atlases.Video3);
+            anim.onComplete.add(this.onCompleteVideo, this);
+            anim.play(15, false, true);
+            this.groupStore.addChild(new Phaser.Sprite(this.game, 0, 0, Images.BackgroundImage));
+        };
+        Tower.prototype.shutdown = function () {
+            this.groupStore.removeAll();
+        };
+        Tower.prototype.onCompleteVideo = function () {
+            this.tween.start();
+        };
+        Tower.prototype.onTweenComplete = function (event) {
+            this.tween.start();
+        };
+        Tower.Name = "tower";
+        return Tower;
+    }(Phaser.State));
+    MortalKombat.Tower = Tower;
+})(MortalKombat || (MortalKombat = {}));
 /// <reference path="..\node_modules\phaser-ce\typescript\phaser.d.ts" />
 /// <reference path="Data\Constants.ts" />
 /// <reference path="Data\Config.ts" />
@@ -1294,4 +1336,5 @@ var MortalKombat;
 /// <reference path="States\Preloader.ts" />
 /// <reference path="States\Menu.ts" />
 /// <reference path="States\Fighters.ts" />
+/// <reference path="States\Tower.ts" />
 /// <reference path="app.ts" />

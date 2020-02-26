@@ -128,7 +128,7 @@ module MortalKombat {
                     }  
                 case Constants.SELECT_FIGHTER:
                     {
-                        
+                        this.game.state.start(Tower.Name, true, false);
                         break;
                     }                                  
                 default:
