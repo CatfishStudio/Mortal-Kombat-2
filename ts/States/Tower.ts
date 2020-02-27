@@ -89,6 +89,8 @@ module MortalKombat {
             this.tutorial.x = Constants.GAME_WIDTH;
             this.tutorial.y = (Constants.GAME_HEIGHT - 175);
             this.groupContent.addChild(this.tutorial);
+
+            Utilits.Data.debugLog("user_personage", GameData.Data.user_personage);
         }
 
         private onButtonClick(event) {

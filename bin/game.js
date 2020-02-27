@@ -383,6 +383,16 @@ var GameData;
             });
             Utilits.Data.debugLog("PERSONAGES", GameData.Data.personages);
         };
+        Data.getPersonage = function (personageID) {
+            var personageChange;
+            GameData.Data.personages.forEach(function (personage) {
+                if (personage.id === personageID) {
+                    personageChange = personage;
+                    return;
+                }
+            });
+            return personageChange;
+        };
         /* загрузка анимаций бойцов
             damage  - damage
             hit1 - hit_leg
@@ -750,36 +760,58 @@ var Fabrique;
             this.fighter = new Phaser.Group(this.game, this);
         };
         WindowPersonage.prototype.showPersonage = function (personageID) {
-            var _this = this;
-            GameData.Data.personages.forEach(function (personage) {
-                if (personage.id === personageID) {
-                    _this.animPersonage = new Fabrique.AnimationFighter(_this.game, personage.id, personage);
-                    _this.animPersonage.x = (_this.width - _this.animPersonage.width) / 3;
-                    _this.animPersonage.y = (_this.height - _this.animPersonage.height) / 4;
-                    _this.animPersonage.scale.x = 1.5;
-                    _this.animPersonage.scale.y = 1.5;
-                    _this.fighter.addChild(_this.animPersonage);
-                    _this.addChild(_this.border);
+            var personage;
+            personage = GameData.Data.getPersonage(personageID);
+            this.animPersonage = new Fabrique.AnimationFighter(this.game, personage.id, personage);
+            this.animPersonage.x = (this.width - this.animPersonage.width) / 3;
+            this.animPersonage.y = (this.height - this.animPersonage.height) / 4;
+            this.animPersonage.scale.x = 1.5;
+            this.animPersonage.scale.y = 1.5;
+            this.fighter.addChild(this.animPersonage);
+            this.addChild(this.border);
+            /*
+            GameData.Data.personages.forEach((personage: GameData.IPersonage) => {
+                if(personage.id === personageID){
+                    this.animPersonage = new AnimationFighter(this.game, personage.id, personage);
+                    this.animPersonage.x = (this.width - this.animPersonage.width) / 3;
+                    this.animPersonage.y = (this.height - this.animPersonage.height) / 4;
+                    this.animPersonage.scale.x = 1.5;
+                    this.animPersonage.scale.y = 1.5;
+                    this.fighter.addChild(this.animPersonage);
+                    this.addChild(this.border);
                     return;
                 }
             });
+            */
         };
         WindowPersonage.prototype.changePersonage = function (personageID) {
-            var _this = this;
-            GameData.Data.personages.forEach(function (personage) {
-                if (personage.id === personageID) {
-                    _this.animPersonage.destroy();
-                    _this.fighter.removeAll();
-                    _this.animPersonage = new Fabrique.AnimationFighter(_this.game, personage.id, personage);
-                    _this.animPersonage.x = (_this.width - _this.animPersonage.width) / 3;
-                    _this.animPersonage.y = (_this.height - _this.animPersonage.height) / 4;
-                    _this.animPersonage.scale.x = 1.5;
-                    _this.animPersonage.scale.y = 1.5;
-                    _this.fighter.addChild(_this.animPersonage);
-                    console.log(personage);
+            var personage;
+            personage = GameData.Data.getPersonage(personageID);
+            this.animPersonage.destroy();
+            this.fighter.removeAll();
+            this.animPersonage = new Fabrique.AnimationFighter(this.game, personage.id, personage);
+            this.animPersonage.x = (this.width - this.animPersonage.width) / 3;
+            this.animPersonage.y = (this.height - this.animPersonage.height) / 4;
+            this.animPersonage.scale.x = 1.5;
+            this.animPersonage.scale.y = 1.5;
+            this.fighter.addChild(this.animPersonage);
+            Utilits.Data.debugLog("change personage", personage);
+            /*
+            GameData.Data.personages.forEach((personage: GameData.IPersonage) => {
+                if(personage.id === personageID){
+                    this.animPersonage.destroy();
+                    this.fighter.removeAll();
+                    this.animPersonage = new AnimationFighter(this.game, personage.id, personage);
+                    this.animPersonage.x = (this.width - this.animPersonage.width) / 3;
+                    this.animPersonage.y = (this.height - this.animPersonage.height) / 4;
+                    this.animPersonage.scale.x = 1.5;
+                    this.animPersonage.scale.y = 1.5;
+                    this.fighter.addChild(this.animPersonage);
+                    Utilits.Data.debugLog("change personage", personage);
                     return;
                 }
             });
+            */
         };
         return WindowPersonage;
     }(Phaser.Sprite));
@@ -914,6 +946,7 @@ var Fabrique;
             this.windowCharacteristics = new Fabrique.WindowCharacteristics(this.game, -225, 375);
             this.windowCharacteristics.showCharacteristics(this.defaultFighterID);
             this.addChild(this.windowCharacteristics);
+            GameData.Data.user_personage = GameData.Data.getPersonage(this.defaultFighterID);
         };
         PanelIcons.prototype.onChange = function (target, id) {
             //Utilits.Data.debugLog('Change [target/type]:', [target, id]);
@@ -926,6 +959,7 @@ var Fabrique;
             });
             this.windowPersonage.changePersonage(id);
             this.windowCharacteristics.showCharacteristics(id);
+            GameData.Data.user_personage = GameData.Data.getPersonage(id);
         };
         PanelIcons.prototype.show = function () {
             var tween = this.game.add.tween(this);
@@ -1345,6 +1379,7 @@ var MortalKombat;
             this.tutorial.x = Constants.GAME_WIDTH;
             this.tutorial.y = (Constants.GAME_HEIGHT - 175);
             this.groupContent.addChild(this.tutorial);
+            Utilits.Data.debugLog("user_personage", GameData.Data.user_personage);
         };
         Tower.prototype.onButtonClick = function (event) {
             switch (event.name) {

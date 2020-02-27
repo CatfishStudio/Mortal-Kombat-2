@@ -32,7 +32,13 @@ module GameData {
         ];
 
         public static personages:IPersonage[]; // массив персонажей и их характеристик
+        
+        public static user_personage:IPersonage; // выбранный пользователем персонаж
+        public static user_continue:number; // количество попыток
+        public static tournamentProgress:number; // прогресс прохождения турника (индекс врага)
 
+        public static id_enemies:number[];  // идентификаторы персонажей (враги)
+        
         /* инициализация персонажей */
         public static initPersonages(game: Phaser.Game):void {
             GameData.Data.personages = [];
@@ -53,6 +59,17 @@ module GameData {
             });
 
             Utilits.Data.debugLog("PERSONAGES", GameData.Data.personages);
+        }
+
+        public static getPersonage(personageID:string):IPersonage{
+            let personageChange: IPersonage;
+            GameData.Data.personages.forEach((personage: GameData.IPersonage) => {
+                if(personage.id === personageID){
+                    personageChange = personage;
+                    return;
+                }
+            });
+            return personageChange;
         }
 
         /* загрузка анимаций бойцов 

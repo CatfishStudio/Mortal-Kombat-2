@@ -17,35 +17,29 @@ module Fabrique {
         }
 
         public showPersonage(personageID:string):void{
-            GameData.Data.personages.forEach((personage: GameData.IPersonage) => {
-                if(personage.id === personageID){
-                    this.animPersonage = new AnimationFighter(this.game, personage.id, personage);
-                    this.animPersonage.x = (this.width - this.animPersonage.width) / 3;
-                    this.animPersonage.y = (this.height - this.animPersonage.height) / 4;
-                    this.animPersonage.scale.x = 1.5;
-                    this.animPersonage.scale.y = 1.5;
-                    this.fighter.addChild(this.animPersonage);
-                    this.addChild(this.border);
-                    return;
-                }
-            });
+            let personage: GameData.IPersonage;
+            personage = GameData.Data.getPersonage(personageID);
+            this.animPersonage = new AnimationFighter(this.game, personage.id, personage);
+            this.animPersonage.x = (this.width - this.animPersonage.width) / 3;
+            this.animPersonage.y = (this.height - this.animPersonage.height) / 4;
+            this.animPersonage.scale.x = 1.5;
+            this.animPersonage.scale.y = 1.5;
+            this.fighter.addChild(this.animPersonage);
+            this.addChild(this.border);
         }
 
         public changePersonage(personageID:string):void{
-            GameData.Data.personages.forEach((personage: GameData.IPersonage) => {
-                if(personage.id === personageID){
-                    this.animPersonage.destroy();
-                    this.fighter.removeAll();
-                    this.animPersonage = new AnimationFighter(this.game, personage.id, personage);
-                    this.animPersonage.x = (this.width - this.animPersonage.width) / 3;
-                    this.animPersonage.y = (this.height - this.animPersonage.height) / 4;
-                    this.animPersonage.scale.x = 1.5;
-                    this.animPersonage.scale.y = 1.5;
-                    this.fighter.addChild(this.animPersonage);
-                    console.log(personage);
-                    return;
-                }
-            });
+            let personage: GameData.IPersonage;
+            personage = GameData.Data.getPersonage(personageID);
+            this.animPersonage.destroy();
+            this.fighter.removeAll();
+            this.animPersonage = new AnimationFighter(this.game, personage.id, personage);
+            this.animPersonage.x = (this.width - this.animPersonage.width) / 3;
+            this.animPersonage.y = (this.height - this.animPersonage.height) / 4;
+            this.animPersonage.scale.x = 1.5;
+            this.animPersonage.scale.y = 1.5;
+            this.fighter.addChild(this.animPersonage);
+            Utilits.Data.debugLog("change personage", personage);
         }
 
     }
