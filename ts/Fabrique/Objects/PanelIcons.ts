@@ -52,6 +52,8 @@ module Fabrique {
             this.windowCharacteristics = new WindowCharacteristics(this.game, -225, 375);
             this.windowCharacteristics.showCharacteristics(this.defaultFighterID);
             this.addChild(this.windowCharacteristics);
+
+            GameData.Data.user_personage = GameData.Data.getPersonage(this.defaultFighterID);
         }
 
         private onChange(target, id): void {
@@ -66,6 +68,7 @@ module Fabrique {
 
             this.windowPersonage.changePersonage(id);
             this.windowCharacteristics.showCharacteristics(id);
+            GameData.Data.user_personage = GameData.Data.getPersonage(id);
         }
 
         public show():void{
