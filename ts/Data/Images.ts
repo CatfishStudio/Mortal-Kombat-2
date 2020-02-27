@@ -20,7 +20,10 @@ class Images {
     public static capRaiden: string = 'raiden_cap.png';
     public static capReptile: string = 'reptile_cap.png';
     public static capShangTsung: string = 'shangtsung_cap.png';
-
+    public static towerHeader: string = 'tower_header.png';
+    public static towerContent: string = 'tower_content.png';
+    public static towerFooter: string = 'tower_footer.png';
+    
     public static BarakaIcon:string = 'baraka.png';
     public static GoroIcon:string = 'goro.png';
     public static JaxIcon:string = 'jax.png';
@@ -56,6 +59,9 @@ class Images {
         Images.capRaiden,
         Images.capReptile,
         Images.capShangTsung,
+        Images.towerHeader,
+        Images.towerContent,
+        Images.towerFooter,
 
         Images.BarakaIcon,
         Images.GoroIcon,

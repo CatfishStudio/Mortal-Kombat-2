@@ -160,6 +160,9 @@ var Images = /** @class */ (function () {
     Images.capRaiden = 'raiden_cap.png';
     Images.capReptile = 'reptile_cap.png';
     Images.capShangTsung = 'shangtsung_cap.png';
+    Images.towerHeader = 'tower_header.png';
+    Images.towerContent = 'tower_content.png';
+    Images.towerFooter = 'tower_footer.png';
     Images.BarakaIcon = 'baraka.png';
     Images.GoroIcon = 'goro.png';
     Images.JaxIcon = 'jax.png';
@@ -194,6 +197,9 @@ var Images = /** @class */ (function () {
         Images.capRaiden,
         Images.capReptile,
         Images.capShangTsung,
+        Images.towerHeader,
+        Images.towerContent,
+        Images.towerFooter,
         Images.BarakaIcon,
         Images.GoroIcon,
         Images.JaxIcon,
@@ -268,6 +274,7 @@ var Sheet = /** @class */ (function () {
     Sheet.ButtonClose = 'button_close_sheet.png';
     Sheet.ButtonSelectFighter = 'button_select_fighter_sheet.png';
     Sheet.ButtonBackMenuMini = 'button_back_menu_mini_sheet.png';
+    Sheet.ButtonBackMini = 'button_back_mini_sheet.png';
     Sheet.ButtonHelpMini = 'button_help_mini_sheet.png';
     Sheet.preloadList = [
         Sheet.ButtonStartNewGame,
@@ -276,6 +283,7 @@ var Sheet = /** @class */ (function () {
         Sheet.ButtonClose,
         Sheet.ButtonSelectFighter,
         Sheet.ButtonBackMenuMini,
+        Sheet.ButtonBackMini,
         Sheet.ButtonHelpMini
     ];
     return Sheet;
@@ -1276,6 +1284,9 @@ var MortalKombat;
 })(MortalKombat || (MortalKombat = {}));
 var MortalKombat;
 (function (MortalKombat) {
+    var Tutorial = Fabrique.Tutorial;
+    var Settings = Fabrique.Settings;
+    var Title = Fabrique.Title;
     var Tower = /** @class */ (function (_super) {
         __extends(Tower, _super);
         function Tower() {
@@ -1284,30 +1295,96 @@ var MortalKombat;
             return _this;
         }
         Tower.prototype.create = function () {
-            this.groupStore = new Phaser.Group(this.game, this.stage);
-            this.storeSprite = new Phaser.Sprite(this.game, -5, -5, Images.UpgradeImage);
-            this.storeSprite.scale.set(1.025);
-            this.groupStore.addChild(this.storeSprite);
-            this.tween = this.game.add.tween(this.storeSprite);
+            this.groupContent = new Phaser.Group(this.game, this.stage);
+            this.backgroundSprite = new Phaser.Sprite(this.game, -5, -5, Images.UpgradeImage);
+            this.backgroundSprite.scale.set(1.025);
+            this.groupContent.addChild(this.backgroundSprite);
+            this.tween = this.game.add.tween(this.backgroundSprite);
             this.tween.to({ x: -200, y: -5 }, 20000, 'Linear');
             this.tween.to({ x: 0, y: 0 }, 20000, 'Linear');
             this.tween.onComplete.add(this.onTweenComplete, this);
             this.videoSprite = new Phaser.Sprite(this.game, 0, 0, Atlases.Video3, 0);
             this.videoSprite.scale.set(2.6, 2.6);
-            this.groupStore.addChild(this.videoSprite);
+            this.groupContent.addChild(this.videoSprite);
             var anim = this.videoSprite.animations.add(Atlases.Video3);
             anim.onComplete.add(this.onCompleteVideo, this);
             anim.play(15, false, true);
-            this.groupStore.addChild(new Phaser.Sprite(this.game, 0, 0, Images.BackgroundImage));
+            this.createContent();
+            this.groupContent.addChild(new Phaser.Sprite(this.game, 0, 0, Images.BackgroundImage));
         };
         Tower.prototype.shutdown = function () {
-            this.groupStore.removeAll();
+            this.tween.stop();
+            this.tween = null;
+            this.groupContent.removeAll();
+            this.game.stage.removeChildren();
         };
         Tower.prototype.onCompleteVideo = function () {
             this.tween.start();
+            this.title.show();
+            if (Config.settintTutorial === true)
+                this.tutorial.show((Constants.GAME_WIDTH / 2), (Constants.GAME_HEIGHT - 175));
+            this.backButton = new Phaser.Button(this.game, -25, 5, Sheet.ButtonBackMini, this.onButtonClick, this, 1, 2, 2, 2);
+            this.backButton.name = Constants.BACK_MENU;
+            this.groupContent.addChild(this.backButton);
+            this.settingsButton = new Phaser.Button(this.game, (Constants.GAME_WIDTH / 2) - (255 / 2), 5, Sheet.ButtonSettings, this.onButtonClick, this, 1, 2, 2, 2);
+            this.settingsButton.name = Constants.SETTINGS;
+            this.groupContent.addChild(this.settingsButton);
+            this.backHalpButton = new Phaser.Button(this.game, Constants.GAME_WIDTH - 230, 5, Sheet.ButtonHelpMini, this.onButtonClick, this, 1, 2, 2, 2);
+            this.backHalpButton.name = Constants.HELP;
+            this.groupContent.addChild(this.backHalpButton);
         };
         Tower.prototype.onTweenComplete = function (event) {
             this.tween.start();
+        };
+        Tower.prototype.createContent = function () {
+            /* title */
+            this.title = new Title(this.game, 0, -50, 'ТУРНИР');
+            this.groupContent.addChild(this.title);
+            /* tutorial */
+            this.tutorial = new Tutorial(this.game, GameData.Data.tutorList[1]);
+            this.tutorial.x = Constants.GAME_WIDTH;
+            this.tutorial.y = (Constants.GAME_HEIGHT - 175);
+            this.groupContent.addChild(this.tutorial);
+        };
+        Tower.prototype.onButtonClick = function (event) {
+            switch (event.name) {
+                case Constants.BACK_MENU:
+                    {
+                        this.game.state.start(MortalKombat.Fighters.Name, true, false);
+                        break;
+                    }
+                case Constants.SETTINGS:
+                    {
+                        this.settingsCreate();
+                        break;
+                    }
+                case Constants.SETTINGS_CLOSE:
+                    {
+                        this.settingsClose();
+                        break;
+                    }
+                case Constants.HELP:
+                    {
+                        break;
+                    }
+                default:
+                    break;
+            }
+        };
+        Tower.prototype.settingsCreate = function () {
+            this.tutorial.x = Constants.GAME_WIDTH;
+            this.tutorial.y = (Constants.GAME_HEIGHT - 175);
+            this.settings = new Settings(this.game, this.groupContent);
+            this.settings.event.add(this.onButtonClick.bind(this));
+        };
+        Tower.prototype.settingsClose = function () {
+            this.settings.removeAll();
+            this.groupContent.removeChild(this.settings);
+            if (Config.settintTutorial === true) {
+                var tweenTutorial = this.game.add.tween(this.tutorial);
+                tweenTutorial.to({ x: (Constants.GAME_WIDTH / 2), y: (Constants.GAME_HEIGHT - 175) }, 500, 'Linear');
+                tweenTutorial.start();
+            }
         };
         Tower.Name = "tower";
         return Tower;

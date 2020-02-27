@@ -5,6 +5,7 @@ class Sheet {
     public static ButtonClose: string = 'button_close_sheet.png';
     public static ButtonSelectFighter: string = 'button_select_fighter_sheet.png';
     public static ButtonBackMenuMini: string = 'button_back_menu_mini_sheet.png';
+    public static ButtonBackMini: string = 'button_back_mini_sheet.png';
     public static ButtonHelpMini: string = 'button_help_mini_sheet.png';
     
     public static preloadList:Array<string> = [
@@ -14,6 +15,7 @@ class Sheet {
         Sheet.ButtonClose,
         Sheet.ButtonSelectFighter,
         Sheet.ButtonBackMenuMini,
+        Sheet.ButtonBackMini,
         Sheet.ButtonHelpMini
     ]; 
     
