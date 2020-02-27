@@ -6,5 +6,5 @@
     "block": 1,
     "uppercut": 1,
     "twist": 2,
-    "life": 0
+    "life": 200
 }
