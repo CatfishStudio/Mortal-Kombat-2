@@ -43,6 +43,7 @@ module MortalKombat {
             anim.onComplete.add(this.onCompleteVideo, this);
             anim.play(15, false, true);
 
+            GameData.Data.initNewGame();
             this.createContent();
 
             this.groupContent.addChild(new Phaser.Sprite(this.game, 0, 0, Images.BackgroundImage));
@@ -59,7 +60,7 @@ module MortalKombat {
             this.tween.start();
 
             this.title.show();
-            if(Config.settintTutorial === true) this.tutorial.show((Constants.GAME_WIDTH / 2), (Constants.GAME_HEIGHT - 175));
+            if(Config.settintTutorial === true) this.tutorial.show(0, 150);
 
             this.backButton = new Phaser.Button(this.game, -25, 5, Sheet.ButtonBackMini, this.onButtonClick, this, 1, 2, 2, 2);
             this.backButton.name = Constants.BACK_MENU;
@@ -86,8 +87,8 @@ module MortalKombat {
                         
             /* tutorial */
             this.tutorial = new Tutorial(this.game, GameData.Data.tutorList[1]);
-            this.tutorial.x = Constants.GAME_WIDTH;
-            this.tutorial.y = (Constants.GAME_HEIGHT - 175);
+            this.tutorial.x = -500;
+            this.tutorial.y = 150;
             this.groupContent.addChild(this.tutorial);
 
             Utilits.Data.debugLog("user_personage", GameData.Data.user_personage);
@@ -121,8 +122,8 @@ module MortalKombat {
         }
 
         private settingsCreate() {
-            this.tutorial.x = Constants.GAME_WIDTH;
-            this.tutorial.y = (Constants.GAME_HEIGHT - 175);
+            this.tutorial.x = -500;
+            this.tutorial.y = 150;
             
             this.settings = new Settings(this.game, this.groupContent);
             this.settings.event.add(this.onButtonClick.bind(this));
@@ -134,7 +135,7 @@ module MortalKombat {
             
             if(Config.settintTutorial === true){
                 let tweenTutorial: Phaser.Tween = this.game.add.tween(this.tutorial);
-                tweenTutorial.to({ x: (Constants.GAME_WIDTH / 2), y: (Constants.GAME_HEIGHT - 175)}, 500, 'Linear');
+                tweenTutorial.to({ x: 0, y: 150}, 500, 'Linear');
                 tweenTutorial.start();
             }
         }

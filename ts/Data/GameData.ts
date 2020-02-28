@@ -61,6 +61,7 @@ module GameData {
             Utilits.Data.debugLog("PERSONAGES", GameData.Data.personages);
         }
 
+        /* получить данные персонажа по его ID */
         public static getPersonage(personageID:string):IPersonage{
             let personageChange: IPersonage;
             GameData.Data.personages.forEach((personage: GameData.IPersonage) => {
@@ -83,7 +84,7 @@ module GameData {
             stance - stance
             victory - win
         */
-        public static loadAnimation(game: Phaser.Game, personage: IPersonage):void {    // загрузка анимаций бойцов
+        public static loadAnimation(game: Phaser.Game, personage: IPersonage):void {
             try {
                 let json = game.cache.getJSON(personage.id + '.json');
                 let block:string[] = [];
@@ -118,8 +119,12 @@ module GameData {
                 personage.animStance = stance;
                 personage.animWin = win;
             } catch (error) {
-                //console.log(error);
+                console.log(error);
             }
+        }
+
+        public static initNewGame():void {
+
         }
     }
 }

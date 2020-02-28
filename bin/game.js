@@ -383,6 +383,7 @@ var GameData;
             });
             Utilits.Data.debugLog("PERSONAGES", GameData.Data.personages);
         };
+        /* получить данные персонажа по его ID */
         Data.getPersonage = function (personageID) {
             var personageChange;
             GameData.Data.personages.forEach(function (personage) {
@@ -447,8 +448,10 @@ var GameData;
                 personage.animWin = win;
             }
             catch (error) {
-                //console.log(error);
+                console.log(error);
             }
+        };
+        Data.initNewGame = function () {
         };
         Data.tutorList = [
             'Нажмите на кнопку\n"начать игру"\nчтобы начать\nтурнир.',
@@ -769,20 +772,6 @@ var Fabrique;
             this.animPersonage.scale.y = 1.5;
             this.fighter.addChild(this.animPersonage);
             this.addChild(this.border);
-            /*
-            GameData.Data.personages.forEach((personage: GameData.IPersonage) => {
-                if(personage.id === personageID){
-                    this.animPersonage = new AnimationFighter(this.game, personage.id, personage);
-                    this.animPersonage.x = (this.width - this.animPersonage.width) / 3;
-                    this.animPersonage.y = (this.height - this.animPersonage.height) / 4;
-                    this.animPersonage.scale.x = 1.5;
-                    this.animPersonage.scale.y = 1.5;
-                    this.fighter.addChild(this.animPersonage);
-                    this.addChild(this.border);
-                    return;
-                }
-            });
-            */
         };
         WindowPersonage.prototype.changePersonage = function (personageID) {
             var personage;
@@ -796,22 +785,6 @@ var Fabrique;
             this.animPersonage.scale.y = 1.5;
             this.fighter.addChild(this.animPersonage);
             Utilits.Data.debugLog("change personage", personage);
-            /*
-            GameData.Data.personages.forEach((personage: GameData.IPersonage) => {
-                if(personage.id === personageID){
-                    this.animPersonage.destroy();
-                    this.fighter.removeAll();
-                    this.animPersonage = new AnimationFighter(this.game, personage.id, personage);
-                    this.animPersonage.x = (this.width - this.animPersonage.width) / 3;
-                    this.animPersonage.y = (this.height - this.animPersonage.height) / 4;
-                    this.animPersonage.scale.x = 1.5;
-                    this.animPersonage.scale.y = 1.5;
-                    this.fighter.addChild(this.animPersonage);
-                    Utilits.Data.debugLog("change personage", personage);
-                    return;
-                }
-            });
-            */
         };
         return WindowPersonage;
     }(Phaser.Sprite));
@@ -1343,6 +1316,7 @@ var MortalKombat;
             var anim = this.videoSprite.animations.add(Atlases.Video3);
             anim.onComplete.add(this.onCompleteVideo, this);
             anim.play(15, false, true);
+            GameData.Data.initNewGame();
             this.createContent();
             this.groupContent.addChild(new Phaser.Sprite(this.game, 0, 0, Images.BackgroundImage));
         };
@@ -1356,7 +1330,7 @@ var MortalKombat;
             this.tween.start();
             this.title.show();
             if (Config.settintTutorial === true)
-                this.tutorial.show((Constants.GAME_WIDTH / 2), (Constants.GAME_HEIGHT - 175));
+                this.tutorial.show(0, 150);
             this.backButton = new Phaser.Button(this.game, -25, 5, Sheet.ButtonBackMini, this.onButtonClick, this, 1, 2, 2, 2);
             this.backButton.name = Constants.BACK_MENU;
             this.groupContent.addChild(this.backButton);
@@ -1376,8 +1350,8 @@ var MortalKombat;
             this.groupContent.addChild(this.title);
             /* tutorial */
             this.tutorial = new Tutorial(this.game, GameData.Data.tutorList[1]);
-            this.tutorial.x = Constants.GAME_WIDTH;
-            this.tutorial.y = (Constants.GAME_HEIGHT - 175);
+            this.tutorial.x = -500;
+            this.tutorial.y = 150;
             this.groupContent.addChild(this.tutorial);
             Utilits.Data.debugLog("user_personage", GameData.Data.user_personage);
         };
@@ -1407,8 +1381,8 @@ var MortalKombat;
             }
         };
         Tower.prototype.settingsCreate = function () {
-            this.tutorial.x = Constants.GAME_WIDTH;
-            this.tutorial.y = (Constants.GAME_HEIGHT - 175);
+            this.tutorial.x = -500;
+            this.tutorial.y = 150;
             this.settings = new Settings(this.game, this.groupContent);
             this.settings.event.add(this.onButtonClick.bind(this));
         };
@@ -1417,7 +1391,7 @@ var MortalKombat;
             this.groupContent.removeChild(this.settings);
             if (Config.settintTutorial === true) {
                 var tweenTutorial = this.game.add.tween(this.tutorial);
-                tweenTutorial.to({ x: (Constants.GAME_WIDTH / 2), y: (Constants.GAME_HEIGHT - 175) }, 500, 'Linear');
+                tweenTutorial.to({ x: 0, y: 150 }, 500, 'Linear');
                 tweenTutorial.start();
             }
         };
