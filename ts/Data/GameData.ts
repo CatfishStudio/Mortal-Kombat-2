@@ -37,8 +37,39 @@ module GameData {
         public static user_continue:number; // количество попыток
         public static tournamentProgress:number; // прогресс прохождения турника (индекс врага)
 
-        public static id_enemies:number[];  // идентификаторы персонажей (враги)
+        public static id_enemies:string[];  // идентификаторы персонажей (враги)
         
+        public static initNewGame():void {
+            this.user_continue = 9;
+            this.tournamentProgress = 1;
+            this.id_enemies = [];
+
+            let listIDs:string[] = [
+                Constants.ID_BARAKA,
+                Constants.ID_JAX,
+                Constants.ID_JOHNYCAGE,
+                Constants.ID_KITANA,
+                Constants.ID_KUNGLAO,
+                Constants.ID_LIUKANG,
+                Constants.ID_MILEENA,
+                Constants.ID_RAIDEN,
+                Constants.ID_REPTILE,
+                Constants.ID_SCORPION,
+                Constants.ID_SHANGTSUNG,
+                Constants.ID_SUBZERO
+            ];
+            let id:string;
+            while(listIDs.length > 0){
+                id = listIDs.splice(Utilits.Data.getRandomRangeIndex(0, listIDs.length-1), 1)[0];
+                if(id === this.user_personage.id) continue;
+                this.id_enemies.push(id);
+            }
+            this.id_enemies.push(Constants.ID_GORO);
+            this.id_enemies.push(Constants.ID_SHAOKAHN);
+
+            Utilits.Data.debugLog("Tournament List:", this.id_enemies);
+        }
+
         /* инициализация персонажей */
         public static initPersonages(game: Phaser.Game):void {
             GameData.Data.personages = [];
@@ -123,8 +154,6 @@ module GameData {
             }
         }
 
-        public static initNewGame():void {
-
-        }
+        
     }
 }

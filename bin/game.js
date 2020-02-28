@@ -363,6 +363,35 @@ var GameData;
     var Data = /** @class */ (function () {
         function Data() {
         }
+        Data.initNewGame = function () {
+            this.user_continue = 9;
+            this.tournamentProgress = 1;
+            this.id_enemies = [];
+            var listIDs = [
+                Constants.ID_BARAKA,
+                Constants.ID_JAX,
+                Constants.ID_JOHNYCAGE,
+                Constants.ID_KITANA,
+                Constants.ID_KUNGLAO,
+                Constants.ID_LIUKANG,
+                Constants.ID_MILEENA,
+                Constants.ID_RAIDEN,
+                Constants.ID_REPTILE,
+                Constants.ID_SCORPION,
+                Constants.ID_SHANGTSUNG,
+                Constants.ID_SUBZERO
+            ];
+            var id;
+            while (listIDs.length > 0) {
+                id = listIDs.splice(Utilits.Data.getRandomRangeIndex(0, listIDs.length - 1), 1)[0];
+                if (id === this.user_personage.id)
+                    continue;
+                this.id_enemies.push(id);
+            }
+            this.id_enemies.push(Constants.ID_GORO);
+            this.id_enemies.push(Constants.ID_SHAOKAHN);
+            Utilits.Data.debugLog("Tournament List:", this.id_enemies);
+        };
         /* инициализация персонажей */
         Data.initPersonages = function (game) {
             var _this = this;
@@ -450,8 +479,6 @@ var GameData;
             catch (error) {
                 console.log(error);
             }
-        };
-        Data.initNewGame = function () {
         };
         Data.tutorList = [
             'Нажмите на кнопку\n"начать игру"\nчтобы начать\nтурнир.',
