@@ -3,6 +3,7 @@ module MortalKombat {
     import Tutorial = Fabrique.Tutorial;
     import Settings = Fabrique.Settings;
     import Title = Fabrique.Title;
+    import Tower = Fabrique.Tower;
 
     export class Tournament extends Phaser.State{
         public static Name: string = "tournament";
@@ -18,6 +19,7 @@ module MortalKombat {
         private backButton:Phaser.Button;
         private settingsButton:Phaser.Button;
         private backHalpButton:Phaser.Button;
+        private tower:Tower;
 
         constructor() {
             super();
@@ -52,6 +54,10 @@ module MortalKombat {
         public shutdown(){
             this.tween.stop();
             this.tween = null;
+            this.title.removeChildren();
+            this.tower.removeChildren();
+            this.tower.removeAll();
+            this.tutorial.removeChildren();
             this.groupContent.removeAll();
             this.game.stage.removeChildren();
         }
@@ -73,6 +79,8 @@ module MortalKombat {
             this.backHalpButton = new Phaser.Button(this.game, Constants.GAME_WIDTH - 230, 5, Sheet.ButtonHelpMini, this.onButtonClick, this, 1, 2, 2, 2);
             this.backHalpButton.name = Constants.HELP;
             this.groupContent.addChild(this.backHalpButton);
+
+            
         }
 
         private onTweenComplete(event:any):void {
@@ -84,6 +92,9 @@ module MortalKombat {
             this.title = new Title(this.game, 0, -50, 'ТУРНИР');
             this.groupContent.addChild(this.title);
 
+            /* tower */
+            this.tower = new Tower(this.game);
+            this.groupContent.addChild(this.tower);
                         
             /* tutorial */
             this.tutorial = new Tutorial(this.game, GameData.Data.tutorList[1]);
@@ -130,6 +141,7 @@ module MortalKombat {
         }
 
         private settingsClose() {
+            this.settings.removeChildren();
             this.settings.removeAll();
             this.groupContent.removeChild(this.settings);
             

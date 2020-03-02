@@ -135,6 +135,7 @@ module MortalKombat {
         }
         
         private settingsClose() {
+            this.settings.removeChildren();
             this.settings.removeAll();
             this.groupMenu.removeChild(this.settings);
             

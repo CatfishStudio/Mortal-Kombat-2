@@ -54,10 +54,12 @@ module MortalKombat {
         public shutdown(){
             this.tween.stop();
             this.tween = null;
-            this.groupFighters.removeChildren();
-            this.groupFighters.removeAll();
+            this.title.removeChildren();
             this.panelIcons.removeChildren();
             this.panelIcons.removeAll();
+            this.tutorial.removeChildren();
+            this.groupFighters.removeChildren();
+            this.groupFighters.removeAll();
             this.game.stage.removeChildren();
         }
 
@@ -145,6 +147,7 @@ module MortalKombat {
         }
 
         private settingsClose() {
+            this.settings.removeChildren();
             this.settings.removeAll();
             this.groupFighters.removeChild(this.settings);
             

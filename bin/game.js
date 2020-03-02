@@ -709,6 +709,33 @@ var Fabrique;
 })(Fabrique || (Fabrique = {}));
 var Fabrique;
 (function (Fabrique) {
+    var Tower = /** @class */ (function (_super) {
+        __extends(Tower, _super);
+        function Tower(game) {
+            var _this = _super.call(this, game) || this;
+            _this.updateTransform();
+            _this.init();
+            return _this;
+        }
+        Tower.prototype.init = function () {
+            var _this = this;
+            this.towerHeader = new Phaser.Sprite(this.game, 0, 0, Images.towerHeader);
+            this.addChild(this.towerHeader);
+            var y = 135;
+            GameData.Data.id_enemies.forEach(function (id) {
+                var towerContent = new Phaser.Sprite(_this.game, 0, y, Images.towerContent);
+                _this.addChild(towerContent);
+                y += 95;
+            });
+            this.towerFooter = new Phaser.Sprite(this.game, 0, 230, Images.towerFooter);
+            this.addChild(this.towerFooter);
+        };
+        return Tower;
+    }(Phaser.Group));
+    Fabrique.Tower = Tower;
+})(Fabrique || (Fabrique = {}));
+var Fabrique;
+(function (Fabrique) {
     var AnimationFighter = /** @class */ (function (_super) {
         __extends(AnimationFighter, _super);
         function AnimationFighter(game, personageiD, personage) {
@@ -1179,6 +1206,7 @@ var MortalKombat;
             this.settings.event.add(this.onButtonClick.bind(this));
         };
         Menu.prototype.settingsClose = function () {
+            this.settings.removeChildren();
             this.settings.removeAll();
             this.groupMenu.removeChild(this.settings);
             if (Config.settintTutorial === true) {
@@ -1226,10 +1254,12 @@ var MortalKombat;
         Fighters.prototype.shutdown = function () {
             this.tween.stop();
             this.tween = null;
-            this.groupFighters.removeChildren();
-            this.groupFighters.removeAll();
+            this.title.removeChildren();
             this.panelIcons.removeChildren();
             this.panelIcons.removeAll();
+            this.tutorial.removeChildren();
+            this.groupFighters.removeChildren();
+            this.groupFighters.removeAll();
             this.game.stage.removeChildren();
         };
         Fighters.prototype.onCompleteVideo = function () {
@@ -1303,6 +1333,7 @@ var MortalKombat;
             this.settings.event.add(this.onButtonClick.bind(this));
         };
         Fighters.prototype.settingsClose = function () {
+            this.settings.removeChildren();
             this.settings.removeAll();
             this.groupFighters.removeChild(this.settings);
             if (Config.settintTutorial === true) {
@@ -1321,6 +1352,7 @@ var MortalKombat;
     var Tutorial = Fabrique.Tutorial;
     var Settings = Fabrique.Settings;
     var Title = Fabrique.Title;
+    var Tower = Fabrique.Tower;
     var Tournament = /** @class */ (function (_super) {
         __extends(Tournament, _super);
         function Tournament() {
@@ -1350,6 +1382,10 @@ var MortalKombat;
         Tournament.prototype.shutdown = function () {
             this.tween.stop();
             this.tween = null;
+            this.title.removeChildren();
+            this.tower.removeChildren();
+            this.tower.removeAll();
+            this.tutorial.removeChildren();
             this.groupContent.removeAll();
             this.game.stage.removeChildren();
         };
@@ -1375,6 +1411,9 @@ var MortalKombat;
             /* title */
             this.title = new Title(this.game, 0, -50, 'ТУРНИР');
             this.groupContent.addChild(this.title);
+            /* tower */
+            this.tower = new Tower(this.game);
+            this.groupContent.addChild(this.tower);
             /* tutorial */
             this.tutorial = new Tutorial(this.game, GameData.Data.tutorList[1]);
             this.tutorial.x = -500;
@@ -1414,6 +1453,7 @@ var MortalKombat;
             this.settings.event.add(this.onButtonClick.bind(this));
         };
         Tournament.prototype.settingsClose = function () {
+            this.settings.removeChildren();
             this.settings.removeAll();
             this.groupContent.removeChild(this.settings);
             if (Config.settintTutorial === true) {
@@ -1440,6 +1480,7 @@ var MortalKombat;
 /// <reference path="Fabrique\Objects\Tutorial.ts" />
 /// <reference path="Fabrique\Objects\Settings.ts" />
 /// <reference path="Fabrique\Objects\Title.ts" />
+/// <reference path="Fabrique\Objects\Tower.ts" />
 /// <reference path="Fabrique\Objects\AnimationFighter.ts" />
 /// <reference path="Fabrique\Objects\Icon.ts" />
 /// <reference path="Fabrique\Objects\WindowPersonage.ts" />

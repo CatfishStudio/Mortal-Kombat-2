@@ -12,6 +12,7 @@
 /// <reference path="Fabrique\Objects\Tutorial.ts" />
 /// <reference path="Fabrique\Objects\Settings.ts" />
 /// <reference path="Fabrique\Objects\Title.ts" />
+/// <reference path="Fabrique\Objects\Tower.ts" />
 /// <reference path="Fabrique\Objects\AnimationFighter.ts" />
 /// <reference path="Fabrique\Objects\Icon.ts" />
 /// <reference path="Fabrique\Objects\WindowPersonage.ts" />
