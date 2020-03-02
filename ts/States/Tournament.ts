@@ -4,9 +4,9 @@ module MortalKombat {
     import Settings = Fabrique.Settings;
     import Title = Fabrique.Title;
 
-    export class Tower extends Phaser.State{
-        public static Name: string = "tower";
-        public name: string = Tower.Name;
+    export class Tournament extends Phaser.State{
+        public static Name: string = "tournament";
+        public name: string = Tournament.Name;
 
         private groupContent: Phaser.Group;
         private videoSprite:Phaser.Sprite;

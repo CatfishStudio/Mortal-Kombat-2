@@ -30,7 +30,7 @@ var MortalKombat;
             _this.state.add(MortalKombat.Preloader.Name, MortalKombat.Preloader, false);
             _this.state.add(MortalKombat.Menu.Name, MortalKombat.Menu, false);
             _this.state.add(MortalKombat.Fighters.Name, MortalKombat.Fighters, false);
-            _this.state.add(MortalKombat.Tower.Name, MortalKombat.Tower, false);
+            _this.state.add(MortalKombat.Tournament.Name, MortalKombat.Tournament, false);
             return _this;
         }
         Game.getInstance = function () {
@@ -1289,7 +1289,7 @@ var MortalKombat;
                     }
                 case Constants.SELECT_FIGHTER:
                     {
-                        this.game.state.start(MortalKombat.Tower.Name, true, false);
+                        this.game.state.start(MortalKombat.Tournament.Name, true, false);
                         break;
                     }
                 default:
@@ -1321,14 +1321,14 @@ var MortalKombat;
     var Tutorial = Fabrique.Tutorial;
     var Settings = Fabrique.Settings;
     var Title = Fabrique.Title;
-    var Tower = /** @class */ (function (_super) {
-        __extends(Tower, _super);
-        function Tower() {
+    var Tournament = /** @class */ (function (_super) {
+        __extends(Tournament, _super);
+        function Tournament() {
             var _this = _super.call(this) || this;
-            _this.name = Tower.Name;
+            _this.name = Tournament.Name;
             return _this;
         }
-        Tower.prototype.create = function () {
+        Tournament.prototype.create = function () {
             this.groupContent = new Phaser.Group(this.game, this.stage);
             this.backgroundSprite = new Phaser.Sprite(this.game, -5, -5, Images.UpgradeImage);
             this.backgroundSprite.scale.set(1.025);
@@ -1347,13 +1347,13 @@ var MortalKombat;
             this.createContent();
             this.groupContent.addChild(new Phaser.Sprite(this.game, 0, 0, Images.BackgroundImage));
         };
-        Tower.prototype.shutdown = function () {
+        Tournament.prototype.shutdown = function () {
             this.tween.stop();
             this.tween = null;
             this.groupContent.removeAll();
             this.game.stage.removeChildren();
         };
-        Tower.prototype.onCompleteVideo = function () {
+        Tournament.prototype.onCompleteVideo = function () {
             this.tween.start();
             this.title.show();
             if (Config.settintTutorial === true)
@@ -1368,10 +1368,10 @@ var MortalKombat;
             this.backHalpButton.name = Constants.HELP;
             this.groupContent.addChild(this.backHalpButton);
         };
-        Tower.prototype.onTweenComplete = function (event) {
+        Tournament.prototype.onTweenComplete = function (event) {
             this.tween.start();
         };
-        Tower.prototype.createContent = function () {
+        Tournament.prototype.createContent = function () {
             /* title */
             this.title = new Title(this.game, 0, -50, 'ТУРНИР');
             this.groupContent.addChild(this.title);
@@ -1382,7 +1382,7 @@ var MortalKombat;
             this.groupContent.addChild(this.tutorial);
             Utilits.Data.debugLog("user_personage", GameData.Data.user_personage);
         };
-        Tower.prototype.onButtonClick = function (event) {
+        Tournament.prototype.onButtonClick = function (event) {
             switch (event.name) {
                 case Constants.BACK_MENU:
                     {
@@ -1407,13 +1407,13 @@ var MortalKombat;
                     break;
             }
         };
-        Tower.prototype.settingsCreate = function () {
+        Tournament.prototype.settingsCreate = function () {
             this.tutorial.x = -500;
             this.tutorial.y = 150;
             this.settings = new Settings(this.game, this.groupContent);
             this.settings.event.add(this.onButtonClick.bind(this));
         };
-        Tower.prototype.settingsClose = function () {
+        Tournament.prototype.settingsClose = function () {
             this.settings.removeAll();
             this.groupContent.removeChild(this.settings);
             if (Config.settintTutorial === true) {
@@ -1422,10 +1422,10 @@ var MortalKombat;
                 tweenTutorial.start();
             }
         };
-        Tower.Name = "tower";
-        return Tower;
+        Tournament.Name = "tournament";
+        return Tournament;
     }(Phaser.State));
-    MortalKombat.Tower = Tower;
+    MortalKombat.Tournament = Tournament;
 })(MortalKombat || (MortalKombat = {}));
 /// <reference path="..\node_modules\phaser-ce\typescript\phaser.d.ts" />
 /// <reference path="Data\Constants.ts" />
@@ -1449,5 +1449,5 @@ var MortalKombat;
 /// <reference path="States\Preloader.ts" />
 /// <reference path="States\Menu.ts" />
 /// <reference path="States\Fighters.ts" />
-/// <reference path="States\Tower.ts" />
+/// <reference path="States\Tournament.ts" />
 /// <reference path="app.ts" />

@@ -21,6 +21,6 @@
 /// <reference path="States\Preloader.ts" />
 /// <reference path="States\Menu.ts" />
 /// <reference path="States\Fighters.ts" />
-/// <reference path="States\Tower.ts" />
+/// <reference path="States\Tournament.ts" />
 
 /// <reference path="app.ts" />
