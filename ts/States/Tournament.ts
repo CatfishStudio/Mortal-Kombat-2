@@ -67,6 +67,7 @@ module MortalKombat {
 
             this.title.show();
             if(Config.settintTutorial === true) this.tutorial.show(0, 150);
+            this.tower.show(this.tower.x, 0);
 
             this.backButton = new Phaser.Button(this.game, -25, 5, Sheet.ButtonBackMini, this.onButtonClick, this, 1, 2, 2, 2);
             this.backButton.name = Constants.BACK_MENU;
@@ -91,6 +92,7 @@ module MortalKombat {
             /* tower */
             this.tower = new Tower(this.game);
             this.tower.x = (Constants.GAME_HEIGHT / 2) - (this.tower.width / 3);
+            this.tower.y = Constants.GAME_WIDTH;
             this.groupContent.addChild(this.tower);
 
             /* title */

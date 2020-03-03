@@ -724,18 +724,27 @@ var Fabrique;
             this.addChild(this.towerHeader);
             y += 135;
             var count = GameData.Data.id_enemies.length - 1;
-            while (count >= 0) {
-                var photo = new Phaser.Sprite(this.game, 200, y + 15, GameData.Data.id_enemies[count] + '.png');
-                photo.scale.x = 0.6;
-                photo.scale.y = 0.6;
-                this.addChild(photo);
+            while (count > 0) {
+                var photo_1 = new Phaser.Sprite(this.game, 200, y + 15, GameData.Data.id_enemies[count] + '.png');
+                photo_1.scale.x = 0.6;
+                photo_1.scale.y = 0.6;
+                this.addChild(photo_1);
                 var towerContent = new Phaser.Sprite(this.game, 0, y, Images.towerContent);
                 this.addChild(towerContent);
                 y += 95;
                 count--;
             }
+            var photo = new Phaser.Sprite(this.game, 200, y + 15, GameData.Data.id_enemies[0] + '.png');
+            photo.scale.x = 0.6;
+            photo.scale.y = 0.6;
+            this.addChild(photo);
             this.towerFooter = new Phaser.Sprite(this.game, 0, y, Images.towerFooter);
             this.addChild(this.towerFooter);
+        };
+        Tower.prototype.show = function (x, y) {
+            var tween = this.game.add.tween(this);
+            tween.to({ x: x, y: y - 725 }, 5000, 'Linear');
+            tween.start();
         };
         return Tower;
     }(Phaser.Group));
@@ -1401,6 +1410,7 @@ var MortalKombat;
             this.title.show();
             if (Config.settintTutorial === true)
                 this.tutorial.show(0, 150);
+            this.tower.show(this.tower.x, 0);
             this.backButton = new Phaser.Button(this.game, -25, 5, Sheet.ButtonBackMini, this.onButtonClick, this, 1, 2, 2, 2);
             this.backButton.name = Constants.BACK_MENU;
             this.groupContent.addChild(this.backButton);
@@ -1415,13 +1425,14 @@ var MortalKombat;
             this.tween.start();
         };
         Tournament.prototype.createContent = function () {
-            /* title */
-            this.title = new Title(this.game, 0, -50, 'ТУРНИР');
-            this.groupContent.addChild(this.title);
             /* tower */
             this.tower = new Tower(this.game);
             this.tower.x = (Constants.GAME_HEIGHT / 2) - (this.tower.width / 3);
+            this.tower.y = Constants.GAME_WIDTH;
             this.groupContent.addChild(this.tower);
+            /* title */
+            this.title = new Title(this.game, 0, -50, 'ТУРНИР');
+            this.groupContent.addChild(this.title);
             /* tutorial */
             this.tutorial = new Tutorial(this.game, GameData.Data.tutorList[1]);
             this.tutorial.x = -500;
