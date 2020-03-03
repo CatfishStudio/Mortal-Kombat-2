@@ -75,7 +75,7 @@ class Images {
         Images.ReptileIcon,
         Images.ScorpionIcon,
         Images.ShangTsungIcon,
-        Images.ShangTsungIcon,
+        Images.ShaoKahnIcon,
         Images.SubZeroIcon
     ]; 
 }

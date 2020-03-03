@@ -88,13 +88,14 @@ module MortalKombat {
         }
 
         private createContent():void{
+            /* tower */
+            this.tower = new Tower(this.game);
+            this.tower.x = (Constants.GAME_HEIGHT / 2) - (this.tower.width / 3);
+            this.groupContent.addChild(this.tower);
+
             /* title */
             this.title = new Title(this.game, 0, -50, 'ТУРНИР');
             this.groupContent.addChild(this.title);
-
-            /* tower */
-            this.tower = new Tower(this.game);
-            this.groupContent.addChild(this.tower);
                         
             /* tutorial */
             this.tutorial = new Tutorial(this.game, GameData.Data.tutorList[1]);

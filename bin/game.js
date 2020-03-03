@@ -212,7 +212,7 @@ var Images = /** @class */ (function () {
         Images.ReptileIcon,
         Images.ScorpionIcon,
         Images.ShangTsungIcon,
-        Images.ShangTsungIcon,
+        Images.ShaoKahnIcon,
         Images.SubZeroIcon
     ];
     return Images;
@@ -718,16 +718,23 @@ var Fabrique;
             return _this;
         }
         Tower.prototype.init = function () {
-            var _this = this;
-            this.towerHeader = new Phaser.Sprite(this.game, 0, 0, Images.towerHeader);
+            var x = 0;
+            var y = 0;
+            this.towerHeader = new Phaser.Sprite(this.game, x, y, Images.towerHeader);
             this.addChild(this.towerHeader);
-            var y = 135;
-            GameData.Data.id_enemies.forEach(function (id) {
-                var towerContent = new Phaser.Sprite(_this.game, 0, y, Images.towerContent);
-                _this.addChild(towerContent);
+            y += 135;
+            var count = GameData.Data.id_enemies.length - 1;
+            while (count >= 0) {
+                var photo = new Phaser.Sprite(this.game, 200, y + 15, GameData.Data.id_enemies[count] + '.png');
+                photo.scale.x = 0.6;
+                photo.scale.y = 0.6;
+                this.addChild(photo);
+                var towerContent = new Phaser.Sprite(this.game, 0, y, Images.towerContent);
+                this.addChild(towerContent);
                 y += 95;
-            });
-            this.towerFooter = new Phaser.Sprite(this.game, 0, 230, Images.towerFooter);
+                count--;
+            }
+            this.towerFooter = new Phaser.Sprite(this.game, 0, y, Images.towerFooter);
             this.addChild(this.towerFooter);
         };
         return Tower;
@@ -1413,6 +1420,7 @@ var MortalKombat;
             this.groupContent.addChild(this.title);
             /* tower */
             this.tower = new Tower(this.game);
+            this.tower.x = (Constants.GAME_HEIGHT / 2) - (this.tower.width / 3);
             this.groupContent.addChild(this.tower);
             /* tutorial */
             this.tutorial = new Tutorial(this.game, GameData.Data.tutorList[1]);
