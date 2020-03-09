@@ -746,9 +746,29 @@ var Fabrique;
             this.addChild(this.personageIcon);
         };
         Tower.prototype.show = function (x, y) {
-            var tween = this.game.add.tween(this);
-            tween.to({ x: x, y: y - 725 }, 5000, 'Linear');
-            tween.start();
+            if (GameData.Data.tournamentProgress === 0) {
+                var tween = this.game.add.tween(this);
+                tween.to({ x: x, y: y - 725 }, 5000, 'Linear');
+                tween.start();
+            }
+            else if (GameData.Data.tournamentProgress === 1) {
+                this.y = y - 725;
+                var tween = this.game.add.tween(this);
+                tween.to({ x: x, y: this.y + 95 }, 1000, 'Linear');
+                tween.start();
+                var tweenIcon = this.game.add.tween(this.personageIcon);
+                tweenIcon.to({ y: this.personageIcon.y - 95 }, 1000, 'Linear');
+                tweenIcon.start();
+            }
+            else {
+                this.y = y - 725 + (47.5 * (GameData.Data.tournamentProgress - 1));
+                var tween = this.game.add.tween(this);
+                tween.to({ x: x, y: this.y + (95 * GameData.Data.tournamentProgress) }, 1000, 'Linear');
+                tween.start();
+                var tweenIcon = this.game.add.tween(this.personageIcon);
+                tweenIcon.to({ y: this.personageIcon.y - (95 * GameData.Data.tournamentProgress) }, 1000, 'Linear');
+                tweenIcon.start();
+            }
         };
         return Tower;
     }(Phaser.Group));

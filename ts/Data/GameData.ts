@@ -35,7 +35,7 @@ module GameData {
         
         public static user_personage:IPersonage; // выбранный пользователем персонаж
         public static user_continue:number; // количество попыток
-        public static tournamentProgress:number; // прогресс прохождения турника (индекс врага)
+        public static tournamentProgress:number; // прогресс прохождения турнира (индекс врага)
 
         public static id_enemies:string[];  // идентификаторы персонажей (враги)
         
