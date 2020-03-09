@@ -1,8 +1,8 @@
 module Fabrique {
     export class Tower extends Phaser.Group {
         private towerHeader:Phaser.Sprite;
-        //private towerContent:Phaser.Sprite;
         private towerFooter:Phaser.Sprite;
+        private personageIcon:Phaser.Sprite;
 
         constructor(game:Phaser.Game){
             super(game);
@@ -38,6 +38,11 @@ module Fabrique {
 
             this.towerFooter = new Phaser.Sprite(this.game,0,y,Images.towerFooter)
             this.addChild(this.towerFooter);
+
+            this.personageIcon = new Phaser.Sprite(this.game, 125, y+18, GameData.Data.user_personage.id+'.png');
+            this.personageIcon.scale.x = 0.55;
+            this.personageIcon.scale.y = 0.55;
+            this.addChild(this.personageIcon);
         }
 
         public show(x:number, y:number):void {

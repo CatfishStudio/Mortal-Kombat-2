@@ -740,6 +740,10 @@ var Fabrique;
             this.addChild(photo);
             this.towerFooter = new Phaser.Sprite(this.game, 0, y, Images.towerFooter);
             this.addChild(this.towerFooter);
+            this.personageIcon = new Phaser.Sprite(this.game, 125, y + 18, GameData.Data.user_personage.id + '.png');
+            this.personageIcon.scale.x = 0.55;
+            this.personageIcon.scale.y = 0.55;
+            this.addChild(this.personageIcon);
         };
         Tower.prototype.show = function (x, y) {
             var tween = this.game.add.tween(this);
