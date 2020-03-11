@@ -41,7 +41,7 @@ module GameData {
         
         public static initNewGame():void {
             this.user_continue = 9;
-            this.tournamentProgress = 1;
+            this.tournamentProgress = 0;
             this.id_enemies = [];
 
             let listIDs:string[] = [

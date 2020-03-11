@@ -365,7 +365,7 @@ var GameData;
         }
         Data.initNewGame = function () {
             this.user_continue = 9;
-            this.tournamentProgress = 1;
+            this.tournamentProgress = 0;
             this.id_enemies = [];
             var listIDs = [
                 Constants.ID_BARAKA,
@@ -751,24 +751,41 @@ var Fabrique;
                 tween.to({ x: x, y: y - 725 }, 5000, 'Linear');
                 tween.start();
             }
-            else if (GameData.Data.tournamentProgress === 1) {
-                this.y = y - 725;
+            else {
+                this.y = y - 725 + (90 * (GameData.Data.tournamentProgress - 1));
                 var tween = this.game.add.tween(this);
-                tween.to({ x: x, y: this.y + 95 }, 1000, 'Linear');
+                tween.to({ x: x, y: this.y + 90 }, 1000, 'Linear');
                 tween.start();
+                this.personageIcon.y = this.personageIcon.y - (95 * (GameData.Data.tournamentProgress - 1));
                 var tweenIcon = this.game.add.tween(this.personageIcon);
                 tweenIcon.to({ y: this.personageIcon.y - 95 }, 1000, 'Linear');
                 tweenIcon.start();
             }
-            else {
-                this.y = y - 725 + (47.5 * (GameData.Data.tournamentProgress - 1));
-                var tween = this.game.add.tween(this);
-                tween.to({ x: x, y: this.y + (95 * GameData.Data.tournamentProgress) }, 1000, 'Linear');
+            /*
+            if(GameData.Data.tournamentProgress === 0){
+                let tween: Phaser.Tween = this.game.add.tween(this);
+                tween.to({ x: x, y:y-725}, 5000, 'Linear');
                 tween.start();
-                var tweenIcon = this.game.add.tween(this.personageIcon);
-                tweenIcon.to({ y: this.personageIcon.y - (95 * GameData.Data.tournamentProgress) }, 1000, 'Linear');
+            }
+            else if(GameData.Data.tournamentProgress === 1){
+                this.y = y-725;
+                let tween: Phaser.Tween = this.game.add.tween(this);
+                tween.to({ x: x, y:this.y+95}, 1000, 'Linear');
+                tween.start();
+                let tweenIcon: Phaser.Tween = this.game.add.tween(this.personageIcon);
+                tweenIcon.to({ y:this.personageIcon.y-95}, 1000, 'Linear');
                 tweenIcon.start();
             }
+            else{
+                this.y = y-725+(47.5*(GameData.Data.tournamentProgress-1));
+                let tween: Phaser.Tween = this.game.add.tween(this);
+                tween.to({ x: x, y:this.y+(95*GameData.Data.tournamentProgress)}, 1000, 'Linear');
+                tween.start();
+                let tweenIcon: Phaser.Tween = this.game.add.tween(this.personageIcon);
+                tweenIcon.to({ y:this.personageIcon.y-(95*GameData.Data.tournamentProgress)}, 1000, 'Linear');
+                tweenIcon.start();
+            }
+            */
         };
         return Tower;
     }(Phaser.Group));
