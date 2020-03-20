@@ -17,6 +17,7 @@
 /// <reference path="Fabrique\Objects\Icon.ts" />
 /// <reference path="Fabrique\Objects\WindowPersonage.ts" />
 /// <reference path="Fabrique\Objects\WindowCharacteristics.ts" />
+/// <reference path="Fabrique\Objects\UpgradeCharacteristics.ts" />
 /// <reference path="Fabrique\Objects\PanelIcons.ts" />
 /// <reference path="States\Boot.ts" />
 /// <reference path="States\Preloader.ts" />

@@ -4,6 +4,7 @@ module MortalKombat {
     import Settings = Fabrique.Settings;
     import Title = Fabrique.Title;
     import Tower = Fabrique.Tower;
+    import UpgradeCharacteristics = Fabrique.UpgradeCharacteristics;
 
     export class Tournament extends Phaser.State{
         public static Name: string = "tournament";
@@ -20,6 +21,8 @@ module MortalKombat {
         private settingsButton:Phaser.Button;
         private backHalpButton:Phaser.Button;
         private tower:Tower;
+        private userUpgradeCharacteristics:UpgradeCharacteristics;
+        private enemyUpgradeCharacteristics:UpgradeCharacteristics;
 
         constructor() {
             super();
@@ -58,6 +61,10 @@ module MortalKombat {
             this.tower.removeChildren();
             this.tower.removeAll();
             this.tutorial.removeChildren();
+            this.userUpgradeCharacteristics.removeChildren();
+            this.userUpgradeCharacteristics.removeAll();
+            this.enemyUpgradeCharacteristics.removeChildren();
+            this.enemyUpgradeCharacteristics.removeAll();
             this.groupContent.removeAll();
             this.game.stage.removeChildren();
         }
@@ -67,7 +74,10 @@ module MortalKombat {
 
             this.title.show();
             if(Config.settintTutorial === true) this.tutorial.show(0, 150);
+
             this.tower.show(this.tower.x, 0);
+            this.userUpgradeCharacteristics.show(50, this.userUpgradeCharacteristics.y);
+            this.enemyUpgradeCharacteristics.show(600, this.enemyUpgradeCharacteristics.y);
 
             this.backButton = new Phaser.Button(this.game, -25, 5, Sheet.ButtonBackMini, this.onButtonClick, this, 1, 2, 2, 2);
             this.backButton.name = Constants.BACK_MENU;
@@ -80,8 +90,6 @@ module MortalKombat {
             this.backHalpButton = new Phaser.Button(this.game, Constants.GAME_WIDTH - 230, 5, Sheet.ButtonHelpMini, this.onButtonClick, this, 1, 2, 2, 2);
             this.backHalpButton.name = Constants.HELP;
             this.groupContent.addChild(this.backHalpButton);
-
-            
         }
 
         private onTweenComplete(event:any):void {
@@ -104,6 +112,16 @@ module MortalKombat {
             this.tutorial.x = -500;
             this.tutorial.y = 150;
             this.groupContent.addChild(this.tutorial);
+
+            /* Upgrade */
+            this.userUpgradeCharacteristics = new UpgradeCharacteristics(this.game);
+            this.userUpgradeCharacteristics.x = -500;
+            this.userUpgradeCharacteristics.y = 300;
+            this.groupContent.addChild(this.userUpgradeCharacteristics);
+            this.enemyUpgradeCharacteristics = new UpgradeCharacteristics(this.game);
+            this.enemyUpgradeCharacteristics.x = Constants.GAME_WIDTH + 500;
+            this.enemyUpgradeCharacteristics.y = 300;
+            this.groupContent.addChild(this.enemyUpgradeCharacteristics);
 
             Utilits.Data.debugLog("user_personage", GameData.Data.user_personage);
         }

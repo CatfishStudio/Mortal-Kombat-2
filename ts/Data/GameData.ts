@@ -35,12 +35,14 @@ module GameData {
         
         public static user_personage:IPersonage; // выбранный пользователем персонаж
         public static user_continue:number; // количество попыток
+        public static user_upgrade_points:number; // количество очков улучшений
         public static tournamentProgress:number; // прогресс прохождения турнира (индекс врага)
 
         public static id_enemies:string[];  // идентификаторы персонажей (враги)
         
         public static initNewGame():void {
             this.user_continue = 9;
+            this.user_upgrade_points = 0;
             this.tournamentProgress = 0;
             this.id_enemies = [];
 
