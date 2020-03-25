@@ -114,11 +114,11 @@ module MortalKombat {
             this.groupContent.addChild(this.tutorial);
 
             /* Upgrade */
-            this.userUpgradeCharacteristics = new UpgradeCharacteristics(this.game);
+            this.userUpgradeCharacteristics = new UpgradeCharacteristics(this.game, true);
             this.userUpgradeCharacteristics.x = -500;
             this.userUpgradeCharacteristics.y = 300;
             this.groupContent.addChild(this.userUpgradeCharacteristics);
-            this.enemyUpgradeCharacteristics = new UpgradeCharacteristics(this.game);
+            this.enemyUpgradeCharacteristics = new UpgradeCharacteristics(this.game, false);
             this.enemyUpgradeCharacteristics.x = Constants.GAME_WIDTH + 500;
             this.enemyUpgradeCharacteristics.y = 300;
             this.groupContent.addChild(this.enemyUpgradeCharacteristics);

@@ -4,6 +4,7 @@ module Fabrique {
     {
         private background:Phaser.Sprite;
         private border:Phaser.Sprite;
+        private buttonPlus:Phaser.Button;
 
         private cap1:Phaser.Sprite;
         private textCap1:Phaser.Text;
@@ -21,9 +22,12 @@ module Fabrique {
         private textCap5:Phaser.Text;
         private textValueCap5:Phaser.Text;
         private upgradePoints:Phaser.Text;
+
+        private thisIsPersonage:boolean;
         
-        constructor(game:Phaser.Game){
+        constructor(game:Phaser.Game, thisIsPersonage:boolean = true){
             super(game);
+            this.thisIsPersonage = thisIsPersonage;
             this.updateTransform();
             this.init();
         }
@@ -82,9 +86,61 @@ module Fabrique {
         }
 
         public show(x:number, y:number):void {
+            if(this.thisIsPersonage){
+                this.textValueCap1.text = (Constants.LEG* GameData.Data.user_personage.leg).toString();
+                this.textValueCap2.text = (Constants.HAND*GameData.Data.user_personage.hand).toString();
+                this.textValueCap3.text = (Constants.BLOCK*GameData.Data.user_personage.block).toString();
+                this.textValueCap4.text = (Constants.UPPERCUT*GameData.Data.user_personage.uppercut).toString();
+                this.textValueCap5.text = (Constants.TWIST*GameData.Data.user_personage.twist).toString();
+                this.upgradePoints.text = "Очки улучшений: " + GameData.Data.user_upgrade_points.toString();
+
+                if(GameData.Data.user_upgrade_points > 0){
+                    this.textValueCap1.x = 140;
+                    this.textValueCap2.x = 140;
+                    this.textValueCap3.x = 140;
+                    this.textValueCap4.x = 140;
+                    this.textValueCap5.x = 140;
+
+                    this.buttonPlus = new Phaser.Button(this.game, 160, 10, Images.ButtonPlus, this.onButtonClick, this);
+                    this.buttonPlus.name = "leg";
+                    this.addChild(this.buttonPlus);
+                }
+            }else{
+                this.textValueCap1.text = (Constants.LEG*GameData.Data.personages[GameData.Data.tournamentProgress].leg).toString();
+                this.textValueCap2.text = (Constants.HAND*GameData.Data.personages[GameData.Data.tournamentProgress].hand).toString();
+                this.textValueCap3.text = (Constants.BLOCK*GameData.Data.personages[GameData.Data.tournamentProgress].block).toString();
+                this.textValueCap4.text = (Constants.UPPERCUT*GameData.Data.personages[GameData.Data.tournamentProgress].uppercut).toString();
+                this.textValueCap5.text = (Constants.TWIST*GameData.Data.personages[GameData.Data.tournamentProgress].twist).toString();
+                this.upgradePoints.text = "";
+            }            
+
             let tween: Phaser.Tween = this.game.add.tween(this);
             tween.to({ x: x, y: y}, 1000, 'Linear');
             tween.start();
+        }
+
+        private onButtonClick(event) {
+            switch (event.name) {
+                case Constants.BACK_MENU:
+                    {
+                        break;
+                    }
+                case Constants.SETTINGS:
+                    {
+                        break;
+                    }
+                case Constants.SETTINGS_CLOSE:
+                    {
+                        break;
+                    }
+                case Constants.HELP:
+                    {
+                        
+                        break;
+                    }  
+                default:
+                    break;
+            }
         }
     }
 }

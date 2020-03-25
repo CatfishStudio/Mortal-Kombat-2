@@ -23,6 +23,7 @@ class Images {
     public static towerHeader: string = 'tower_header.png';
     public static towerContent: string = 'tower_content.png';
     public static towerFooter: string = 'tower_footer.png';
+    public static ButtonPlus: string = 'button_plus.png';
     
     public static BarakaIcon:string = 'baraka.png';
     public static GoroIcon:string = 'goro.png';
@@ -62,6 +63,7 @@ class Images {
         Images.towerHeader,
         Images.towerContent,
         Images.towerFooter,
+        Images.ButtonPlus,
 
         Images.BarakaIcon,
         Images.GoroIcon,

@@ -163,6 +163,7 @@ var Images = /** @class */ (function () {
     Images.towerHeader = 'tower_header.png';
     Images.towerContent = 'tower_content.png';
     Images.towerFooter = 'tower_footer.png';
+    Images.ButtonPlus = 'button_plus.png';
     Images.BarakaIcon = 'baraka.png';
     Images.GoroIcon = 'goro.png';
     Images.JaxIcon = 'jax.png';
@@ -200,6 +201,7 @@ var Images = /** @class */ (function () {
         Images.towerHeader,
         Images.towerContent,
         Images.towerFooter,
+        Images.ButtonPlus,
         Images.BarakaIcon,
         Images.GoroIcon,
         Images.JaxIcon,
@@ -365,7 +367,7 @@ var GameData;
         }
         Data.initNewGame = function () {
             this.user_continue = 9;
-            this.user_upgrade_points = 0;
+            this.user_upgrade_points = 10;
             this.tournamentProgress = 0;
             this.id_enemies = [];
             var listIDs = [
@@ -962,8 +964,10 @@ var Fabrique;
 (function (Fabrique) {
     var UpgradeCharacteristics = /** @class */ (function (_super) {
         __extends(UpgradeCharacteristics, _super);
-        function UpgradeCharacteristics(game) {
+        function UpgradeCharacteristics(game, thisIsPersonage) {
+            if (thisIsPersonage === void 0) { thisIsPersonage = true; }
             var _this = _super.call(this, game) || this;
+            _this.thisIsPersonage = thisIsPersonage;
             _this.updateTransform();
             _this.init();
             return _this;
@@ -1017,9 +1021,57 @@ var Fabrique;
             this.addChild(this.border);
         };
         UpgradeCharacteristics.prototype.show = function (x, y) {
+            if (this.thisIsPersonage) {
+                this.textValueCap1.text = (Constants.LEG * GameData.Data.user_personage.leg).toString();
+                this.textValueCap2.text = (Constants.HAND * GameData.Data.user_personage.hand).toString();
+                this.textValueCap3.text = (Constants.BLOCK * GameData.Data.user_personage.block).toString();
+                this.textValueCap4.text = (Constants.UPPERCUT * GameData.Data.user_personage.uppercut).toString();
+                this.textValueCap5.text = (Constants.TWIST * GameData.Data.user_personage.twist).toString();
+                this.upgradePoints.text = "Очки улучшений: " + GameData.Data.user_upgrade_points.toString();
+                if (GameData.Data.user_upgrade_points > 0) {
+                    this.textValueCap1.x = 140;
+                    this.textValueCap2.x = 140;
+                    this.textValueCap3.x = 140;
+                    this.textValueCap4.x = 140;
+                    this.textValueCap5.x = 140;
+                    this.buttonPlus = new Phaser.Button(this.game, 160, 10, Images.ButtonPlus, this.onButtonClick, this);
+                    this.buttonPlus.name = "leg";
+                    this.addChild(this.buttonPlus);
+                }
+            }
+            else {
+                this.textValueCap1.text = (Constants.LEG * GameData.Data.personages[GameData.Data.tournamentProgress].leg).toString();
+                this.textValueCap2.text = (Constants.HAND * GameData.Data.personages[GameData.Data.tournamentProgress].hand).toString();
+                this.textValueCap3.text = (Constants.BLOCK * GameData.Data.personages[GameData.Data.tournamentProgress].block).toString();
+                this.textValueCap4.text = (Constants.UPPERCUT * GameData.Data.personages[GameData.Data.tournamentProgress].uppercut).toString();
+                this.textValueCap5.text = (Constants.TWIST * GameData.Data.personages[GameData.Data.tournamentProgress].twist).toString();
+                this.upgradePoints.text = "";
+            }
             var tween = this.game.add.tween(this);
             tween.to({ x: x, y: y }, 1000, 'Linear');
             tween.start();
+        };
+        UpgradeCharacteristics.prototype.onButtonClick = function (event) {
+            switch (event.name) {
+                case Constants.BACK_MENU:
+                    {
+                        break;
+                    }
+                case Constants.SETTINGS:
+                    {
+                        break;
+                    }
+                case Constants.SETTINGS_CLOSE:
+                    {
+                        break;
+                    }
+                case Constants.HELP:
+                    {
+                        break;
+                    }
+                default:
+                    break;
+            }
         };
         return UpgradeCharacteristics;
     }(Phaser.Group));
@@ -1530,11 +1582,11 @@ var MortalKombat;
             this.tutorial.y = 150;
             this.groupContent.addChild(this.tutorial);
             /* Upgrade */
-            this.userUpgradeCharacteristics = new UpgradeCharacteristics(this.game);
+            this.userUpgradeCharacteristics = new UpgradeCharacteristics(this.game, true);
             this.userUpgradeCharacteristics.x = -500;
             this.userUpgradeCharacteristics.y = 300;
             this.groupContent.addChild(this.userUpgradeCharacteristics);
-            this.enemyUpgradeCharacteristics = new UpgradeCharacteristics(this.game);
+            this.enemyUpgradeCharacteristics = new UpgradeCharacteristics(this.game, false);
             this.enemyUpgradeCharacteristics.x = Constants.GAME_WIDTH + 500;
             this.enemyUpgradeCharacteristics.y = 300;
             this.groupContent.addChild(this.enemyUpgradeCharacteristics);
