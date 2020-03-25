@@ -4,7 +4,11 @@ module Fabrique {
     {
         private background:Phaser.Sprite;
         private border:Phaser.Sprite;
-        private buttonPlus:Phaser.Button;
+        private buttonLegPlus:Phaser.Button;
+        private buttonHandPlus:Phaser.Button;
+        private buttonBlockPlus:Phaser.Button;
+        private buttonUppercutPlus:Phaser.Button;
+        private buttonTwistPlus:Phaser.Button;
 
         private cap1:Phaser.Sprite;
         private textCap1:Phaser.Text;
@@ -87,12 +91,12 @@ module Fabrique {
 
         public show(x:number, y:number):void {
             if(this.thisIsPersonage){
-                this.textValueCap1.text = (Constants.LEG* GameData.Data.user_personage.leg).toString();
-                this.textValueCap2.text = (Constants.HAND*GameData.Data.user_personage.hand).toString();
-                this.textValueCap3.text = (Constants.BLOCK*GameData.Data.user_personage.block).toString();
-                this.textValueCap4.text = (Constants.UPPERCUT*GameData.Data.user_personage.uppercut).toString();
-                this.textValueCap5.text = (Constants.TWIST*GameData.Data.user_personage.twist).toString();
-                this.upgradePoints.text = "Очки улучшений: " + GameData.Data.user_upgrade_points.toString();
+                this.textValueCap1.text = "x"+ GameData.Data.user_personage.leg;
+                this.textValueCap2.text = "x"+ GameData.Data.user_personage.hand;
+                this.textValueCap3.text = "x"+ GameData.Data.user_personage.block;
+                this.textValueCap4.text = "x"+ GameData.Data.user_personage.uppercut;
+                this.textValueCap5.text = "x"+ GameData.Data.user_personage.twist;
+                 this.upgradePoints.text = "Очки улучшений: " + GameData.Data.user_upgrade_points.toString();
 
                 if(GameData.Data.user_upgrade_points > 0){
                     this.textValueCap1.x = 140;
@@ -101,9 +105,25 @@ module Fabrique {
                     this.textValueCap4.x = 140;
                     this.textValueCap5.x = 140;
 
-                    this.buttonPlus = new Phaser.Button(this.game, 160, 10, Images.ButtonPlus, this.onButtonClick, this);
-                    this.buttonPlus.name = "leg";
-                    this.addChild(this.buttonPlus);
+                    this.buttonLegPlus = new Phaser.Button(this.game, 160, 10, Images.ButtonPlus, this.onButtonClick, this);
+                    this.buttonLegPlus.name = Constants.BUTTON_LEG;
+                    this.addChild(this.buttonLegPlus);
+
+                    this.buttonHandPlus = new Phaser.Button(this.game, 160, 55, Images.ButtonPlus, this.onButtonClick, this);
+                    this.buttonHandPlus.name = Constants.BUTTON_HAND;
+                    this.addChild(this.buttonHandPlus);
+
+                    this.buttonBlockPlus = new Phaser.Button(this.game, 160, 100, Images.ButtonPlus, this.onButtonClick, this);
+                    this.buttonBlockPlus.name = Constants.BUTTON_BLOCK;
+                    this.addChild(this.buttonBlockPlus);
+
+                    this.buttonUppercutPlus = new Phaser.Button(this.game, 160, 145, Images.ButtonPlus, this.onButtonClick, this);
+                    this.buttonUppercutPlus.name = Constants.BUTTON_UPPERCUT;
+                    this.addChild(this.buttonUppercutPlus);
+
+                    this.buttonTwistPlus = new Phaser.Button(this.game, 160, 190, Images.ButtonPlus, this.onButtonClick, this);
+                    this.buttonTwistPlus.name = Constants.BUTTON_TWIST;
+                    this.addChild(this.buttonTwistPlus);
                 }
             }else{
                 this.textValueCap1.text = (Constants.LEG*GameData.Data.personages[GameData.Data.tournamentProgress].leg).toString();
@@ -121,25 +141,76 @@ module Fabrique {
 
         private onButtonClick(event) {
             switch (event.name) {
-                case Constants.BACK_MENU:
+                case Constants.BUTTON_LEG:
                     {
+                        GameData.Data.user_personage.leg++;
+                        GameData.Data.user_upgrade_points--;
+                        this.textValueCap1.text = "x"+ GameData.Data.user_personage.leg;
+                        this.upgradePoints.text = "Очки улучшений: " + GameData.Data.user_upgrade_points.toString();
+                        this.removeUpgradeButtons();
                         break;
                     }
-                case Constants.SETTINGS:
+                case Constants.BUTTON_HAND:
                     {
+                        GameData.Data.user_personage.hand++;
+                        GameData.Data.user_upgrade_points--;
+                        this.textValueCap2.text = "x"+ GameData.Data.user_personage.hand;
+                        this.upgradePoints.text = "Очки улучшений: " + GameData.Data.user_upgrade_points.toString();
+                        this.removeUpgradeButtons();
                         break;
                     }
-                case Constants.SETTINGS_CLOSE:
+                case Constants.BUTTON_BLOCK:
                     {
+                        GameData.Data.user_personage.block++;
+                        GameData.Data.user_upgrade_points--;
+                        this.textValueCap3.text = "x"+ GameData.Data.user_personage.block;
+                        this.upgradePoints.text = "Очки улучшений: " + GameData.Data.user_upgrade_points.toString();
+                        this.removeUpgradeButtons();
                         break;
                     }
-                case Constants.HELP:
+                case Constants.BUTTON_UPPERCUT:
                     {
-                        
+                        GameData.Data.user_personage.uppercut++;
+                        GameData.Data.user_upgrade_points--;
+                        this.textValueCap4.text = "x"+ GameData.Data.user_personage.uppercut;
+                        this.upgradePoints.text = "Очки улучшений: " + GameData.Data.user_upgrade_points.toString();
+                        this.removeUpgradeButtons();
+                        break;
+                    }
+                case Constants.BUTTON_TWIST:
+                    {
+                        GameData.Data.user_personage.twist++;
+                        GameData.Data.user_upgrade_points--;
+                        this.textValueCap5.text = "x"+ GameData.Data.user_personage.twist;
+                        this.upgradePoints.text = "Очки улучшений: " + GameData.Data.user_upgrade_points.toString();
+                        this.removeUpgradeButtons();
                         break;
                     }  
                 default:
                     break;
+            }
+        }
+
+        private removeUpgradeButtons()
+        {
+            if(GameData.Data.user_upgrade_points == 0){
+                this.removeChild(this.buttonLegPlus);
+                this.removeChild(this.buttonHandPlus);
+                this.removeChild(this.buttonBlockPlus);
+                this.removeChild(this.buttonUppercutPlus);
+                this.removeChild(this.buttonTwistPlus);
+
+                this.textValueCap1.text = (Constants.LEG* GameData.Data.user_personage.leg).toString();
+                this.textValueCap2.text = (Constants.HAND*GameData.Data.user_personage.hand).toString();
+                this.textValueCap3.text = (Constants.BLOCK*GameData.Data.user_personage.block).toString();
+                this.textValueCap4.text = (Constants.UPPERCUT*GameData.Data.user_personage.uppercut).toString();
+                this.textValueCap5.text = (Constants.TWIST*GameData.Data.user_personage.twist).toString();
+
+                this.textValueCap1.x = 150;
+                this.textValueCap2.x = 150;
+                this.textValueCap3.x = 150;
+                this.textValueCap4.x = 150;
+                this.textValueCap5.x = 150;
             }
         }
     }

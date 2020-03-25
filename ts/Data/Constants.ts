@@ -27,6 +27,12 @@ class Constants {
     public static UPPERCUT              = 6;
     public static TWIST                 = 10;
 
+    public static BUTTON_HAND           = "button_hand";
+    public static BUTTON_LEG            = "button_leg";
+    public static BUTTON_BLOCK          = "button_block";
+    public static BUTTON_UPPERCUT       = "button_uppercut";
+    public static BUTTON_TWIST          = "button_twist";
+
     public static ID_BARAKA = 'baraka';
     public static ID_GORO = 'goro';
     public static ID_JAX = 'jax';
