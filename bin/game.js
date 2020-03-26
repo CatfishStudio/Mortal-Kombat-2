@@ -69,16 +69,21 @@ var Constants = /** @class */ (function () {
     Constants.ANIMATION_TYPE_DAMAGE = "animation_type_damage";
     Constants.ANIMATION_TYPE_LOSE = "animation_type_lose";
     Constants.ANIMATION_TYPE_WIN = "animation_type_win";
-    Constants.HAND = 3;
-    Constants.LEG = 5;
-    Constants.BLOCK = 3;
-    Constants.UPPERCUT = 6;
-    Constants.TWIST = 10;
-    Constants.BUTTON_HAND = "button_hand";
-    Constants.BUTTON_LEG = "button_leg";
-    Constants.BUTTON_BLOCK = "button_block";
-    Constants.BUTTON_UPPERCUT = "button_uppercut";
-    Constants.BUTTON_TWIST = "button_twist";
+    Constants.DAMAGE_HAND = 3;
+    Constants.DAMAGE_LEG = 5;
+    Constants.DAMAGE_BLOCK = 3;
+    Constants.DAMAGE_UPPERCUT = 6;
+    Constants.DAMAGE_TWIST = 10;
+    Constants.MAX_HIT_HAND = 12;
+    Constants.MAX_HIT_LEG = 6;
+    Constants.MAX_HIT_BLOCK = 12;
+    Constants.MAX_HIT_UPPERCUT = 5;
+    Constants.MAX_HIT_TWIST = 3;
+    Constants.HAND = "hand";
+    Constants.LEG = "leg";
+    Constants.BLOCK = "block";
+    Constants.UPPERCUT = "uppercut";
+    Constants.TWIST = "twist";
     Constants.ID_BARAKA = 'baraka';
     Constants.ID_GORO = 'goro';
     Constants.ID_JAX = 'jax';
@@ -952,11 +957,11 @@ var Fabrique;
                     */
                     _this.namePersonage.text = personage.name;
                     _this.namePersonage.x = (400 / 2) - (_this.namePersonage.text.length * 5);
-                    _this.textValueCap1.text = (Constants.LEG * personage.leg).toString();
-                    _this.textValueCap2.text = (Constants.HAND * personage.hand).toString();
-                    _this.textValueCap3.text = (Constants.BLOCK * personage.block).toString();
-                    _this.textValueCap4.text = (Constants.UPPERCUT * personage.uppercut).toString();
-                    _this.textValueCap5.text = (Constants.TWIST * personage.twist).toString();
+                    _this.textValueCap1.text = (Constants.DAMAGE_LEG * personage.leg).toString();
+                    _this.textValueCap2.text = (Constants.DAMAGE_HAND * personage.hand).toString();
+                    _this.textValueCap3.text = (Constants.DAMAGE_BLOCK * personage.block).toString();
+                    _this.textValueCap4.text = (Constants.DAMAGE_UPPERCUT * personage.uppercut).toString();
+                    _this.textValueCap5.text = (Constants.DAMAGE_TWIST * personage.twist).toString();
                     return;
                 }
             });
@@ -1027,41 +1032,66 @@ var Fabrique;
         };
         UpgradeCharacteristics.prototype.show = function (x, y) {
             if (this.thisIsPersonage) {
-                this.textValueCap1.text = "x" + GameData.Data.user_personage.leg;
-                this.textValueCap2.text = "x" + GameData.Data.user_personage.hand;
-                this.textValueCap3.text = "x" + GameData.Data.user_personage.block;
-                this.textValueCap4.text = "x" + GameData.Data.user_personage.uppercut;
-                this.textValueCap5.text = "x" + GameData.Data.user_personage.twist;
+                this.textValueCap1.text = Constants.DAMAGE_LEG + " x" + GameData.Data.user_personage.leg;
+                this.textValueCap2.text = Constants.DAMAGE_HAND + " x" + GameData.Data.user_personage.hand;
+                this.textValueCap3.text = Constants.DAMAGE_BLOCK + " x" + GameData.Data.user_personage.block;
+                this.textValueCap4.text = Constants.DAMAGE_UPPERCUT + " x" + GameData.Data.user_personage.uppercut;
+                this.textValueCap5.text = Constants.DAMAGE_TWIST + " x" + GameData.Data.user_personage.twist;
                 this.upgradePoints.text = "Очки улучшений: " + GameData.Data.user_upgrade_points.toString();
                 if (GameData.Data.user_upgrade_points > 0) {
-                    this.textValueCap1.x = 140;
-                    this.textValueCap2.x = 140;
-                    this.textValueCap3.x = 140;
-                    this.textValueCap4.x = 140;
-                    this.textValueCap5.x = 140;
-                    this.buttonLegPlus = new Phaser.Button(this.game, 160, 10, Images.ButtonPlus, this.onButtonClick, this);
-                    this.buttonLegPlus.name = Constants.BUTTON_LEG;
-                    this.addChild(this.buttonLegPlus);
-                    this.buttonHandPlus = new Phaser.Button(this.game, 160, 55, Images.ButtonPlus, this.onButtonClick, this);
-                    this.buttonHandPlus.name = Constants.BUTTON_HAND;
-                    this.addChild(this.buttonHandPlus);
-                    this.buttonBlockPlus = new Phaser.Button(this.game, 160, 100, Images.ButtonPlus, this.onButtonClick, this);
-                    this.buttonBlockPlus.name = Constants.BUTTON_BLOCK;
-                    this.addChild(this.buttonBlockPlus);
-                    this.buttonUppercutPlus = new Phaser.Button(this.game, 160, 145, Images.ButtonPlus, this.onButtonClick, this);
-                    this.buttonUppercutPlus.name = Constants.BUTTON_UPPERCUT;
-                    this.addChild(this.buttonUppercutPlus);
-                    this.buttonTwistPlus = new Phaser.Button(this.game, 160, 190, Images.ButtonPlus, this.onButtonClick, this);
-                    this.buttonTwistPlus.name = Constants.BUTTON_TWIST;
-                    this.addChild(this.buttonTwistPlus);
+                    this.textValueCap1.x = 125;
+                    this.textValueCap2.x = 125;
+                    this.textValueCap3.x = 125;
+                    this.textValueCap4.x = 125;
+                    this.textValueCap5.x = 125;
+                    if (GameData.Data.user_personage.leg < Constants.MAX_HIT_LEG) {
+                        this.buttonLegPlus = new Phaser.Button(this.game, 160, 10, Images.ButtonPlus, this.onButtonClick, this);
+                        this.buttonLegPlus.name = Constants.LEG;
+                        this.addChild(this.buttonLegPlus);
+                    }
+                    else {
+                        this.textValueCap1.text = Constants.DAMAGE_LEG + " x" + GameData.Data.user_personage.leg + " (макс.)";
+                    }
+                    if (GameData.Data.user_personage.hand < Constants.MAX_HIT_HAND) {
+                        this.buttonHandPlus = new Phaser.Button(this.game, 160, 55, Images.ButtonPlus, this.onButtonClick, this);
+                        this.buttonHandPlus.name = Constants.HAND;
+                        this.addChild(this.buttonHandPlus);
+                    }
+                    else {
+                        this.textValueCap2.text = Constants.DAMAGE_HAND + " x" + GameData.Data.user_personage.hand + " (макс.)";
+                    }
+                    if (GameData.Data.user_personage.block < Constants.MAX_HIT_BLOCK) {
+                        this.buttonBlockPlus = new Phaser.Button(this.game, 160, 100, Images.ButtonPlus, this.onButtonClick, this);
+                        this.buttonBlockPlus.name = Constants.BLOCK;
+                        this.addChild(this.buttonBlockPlus);
+                    }
+                    else {
+                        this.textValueCap3.text = Constants.DAMAGE_BLOCK + " x" + GameData.Data.user_personage.block + " (макс.)";
+                    }
+                    if (GameData.Data.user_personage.uppercut < Constants.MAX_HIT_UPPERCUT) {
+                        this.buttonUppercutPlus = new Phaser.Button(this.game, 160, 145, Images.ButtonPlus, this.onButtonClick, this);
+                        this.buttonUppercutPlus.name = Constants.UPPERCUT;
+                        this.addChild(this.buttonUppercutPlus);
+                    }
+                    else {
+                        this.textValueCap4.text = Constants.DAMAGE_UPPERCUT + " x" + GameData.Data.user_personage.uppercut + " (макс.)";
+                    }
+                    if (GameData.Data.user_personage.twist < Constants.MAX_HIT_TWIST) {
+                        this.buttonTwistPlus = new Phaser.Button(this.game, 160, 190, Images.ButtonPlus, this.onButtonClick, this);
+                        this.buttonTwistPlus.name = Constants.TWIST;
+                        this.addChild(this.buttonTwistPlus);
+                    }
+                    else {
+                        this.textValueCap5.text = Constants.DAMAGE_TWIST + " x" + GameData.Data.user_personage.twist + " (макс.)";
+                    }
                 }
             }
             else {
-                this.textValueCap1.text = (Constants.LEG * GameData.Data.personages[GameData.Data.tournamentProgress].leg).toString();
-                this.textValueCap2.text = (Constants.HAND * GameData.Data.personages[GameData.Data.tournamentProgress].hand).toString();
-                this.textValueCap3.text = (Constants.BLOCK * GameData.Data.personages[GameData.Data.tournamentProgress].block).toString();
-                this.textValueCap4.text = (Constants.UPPERCUT * GameData.Data.personages[GameData.Data.tournamentProgress].uppercut).toString();
-                this.textValueCap5.text = (Constants.TWIST * GameData.Data.personages[GameData.Data.tournamentProgress].twist).toString();
+                this.textValueCap1.text = (Constants.DAMAGE_LEG * GameData.Data.personages[GameData.Data.tournamentProgress].leg).toString();
+                this.textValueCap2.text = (Constants.DAMAGE_HAND * GameData.Data.personages[GameData.Data.tournamentProgress].hand).toString();
+                this.textValueCap3.text = (Constants.DAMAGE_BLOCK * GameData.Data.personages[GameData.Data.tournamentProgress].block).toString();
+                this.textValueCap4.text = (Constants.DAMAGE_UPPERCUT * GameData.Data.personages[GameData.Data.tournamentProgress].uppercut).toString();
+                this.textValueCap5.text = (Constants.DAMAGE_TWIST * GameData.Data.personages[GameData.Data.tournamentProgress].twist).toString();
                 this.upgradePoints.text = "";
             }
             var tween = this.game.add.tween(this);
@@ -1070,47 +1100,47 @@ var Fabrique;
         };
         UpgradeCharacteristics.prototype.onButtonClick = function (event) {
             switch (event.name) {
-                case Constants.BUTTON_LEG:
+                case Constants.LEG:
                     {
                         GameData.Data.user_personage.leg++;
                         GameData.Data.user_upgrade_points--;
-                        this.textValueCap1.text = "x" + GameData.Data.user_personage.leg;
+                        this.textValueCap1.text = Constants.DAMAGE_LEG + " x" + GameData.Data.user_personage.leg;
                         this.upgradePoints.text = "Очки улучшений: " + GameData.Data.user_upgrade_points.toString();
                         this.removeUpgradeButtons();
                         break;
                     }
-                case Constants.BUTTON_HAND:
+                case Constants.HAND:
                     {
                         GameData.Data.user_personage.hand++;
                         GameData.Data.user_upgrade_points--;
-                        this.textValueCap2.text = "x" + GameData.Data.user_personage.hand;
+                        this.textValueCap2.text = Constants.DAMAGE_HAND + " x" + GameData.Data.user_personage.hand;
                         this.upgradePoints.text = "Очки улучшений: " + GameData.Data.user_upgrade_points.toString();
                         this.removeUpgradeButtons();
                         break;
                     }
-                case Constants.BUTTON_BLOCK:
+                case Constants.BLOCK:
                     {
                         GameData.Data.user_personage.block++;
                         GameData.Data.user_upgrade_points--;
-                        this.textValueCap3.text = "x" + GameData.Data.user_personage.block;
+                        this.textValueCap3.text = Constants.DAMAGE_BLOCK + " x" + GameData.Data.user_personage.block;
                         this.upgradePoints.text = "Очки улучшений: " + GameData.Data.user_upgrade_points.toString();
                         this.removeUpgradeButtons();
                         break;
                     }
-                case Constants.BUTTON_UPPERCUT:
+                case Constants.UPPERCUT:
                     {
                         GameData.Data.user_personage.uppercut++;
                         GameData.Data.user_upgrade_points--;
-                        this.textValueCap4.text = "x" + GameData.Data.user_personage.uppercut;
+                        this.textValueCap4.text = Constants.DAMAGE_UPPERCUT + " x" + GameData.Data.user_personage.uppercut;
                         this.upgradePoints.text = "Очки улучшений: " + GameData.Data.user_upgrade_points.toString();
                         this.removeUpgradeButtons();
                         break;
                     }
-                case Constants.BUTTON_TWIST:
+                case Constants.TWIST:
                     {
                         GameData.Data.user_personage.twist++;
                         GameData.Data.user_upgrade_points--;
-                        this.textValueCap5.text = "x" + GameData.Data.user_personage.twist;
+                        this.textValueCap5.text = Constants.DAMAGE_TWIST + " x" + GameData.Data.user_personage.twist;
                         this.upgradePoints.text = "Очки улучшений: " + GameData.Data.user_upgrade_points.toString();
                         this.removeUpgradeButtons();
                         break;
@@ -1126,16 +1156,38 @@ var Fabrique;
                 this.removeChild(this.buttonBlockPlus);
                 this.removeChild(this.buttonUppercutPlus);
                 this.removeChild(this.buttonTwistPlus);
-                this.textValueCap1.text = (Constants.LEG * GameData.Data.user_personage.leg).toString();
-                this.textValueCap2.text = (Constants.HAND * GameData.Data.user_personage.hand).toString();
-                this.textValueCap3.text = (Constants.BLOCK * GameData.Data.user_personage.block).toString();
-                this.textValueCap4.text = (Constants.UPPERCUT * GameData.Data.user_personage.uppercut).toString();
-                this.textValueCap5.text = (Constants.TWIST * GameData.Data.user_personage.twist).toString();
+                this.textValueCap1.text = (Constants.DAMAGE_LEG * GameData.Data.user_personage.leg).toString();
+                this.textValueCap2.text = (Constants.DAMAGE_HAND * GameData.Data.user_personage.hand).toString();
+                this.textValueCap3.text = (Constants.DAMAGE_BLOCK * GameData.Data.user_personage.block).toString();
+                this.textValueCap4.text = (Constants.DAMAGE_UPPERCUT * GameData.Data.user_personage.uppercut).toString();
+                this.textValueCap5.text = (Constants.DAMAGE_TWIST * GameData.Data.user_personage.twist).toString();
                 this.textValueCap1.x = 150;
                 this.textValueCap2.x = 150;
                 this.textValueCap3.x = 150;
                 this.textValueCap4.x = 150;
                 this.textValueCap5.x = 150;
+            }
+            else {
+                if (GameData.Data.user_personage.leg == Constants.MAX_HIT_LEG) {
+                    this.removeChild(this.buttonLegPlus);
+                    this.textValueCap1.text = Constants.DAMAGE_LEG + " x" + GameData.Data.user_personage.leg + " (макс.)";
+                }
+                if (GameData.Data.user_personage.hand == Constants.MAX_HIT_HAND) {
+                    this.removeChild(this.buttonHandPlus);
+                    this.textValueCap2.text = Constants.DAMAGE_HAND + " x" + GameData.Data.user_personage.hand + " (макс.)";
+                }
+                if (GameData.Data.user_personage.block == Constants.MAX_HIT_BLOCK) {
+                    this.removeChild(this.buttonBlockPlus);
+                    this.textValueCap3.text = Constants.DAMAGE_BLOCK + " x" + GameData.Data.user_personage.block + " (макс.)";
+                }
+                if (GameData.Data.user_personage.uppercut == Constants.MAX_HIT_UPPERCUT) {
+                    this.removeChild(this.buttonUppercutPlus);
+                    this.textValueCap4.text = Constants.DAMAGE_UPPERCUT + " x" + GameData.Data.user_personage.uppercut + " (макс.)";
+                }
+                if (GameData.Data.user_personage.twist == Constants.MAX_HIT_TWIST) {
+                    this.removeChild(this.buttonTwistPlus);
+                    this.textValueCap5.text = Constants.DAMAGE_TWIST + " x" + GameData.Data.user_personage.twist + " (макс.)";
+                }
             }
         };
         return UpgradeCharacteristics;

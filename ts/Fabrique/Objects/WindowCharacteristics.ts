@@ -86,11 +86,11 @@ module Fabrique {
                     */
                     this.namePersonage.text = personage.name;
                     this.namePersonage.x = (400 / 2) - (this.namePersonage.text.length * 5);
-                    this.textValueCap1.text = (Constants.LEG*personage.leg).toString();
-                    this.textValueCap2.text = (Constants.HAND*personage.hand).toString();
-                    this.textValueCap3.text = (Constants.BLOCK*personage.block).toString();
-                    this.textValueCap4.text = (Constants.UPPERCUT*personage.uppercut).toString();
-                    this.textValueCap5.text = (Constants.TWIST*personage.twist).toString();
+                    this.textValueCap1.text = (Constants.DAMAGE_LEG*personage.leg).toString();
+                    this.textValueCap2.text = (Constants.DAMAGE_HAND*personage.hand).toString();
+                    this.textValueCap3.text = (Constants.DAMAGE_BLOCK*personage.block).toString();
+                    this.textValueCap4.text = (Constants.DAMAGE_UPPERCUT*personage.uppercut).toString();
+                    this.textValueCap5.text = (Constants.DAMAGE_TWIST*personage.twist).toString();
                     return;
                 }
             });

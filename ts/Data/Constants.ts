@@ -21,17 +21,23 @@ class Constants {
     public static ANIMATION_TYPE_LOSE       = "animation_type_lose";
     public static ANIMATION_TYPE_WIN        = "animation_type_win";
 
-    public static HAND                  = 3;
-    public static LEG                   = 5;
-    public static BLOCK                 = 3;
-    public static UPPERCUT              = 6;
-    public static TWIST                 = 10;
+    public static DAMAGE_HAND                  = 3;
+    public static DAMAGE_LEG                   = 5;
+    public static DAMAGE_BLOCK                 = 3;
+    public static DAMAGE_UPPERCUT              = 6;
+    public static DAMAGE_TWIST                 = 10;
 
-    public static BUTTON_HAND           = "button_hand";
-    public static BUTTON_LEG            = "button_leg";
-    public static BUTTON_BLOCK          = "button_block";
-    public static BUTTON_UPPERCUT       = "button_uppercut";
-    public static BUTTON_TWIST          = "button_twist";
+    public static MAX_HIT_HAND                  = 12;
+    public static MAX_HIT_LEG                   = 6;
+    public static MAX_HIT_BLOCK                 = 12;
+    public static MAX_HIT_UPPERCUT              = 5;
+    public static MAX_HIT_TWIST                 = 3;
+
+    public static HAND           = "hand";
+    public static LEG            = "leg";
+    public static BLOCK          = "block";
+    public static UPPERCUT       = "uppercut";
+    public static TWIST          = "twist";
 
     public static ID_BARAKA = 'baraka';
     public static ID_GORO = 'goro';
