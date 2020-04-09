@@ -1521,6 +1521,7 @@ var MortalKombat;
                     }
                 case Constants.CONTINUE:
                     {
+                        this.game.state.start(MortalKombat.Tournament.Name, true, false);
                         break;
                     }
                 case Constants.SETTINGS:
@@ -1734,7 +1735,8 @@ var MortalKombat;
             var anim = this.videoSprite.animations.add(Atlases.Video3);
             anim.onComplete.add(this.onCompleteVideo, this);
             anim.play(15, false, true);
-            GameData.Data.initNewGame();
+            if (GameData.Data.tournamentProgress === 0)
+                GameData.Data.initNewGame();
             this.createContent();
             this.groupContent.addChild(new Phaser.Sprite(this.game, 0, 0, Images.BackgroundImage));
         };
@@ -1802,7 +1804,10 @@ var MortalKombat;
             switch (event.name) {
                 case Constants.BACK_MENU:
                     {
-                        this.game.state.start(MortalKombat.Fighters.Name, true, false);
+                        if (GameData.Data.tournamentProgress === 0)
+                            this.game.state.start(MortalKombat.Fighters.Name, true, false);
+                        else
+                            this.game.state.start(MortalKombat.Menu.Name, true, false);
                         break;
                     }
                 case Constants.SETTINGS:

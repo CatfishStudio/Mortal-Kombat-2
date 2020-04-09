@@ -130,7 +130,8 @@ module MortalKombat {
             switch (event.name) {
                 case Constants.BACK_MENU:
                     {
-                        this.game.state.start(Fighters.Name, true, false);
+                        if(GameData.Data.tournamentProgress === 0) this.game.state.start(Fighters.Name, true, false);
+                        else this.game.state.start(Menu.Name, true, false);
                         break;
                     }
                 case Constants.SETTINGS:

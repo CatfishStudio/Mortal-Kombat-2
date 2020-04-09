@@ -106,7 +106,7 @@ module MortalKombat {
                     }
                 case Constants.CONTINUE:
                     {
-                        
+                        this.game.state.start(Tournament.Name, true, false);
                         break;
                     }
                 case Constants.SETTINGS:
