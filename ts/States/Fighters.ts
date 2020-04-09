@@ -130,6 +130,7 @@ module MortalKombat {
                     }  
                 case Constants.SELECT_FIGHTER:
                     {
+                        GameData.Data.initNewGame();
                         this.game.state.start(Tournament.Name, true, false);
                         break;
                     }                                  

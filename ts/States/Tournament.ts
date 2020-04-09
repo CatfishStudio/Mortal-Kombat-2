@@ -48,7 +48,6 @@ module MortalKombat {
             anim.onComplete.add(this.onCompleteVideo, this);
             anim.play(15, false, true);
 
-            GameData.Data.initNewGame();
             this.createContent();
 
             this.groupContent.addChild(new Phaser.Sprite(this.game, 0, 0, Images.BackgroundImage));
@@ -123,7 +122,7 @@ module MortalKombat {
             this.enemyUpgradeCharacteristics.y = 300;
             this.groupContent.addChild(this.enemyUpgradeCharacteristics);
 
-            Utilits.Data.debugLog("user_personage", GameData.Data.user_personage);
+            Utilits.Data.debugLog("TOURNAMENT - CHANGE USER PERSOHAGE", GameData.Data.user_personage);
         }
 
         private onButtonClick(event) {

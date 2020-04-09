@@ -405,7 +405,7 @@ var GameData;
             }
             this.id_enemies.push(Constants.ID_GORO);
             this.id_enemies.push(Constants.ID_SHAOKAHN);
-            Utilits.Data.debugLog("Tournament List:", this.id_enemies);
+            Utilits.Data.debugLog("INIT NEW GAME - Tournament List:", this.id_enemies);
         };
         /* инициализация персонажей */
         Data.initPersonages = function (game) {
@@ -425,7 +425,7 @@ var GameData;
                 _this.loadAnimation(game, personage);
                 GameData.Data.personages.push(personage);
             });
-            Utilits.Data.debugLog("PERSONAGES", GameData.Data.personages);
+            Utilits.Data.debugLog("INIT PERSONAGES:", GameData.Data.personages);
         };
         /* получить данные персонажа по его ID */
         Data.getPersonage = function (personageID) {
@@ -1559,6 +1559,11 @@ var MortalKombat;
             }
         };
         Menu.prototype.continueGame = function () {
+            /* Загрузка сохраненных данных */
+            //GameData.Data.initPersonages(this.game);
+            //GameData.Data.user_personage = GameData.Data.getPersonage(Constants.ID_LIUKANG);
+            //GameData.Data.initNewGame();
+            //GameData.Data.tournamentProgress = 1;
             if (GameData.Data.tournamentProgress > 0) {
                 var buttonStart = new Phaser.Button(this.game, 75, 475, Sheet.ButtonStartNewGame, this.onButtonClick, this, 1, 2);
                 buttonStart.name = Constants.START;
@@ -1678,6 +1683,7 @@ var MortalKombat;
                     }
                 case Constants.SELECT_FIGHTER:
                     {
+                        GameData.Data.initNewGame();
                         this.game.state.start(MortalKombat.Tournament.Name, true, false);
                         break;
                     }
@@ -1735,8 +1741,6 @@ var MortalKombat;
             var anim = this.videoSprite.animations.add(Atlases.Video3);
             anim.onComplete.add(this.onCompleteVideo, this);
             anim.play(15, false, true);
-            if (GameData.Data.tournamentProgress === 0)
-                GameData.Data.initNewGame();
             this.createContent();
             this.groupContent.addChild(new Phaser.Sprite(this.game, 0, 0, Images.BackgroundImage));
         };
@@ -1798,7 +1802,7 @@ var MortalKombat;
             this.enemyUpgradeCharacteristics.x = Constants.GAME_WIDTH + 500;
             this.enemyUpgradeCharacteristics.y = 300;
             this.groupContent.addChild(this.enemyUpgradeCharacteristics);
-            Utilits.Data.debugLog("user_personage", GameData.Data.user_personage);
+            Utilits.Data.debugLog("TOURNAMENT - CHANGE USER PERSOHAGE", GameData.Data.user_personage);
         };
         Tournament.prototype.onButtonClick = function (event) {
             switch (event.name) {

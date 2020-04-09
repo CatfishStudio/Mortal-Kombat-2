@@ -150,6 +150,12 @@ module MortalKombat {
         }
 
         private continueGame(){
+            /* Загрузка сохраненных данных */
+            //GameData.Data.initPersonages(this.game);
+            //GameData.Data.user_personage = GameData.Data.getPersonage(Constants.ID_LIUKANG);
+            //GameData.Data.initNewGame();
+            //GameData.Data.tournamentProgress = 1;
+
             if(GameData.Data.tournamentProgress > 0){
                 let buttonStart = new Phaser.Button(this.game, 75, 475, Sheet.ButtonStartNewGame, this.onButtonClick, this, 1, 2);
                 buttonStart.name = Constants.START;

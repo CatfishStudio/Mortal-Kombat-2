@@ -69,7 +69,7 @@ module GameData {
             this.id_enemies.push(Constants.ID_GORO);
             this.id_enemies.push(Constants.ID_SHAOKAHN);
 
-            Utilits.Data.debugLog("Tournament List:", this.id_enemies);
+            Utilits.Data.debugLog("INIT NEW GAME - Tournament List:", this.id_enemies);
         }
 
         /* инициализация персонажей */
@@ -91,7 +91,7 @@ module GameData {
                 GameData.Data.personages.push(personage);
             });
 
-            Utilits.Data.debugLog("PERSONAGES", GameData.Data.personages);
+            Utilits.Data.debugLog("INIT PERSONAGES:", GameData.Data.personages);
         }
 
         /* получить данные персонажа по его ID */
