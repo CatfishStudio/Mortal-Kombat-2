@@ -71,6 +71,8 @@ module MortalKombat {
             buttonInvite.name = Constants.INVITE;
             this.groupButtons.addChild(buttonInvite);
 
+            this.continueGame();
+
             this.tutorial = new Tutorial(this.game, GameData.Data.tutorList[0]);
             this.tutorial.x = Constants.GAME_WIDTH;
             this.tutorial.y = (Constants.GAME_HEIGHT - 175);
@@ -98,6 +100,7 @@ module MortalKombat {
             switch (event.name) {
                 case Constants.START:
                     {
+                        GameData.Data.initPersonages(this.game);
                         this.game.state.start(Fighters.Name, true, false);
                         break;
                     }
@@ -143,6 +146,26 @@ module MortalKombat {
                 let tweenTutorial: Phaser.Tween = this.game.add.tween(this.tutorial);
                 tweenTutorial.to({ x: (Constants.GAME_WIDTH / 2), y: (Constants.GAME_HEIGHT - 175)}, 500, 'Linear');
                 tweenTutorial.start();
+            }
+        }
+
+        private continueGame(){
+            if(GameData.Data.tournamentProgress > 0){
+                let buttonStart = new Phaser.Button(this.game, 75, 475, Sheet.ButtonStartNewGame, this.onButtonClick, this, 1, 2);
+                buttonStart.name = Constants.START;
+                this.groupButtons.addChild(buttonStart);
+                
+                let buttonSettings = new Phaser.Button(this.game, 75, 550, Sheet.ButtonSettings, this.onButtonClick, this, 1, 2, 2, 2);
+                buttonSettings.name = Constants.SETTINGS;
+                this.groupButtons.addChild(buttonSettings);
+                
+                let buttonInvite = new Phaser.Button(this.game, 75, 625, Sheet.ButtonInvite, this.onButtonClick, this, 1, 2, 2, 2);
+                buttonInvite.name = Constants.INVITE;
+                this.groupButtons.addChild(buttonInvite);
+
+                let buttonContinue = new Phaser.Button(this.game, 75, 400, Sheet.ButtonСontinueGame, this.onButtonClick, this, 1, 2);
+                buttonContinue.name = Constants.CONTINUE;
+                this.groupButtons.addChild(buttonContinue);
             }
         }
     }

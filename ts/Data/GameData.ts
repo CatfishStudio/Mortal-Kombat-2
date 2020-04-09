@@ -42,7 +42,7 @@ module GameData {
         
         public static initNewGame():void {
             this.user_continue = 9;
-            this.user_upgrade_points = 10;
+            this.user_upgrade_points = 0;
             this.tournamentProgress = 0;
             this.id_enemies = [];
 
@@ -156,6 +156,73 @@ module GameData {
             }
         }
 
-        
+        /* Изменение количества здоровья персонажа в соответствии с прогрессом */
+        public static upgradePersonageLife(personageID:string):void
+        {
+            let personage: IPersonage;
+            personage = this.getPersonage(personageID);
+            personage.life += 50 * this.tournamentProgress;
+            Utilits.Data.debugLog("UPGRADE PERSONAGE LIFE", this.getPersonage(personageID));
+        }
+
+        /* Улучшение характеристик персонажа в соответствии с прогрессом */
+        public static upgradePersonageCharacteristics(personageID:string):void
+        {
+            let personage: IPersonage;
+            personage = this.getPersonage(personageID);
+            for(let i = 0; i < this.tournamentProgress; i++)
+            {
+                if(this.checkAccessPersonageUpgrade(personageID)===false){
+                    Utilits.Data.debugLog("NOT AVAILABLE - UPGRADE PERSONAGE CHARACTERISTICS", this.getPersonage(personageID));
+                    return;
+                }
+
+                let index = Utilits.Data.getRandomRangeIndex(1, 5);
+                while(index > 0)
+                {
+                    if(index === 1){
+                        if(personage.leg < Constants.MAX_HIT_LEG) {
+                            personage.leg++;
+                            index = 0;
+                        }
+                    }else if(index === 2){
+                        if(personage.hand < Constants.MAX_HIT_HAND) {
+                            personage.hand++;
+                            index = 0;
+                        }
+                    }else if(index === 3){
+                        if(personage.block < Constants.MAX_HIT_BLOCK){
+                            personage.block++;
+                            index = 0;
+                        }
+                    }else if(index === 4){
+                        if(personage.uppercut < Constants.MAX_HIT_UPPERCUT){
+                            personage.uppercut++;
+                            index = 0;
+                        }
+                    }else if(index === 5){
+                        if(personage.twist < Constants.MAX_HIT_TWIST){
+                            personage.twist++;
+                            index = 0;
+                        }
+                    }
+                    if(index !== 0) index = Utilits.Data.getRandomRangeIndex(1, 5);
+                }
+            }
+            Utilits.Data.debugLog("UPGRADE PERSONAGE CHARACTERISTICS", this.getPersonage(personageID));
+        }
+
+        /* Проверить доступен ли upgrade персонажа */
+        public static checkAccessPersonageUpgrade(personageID:string):boolean
+        {
+            let personage: IPersonage;
+            personage = this.getPersonage(personageID);
+            if(personage.leg < Constants.MAX_HIT_LEG) return true;
+            if(personage.hand < Constants.MAX_HIT_HAND) return true;
+            if(personage.block < Constants.MAX_HIT_BLOCK) return true;
+            if(personage.uppercut < Constants.MAX_HIT_UPPERCUT) return true;
+            if(personage.twist < Constants.MAX_HIT_TWIST) return true;
+            return false;
+        }
     }
 }

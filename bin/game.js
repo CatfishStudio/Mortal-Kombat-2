@@ -281,6 +281,7 @@ var Sheet = /** @class */ (function () {
     function Sheet() {
     }
     Sheet.ButtonStartNewGame = 'button_start_new_game_sheet.png';
+    Sheet.ButtonСontinueGame = 'button_continue_game_sheet.png';
     Sheet.ButtonSettings = 'button_settings_sheet.png';
     Sheet.ButtonInvite = 'button_invite_sheet.png';
     Sheet.ButtonClose = 'button_close_sheet.png';
@@ -290,6 +291,7 @@ var Sheet = /** @class */ (function () {
     Sheet.ButtonHelpMini = 'button_help_mini_sheet.png';
     Sheet.preloadList = [
         Sheet.ButtonStartNewGame,
+        Sheet.ButtonСontinueGame,
         Sheet.ButtonSettings,
         Sheet.ButtonInvite,
         Sheet.ButtonClose,
@@ -377,7 +379,7 @@ var GameData;
         }
         Data.initNewGame = function () {
             this.user_continue = 9;
-            this.user_upgrade_points = 10;
+            this.user_upgrade_points = 0;
             this.tournamentProgress = 0;
             this.id_enemies = [];
             var listIDs = [
@@ -492,6 +494,76 @@ var GameData;
             catch (error) {
                 console.log(error);
             }
+        };
+        /* Изменение количества здоровья персонажа в соответствии с прогрессом */
+        Data.upgradePersonageLife = function (personageID) {
+            var personage;
+            personage = this.getPersonage(personageID);
+            personage.life += 50 * this.tournamentProgress;
+            Utilits.Data.debugLog("UPGRADE PERSONAGE LIFE", this.getPersonage(personageID));
+        };
+        /* Улучшение характеристик персонажа в соответствии с прогрессом */
+        Data.upgradePersonageCharacteristics = function (personageID) {
+            var personage;
+            personage = this.getPersonage(personageID);
+            for (var i = 0; i < this.tournamentProgress; i++) {
+                if (this.checkAccessPersonageUpgrade(personageID) === false) {
+                    Utilits.Data.debugLog("NOT AVAILABLE - UPGRADE PERSONAGE CHARACTERISTICS", this.getPersonage(personageID));
+                    return;
+                }
+                var index = Utilits.Data.getRandomRangeIndex(1, 5);
+                while (index > 0) {
+                    if (index === 1) {
+                        if (personage.leg < Constants.MAX_HIT_LEG) {
+                            personage.leg++;
+                            index = 0;
+                        }
+                    }
+                    else if (index === 2) {
+                        if (personage.hand < Constants.MAX_HIT_HAND) {
+                            personage.hand++;
+                            index = 0;
+                        }
+                    }
+                    else if (index === 3) {
+                        if (personage.block < Constants.MAX_HIT_BLOCK) {
+                            personage.block++;
+                            index = 0;
+                        }
+                    }
+                    else if (index === 4) {
+                        if (personage.uppercut < Constants.MAX_HIT_UPPERCUT) {
+                            personage.uppercut++;
+                            index = 0;
+                        }
+                    }
+                    else if (index === 5) {
+                        if (personage.twist < Constants.MAX_HIT_TWIST) {
+                            personage.twist++;
+                            index = 0;
+                        }
+                    }
+                    if (index !== 0)
+                        index = Utilits.Data.getRandomRangeIndex(1, 5);
+                }
+            }
+            Utilits.Data.debugLog("UPGRADE PERSONAGE CHARACTERISTICS", this.getPersonage(personageID));
+        };
+        /* Проверить доступен ли upgrade персонажа */
+        Data.checkAccessPersonageUpgrade = function (personageID) {
+            var personage;
+            personage = this.getPersonage(personageID);
+            if (personage.leg < Constants.MAX_HIT_LEG)
+                return true;
+            if (personage.hand < Constants.MAX_HIT_HAND)
+                return true;
+            if (personage.block < Constants.MAX_HIT_BLOCK)
+                return true;
+            if (personage.uppercut < Constants.MAX_HIT_UPPERCUT)
+                return true;
+            if (personage.twist < Constants.MAX_HIT_TWIST)
+                return true;
+            return false;
         };
         Data.tutorList = [
             'Нажмите на кнопку\n"начать игру"\nчтобы начать\nтурнир.',
@@ -1358,7 +1430,6 @@ var MortalKombat;
             }
         };
         Preloader.prototype.onLoadComplete = function () {
-            GameData.Data.initPersonages(this.game);
             this.logo.frameName = "load_" + this.loadPercent + ".png";
             this.game.stage.removeChildren();
             this.game.state.start(this.config.nextStage, true, false);
@@ -1419,6 +1490,7 @@ var MortalKombat;
             var buttonInvite = new Phaser.Button(this.game, 75, 550, Sheet.ButtonInvite, this.onButtonClick, this, 1, 2, 2, 2);
             buttonInvite.name = Constants.INVITE;
             this.groupButtons.addChild(buttonInvite);
+            this.continueGame();
             this.tutorial = new Tutorial(this.game, GameData.Data.tutorList[0]);
             this.tutorial.x = Constants.GAME_WIDTH;
             this.tutorial.y = (Constants.GAME_HEIGHT - 175);
@@ -1443,6 +1515,7 @@ var MortalKombat;
             switch (event.name) {
                 case Constants.START:
                     {
+                        GameData.Data.initPersonages(this.game);
                         this.game.state.start(MortalKombat.Fighters.Name, true, false);
                         break;
                     }
@@ -1482,6 +1555,22 @@ var MortalKombat;
                 var tweenTutorial = this.game.add.tween(this.tutorial);
                 tweenTutorial.to({ x: (Constants.GAME_WIDTH / 2), y: (Constants.GAME_HEIGHT - 175) }, 500, 'Linear');
                 tweenTutorial.start();
+            }
+        };
+        Menu.prototype.continueGame = function () {
+            if (GameData.Data.tournamentProgress > 0) {
+                var buttonStart = new Phaser.Button(this.game, 75, 475, Sheet.ButtonStartNewGame, this.onButtonClick, this, 1, 2);
+                buttonStart.name = Constants.START;
+                this.groupButtons.addChild(buttonStart);
+                var buttonSettings = new Phaser.Button(this.game, 75, 550, Sheet.ButtonSettings, this.onButtonClick, this, 1, 2, 2, 2);
+                buttonSettings.name = Constants.SETTINGS;
+                this.groupButtons.addChild(buttonSettings);
+                var buttonInvite = new Phaser.Button(this.game, 75, 625, Sheet.ButtonInvite, this.onButtonClick, this, 1, 2, 2, 2);
+                buttonInvite.name = Constants.INVITE;
+                this.groupButtons.addChild(buttonInvite);
+                var buttonContinue = new Phaser.Button(this.game, 75, 400, Sheet.ButtonСontinueGame, this.onButtonClick, this, 1, 2);
+                buttonContinue.name = Constants.CONTINUE;
+                this.groupButtons.addChild(buttonContinue);
             }
         };
         Menu.Name = "menu";

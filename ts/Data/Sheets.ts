@@ -1,5 +1,6 @@
 class Sheet {
     public static ButtonStartNewGame: string = 'button_start_new_game_sheet.png';
+    public static ButtonСontinueGame: string = 'button_continue_game_sheet.png';
     public static ButtonSettings: string = 'button_settings_sheet.png';
     public static ButtonInvite: string = 'button_invite_sheet.png';
     public static ButtonClose: string = 'button_close_sheet.png';
@@ -10,6 +11,7 @@ class Sheet {
     
     public static preloadList:Array<string> = [
         Sheet.ButtonStartNewGame,
+        Sheet.ButtonСontinueGame,
         Sheet.ButtonSettings,
         Sheet.ButtonInvite,
         Sheet.ButtonClose,
