@@ -19,6 +19,8 @@ module MortalKombat {
         }
         
         public create() {
+            GameData.Data.initPersonages(this.game);
+
             this.groupMenu = new Phaser.Group(this.game, this.stage);
             
             this.menuSprite = new Phaser.Sprite(this.game, -5,-5, Images.MenuImage)
@@ -100,7 +102,6 @@ module MortalKombat {
             switch (event.name) {
                 case Constants.START:
                     {
-                        GameData.Data.initPersonages(this.game);
                         this.game.state.start(Fighters.Name, true, false);
                         break;
                     }
@@ -151,12 +152,10 @@ module MortalKombat {
 
         private continueGame(){
             /* Загрузка сохраненных данных */
-            //GameData.Data.initPersonages(this.game);
-            //GameData.Data.user_personage = GameData.Data.getPersonage(Constants.ID_LIUKANG);
-            //GameData.Data.initNewGame();
-            //GameData.Data.tournamentProgress = 1;
+            //GameData.Data.saveData = SocialVK.vkSaveData();
+            let loadData = SocialVK.LoadData(GameData.Data.saveData);
 
-            if(GameData.Data.tournamentProgress > 0){
+            if(loadData === true){
                 let buttonStart = new Phaser.Button(this.game, 75, 475, Sheet.ButtonStartNewGame, this.onButtonClick, this, 1, 2);
                 buttonStart.name = Constants.START;
                 this.groupButtons.addChild(buttonStart);

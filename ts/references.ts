@@ -9,6 +9,7 @@
 /// <reference path="Data\Characteristics.ts" />
 /// <reference path="Data\Animations.ts" />
 /// <reference path="Data\GameData.ts" />
+/// <reference path="Data\SocialVK.ts" />
 /// <reference path="Fabrique\Objects\Tutorial.ts" />
 /// <reference path="Fabrique\Objects\Settings.ts" />
 /// <reference path="Fabrique\Objects\Title.ts" />

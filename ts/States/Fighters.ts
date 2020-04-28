@@ -131,9 +131,10 @@ module MortalKombat {
                 case Constants.SELECT_FIGHTER:
                     {
                         GameData.Data.initNewGame();
+                        GameData.Data.saveData = SocialVK.vkSaveData();
                         this.game.state.start(Tournament.Name, true, false);
                         break;
-                    }                                  
+                    }                        
                 default:
                     break;
             }

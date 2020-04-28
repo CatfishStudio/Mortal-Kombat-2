@@ -39,12 +39,15 @@ module GameData {
         public static tournamentProgress:number; // прогресс прохождения турнира (индекс врага)
 
         public static id_enemies:string[];  // идентификаторы персонажей (враги)
+
+        public static saveData:string; // сохраняемые данные в формате json
         
         public static initNewGame():void {
             this.user_continue = 9;
             this.user_upgrade_points = 0;
             this.tournamentProgress = 0;
             this.id_enemies = [];
+            this.saveData = "";
 
             let listIDs:string[] = [
                 Constants.ID_BARAKA,
