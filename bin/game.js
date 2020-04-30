@@ -649,12 +649,22 @@ var SocialVK = /** @class */ (function () {
                 GameData.Data.tournamentProgress = value;
             if (key === 'enemies')
                 GameData.Data.id_enemies = value;
+            if (key === 'personage') {
+                GameData.Data.user_personage = GameData.Data.getPersonage(value.id);
+                GameData.Data.user_personage.hand = value.hand;
+                GameData.Data.user_personage.leg = value.leg;
+                GameData.Data.user_personage.block = value.block;
+                GameData.Data.user_personage.uppercut = value.uppercut;
+                GameData.Data.user_personage.twist = value.twist;
+                GameData.Data.user_personage.life = value.life;
+            }
             return value;
         });
-        Utilits.Data.debugLog('LOAD DATA COMPLETE', GameData.Data.user_continue.toString() + " " +
+        Utilits.Data.debugLog('LOAD DATA', GameData.Data.user_continue.toString() + " " +
             GameData.Data.user_upgrade_points.toString() + " " +
             GameData.Data.tournamentProgress.toString() + " " +
             GameData.Data.id_enemies.toString());
+        Utilits.Data.debugLog('LOAD PERSONAGE', GameData.Data.user_personage);
         if (GameData.Data.tournamentProgress > -1) {
             return true;
         }
@@ -1674,7 +1684,6 @@ var MortalKombat;
         };
         Menu.prototype.continueGame = function () {
             /* Загрузка сохраненных данных */
-            //GameData.Data.saveData = SocialVK.vkSaveData();
             var loadData = SocialVK.LoadData(GameData.Data.saveData);
             if (loadData === true) {
                 var buttonStart = new Phaser.Button(this.game, 75, 475, Sheet.ButtonStartNewGame, this.onButtonClick, this, 1, 2);

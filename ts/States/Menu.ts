@@ -152,7 +152,6 @@ module MortalKombat {
 
         private continueGame(){
             /* Загрузка сохраненных данных */
-            //GameData.Data.saveData = SocialVK.vkSaveData();
             let loadData = SocialVK.LoadData(GameData.Data.saveData);
 
             if(loadData === true){

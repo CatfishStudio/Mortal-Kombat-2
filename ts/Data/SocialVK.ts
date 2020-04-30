@@ -75,14 +75,24 @@ class SocialVK {
             if (key === 'points') GameData.Data.user_upgrade_points = value;
             if (key === 'progress') GameData.Data.tournamentProgress = value;
             if (key === 'enemies') GameData.Data.id_enemies = value;
+            if (key === 'personage') {
+                GameData.Data.user_personage = GameData.Data.getPersonage(value.id);
+                GameData.Data.user_personage.hand = value.hand;
+                GameData.Data.user_personage.leg = value.leg;
+                GameData.Data.user_personage.block = value.block;
+                GameData.Data.user_personage.uppercut = value.uppercut;
+                GameData.Data.user_personage.twist = value.twist;
+                GameData.Data.user_personage.life = value.life;
+            }
             return value;
         });
 
-        Utilits.Data.debugLog('LOAD DATA COMPLETE',
+        Utilits.Data.debugLog('LOAD DATA',
             GameData.Data.user_continue.toString() + " " +
             GameData.Data.user_upgrade_points.toString() + " " +
             GameData.Data.tournamentProgress.toString() + " " +
             GameData.Data.id_enemies.toString());
+        Utilits.Data.debugLog('LOAD PERSONAGE', GameData.Data.user_personage);
 
         if (GameData.Data.tournamentProgress > -1){
             return true;
