@@ -94,39 +94,12 @@ class SocialVK {
             GameData.Data.id_enemies.toString());
         Utilits.Data.debugLog('LOAD PERSONAGE', GameData.Data.user_personage);
 
+        GameData.Data.enemiesUpgrade();
+
         if (GameData.Data.tournamentProgress > -1){
             return true;
         }else{
             return false;
         }
-
-
-        /*
-        GameData.Data.comixIndex = 0;
-        GameData.Data.progressIndex = -1;
-        GameData.Data.fighterIndex = -1;
-        GameData.Data.tournamentListIds = [];
-
-        JSON.parse(jsonData, function (key, value) {
-            if (key === 'fi') GameData.Data.fighterIndex = value;
-            if (key === 'pi') GameData.Data.progressIndex = value;
-            if (key === 'ci') GameData.Data.comixIndex = value;
-            if (key === 'list') GameData.Data.tournamentListIds = value;
-            return value;
-        });
-
-        Utilits.Data.debugLog('LOAD DATA COMPLETE',
-            GameData.Data.comixIndex.toString() + " " +
-            GameData.Data.progressIndex.toString() + " " +
-            GameData.Data.fighterIndex.toString() + " " +
-            GameData.Data.tournamentListIds.toString());
-
-        if (GameData.Data.fighterIndex > -1){
-            return true;
-        }else{
-            return false;
-        }
-        */
-       
     }
 }
