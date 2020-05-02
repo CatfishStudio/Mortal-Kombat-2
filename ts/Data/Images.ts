@@ -39,6 +39,20 @@ class Images {
     public static ShangTsungIcon:string = 'shangtsung.png';
     public static ShaoKahnIcon:string = 'shaokahn.png';
     public static SubZeroIcon:string = 'subzero.png';
+
+    public static level1: string = 'level_1.png';
+    public static level2: string = 'level_2.png';
+    public static level3: string = 'level_3.png';
+    public static level4: string = 'level_4.png';
+    public static level5: string = 'level_5.png';
+    public static level6: string = 'level_6.png';
+    public static level7: string = 'level_7.png';
+    public static level8: string = 'level_8.png';
+    public static level9: string = 'level_9.png';
+    public static level10: string = 'level_10.png';
+    public static level11: string = 'level_11.png';
+    public static level12: string = 'level_12.png';
+    public static level13: string = 'level_13.png';
     
     public static preloadList:Array<string> = [
         Images.BackgroundImage,
@@ -78,6 +92,20 @@ class Images {
         Images.ScorpionIcon,
         Images.ShangTsungIcon,
         Images.ShaoKahnIcon,
-        Images.SubZeroIcon
+        Images.SubZeroIcon,
+
+        Images.level1,
+        Images.level2,
+        Images.level3,
+        Images.level4,
+        Images.level5,
+        Images.level6,
+        Images.level7,
+        Images.level8,
+        Images.level9,
+        Images.level10,
+        Images.level11,
+        Images.level12,
+        Images.level13
     ]; 
 }
