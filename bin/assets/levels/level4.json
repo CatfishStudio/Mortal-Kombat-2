@@ -1,0 +1,224 @@
+{
+  "Level": {
+    "LevelNumber": "4",
+    "LevelType": "LEVEL_TYPE_ALL",
+    "cell": [
+      {
+        "cellType": "CELL_TYPE_CLEAR",
+        "cellObject": "HIT_3",
+        "cellColumn": "0",
+        "cellRow": "0"
+      },
+      {
+        "cellType": "CELL_TYPE_CLEAR",
+        "cellObject": "HIT_2",
+        "cellColumn": "0",
+        "cellRow": "1"
+      },
+      {
+        "cellType": "CELL_TYPE_CLEAR",
+        "cellObject": "HIT_4",
+        "cellColumn": "0",
+        "cellRow": "2"
+      },
+      {
+        "cellType": "CELL_TYPE_CLEAR",
+        "cellObject": "HIT_2",
+        "cellColumn": "0",
+        "cellRow": "3"
+      },
+      {
+        "cellType": "CELL_TYPE_CLEAR",
+        "cellObject": "HIT_4",
+        "cellColumn": "0",
+        "cellRow": "4"
+      },
+      {
+        "cellType": "CELL_TYPE_CLEAR",
+        "cellObject": "HIT_4",
+        "cellColumn": "0",
+        "cellRow": "5"
+      },
+      {
+        "cellType": "CELL_TYPE_DROP",
+        "cellObject": "HIT_0",
+        "cellColumn": "1",
+        "cellRow": "0"
+      },
+      {
+        "cellType": "CELL_TYPE_CLEAR",
+        "cellObject": "HIT_5",
+        "cellColumn": "1",
+        "cellRow": "1"
+      },
+      {
+        "cellType": "CELL_TYPE_CLEAR",
+        "cellObject": "HIT_2",
+        "cellColumn": "1",
+        "cellRow": "2"
+      },
+      {
+        "cellType": "CELL_TYPE_CLEAR",
+        "cellObject": "HIT_5",
+        "cellColumn": "1",
+        "cellRow": "3"
+      },
+      {
+        "cellType": "CELL_TYPE_CLEAR",
+        "cellObject": "HIT_5",
+        "cellColumn": "1",
+        "cellRow": "4"
+      },
+      {
+        "cellType": "CELL_TYPE_DROP",
+        "cellObject": "HIT_0",
+        "cellColumn": "1",
+        "cellRow": "5"
+      },
+      {
+        "cellType": "CELL_TYPE_CLEAR",
+        "cellObject": "HIT_4",
+        "cellColumn": "2",
+        "cellRow": "0"
+      },
+      {
+        "cellType": "CELL_TYPE_CLEAR",
+        "cellObject": "HIT_1",
+        "cellColumn": "2",
+        "cellRow": "1"
+      },
+      {
+        "cellType": "CELL_TYPE_CLEAR",
+        "cellObject": "HIT_4",
+        "cellColumn": "2",
+        "cellRow": "2"
+      },
+      {
+        "cellType": "CELL_TYPE_CLEAR",
+        "cellObject": "HIT_1",
+        "cellColumn": "2",
+        "cellRow": "3"
+      },
+      {
+        "cellType": "CELL_TYPE_CLEAR",
+        "cellObject": "HIT_2",
+        "cellColumn": "2",
+        "cellRow": "4"
+      },
+      {
+        "cellType": "CELL_TYPE_CLEAR",
+        "cellObject": "HIT_3",
+        "cellColumn": "2",
+        "cellRow": "5"
+      },
+      {
+        "cellType": "CELL_TYPE_CLEAR",
+        "cellObject": "HIT_1",
+        "cellColumn": "3",
+        "cellRow": "0"
+      },
+      {
+        "cellType": "CELL_TYPE_CLEAR",
+        "cellObject": "HIT_4",
+        "cellColumn": "3",
+        "cellRow": "1"
+      },
+      {
+        "cellType": "CELL_TYPE_CLEAR",
+        "cellObject": "HIT_3",
+        "cellColumn": "3",
+        "cellRow": "2"
+      },
+      {
+        "cellType": "CELL_TYPE_CLEAR",
+        "cellObject": "HIT_1",
+        "cellColumn": "3",
+        "cellRow": "3"
+      },
+      {
+        "cellType": "CELL_TYPE_CLEAR",
+        "cellObject": "HIT_5",
+        "cellColumn": "3",
+        "cellRow": "4"
+      },
+      {
+        "cellType": "CELL_TYPE_CLEAR",
+        "cellObject": "HIT_2",
+        "cellColumn": "3",
+        "cellRow": "5"
+      },
+      {
+        "cellType": "CELL_TYPE_DROP",
+        "cellObject": "HIT_0",
+        "cellColumn": "4",
+        "cellRow": "0"
+      },
+      {
+        "cellType": "CELL_TYPE_CLEAR",
+        "cellObject": "HIT_1",
+        "cellColumn": "4",
+        "cellRow": "1"
+      },
+      {
+        "cellType": "CELL_TYPE_CLEAR",
+        "cellObject": "HIT_4",
+        "cellColumn": "4",
+        "cellRow": "2"
+      },
+      {
+        "cellType": "CELL_TYPE_CLEAR",
+        "cellObject": "HIT_3",
+        "cellColumn": "4",
+        "cellRow": "3"
+      },
+      {
+        "cellType": "CELL_TYPE_CLEAR",
+        "cellObject": "HIT_5",
+        "cellColumn": "4",
+        "cellRow": "4"
+      },
+      {
+        "cellType": "CELL_TYPE_DROP",
+        "cellObject": "HIT_0",
+        "cellColumn": "4",
+        "cellRow": "5"
+      },
+      {
+        "cellType": "CELL_TYPE_CLEAR",
+        "cellObject": "HIT_4",
+        "cellColumn": "5",
+        "cellRow": "0"
+      },
+      {
+        "cellType": "CELL_TYPE_CLEAR",
+        "cellObject": "HIT_4",
+        "cellColumn": "5",
+        "cellRow": "1"
+      },
+      {
+        "cellType": "CELL_TYPE_CLEAR",
+        "cellObject": "HIT_3",
+        "cellColumn": "5",
+        "cellRow": "2"
+      },
+      {
+        "cellType": "CELL_TYPE_CLEAR",
+        "cellObject": "HIT_1",
+        "cellColumn": "5",
+        "cellRow": "3"
+      },
+      {
+        "cellType": "CELL_TYPE_CLEAR",
+        "cellObject": "HIT_2",
+        "cellColumn": "5",
+        "cellRow": "4"
+      },
+      {
+        "cellType": "CELL_TYPE_CLEAR",
+        "cellObject": "HIT_5",
+        "cellColumn": "5",
+        "cellRow": "5"
+      }
+    ]
+  }
+}
