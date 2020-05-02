@@ -46,6 +46,10 @@ module MortalKombat {
                     Characteristics.preloadList.forEach((assetName: string) => {
                         this.game.load.json(assetName, 'assets/data/'+ assetName);
                     });
+
+                    Levels.levelsList.forEach((assetName: string)=>{
+                        this.game.load.json(assetName, 'assets/levels/'+ assetName);
+                    });
                 }
             });
         }

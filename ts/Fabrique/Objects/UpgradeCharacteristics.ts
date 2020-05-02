@@ -163,6 +163,7 @@ module Fabrique {
             switch (event.name) {
                 case Constants.LEG:
                     {
+                        GameData.Data.user_personage.life += 50;
                         GameData.Data.user_personage.leg++;
                         GameData.Data.user_upgrade_points--;
                         this.textValueCap1.text = Constants.DAMAGE_LEG + " x"+ GameData.Data.user_personage.leg;
@@ -172,6 +173,7 @@ module Fabrique {
                     }
                 case Constants.HAND:
                     {
+                        GameData.Data.user_personage.life += 50;
                         GameData.Data.user_personage.hand++;
                         GameData.Data.user_upgrade_points--;
                         this.textValueCap2.text = Constants.DAMAGE_HAND + " x"+ GameData.Data.user_personage.hand;
@@ -181,6 +183,7 @@ module Fabrique {
                     }
                 case Constants.BLOCK:
                     {
+                        GameData.Data.user_personage.life += 50;
                         GameData.Data.user_personage.block++;
                         GameData.Data.user_upgrade_points--;
                         this.textValueCap3.text = Constants.DAMAGE_BLOCK + " x"+ GameData.Data.user_personage.block;
@@ -190,6 +193,7 @@ module Fabrique {
                     }
                 case Constants.UPPERCUT:
                     {
+                        GameData.Data.user_personage.life += 50;
                         GameData.Data.user_personage.uppercut++;
                         GameData.Data.user_upgrade_points--;
                         this.textValueCap4.text = Constants.DAMAGE_UPPERCUT + " x"+ GameData.Data.user_personage.uppercut;
@@ -199,6 +203,7 @@ module Fabrique {
                     }
                 case Constants.TWIST:
                     {
+                        GameData.Data.user_personage.life += 50;
                         GameData.Data.user_personage.twist++;
                         GameData.Data.user_upgrade_points--;
                         this.textValueCap5.text = Constants.DAMAGE_TWIST + " x"+ GameData.Data.user_personage.twist;

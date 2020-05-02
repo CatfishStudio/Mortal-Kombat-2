@@ -188,6 +188,19 @@ var Images = /** @class */ (function () {
     Images.ShangTsungIcon = 'shangtsung.png';
     Images.ShaoKahnIcon = 'shaokahn.png';
     Images.SubZeroIcon = 'subzero.png';
+    Images.level1 = 'level_1.png';
+    Images.level2 = 'level_2.png';
+    Images.level3 = 'level_3.png';
+    Images.level4 = 'level_4.png';
+    Images.level5 = 'level_5.png';
+    Images.level6 = 'level_6.png';
+    Images.level7 = 'level_7.png';
+    Images.level8 = 'level_8.png';
+    Images.level9 = 'level_9.png';
+    Images.level10 = 'level_10.png';
+    Images.level11 = 'level_11.png';
+    Images.level12 = 'level_12.png';
+    Images.level13 = 'level_13.png';
     Images.preloadList = [
         Images.BackgroundImage,
         Images.MenuImage,
@@ -225,7 +238,20 @@ var Images = /** @class */ (function () {
         Images.ScorpionIcon,
         Images.ShangTsungIcon,
         Images.ShaoKahnIcon,
-        Images.SubZeroIcon
+        Images.SubZeroIcon,
+        Images.level1,
+        Images.level2,
+        Images.level3,
+        Images.level4,
+        Images.level5,
+        Images.level6,
+        Images.level7,
+        Images.level8,
+        Images.level9,
+        Images.level10,
+        Images.level11,
+        Images.level12,
+        Images.level13
     ];
     return Images;
 }());
@@ -336,6 +362,41 @@ var Characteristics = /** @class */ (function () {
         Characteristics.subzeroJson
     ];
     return Characteristics;
+}());
+var Levels = /** @class */ (function () {
+    function Levels() {
+    }
+    Levels.level0 = "level0.json";
+    Levels.level1 = "level1.json";
+    Levels.level2 = "level2.json";
+    Levels.level3 = "level3.json";
+    Levels.level4 = "level4.json";
+    Levels.level5 = "level5.json";
+    Levels.level6 = "level6.json";
+    Levels.level7 = "level7.json";
+    Levels.level8 = "level8.json";
+    Levels.level9 = "level9.json";
+    Levels.level10 = "level10.json";
+    Levels.level11 = "level11.json";
+    Levels.level12 = "level12.json";
+    Levels.level13 = "level13.json";
+    Levels.levelsList = [
+        Levels.level0,
+        Levels.level1,
+        Levels.level2,
+        Levels.level3,
+        Levels.level4,
+        Levels.level5,
+        Levels.level6,
+        Levels.level7,
+        Levels.level8,
+        Levels.level9,
+        Levels.level10,
+        Levels.level11,
+        Levels.level12,
+        Levels.level13
+    ];
+    return Levels;
 }());
 var Animations = /** @class */ (function () {
     function Animations() {
@@ -1274,6 +1335,7 @@ var Fabrique;
             switch (event.name) {
                 case Constants.LEG:
                     {
+                        GameData.Data.user_personage.life += 50;
                         GameData.Data.user_personage.leg++;
                         GameData.Data.user_upgrade_points--;
                         this.textValueCap1.text = Constants.DAMAGE_LEG + " x" + GameData.Data.user_personage.leg;
@@ -1283,6 +1345,7 @@ var Fabrique;
                     }
                 case Constants.HAND:
                     {
+                        GameData.Data.user_personage.life += 50;
                         GameData.Data.user_personage.hand++;
                         GameData.Data.user_upgrade_points--;
                         this.textValueCap2.text = Constants.DAMAGE_HAND + " x" + GameData.Data.user_personage.hand;
@@ -1292,6 +1355,7 @@ var Fabrique;
                     }
                 case Constants.BLOCK:
                     {
+                        GameData.Data.user_personage.life += 50;
                         GameData.Data.user_personage.block++;
                         GameData.Data.user_upgrade_points--;
                         this.textValueCap3.text = Constants.DAMAGE_BLOCK + " x" + GameData.Data.user_personage.block;
@@ -1301,6 +1365,7 @@ var Fabrique;
                     }
                 case Constants.UPPERCUT:
                     {
+                        GameData.Data.user_personage.life += 50;
                         GameData.Data.user_personage.uppercut++;
                         GameData.Data.user_upgrade_points--;
                         this.textValueCap4.text = Constants.DAMAGE_UPPERCUT + " x" + GameData.Data.user_personage.uppercut;
@@ -1310,6 +1375,7 @@ var Fabrique;
                     }
                 case Constants.TWIST:
                     {
+                        GameData.Data.user_personage.life += 50;
                         GameData.Data.user_personage.twist++;
                         GameData.Data.user_upgrade_points--;
                         this.textValueCap5.text = Constants.DAMAGE_TWIST + " x" + GameData.Data.user_personage.twist;
@@ -1479,6 +1545,9 @@ var MortalKombat;
                     });
                     Characteristics.preloadList.forEach(function (assetName) {
                         _this.game.load.json(assetName, 'assets/data/' + assetName);
+                    });
+                    Levels.levelsList.forEach(function (assetName) {
+                        _this.game.load.json(assetName, 'assets/levels/' + assetName);
                     });
                 }
             });
@@ -1959,6 +2028,7 @@ var MortalKombat;
 /// <reference path="Data\Atlases.ts" />
 /// <reference path="Data\Sheets.ts" />
 /// <reference path="Data\Characteristics.ts" />
+/// <reference path="Data\Levels.ts" />
 /// <reference path="Data\Animations.ts" />
 /// <reference path="Data\GameData.ts" />
 /// <reference path="Data\SocialVK.ts" />

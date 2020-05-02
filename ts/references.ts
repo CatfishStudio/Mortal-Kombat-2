@@ -7,6 +7,7 @@
 /// <reference path="Data\Atlases.ts" />
 /// <reference path="Data\Sheets.ts" />
 /// <reference path="Data\Characteristics.ts" />
+/// <reference path="Data\Levels.ts" />
 /// <reference path="Data\Animations.ts" />
 /// <reference path="Data\GameData.ts" />
 /// <reference path="Data\SocialVK.ts" />
