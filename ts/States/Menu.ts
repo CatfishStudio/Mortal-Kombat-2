@@ -8,6 +8,7 @@ module MortalKombat {
         public name: string = Menu.Name;
         private videoSprite:Phaser.Sprite;
         private menuSprite:Phaser.Sprite;
+        private startLogoSprite:Phaser.Sprite;
         private groupMenu: Phaser.Group;
         private groupButtons: Phaser.Group;
         private tween:Phaser.Tween;
@@ -27,14 +28,23 @@ module MortalKombat {
             this.menuSprite.scale.set(1.025);
             this.groupMenu.addChild(this.menuSprite);
             
-            this.tween = this.game.add.tween(this.menuSprite);
-            this.tween.to({ x: -200, y: -5 }, 20000, 'Linear');
-            this.tween.to({ x: 0, y: 0}, 20000, 'Linear');
-            this.tween.onComplete.add(this.onTweenComplete, this);
+            //this.tween = this.game.add.tween(this.menuSprite);
+            //this.tween.to({ x: -200, y: -5 }, 20000, 'Linear');
+            //this.tween.to({ x: 0, y: 0}, 20000, 'Linear');
+            //this.tween.onComplete.add(this.onTweenComplete, this);
 
             this.videoSprite = new Phaser.Sprite(this.game,0,0,Atlases.Video1,0);
             this.videoSprite.scale.set(2.6, 2.6);
             this.groupMenu.addChild(this.videoSprite);
+
+            this.startLogoSprite = new Phaser.Sprite(this.game, 125, 150, Images.StartLogoImage);
+            this.startLogoSprite.alpha = 0;
+            this.groupMenu.addChild(this.startLogoSprite);
+
+            this.tween = this.game.add.tween(this.startLogoSprite);
+            this.tween.to({ alpha: 1 }, 2500, 'Linear');
+            this.tween.to({ alpha: 0}, 2500, 'Linear');
+            this.tween.start();
 
             let anim: Phaser.Animation = this.videoSprite.animations.add(Atlases.Video1);
             anim.onComplete.add(this.onCompleteVideo, this);
@@ -83,6 +93,11 @@ module MortalKombat {
 
         private onCompleteVideo():void {
             this.groupButtons.visible = true;
+
+            this.tween = this.game.add.tween(this.menuSprite);
+            this.tween.to({ x: -200, y: -5 }, 20000, 'Linear');
+            this.tween.to({ x: 0, y: 0}, 20000, 'Linear');
+            this.tween.onComplete.add(this.onTweenComplete, this);
 
             let tweenButtons: Phaser.Tween = this.game.add.tween(this.groupButtons);
             tweenButtons.to({ x: 0, y: 0}, 500, 'Linear');

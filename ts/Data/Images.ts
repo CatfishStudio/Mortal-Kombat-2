@@ -4,6 +4,7 @@ class Images {
     public static BackgroundImage: string = 'background.png';
     public static MenuImage: string = 'menu.png';
     public static LogoImage: string = 'logo.png';
+    public static StartLogoImage: string = 'start_logo.png';
     public static FightersImage: string = 'fighters.png';
     public static UpgradeImage: string = 'upgrade.png';
     public static ButtonOn: string = 'buttons_on.png';
@@ -58,6 +59,7 @@ class Images {
         Images.BackgroundImage,
         Images.MenuImage,
         Images.LogoImage,
+        Images.StartLogoImage,
         Images.FightersImage,
         Images.UpgradeImage,
         Images.ButtonOn,
