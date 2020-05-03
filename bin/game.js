@@ -31,6 +31,7 @@ var MortalKombat;
             _this.state.add(MortalKombat.Menu.Name, MortalKombat.Menu, false);
             _this.state.add(MortalKombat.Fighters.Name, MortalKombat.Fighters, false);
             _this.state.add(MortalKombat.Tournament.Name, MortalKombat.Tournament, false);
+            _this.state.add(MortalKombat.Level.Name, MortalKombat.Level, false);
             return _this;
         }
         Game.getInstance = function () {
@@ -490,6 +491,7 @@ var GameData;
             this.id_enemies.push(Constants.ID_SHAOKAHN);
             Utilits.Data.debugLog("INIT NEW GAME - Tournament List:", this.id_enemies);
             this.enemiesUpgrade();
+            this.initLevels();
         };
         /* получить данные персонажа по его ID */
         Data.getPersonage = function (personageID) {
@@ -628,6 +630,25 @@ var GameData;
                 return true;
             return false;
         };
+        /* Список уровней */
+        Data.initLevels = function () {
+            this.levels = [];
+            var images = [
+                Images.level1, Images.level2, Images.level3, Images.level4, Images.level5, Images.level6, Images.level7,
+                Images.level8, Images.level9, Images.level10, Images.level11, Images.level12, Images.level13
+            ];
+            var files = [
+                Levels.level1, Levels.level2, Levels.level3, Levels.level4, Levels.level5, Levels.level6, Levels.level7,
+                Levels.level8, Levels.level9, Levels.level10, Levels.level11, Levels.level12, Levels.level13
+            ];
+            for (var i = 0; i < images.length; i++) {
+                var img = images[i];
+                var index = Utilits.Data.getRandomRangeIndex(0, files.length - 1);
+                var file = files.splice(index, 1);
+                this.levels.push([img, file[0]]);
+            }
+            Utilits.Data.debugLog('LEVELS:', this.levels);
+        };
         Data.tutorList = [
             'Нажмите на кнопку\n"начать игру"\nчтобы начать\nтурнир.',
             'Нажмите на иконку\nбойца и на кнопку\n"Выбрать бойца',
@@ -728,6 +749,7 @@ var SocialVK = /** @class */ (function () {
             GameData.Data.id_enemies.toString());
         Utilits.Data.debugLog('LOAD PERSONAGE', GameData.Data.user_personage);
         GameData.Data.enemiesUpgrade();
+        GameData.Data.initLevels();
         if (GameData.Data.tournamentProgress > -1) {
             return true;
         }
@@ -2020,6 +2042,47 @@ var MortalKombat;
     }(Phaser.State));
     MortalKombat.Tournament = Tournament;
 })(MortalKombat || (MortalKombat = {}));
+var MortalKombat;
+(function (MortalKombat) {
+    var Level = /** @class */ (function (_super) {
+        __extends(Level, _super);
+        function Level() {
+            var _this = _super.call(this) || this;
+            _this.name = MortalKombat.Tournament.Name;
+            return _this;
+        }
+        Level.prototype.create = function () {
+        };
+        Level.prototype.shutdown = function () {
+            this.game.stage.removeChildren();
+        };
+        Level.prototype.onButtonClick = function (event) {
+            switch (event.name) {
+                case Constants.BACK_MENU:
+                    {
+                        break;
+                    }
+                case Constants.SETTINGS:
+                    {
+                        break;
+                    }
+                case Constants.SETTINGS_CLOSE:
+                    {
+                        break;
+                    }
+                case Constants.HELP:
+                    {
+                        break;
+                    }
+                default:
+                    break;
+            }
+        };
+        Level.Name = "level";
+        return Level;
+    }(Phaser.State));
+    MortalKombat.Level = Level;
+})(MortalKombat || (MortalKombat = {}));
 /// <reference path="..\node_modules\phaser-ce\typescript\phaser.d.ts" />
 /// <reference path="Data\Constants.ts" />
 /// <reference path="Data\Config.ts" />
@@ -2047,4 +2110,5 @@ var MortalKombat;
 /// <reference path="States\Menu.ts" />
 /// <reference path="States\Fighters.ts" />
 /// <reference path="States\Tournament.ts" />
+/// <reference path="States\Level.ts" />
 /// <reference path="app.ts" />

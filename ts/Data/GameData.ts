@@ -32,6 +32,7 @@ module GameData {
         ];
 
         public static personages:IPersonage[]; // массив персонажей и их характеристик
+        public static levels:string[][]; // массив уровней
         
         public static user_personage:IPersonage; // выбранный пользователем персонаж
         public static user_continue:number; // количество попыток
@@ -98,6 +99,7 @@ module GameData {
             Utilits.Data.debugLog("INIT NEW GAME - Tournament List:", this.id_enemies);
 
             this.enemiesUpgrade();
+            this.initLevels();
         }
 
         /* получить данные персонажа по его ID */
@@ -214,8 +216,6 @@ module GameData {
             Utilits.Data.debugLog("UPGRADE ENEMIES", this.personages);
         }
 
-        
-
         /* Проверить доступен ли upgrade персонажа */
         public static checkAccessPersonageUpgrade(personageID:string):boolean
         {
@@ -227,6 +227,29 @@ module GameData {
             if(personage.uppercut < Constants.MAX_HIT_UPPERCUT) return true;
             if(personage.twist < Constants.MAX_HIT_TWIST) return true;
             return false;
+        }
+
+        /* Список уровней */
+        public static initLevels():void
+        {
+            this.levels = [];
+            let images = [
+                Images.level1, Images.level2, Images.level3, Images.level4, Images.level5, Images.level6, Images.level7,
+                Images.level8, Images.level9, Images.level10, Images.level11, Images.level12, Images.level13
+            ];
+            let files = [
+                Levels.level1, Levels.level2, Levels.level3, Levels.level4, Levels.level5, Levels.level6, Levels.level7,
+                Levels.level8, Levels.level9, Levels.level10, Levels.level11, Levels.level12, Levels.level13
+            ];
+
+            for(let i = 0; i < images.length; i++){
+                let img = images[i];
+                let index = Utilits.Data.getRandomRangeIndex(0, files.length-1);
+                let file = files.splice(index, 1);
+                this.levels.push([img, file[0]]);
+            }
+
+            Utilits.Data.debugLog('LEVELS:', this.levels);
         }
     }
 }

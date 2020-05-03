@@ -95,6 +95,7 @@ class SocialVK {
         Utilits.Data.debugLog('LOAD PERSONAGE', GameData.Data.user_personage);
 
         GameData.Data.enemiesUpgrade();
+        GameData.Data.initLevels();
 
         if (GameData.Data.tournamentProgress > -1){
             return true;
