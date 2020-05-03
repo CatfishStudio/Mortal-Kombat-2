@@ -242,6 +242,7 @@ module GameData {
                 Levels.level8, Levels.level9, Levels.level10, Levels.level11, Levels.level12, Levels.level13
             ];
 
+            images.sort(Utilits.Data.compareRandom);
             for(let i = 0; i < images.length; i++){
                 let img = images[i];
                 let index = Utilits.Data.getRandomRangeIndex(0, files.length-1);

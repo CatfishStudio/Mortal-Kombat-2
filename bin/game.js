@@ -641,6 +641,7 @@ var GameData;
                 Levels.level1, Levels.level2, Levels.level3, Levels.level4, Levels.level5, Levels.level6, Levels.level7,
                 Levels.level8, Levels.level9, Levels.level10, Levels.level11, Levels.level12, Levels.level13
             ];
+            images.sort(Utilits.Data.compareRandom);
             for (var i = 0; i < images.length; i++) {
                 var img = images[i];
                 var index = Utilits.Data.getRandomRangeIndex(0, files.length - 1);
@@ -1964,6 +1965,9 @@ var MortalKombat;
             this.backHalpButton = new Phaser.Button(this.game, Constants.GAME_WIDTH - 230, 5, Sheet.ButtonHelpMini, this.onButtonClick, this, 1, 2, 2, 2);
             this.backHalpButton.name = Constants.HELP;
             this.groupContent.addChild(this.backHalpButton);
+            this.startButton = new Phaser.Button(this.game, (Constants.GAME_WIDTH / 2) - (255 / 2), (Constants.GAME_HEIGHT - 50), Sheet.ButtonSelectFighter, this.onButtonClick, this, 1, 2, 2, 2);
+            this.startButton.name = Constants.START;
+            this.groupContent.addChild(this.startButton);
         };
         Tournament.prototype.onTweenComplete = function (event) {
             this.tween.start();
@@ -1995,6 +1999,11 @@ var MortalKombat;
         };
         Tournament.prototype.onButtonClick = function (event) {
             switch (event.name) {
+                case Constants.START:
+                    {
+                        this.game.state.start(MortalKombat.Level.Name, true, false);
+                        break;
+                    }
                 case Constants.BACK_MENU:
                     {
                         if (GameData.Data.tournamentProgress === 0)
@@ -2052,6 +2061,11 @@ var MortalKombat;
             return _this;
         }
         Level.prototype.create = function () {
+            this.groupContent = new Phaser.Group(this.game, this.stage);
+            this.backgroundSprite = new Phaser.Sprite(this.game, 0, 0, GameData.Data.levels[GameData.Data.tournamentProgress][0]);
+            this.groupContent.addChild(this.backgroundSprite);
+            this.borderSprite = new Phaser.Sprite(this.game, 0, 0, Images.BackgroundImage);
+            this.groupContent.addChild(this.borderSprite);
         };
         Level.prototype.shutdown = function () {
             this.game.stage.removeChildren();

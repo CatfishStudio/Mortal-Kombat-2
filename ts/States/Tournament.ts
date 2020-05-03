@@ -20,6 +20,7 @@ module MortalKombat {
         private backButton:Phaser.Button;
         private settingsButton:Phaser.Button;
         private backHalpButton:Phaser.Button;
+        private startButton:Phaser.Button;
         private tower:Tower;
         private userUpgradeCharacteristics:UpgradeCharacteristics;
         private enemyUpgradeCharacteristics:UpgradeCharacteristics;
@@ -89,6 +90,10 @@ module MortalKombat {
             this.backHalpButton = new Phaser.Button(this.game, Constants.GAME_WIDTH - 230, 5, Sheet.ButtonHelpMini, this.onButtonClick, this, 1, 2, 2, 2);
             this.backHalpButton.name = Constants.HELP;
             this.groupContent.addChild(this.backHalpButton);
+
+            this.startButton = new Phaser.Button(this.game, (Constants.GAME_WIDTH / 2) - (255 / 2), (Constants.GAME_HEIGHT - 50), Sheet.ButtonSelectFighter, this.onButtonClick, this, 1, 2, 2, 2);
+            this.startButton.name = Constants.START;
+            this.groupContent.addChild(this.startButton);
         }
 
         private onTweenComplete(event:any):void {
@@ -127,6 +132,12 @@ module MortalKombat {
 
         private onButtonClick(event) {
             switch (event.name) {
+                case Constants.START:
+                    {
+                        this.game.state.start(Level.Name, true, false);
+                        break;
+                    }
+                
                 case Constants.BACK_MENU:
                     {
                         if(GameData.Data.tournamentProgress === 0) this.game.state.start(Fighters.Name, true, false);
