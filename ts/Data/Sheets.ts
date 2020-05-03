@@ -8,6 +8,7 @@ class Sheet {
     public static ButtonBackMenuMini: string = 'button_back_menu_mini_sheet.png';
     public static ButtonBackMini: string = 'button_back_mini_sheet.png';
     public static ButtonHelpMini: string = 'button_help_mini_sheet.png';
+    public static ButtonStartBattle: string = 'button_start_battle_sheet.png';
     
     public static preloadList:Array<string> = [
         Sheet.ButtonStartNewGame,
@@ -18,7 +19,8 @@ class Sheet {
         Sheet.ButtonSelectFighter,
         Sheet.ButtonBackMenuMini,
         Sheet.ButtonBackMini,
-        Sheet.ButtonHelpMini
+        Sheet.ButtonHelpMini,
+        Sheet.ButtonStartBattle
     ]; 
     
 }

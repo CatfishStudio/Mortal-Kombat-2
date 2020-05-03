@@ -316,6 +316,7 @@ var Sheet = /** @class */ (function () {
     Sheet.ButtonBackMenuMini = 'button_back_menu_mini_sheet.png';
     Sheet.ButtonBackMini = 'button_back_mini_sheet.png';
     Sheet.ButtonHelpMini = 'button_help_mini_sheet.png';
+    Sheet.ButtonStartBattle = 'button_start_battle_sheet.png';
     Sheet.preloadList = [
         Sheet.ButtonStartNewGame,
         Sheet.ButtonСontinueGame,
@@ -325,7 +326,8 @@ var Sheet = /** @class */ (function () {
         Sheet.ButtonSelectFighter,
         Sheet.ButtonBackMenuMini,
         Sheet.ButtonBackMini,
-        Sheet.ButtonHelpMini
+        Sheet.ButtonHelpMini,
+        Sheet.ButtonStartBattle
     ];
     return Sheet;
 }());
@@ -1965,7 +1967,7 @@ var MortalKombat;
             this.backHalpButton = new Phaser.Button(this.game, Constants.GAME_WIDTH - 230, 5, Sheet.ButtonHelpMini, this.onButtonClick, this, 1, 2, 2, 2);
             this.backHalpButton.name = Constants.HELP;
             this.groupContent.addChild(this.backHalpButton);
-            this.startButton = new Phaser.Button(this.game, (Constants.GAME_WIDTH / 2) - (255 / 2), (Constants.GAME_HEIGHT - 50), Sheet.ButtonSelectFighter, this.onButtonClick, this, 1, 2, 2, 2);
+            this.startButton = new Phaser.Button(this.game, (Constants.GAME_WIDTH / 2) - (255 / 2), (Constants.GAME_HEIGHT - 50), Sheet.ButtonStartBattle, this.onButtonClick, this, 1, 2, 2, 2);
             this.startButton.name = Constants.START;
             this.groupContent.addChild(this.startButton);
         };

@@ -91,7 +91,7 @@ module MortalKombat {
             this.backHalpButton.name = Constants.HELP;
             this.groupContent.addChild(this.backHalpButton);
 
-            this.startButton = new Phaser.Button(this.game, (Constants.GAME_WIDTH / 2) - (255 / 2), (Constants.GAME_HEIGHT - 50), Sheet.ButtonSelectFighter, this.onButtonClick, this, 1, 2, 2, 2);
+            this.startButton = new Phaser.Button(this.game, (Constants.GAME_WIDTH / 2) - (255 / 2), (Constants.GAME_HEIGHT - 50), Sheet.ButtonStartBattle, this.onButtonClick, this, 1, 2, 2, 2);
             this.startButton.name = Constants.START;
             this.groupContent.addChild(this.startButton);
         }
