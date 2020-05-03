@@ -28,11 +28,6 @@ module MortalKombat {
             this.menuSprite.scale.set(1.025);
             this.groupMenu.addChild(this.menuSprite);
             
-            //this.tween = this.game.add.tween(this.menuSprite);
-            //this.tween.to({ x: -200, y: -5 }, 20000, 'Linear');
-            //this.tween.to({ x: 0, y: 0}, 20000, 'Linear');
-            //this.tween.onComplete.add(this.onTweenComplete, this);
-
             this.videoSprite = new Phaser.Sprite(this.game,0,0,Atlases.Video1,0);
             this.videoSprite.scale.set(2.6, 2.6);
             this.groupMenu.addChild(this.videoSprite);
