@@ -14,12 +14,15 @@ class Constants {
     public static INVITE                = 'invite';
     public static CONTINUE              = 'continue';
 
-    public static ANIMATION_TYPE_STANCE     = "animation_type_stance";
-    public static ANIMATION_TYPE_BLOCK      = "animation_type_block";
-    public static ANIMATION_TYPE_HIT        = "animation_type_hit";
-    public static ANIMATION_TYPE_DAMAGE     = "animation_type_damage";
-    public static ANIMATION_TYPE_LOSE       = "animation_type_lose";
-    public static ANIMATION_TYPE_WIN        = "animation_type_win";
+    public static ANIMATION_TYPE_STANCE             = "animation_type_stance";
+    public static ANIMATION_TYPE_BLOCK              = "animation_type_block";
+    public static ANIMATION_TYPE_HIT_HAND           = "animation_type_hit_hand";
+    public static ANIMATION_TYPE_HIT_HAND_UPPERCUT  = "animation_type_hit_hand_uppercut";
+    public static ANIMATION_TYPE_HIT_LEG            = "animation_type_hit_leg";
+    public static ANIMATION_TYPE_HIT_LEG_TWIST      = "animation_type_hit_leg_twist";
+    public static ANIMATION_TYPE_DAMAGE             = "animation_type_damage";
+    public static ANIMATION_TYPE_LOSE               = "animation_type_lose";
+    public static ANIMATION_TYPE_WIN                = "animation_type_win";
 
     public static DAMAGE_HAND                  = 3;
     public static DAMAGE_LEG                   = 5;

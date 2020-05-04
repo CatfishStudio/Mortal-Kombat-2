@@ -66,7 +66,10 @@ var Constants = /** @class */ (function () {
     Constants.CONTINUE = 'continue';
     Constants.ANIMATION_TYPE_STANCE = "animation_type_stance";
     Constants.ANIMATION_TYPE_BLOCK = "animation_type_block";
-    Constants.ANIMATION_TYPE_HIT = "animation_type_hit";
+    Constants.ANIMATION_TYPE_HIT_HAND = "animation_type_hit_hand";
+    Constants.ANIMATION_TYPE_HIT_HAND_UPPERCUT = "animation_type_hit_hand_uppercut";
+    Constants.ANIMATION_TYPE_HIT_LEG = "animation_type_hit_leg";
+    Constants.ANIMATION_TYPE_HIT_LEG_TWIST = "animation_type_hit_leg_twist";
     Constants.ANIMATION_TYPE_DAMAGE = "animation_type_damage";
     Constants.ANIMATION_TYPE_LOSE = "animation_type_lose";
     Constants.ANIMATION_TYPE_WIN = "animation_type_win";
@@ -1050,24 +1053,57 @@ var Fabrique;
             return _this;
         }
         AnimationFighter.prototype.init = function () {
-            this.animationType = Constants.ANIMATION_TYPE_STANCE;
-            this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animStance);
-            this.animation.onComplete.add(this.onComplete, this);
-            this.animation.play(10, true, false);
+            this.stanceAnimation();
         };
-        AnimationFighter.prototype.onComplete = function (sprite, animation) {
-            //console.log( (sprite as AnimationFighter).animation);
-            if (this.animationType === Constants.ANIMATION_TYPE_STANCE)
-                return;
-        };
-        AnimationFighter.prototype.winAnimation = function () {
+        /*
+        public winAnimation():void{
             this.animation.stop();
             this.animation.onComplete.removeAll();
             this.animation.destroy();
             this.animationType = Constants.ANIMATION_TYPE_STANCE;
             this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animWin);
             this.animation.onComplete.add(this.onComplete, this);
-            this.animation.play(15, true, false);
+            this.animation.play(10, true, false);
+        }
+        */
+        AnimationFighter.prototype.stanceAnimation = function () {
+            this.animationType = Constants.ANIMATION_TYPE_STANCE;
+            this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animStance);
+            this.animation.onComplete.add(this.onComplete, this);
+            this.animation.play(10, true, false);
+        };
+        AnimationFighter.prototype.changeAnimation = function (type) {
+            this.animation.stop();
+            this.animation.onComplete.removeAll();
+            this.animation.destroy();
+            this.animationType = type;
+            if (this.animationType === Constants.ANIMATION_TYPE_STANCE)
+                this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animStance);
+            if (this.animationType === Constants.ANIMATION_TYPE_BLOCK)
+                this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animBlock);
+            if (this.animationType === Constants.ANIMATION_TYPE_DAMAGE)
+                this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animDamage);
+            if (this.animationType === Constants.ANIMATION_TYPE_HIT_HAND)
+                this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animHitHand);
+            if (this.animationType === Constants.ANIMATION_TYPE_HIT_HAND_UPPERCUT)
+                this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animHitHandUppercut);
+            if (this.animationType === Constants.ANIMATION_TYPE_HIT_LEG)
+                this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animHitLeg);
+            if (this.animationType === Constants.ANIMATION_TYPE_HIT_LEG_TWIST)
+                this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animHitLegTwist);
+            if (this.animationType === Constants.ANIMATION_TYPE_LOSE)
+                this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animLose);
+            if (this.animationType === Constants.ANIMATION_TYPE_WIN)
+                this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animWin);
+            this.animation.onComplete.add(this.onComplete, this);
+            this.animation.play(10, false, false);
+        };
+        AnimationFighter.prototype.onComplete = function (sprite, animation) {
+            //console.log( (sprite as AnimationFighter).animation);
+            if (this.animationType === Constants.ANIMATION_TYPE_STANCE)
+                return;
+            else
+                this.stanceAnimation();
         };
         return AnimationFighter;
     }(Phaser.Sprite));
@@ -1652,10 +1688,6 @@ var MortalKombat;
             this.menuSprite = new Phaser.Sprite(this.game, -5, -5, Images.MenuImage);
             this.menuSprite.scale.set(1.025);
             this.groupMenu.addChild(this.menuSprite);
-            //this.tween = this.game.add.tween(this.menuSprite);
-            //this.tween.to({ x: -200, y: -5 }, 20000, 'Linear');
-            //this.tween.to({ x: 0, y: 0}, 20000, 'Linear');
-            //this.tween.onComplete.add(this.onTweenComplete, this);
             this.videoSprite = new Phaser.Sprite(this.game, 0, 0, Atlases.Video1, 0);
             this.videoSprite.scale.set(2.6, 2.6);
             this.groupMenu.addChild(this.videoSprite);
@@ -1841,9 +1873,9 @@ var MortalKombat;
             this.settingsButton = new Phaser.Button(this.game, (Constants.GAME_WIDTH / 2) - (255 / 2), 5, Sheet.ButtonSettings, this.onButtonClick, this, 1, 2, 2, 2);
             this.settingsButton.name = Constants.SETTINGS;
             this.groupFighters.addChild(this.settingsButton);
-            this.backHalpButton = new Phaser.Button(this.game, Constants.GAME_WIDTH - 230, 5, Sheet.ButtonHelpMini, this.onButtonClick, this, 1, 2, 2, 2);
-            this.backHalpButton.name = Constants.HELP;
-            this.groupFighters.addChild(this.backHalpButton);
+            this.helpButton = new Phaser.Button(this.game, Constants.GAME_WIDTH - 230, 5, Sheet.ButtonHelpMini, this.onButtonClick, this, 1, 2, 2, 2);
+            this.helpButton.name = Constants.HELP;
+            this.groupFighters.addChild(this.helpButton);
             this.selectButton = new Phaser.Button(this.game, (Constants.GAME_WIDTH / 2) - (255 / 2), (Constants.GAME_HEIGHT - 50), Sheet.ButtonSelectFighter, this.onButtonClick, this, 1, 2, 2, 2);
             this.selectButton.name = Constants.SELECT_FIGHTER;
             this.groupFighters.addChild(this.selectButton);
@@ -1977,9 +2009,9 @@ var MortalKombat;
             this.settingsButton = new Phaser.Button(this.game, (Constants.GAME_WIDTH / 2) - (255 / 2), 5, Sheet.ButtonSettings, this.onButtonClick, this, 1, 2, 2, 2);
             this.settingsButton.name = Constants.SETTINGS;
             this.groupContent.addChild(this.settingsButton);
-            this.backHalpButton = new Phaser.Button(this.game, Constants.GAME_WIDTH - 230, 5, Sheet.ButtonHelpMini, this.onButtonClick, this, 1, 2, 2, 2);
-            this.backHalpButton.name = Constants.HELP;
-            this.groupContent.addChild(this.backHalpButton);
+            this.helpButton = new Phaser.Button(this.game, Constants.GAME_WIDTH - 230, 5, Sheet.ButtonHelpMini, this.onButtonClick, this, 1, 2, 2, 2);
+            this.helpButton.name = Constants.HELP;
+            this.groupContent.addChild(this.helpButton);
             this.startButton = new Phaser.Button(this.game, (Constants.GAME_WIDTH / 2) - (255 / 2), (Constants.GAME_HEIGHT - 50), Sheet.ButtonStartBattle, this.onButtonClick, this, 1, 2, 2, 2);
             this.startButton.name = Constants.START;
             this.groupContent.addChild(this.startButton);
@@ -2068,6 +2100,7 @@ var MortalKombat;
 })(MortalKombat || (MortalKombat = {}));
 var MortalKombat;
 (function (MortalKombat) {
+    var AnimationFighter = Fabrique.AnimationFighter;
     var Level = /** @class */ (function (_super) {
         __extends(Level, _super);
         function Level() {
@@ -2079,10 +2112,30 @@ var MortalKombat;
             this.groupContent = new Phaser.Group(this.game, this.stage);
             this.backgroundSprite = new Phaser.Sprite(this.game, 0, 0, GameData.Data.levels[GameData.Data.tournamentProgress][0]);
             this.groupContent.addChild(this.backgroundSprite);
+            this.persUser = GameData.Data.user_personage;
+            this.animUser = new AnimationFighter(this.game, this.persUser.id, this.persUser);
+            this.animUser.x = 100 - (this.animUser.width / 2);
+            this.animUser.y = Constants.GAME_HEIGHT - (this.animUser.height * 2);
+            this.animUser.scale.x = 1.5;
+            this.animUser.scale.y = 1.5;
+            this.groupContent.addChild(this.animUser);
+            this.persEnemies = GameData.Data.getPersonage(GameData.Data.id_enemies[GameData.Data.tournamentProgress]);
+            this.animEnemies = new AnimationFighter(this.game, this.persEnemies.id, this.persEnemies);
+            this.animEnemies.x = Constants.GAME_WIDTH - 25 - (this.animEnemies.width / 2);
+            this.animEnemies.y = Constants.GAME_HEIGHT - (this.animEnemies.height * 2);
+            this.animEnemies.anchor.setTo(.0, .0);
+            this.animEnemies.scale.x = 1.5;
+            this.animEnemies.scale.y = 1.5;
+            this.animEnemies.scale.x *= -1;
+            this.groupContent.addChild(this.animEnemies);
             this.borderSprite = new Phaser.Sprite(this.game, 0, 0, Images.BackgroundImage);
             this.groupContent.addChild(this.borderSprite);
+            this.helpButton = new Phaser.Button(this.game, Constants.GAME_WIDTH - 230, 5, Sheet.ButtonHelpMini, this.onButtonClick, this, 1, 2, 2, 2);
+            this.helpButton.name = Constants.HELP;
+            this.groupContent.addChild(this.helpButton);
         };
         Level.prototype.shutdown = function () {
+            this.groupContent.removeAll();
             this.game.stage.removeChildren();
         };
         Level.prototype.onButtonClick = function (event) {
@@ -2101,6 +2154,7 @@ var MortalKombat;
                     }
                 case Constants.HELP:
                     {
+                        this.animUser.changeAnimation(Constants.ANIMATION_TYPE_HIT_LEG_TWIST);
                         break;
                     }
                 default:

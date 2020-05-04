@@ -19,7 +19,7 @@ module MortalKombat {
         private settings:Settings;
         private backMenuButton:Phaser.Button;
         private settingsButton:Phaser.Button;
-        private backHalpButton:Phaser.Button;
+        private helpButton:Phaser.Button;
         private selectButton:Phaser.Button;
 
         constructor(){
@@ -76,9 +76,9 @@ module MortalKombat {
             this.settingsButton.name = Constants.SETTINGS;
             this.groupFighters.addChild(this.settingsButton);
 
-            this.backHalpButton = new Phaser.Button(this.game, Constants.GAME_WIDTH - 230, 5, Sheet.ButtonHelpMini, this.onButtonClick, this, 1, 2, 2, 2);
-            this.backHalpButton.name = Constants.HELP;
-            this.groupFighters.addChild(this.backHalpButton);
+            this.helpButton = new Phaser.Button(this.game, Constants.GAME_WIDTH - 230, 5, Sheet.ButtonHelpMini, this.onButtonClick, this, 1, 2, 2, 2);
+            this.helpButton.name = Constants.HELP;
+            this.groupFighters.addChild(this.helpButton);
 
             this.selectButton = new Phaser.Button(this.game, (Constants.GAME_WIDTH / 2) - (255 / 2), (Constants.GAME_HEIGHT - 50), Sheet.ButtonSelectFighter, this.onButtonClick, this, 1, 2, 2, 2);
             this.selectButton.name = Constants.SELECT_FIGHTER;

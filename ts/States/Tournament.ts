@@ -19,7 +19,7 @@ module MortalKombat {
         private tutorial:Tutorial;
         private backButton:Phaser.Button;
         private settingsButton:Phaser.Button;
-        private backHalpButton:Phaser.Button;
+        private helpButton:Phaser.Button;
         private startButton:Phaser.Button;
         private tower:Tower;
         private userUpgradeCharacteristics:UpgradeCharacteristics;
@@ -87,9 +87,9 @@ module MortalKombat {
             this.settingsButton.name = Constants.SETTINGS;
             this.groupContent.addChild(this.settingsButton);
 
-            this.backHalpButton = new Phaser.Button(this.game, Constants.GAME_WIDTH - 230, 5, Sheet.ButtonHelpMini, this.onButtonClick, this, 1, 2, 2, 2);
-            this.backHalpButton.name = Constants.HELP;
-            this.groupContent.addChild(this.backHalpButton);
+            this.helpButton = new Phaser.Button(this.game, Constants.GAME_WIDTH - 230, 5, Sheet.ButtonHelpMini, this.onButtonClick, this, 1, 2, 2, 2);
+            this.helpButton.name = Constants.HELP;
+            this.groupContent.addChild(this.helpButton);
 
             this.startButton = new Phaser.Button(this.game, (Constants.GAME_WIDTH / 2) - (255 / 2), (Constants.GAME_HEIGHT - 50), Sheet.ButtonStartBattle, this.onButtonClick, this, 1, 2, 2, 2);
             this.startButton.name = Constants.START;
