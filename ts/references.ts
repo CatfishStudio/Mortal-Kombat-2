@@ -1,5 +1,9 @@
 /// <reference path="..\node_modules\phaser-ce\typescript\phaser.d.ts" />
 
+/// <reference path="Match3\Timer.ts" />
+/// <reference path="Match3\Cell.ts" />
+/// <reference path="Match3\Unit.ts" />
+/// <reference path="Match3\Field.ts" />
 /// <reference path="Data\Constants.ts" />
 /// <reference path="Data\Config.ts" />
 /// <reference path="Data\Utilits.ts" />

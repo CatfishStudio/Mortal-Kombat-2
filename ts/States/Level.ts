@@ -1,5 +1,6 @@
 module MortalKombat {
     import AnimationFighter = Fabrique.AnimationFighter;
+    import Field = Match3.Field;
 
     export class Level extends Phaser.State{
         public static Name: string = "level";
@@ -13,6 +14,7 @@ module MortalKombat {
         private animUser:AnimationFighter;
         private persEnemies:GameData.IPersonage;
         private animEnemies:AnimationFighter;
+        private field:Field;
 
         constructor() {
             super();
@@ -48,9 +50,12 @@ module MortalKombat {
             this.helpButton = new Phaser.Button(this.game, Constants.GAME_WIDTH - 230, 5, Sheet.ButtonHelpMini, this.onButtonClick, this, 1, 2, 2, 2);
             this.helpButton.name = Constants.HELP;
             this.groupContent.addChild(this.helpButton);
+
+            this.field = new Field(this.game, this.groupContent);
         }
 
         public shutdown(){
+            this.field.removeAll();
             this.groupContent.removeAll();
             this.game.stage.removeChildren();
         }

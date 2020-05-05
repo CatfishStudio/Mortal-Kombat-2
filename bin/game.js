@@ -48,6 +48,161 @@ var MortalKombat;
     }(Phaser.Game));
     MortalKombat.Game = Game;
 })(MortalKombat || (MortalKombat = {}));
+var Match3;
+(function (Match3) {
+    var Timer = /** @class */ (function (_super) {
+        __extends(Timer, _super);
+        function Timer(game, x, y, imageTablo) {
+            var _this = _super.call(this, game, x, y, imageTablo) || this;
+            _this.init();
+            return _this;
+        }
+        Timer.prototype.shutdown = function () {
+            this.timer.stop(true);
+            this.removeChildren();
+        };
+        Timer.prototype.init = function () {
+            this.event = new Phaser.Signal();
+            this.count = 30;
+            this.timer = this.game.time.create(false);
+            this.timer.loop(1000, this.onTimerComplete, this);
+            this.timerText = this.game.add.text(45, 12, "0:" + this.count.toString(), { font: "bold 24px arial", fill: "#FFFFFF", align: "left" });
+            this.addChild(this.timerText);
+            this.messageText = this.game.add.text(40, 40, "............................", { font: "bold 12px arial", fill: "#FFFFFF", align: "left" });
+            this.addChild(this.messageText);
+        };
+        Timer.prototype.onTimerComplete = function () {
+            this.count--;
+            if (this.timerText !== undefined && this.timerText !== null) {
+                if (this.count > 9)
+                    this.timerText.text = "0:" + this.count.toString();
+                else
+                    this.timerText.text = "0:0" + this.count.toString();
+            }
+            if (this.count === 0) {
+                this.event.dispatch(Timer.TIMER_END);
+                this.count = 30;
+                Utilits.Data.debugLog("TIMER:", "ON COMPLETE");
+            }
+        };
+        Timer.prototype.run = function () {
+            this.timer.start(this.count);
+        };
+        Timer.prototype.runTimer = function () {
+            this.resetTimer();
+            this.run();
+        };
+        Timer.prototype.pauseTimer = function (value) {
+            if (value === void 0) { value = true; }
+            if (value === true)
+                this.timer.stop(false);
+            else
+                this.timer.start(this.count);
+            Utilits.Data.debugLog("TIMER PAUSE:", value);
+        };
+        Timer.prototype.stopTimer = function () {
+            this.timer.stop(false);
+            this.count = 30;
+            this.setMessage("............................");
+            Utilits.Data.debugLog("TIMER:", "STOP");
+        };
+        Timer.prototype.resetTimer = function () {
+            this.count = 30;
+        };
+        Timer.prototype.setMessage = function (value) {
+            if (this.messageText !== undefined && this.messageText !== null) {
+                this.messageText.text = value;
+                if (value.length < 10)
+                    this.messageText.x = 42;
+                else
+                    this.messageText.x = 20;
+            }
+        };
+        Timer.TIMER_END = "timer_end";
+        return Timer;
+    }(Phaser.Sprite));
+    Match3.Timer = Timer;
+})(Match3 || (Match3 = {}));
+var Match3;
+(function (Match3) {
+    var Cell = /** @class */ (function (_super) {
+        __extends(Cell, _super);
+        function Cell(game, x, y) {
+            var _this = _super.call(this, game, x, y) || this;
+            _this.init();
+            return _this;
+        }
+        Cell.prototype.init = function () {
+        };
+        return Cell;
+    }(Phaser.Sprite));
+    Match3.Cell = Cell;
+})(Match3 || (Match3 = {}));
+var Match3;
+(function (Match3) {
+    var Unit = /** @class */ (function (_super) {
+        __extends(Unit, _super);
+        function Unit(game, x, y) {
+            var _this = _super.call(this, game, x, y) || this;
+            _this.init();
+            return _this;
+        }
+        Unit.prototype.init = function () {
+        };
+        return Unit;
+    }(Phaser.Sprite));
+    Match3.Unit = Unit;
+})(Match3 || (Match3 = {}));
+var Match3;
+(function (Match3) {
+    var Field = /** @class */ (function (_super) {
+        __extends(Field, _super);
+        function Field(game, parent) {
+            var _this = _super.call(this, game, parent) || this;
+            _this.updateTransform();
+            _this.init();
+            return _this;
+        }
+        Field.prototype.init = function () {
+            this.matchFieldBlocked = false;
+            this.modeAI = false;
+            this.initMatchMatrixPosition();
+        };
+        /* Инициализация матриц позиций ================================================================ */
+        Field.prototype.initMatchMatrixPosition = function () {
+            this.matchMatrixFrontPosition = [];
+            this.matchMatrixBackPosition = [];
+            for (var i = 0; i < Field.MATCH_COLUMNS; i++) {
+                for (var j = 0; j < Field.MATCH_ROWS; j++) {
+                    var point = {};
+                    point.x = 184 + (Field.MATCH_CELL_WIDTH * i);
+                    point.y = 120 + (Field.MATCH_CELL_HEIGHT * j);
+                    this.matchMatrixFrontPosition["i" + i + ":j" + j] = point;
+                    point = {};
+                    point.x = 180 + (Field.MATCH_CELL_WIDTH * i);
+                    point.y = -372 + (Field.MATCH_CELL_HEIGHT * j);
+                    this.matchMatrixBackPosition["i" + i + ":j" + j] = point;
+                }
+            }
+            Utilits.Data.debugLog("initMatchMatrixPosition", this.matchMatrixFrontPosition);
+        };
+        Field.MATCH_COLUMNS = 6;
+        Field.MATCH_ROWS = 6;
+        Field.MATCH_CELL_WIDTH = 82;
+        Field.MATCH_CELL_HEIGHT = 82;
+        Field.MATCH_CELL_TYPE_DROP = "CELL_TYPE_DROP";
+        Field.MATCH_CELL_TYPE_CLEAR = "CELL_TYPE_CLEAR";
+        Field.MATCH_CELL_TYPE_EMPTY = "CELL_TYPE_EMPTY";
+        Field.MATCH_HIT_0 = "HIT_0";
+        Field.MATCH_HIT_1 = "HIT_1";
+        Field.MATCH_HIT_2 = "HIT_2";
+        Field.MATCH_HIT_3 = "HIT_3";
+        Field.MATCH_HIT_4 = "HIT_4";
+        Field.MATCH_HIT_5 = "HIT_5";
+        return Field;
+    }(Phaser.Group));
+    Match3.Field = Field;
+})(Match3 || (Match3 = {}));
 var Constants = /** @class */ (function () {
     function Constants() {
     }
@@ -179,6 +334,7 @@ var Images = /** @class */ (function () {
     Images.towerContent = 'tower_content.png';
     Images.towerFooter = 'tower_footer.png';
     Images.ButtonPlus = 'button_plus.png';
+    Images.Tablo = 'tablo.png';
     Images.BarakaIcon = 'baraka.png';
     Images.GoroIcon = 'goro.png';
     Images.JaxIcon = 'jax.png';
@@ -231,6 +387,7 @@ var Images = /** @class */ (function () {
         Images.towerContent,
         Images.towerFooter,
         Images.ButtonPlus,
+        Images.Tablo,
         Images.BarakaIcon,
         Images.GoroIcon,
         Images.JaxIcon,
@@ -2101,6 +2258,7 @@ var MortalKombat;
 var MortalKombat;
 (function (MortalKombat) {
     var AnimationFighter = Fabrique.AnimationFighter;
+    var Field = Match3.Field;
     var Level = /** @class */ (function (_super) {
         __extends(Level, _super);
         function Level() {
@@ -2133,8 +2291,10 @@ var MortalKombat;
             this.helpButton = new Phaser.Button(this.game, Constants.GAME_WIDTH - 230, 5, Sheet.ButtonHelpMini, this.onButtonClick, this, 1, 2, 2, 2);
             this.helpButton.name = Constants.HELP;
             this.groupContent.addChild(this.helpButton);
+            this.field = new Field(this.game, this.groupContent);
         };
         Level.prototype.shutdown = function () {
+            this.field.removeAll();
             this.groupContent.removeAll();
             this.game.stage.removeChildren();
         };
@@ -2167,6 +2327,10 @@ var MortalKombat;
     MortalKombat.Level = Level;
 })(MortalKombat || (MortalKombat = {}));
 /// <reference path="..\node_modules\phaser-ce\typescript\phaser.d.ts" />
+/// <reference path="Match3\Timer.ts" />
+/// <reference path="Match3\Cell.ts" />
+/// <reference path="Match3\Unit.ts" />
+/// <reference path="Match3\Field.ts" />
 /// <reference path="Data\Constants.ts" />
 /// <reference path="Data\Config.ts" />
 /// <reference path="Data\Utilits.ts" />
