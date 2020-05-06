@@ -33,7 +33,7 @@ module Match3 {
 
         private matchFieldBlocked:boolean;  // блокирование игрового поля
         private modeAI:boolean;             // режим искуственного интелекта (по умолчанию отключен в начале)
-        private matchLevelJSON:string;      // json игрового поля
+        private matchLevelJSON:any;      // json игрового поля
 
         constructor(game:Phaser.Game, parent:any){
             super(game, parent);
@@ -44,11 +44,10 @@ module Match3 {
         private init():void{
             this.matchFieldBlocked = false;
             this.modeAI = false;
-            this.initMatchMatrixPosition();
         }
 
         /* Инициализация матриц позиций ================================================================ */
-         private initMatchMatrixPosition():void {
+        private initMatchMatrixPosition():void {
             this.matchMatrixFrontPosition = [];
             this.matchMatrixBackPosition = [];
             for(let i = 0; i < Field.MATCH_COLUMNS; i++){
@@ -64,8 +63,40 @@ module Match3 {
                     this.matchMatrixBackPosition["i"+i+":j"+j] = point;
                 }
             }
-            Utilits.Data.debugLog("matchMatrixFrontPosition", this.matchMatrixFrontPosition);
-            Utilits.Data.debugLog("matchMatrixBackPosition", this.matchMatrixBackPosition);
+            Utilits.Data.debugLog("matchMatrixFrontPosition:", this.matchMatrixFrontPosition);
+            Utilits.Data.debugLog("matchMatrixBackPosition:", this.matchMatrixBackPosition);
+        }
+
+        /* Создание игрового поля ====================================================================== */
+        public createMatchField(valueJSON:any):void
+        {
+            this.matchLevelJSON = valueJSON;
+            Utilits.Data.debugLog('matchLevelJSON:', this.matchLevelJSON);
+
+            this.initMatchMatrixPosition();
+
+            this.matchMatrixCell = [];
+            this.matchMatrixUnit = [];
+
+            let index = 0;
+            for(let iCell = 0; iCell < Field.MATCH_COLUMNS; iCell++)
+            {
+                for(let jCell = 0; jCell < Field.MATCH_ROWS; jCell++)
+                {
+                    if(valueJSON.Level.cell[index].cellType !== Field.MATCH_CELL_TYPE_DROP){
+                        let cell = new Cell(this.game, 
+                            this.matchMatrixFrontPosition["i"+iCell+":j"+jCell].x,
+                            this.matchMatrixFrontPosition["i"+iCell+":j"+jCell].y);
+                        cell.cellType = valueJSON.Level.cell[index].cellType;
+                        this.matchMatrixCell["i"+iCell+":j"+jCell] = cell;
+                        this.addChild(this.matchMatrixCell["i"+iCell+":j"+jCell]);
+                    }else{
+                        this.matchMatrixCell["i"+iCell+":j"+jCell] = null;
+                    }
+                    index++;
+                }
+            }
+
         }
     }
 }

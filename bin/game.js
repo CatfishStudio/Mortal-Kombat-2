@@ -133,9 +133,13 @@ var Match3;
             return _this;
         }
         Cell.prototype.init = function () {
+            this.lineStyle(1, 0x000000, 0.85);
+            this.beginFill(0x000000, 0.50);
+            this.drawRoundedRect(0, 0, Match3.Field.MATCH_CELL_WIDTH, Match3.Field.MATCH_CELL_HEIGHT, 15);
+            this.endFill();
         };
         return Cell;
-    }(Phaser.Sprite));
+    }(Phaser.Graphics));
     Match3.Cell = Cell;
 })(Match3 || (Match3 = {}));
 var Match3;
@@ -155,6 +159,7 @@ var Match3;
 })(Match3 || (Match3 = {}));
 var Match3;
 (function (Match3) {
+    var Cell = Match3.Cell;
     var Field = /** @class */ (function (_super) {
         __extends(Field, _super);
         function Field(game, parent) {
@@ -166,7 +171,6 @@ var Match3;
         Field.prototype.init = function () {
             this.matchFieldBlocked = false;
             this.modeAI = false;
-            this.initMatchMatrixPosition();
         };
         /* Инициализация матриц позиций ================================================================ */
         Field.prototype.initMatchMatrixPosition = function () {
@@ -184,7 +188,31 @@ var Match3;
                     this.matchMatrixBackPosition["i" + i + ":j" + j] = point;
                 }
             }
-            Utilits.Data.debugLog("initMatchMatrixPosition", this.matchMatrixFrontPosition);
+            Utilits.Data.debugLog("matchMatrixFrontPosition:", this.matchMatrixFrontPosition);
+            Utilits.Data.debugLog("matchMatrixBackPosition:", this.matchMatrixBackPosition);
+        };
+        /* Создание игрового поля ====================================================================== */
+        Field.prototype.createMatchField = function (valueJSON) {
+            this.matchLevelJSON = valueJSON;
+            Utilits.Data.debugLog('matchLevelJSON:', this.matchLevelJSON);
+            this.initMatchMatrixPosition();
+            this.matchMatrixCell = [];
+            this.matchMatrixUnit = [];
+            var index = 0;
+            for (var iCell = 0; iCell < Field.MATCH_COLUMNS; iCell++) {
+                for (var jCell = 0; jCell < Field.MATCH_ROWS; jCell++) {
+                    if (valueJSON.Level.cell[index].cellType !== Field.MATCH_CELL_TYPE_DROP) {
+                        var cell = new Cell(this.game, this.matchMatrixFrontPosition["i" + iCell + ":j" + jCell].x, this.matchMatrixFrontPosition["i" + iCell + ":j" + jCell].y);
+                        cell.cellType = valueJSON.Level.cell[index].cellType;
+                        this.matchMatrixCell["i" + iCell + ":j" + jCell] = cell;
+                        this.addChild(this.matchMatrixCell["i" + iCell + ":j" + jCell]);
+                    }
+                    else {
+                        this.matchMatrixCell["i" + iCell + ":j" + jCell] = null;
+                    }
+                    index++;
+                }
+            }
         };
         Field.MATCH_COLUMNS = 6;
         Field.MATCH_ROWS = 6;
@@ -2291,7 +2319,10 @@ var MortalKombat;
             this.helpButton = new Phaser.Button(this.game, Constants.GAME_WIDTH - 230, 5, Sheet.ButtonHelpMini, this.onButtonClick, this, 1, 2, 2, 2);
             this.helpButton.name = Constants.HELP;
             this.groupContent.addChild(this.helpButton);
+            var valueJSON = this.game.cache.getJSON(GameData.Data.levels[GameData.Data.tournamentProgress][1]);
+            //let valueJSON = this.game.cache.getJSON('level1.json');
             this.field = new Field(this.game, this.groupContent);
+            this.field.createMatchField(valueJSON);
         };
         Level.prototype.shutdown = function () {
             this.field.removeAll();
