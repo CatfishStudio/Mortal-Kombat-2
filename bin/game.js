@@ -156,11 +156,10 @@ var Match3;
             this.events.onInputUp.add(this.onClick, this);
         };
         Unit.prototype.onClick = function (sprite, pointer) {
-            Utilits.Data.debugLog('EVENT', sprite);
             this.event.dispatch(this);
         };
         return Unit;
-    }(Phaser.Sprite));
+    }(Phaser.Button));
     Match3.Unit = Unit;
 })(Match3 || (Match3 = {}));
 /*
@@ -269,17 +268,15 @@ var Match3;
                         unit.flagRemove = false;
                         unit.posColumnI = iUnit;
                         unit.posRowJ = jUnit;
-                        unit.event.add(this.onMatchUnitClick, this);
                         this.matchMatrixUnit["i" + iUnit + ":j" + jUnit] = unit;
-                        this.addChild(this.matchMatrixUnit["i" + iUnit + ":j" + jUnit]);
                     }
                     index++;
                 }
             }
         };
         /* Событие: нажатие на юнит */
-        Field.prototype.onMatchUnitClick = function (target) {
-            Utilits.Data.debugLog('Change [target]:', target);
+        Field.prototype.onMatchUnitClick = function (unit) {
+            Utilits.Data.debugLog('onMatchUnitClick:', unit);
             if (this.matchFieldBlocked === false) {
             }
         };

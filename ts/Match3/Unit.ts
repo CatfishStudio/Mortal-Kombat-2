@@ -1,5 +1,5 @@
 module Match3 {
-    export class Unit extends Phaser.Sprite {
+    export class Unit extends Phaser.Button {
         public event: Phaser.Signal;
         public interactive:boolean;
         public buttonMode:boolean;
@@ -19,7 +19,6 @@ module Match3 {
         }
 
         private onClick(sprite: Phaser.Sprite, pointer: Phaser.Pointer) {
-            Utilits.Data.debugLog('EVENT', sprite);
             this.event.dispatch(this);
         }
     }

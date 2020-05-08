@@ -155,9 +155,9 @@ module Match3 {
         }
 
         /* Событие: нажатие на юнит */
-        public onMatchUnitClick(target):void
+        public onMatchUnitClick(unit):void
         {
-            Utilits.Data.debugLog('Change [target]:', target);
+            Utilits.Data.debugLog('onMatchUnitClick:', unit);
             if(this.matchFieldBlocked === false){
                 
             }
