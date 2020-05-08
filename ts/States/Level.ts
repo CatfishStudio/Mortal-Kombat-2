@@ -52,10 +52,8 @@ module MortalKombat {
             this.groupContent.addChild(this.helpButton);
 
             let valueJSON = this.game.cache.getJSON(GameData.Data.levels[GameData.Data.tournamentProgress][1]);
-            //let valueJSON = this.game.cache.getJSON('level1.json');
             this.field = new Field(this.game, this.groupContent);
             this.field.createMatchField(valueJSON);
-
 
         }
 

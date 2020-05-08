@@ -146,20 +146,30 @@ var Match3;
 (function (Match3) {
     var Unit = /** @class */ (function (_super) {
         __extends(Unit, _super);
-        function Unit(game, x, y) {
-            var _this = _super.call(this, game, x, y) || this;
+        function Unit(game, x, y, image) {
+            var _this = _super.call(this, game, x, y, image) || this;
             _this.init();
             return _this;
         }
         Unit.prototype.init = function () {
+            this.event = new Phaser.Signal();
+            this.events.onInputUp.add(this.onClick, this);
+        };
+        Unit.prototype.onClick = function (sprite, pointer) {
+            Utilits.Data.debugLog('EVENT', sprite);
+            this.event.dispatch(this);
         };
         return Unit;
     }(Phaser.Sprite));
     Match3.Unit = Unit;
 })(Match3 || (Match3 = {}));
+/*
+ * https://github.com/CatfishStudio/swq/blob/master/html5/public_html/js/game/match3/match.js
+ */
 var Match3;
 (function (Match3) {
     var Cell = Match3.Cell;
+    var Unit = Match3.Unit;
     var Field = /** @class */ (function (_super) {
         __extends(Field, _super);
         function Field(game, parent) {
@@ -198,6 +208,7 @@ var Match3;
             this.initMatchMatrixPosition();
             this.matchMatrixCell = [];
             this.matchMatrixUnit = [];
+            // CELLS
             var index = 0;
             for (var iCell = 0; iCell < Field.MATCH_COLUMNS; iCell++) {
                 for (var jCell = 0; jCell < Field.MATCH_ROWS; jCell++) {
@@ -212,6 +223,64 @@ var Match3;
                     }
                     index++;
                 }
+            }
+            // UNITS
+            index = 0;
+            for (var iUnit = 0; iUnit < Field.MATCH_COLUMNS; iUnit++) {
+                for (var jUnit = 0; jUnit < Field.MATCH_ROWS; jUnit++) {
+                    var unit = void 0;
+                    var xUnit = this.matchMatrixFrontPosition["i" + iUnit + ":j" + jUnit].x;
+                    var yUnit = this.matchMatrixFrontPosition["i" + iUnit + ":j" + jUnit].y;
+                    if (valueJSON.Level.cell[index].cellObject !== Field.MATCH_HIT_0) {
+                        if (valueJSON.Level.cell[index].cellObject === Field.MATCH_HIT_1) {
+                            unit = new Unit(this.game, xUnit, yUnit, Images.capShangTsung);
+                            unit.unitType = Constants.LEG;
+                        }
+                        if (valueJSON.Level.cell[index].cellObject === Field.MATCH_HIT_2) {
+                            unit = new Unit(this.game, xUnit, yUnit, Images.capJax);
+                            unit.unitType = Constants.HAND;
+                        }
+                        if (valueJSON.Level.cell[index].cellObject === Field.MATCH_HIT_3) {
+                            unit = new Unit(this.game, xUnit, yUnit, Images.capMileena);
+                            unit.unitType = Constants.BLOCK;
+                        }
+                        if (valueJSON.Level.cell[index].cellObject === Field.MATCH_HIT_4) {
+                            unit = new Unit(this.game, xUnit, yUnit, Images.capRaiden);
+                            unit.unitType = Constants.TWIST;
+                        }
+                        if (valueJSON.Level.cell[index].cellObject === Field.MATCH_HIT_5) {
+                            unit = new Unit(this.game, xUnit, yUnit, Images.capReptile);
+                            unit.unitType = Constants.UPPERCUT;
+                        }
+                        unit.name = "i" + iUnit + ":j" + jUnit;
+                        unit.interactive = true;
+                        unit.buttonMode = true;
+                        unit.flagRemove = false;
+                        unit.posColumnI = iUnit;
+                        unit.posRowJ = jUnit;
+                        unit.event.add(this.onMatchUnitClick, this);
+                        this.matchMatrixUnit["i" + iUnit + ":j" + jUnit] = unit;
+                        this.addChild(this.matchMatrixUnit["i" + iUnit + ":j" + jUnit]);
+                    }
+                    else {
+                        unit = new Unit(this.game, xUnit, yUnit, Images.capShangTsung);
+                        unit.name = "i" + iUnit + ":j" + jUnit;
+                        unit.unitType = Field.MATCH_HIT_0;
+                        unit.flagRemove = false;
+                        unit.posColumnI = iUnit;
+                        unit.posRowJ = jUnit;
+                        unit.event.add(this.onMatchUnitClick, this);
+                        this.matchMatrixUnit["i" + iUnit + ":j" + jUnit] = unit;
+                        this.addChild(this.matchMatrixUnit["i" + iUnit + ":j" + jUnit]);
+                    }
+                    index++;
+                }
+            }
+        };
+        /* Событие: нажатие на юнит */
+        Field.prototype.onMatchUnitClick = function (target) {
+            Utilits.Data.debugLog('Change [target]:', target);
+            if (this.matchFieldBlocked === false) {
             }
         };
         Field.MATCH_COLUMNS = 6;
@@ -2320,7 +2389,6 @@ var MortalKombat;
             this.helpButton.name = Constants.HELP;
             this.groupContent.addChild(this.helpButton);
             var valueJSON = this.game.cache.getJSON(GameData.Data.levels[GameData.Data.tournamentProgress][1]);
-            //let valueJSON = this.game.cache.getJSON('level1.json');
             this.field = new Field(this.game, this.groupContent);
             this.field.createMatchField(valueJSON);
         };

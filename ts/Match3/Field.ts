@@ -1,3 +1,6 @@
+/*
+ * https://github.com/CatfishStudio/swq/blob/master/html5/public_html/js/game/match3/match.js
+ */
 module Match3 {
     import Cell = Match3.Cell;
     import Unit = Match3.Unit;
@@ -78,6 +81,7 @@ module Match3 {
             this.matchMatrixCell = [];
             this.matchMatrixUnit = [];
 
+            // CELLS
             let index = 0;
             for(let iCell = 0; iCell < Field.MATCH_COLUMNS; iCell++)
             {
@@ -97,6 +101,76 @@ module Match3 {
                 }
             }
 
+            // UNITS
+            index = 0;
+            for(let iUnit = 0; iUnit < Field.MATCH_COLUMNS; iUnit++)
+            {
+                for(let jUnit = 0; jUnit < Field.MATCH_ROWS; jUnit++)
+                {
+                    let unit:Unit;
+                    let xUnit:number = this.matchMatrixFrontPosition["i"+iUnit+":j"+jUnit].x;
+                    let yUnit:number = this.matchMatrixFrontPosition["i"+iUnit+":j"+jUnit].y;
+                    if(valueJSON.Level.cell[index].cellObject !== Field.MATCH_HIT_0){
+                        if(valueJSON.Level.cell[index].cellObject === Field.MATCH_HIT_1){
+                            unit = new Unit(this.game, xUnit, yUnit, Images.capShangTsung);
+                            unit.unitType = Constants.LEG;
+                        } 
+                        if(valueJSON.Level.cell[index].cellObject === Field.MATCH_HIT_2) {
+                            unit = new Unit(this.game, xUnit, yUnit, Images.capJax);
+                            unit.unitType = Constants.HAND;
+                        }
+                        if(valueJSON.Level.cell[index].cellObject === Field.MATCH_HIT_3) {
+                            unit = new Unit(this.game, xUnit, yUnit, Images.capMileena);
+                            unit.unitType = Constants.BLOCK;
+                        }
+                        if(valueJSON.Level.cell[index].cellObject === Field.MATCH_HIT_4) {
+                            unit = new Unit(this.game, xUnit, yUnit, Images.capRaiden);
+                            unit.unitType = Constants.TWIST;
+                        }
+                        if(valueJSON.Level.cell[index].cellObject === Field.MATCH_HIT_5) {
+                            unit = new Unit(this.game, xUnit, yUnit, Images.capReptile);
+                            unit.unitType = Constants.UPPERCUT;
+                        }
+                        unit.name = "i"+iUnit+":j"+jUnit;
+                        unit.interactive = true;
+                        unit.buttonMode = true;
+                        unit.flagRemove = false;
+                        unit.posColumnI = iUnit;
+                        unit.posRowJ = jUnit;
+                        unit.event.add(this.onMatchUnitClick, this);
+                        this.matchMatrixUnit["i"+iUnit+":j"+jUnit] = unit;
+                        this.addChild(this.matchMatrixUnit["i"+iUnit+":j"+jUnit]);
+                    }else{
+                        unit = new Unit(this.game, xUnit, yUnit, Images.capShangTsung);
+                        unit.name = "i"+iUnit+":j"+jUnit;
+                        unit.unitType = Field.MATCH_HIT_0;
+                        unit.flagRemove = false;
+                        unit.posColumnI = iUnit;
+                        unit.posRowJ = jUnit;
+                        this.matchMatrixUnit["i"+iUnit+":j"+jUnit] = unit;
+                    }
+                    index++;
+                }
+            }
         }
+
+        /* Событие: нажатие на юнит */
+        public onMatchUnitClick(target):void
+        {
+            Utilits.Data.debugLog('Change [target]:', target);
+            if(this.matchFieldBlocked === false){
+                
+            }
+        }
+
+
+
+
+
+
+
+
+
+
     }
 }
