@@ -159,12 +159,28 @@ module Match3 {
         {
             Utilits.Data.debugLog('onMatchUnitClick:', unit);
             if(this.matchFieldBlocked === false){
-                
+                this.matchCellColorSelect(unit.unitType, unit.posColumnI, unit.posRowJ);
+                if(this.matchSelectUnit1 === null){
+                    this.matchSelectUnit1 = unit;
+                }else{
+                    if(this.matchSelectUnit2 === null){
+                        this.matchSelectUnit2 = unit;
+                        this.matchExchangeUnits(); // меняем юниты местами
+                    }
+                }
             }
         }
 
+        /* Событие: свайп кристалов */
+        public  onMatchUnitEndClick(unit):void
+        {
 
+        }
 
+        private matchCellColorSelect(unitType, colI, rowJ):void
+        {
+            this.matchMatrixCell["i"+colI+":j"+rowJ].changeUnit(unitType);
+        }
 
 
 

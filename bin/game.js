@@ -138,6 +138,22 @@ var Match3;
             this.drawRoundedRect(0, 0, Match3.Field.MATCH_CELL_WIDTH, Match3.Field.MATCH_CELL_HEIGHT, 15);
             this.endFill();
         };
+        Cell.prototype.changeUnit = function (unitType) {
+            this.clear();
+            this.lineStyle(1, 0x000000, 0.85);
+            if (unitType === Constants.LEG)
+                this.beginFill(0xFFFF80, 0.50);
+            if (unitType === Constants.HAND)
+                this.beginFill(0xFF0000, 0.50);
+            if (unitType === Constants.BLOCK)
+                this.beginFill(0xFF00FF, 0.50);
+            if (unitType === Constants.TWIST)
+                this.beginFill(0x0080FF, 0.50);
+            if (unitType === Constants.UPPERCUT)
+                this.beginFill(0x00FF80, 0.50);
+            this.drawRoundedRect(0, 0, Match3.Field.MATCH_CELL_WIDTH, Match3.Field.MATCH_CELL_HEIGHT, 15);
+            this.endFill();
+        };
         return Cell;
     }(Phaser.Graphics));
     Match3.Cell = Cell;
@@ -278,7 +294,23 @@ var Match3;
         Field.prototype.onMatchUnitClick = function (unit) {
             Utilits.Data.debugLog('onMatchUnitClick:', unit);
             if (this.matchFieldBlocked === false) {
+                this.matchCellColorSelect(unit.unitType, unit.posColumnI, unit.posRowJ);
+                if (this.matchSelectUnit1 === null) {
+                    this.matchSelectUnit1 = unit;
+                }
+                else {
+                    if (this.matchSelectUnit2 === null) {
+                        this.matchSelectUnit2 = unit;
+                        //this.matchExchangeUnits(); // меняем юниты местами
+                    }
+                }
             }
+        };
+        /* Событие: свайп кристалов */
+        Field.prototype.onMatchUnitEndClick = function (unit) {
+        };
+        Field.prototype.matchCellColorSelect = function (unitType, colI, rowJ) {
+            this.matchMatrixCell["i" + colI + ":j" + rowJ].changeUnit(unitType);
         };
         Field.MATCH_COLUMNS = 6;
         Field.MATCH_ROWS = 6;
