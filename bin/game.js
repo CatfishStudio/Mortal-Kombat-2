@@ -154,6 +154,13 @@ var Match3;
             this.drawRoundedRect(0, 0, Match3.Field.MATCH_CELL_WIDTH, Match3.Field.MATCH_CELL_HEIGHT, 15);
             this.endFill();
         };
+        Cell.prototype.defaultCell = function () {
+            this.clear();
+            this.lineStyle(1, 0x000000, 0.85);
+            this.beginFill(0x000000, 0.50);
+            this.drawRoundedRect(0, 0, Match3.Field.MATCH_CELL_WIDTH, Match3.Field.MATCH_CELL_HEIGHT, 15);
+            this.endFill();
+        };
         return Cell;
     }(Phaser.Graphics));
     Match3.Cell = Cell;
@@ -194,6 +201,8 @@ var Match3;
             return _this;
         }
         Field.prototype.init = function () {
+            this.matchSelectUnit1 = null;
+            this.matchSelectUnit2 = null;
             this.matchFieldBlocked = false;
             this.modeAI = false;
         };
@@ -295,22 +304,72 @@ var Match3;
             Utilits.Data.debugLog('onMatchUnitClick:', unit);
             if (this.matchFieldBlocked === false) {
                 this.matchCellColorSelect(unit.unitType, unit.posColumnI, unit.posRowJ);
-                if (this.matchSelectUnit1 === null) {
+                if (this.matchSelectUnit1 === null || this.matchSelectUnit1 === undefined) {
                     this.matchSelectUnit1 = unit;
                 }
                 else {
-                    if (this.matchSelectUnit2 === null) {
+                    if (this.matchSelectUnit2 === null || this.matchSelectUnit2 === undefined) {
                         this.matchSelectUnit2 = unit;
-                        //this.matchExchangeUnits(); // меняем юниты местами
+                        this.matchExchangeUnits(); // меняем юниты местами
                     }
                 }
             }
+            Utilits.Data.debugLog('onMatchUnitClick:', [this.matchSelectUnit1, this.matchSelectUnit2]);
         };
         /* Событие: свайп кристалов */
         Field.prototype.onMatchUnitEndClick = function (unit) {
         };
+        /* Определение цвета ячеек Cell игрового поля ================================================= */
         Field.prototype.matchCellColorSelect = function (unitType, colI, rowJ) {
             this.matchMatrixCell["i" + colI + ":j" + rowJ].changeUnit(unitType);
+        };
+        Field.prototype.matchCellColorBack = function () {
+            if (this.matchSelectUnit1 !== null) {
+                this.matchMatrixCell["i" + this.matchSelectUnit1.posColumnI + ":j" + this.matchSelectUnit1.posRowJ].defaultCell();
+            }
+            if (this.matchSelectUnit2 !== null) {
+                this.matchMatrixCell["i" + this.matchSelectUnit2.posColumnI + ":j" + this.matchSelectUnit2.posRowJ].defaultCell();
+            }
+        };
+        /* Обмен местами в массиве выбранных пользователем  объектов =================================== */
+        Field.prototype.matchExchangeUnits = function () {
+            this.matchFieldBlocked = true;
+            var iUnit1 = this.matchSelectUnit1.posColumnI;
+            var jUnit1 = this.matchSelectUnit1.posRowJ;
+            var iUnit2 = this.matchSelectUnit2.posColumnI;
+            var jUnit2 = this.matchSelectUnit2.posRowJ;
+            Utilits.Data.debugLog("UNITS", [iUnit1, jUnit1, iUnit2, jUnit2]);
+            if (iUnit2 > (iUnit1 - 2) && iUnit2 < (iUnit1 + 2)
+                && jUnit2 > (jUnit1 - 2) && jUnit2 < (jUnit1 + 2)
+                && ((iUnit2 === iUnit1 && jUnit2 !== jUnit1) || (jUnit2 === jUnit1 && iUnit2 !== iUnit1))) {
+                this.matchMatrixUnit["i" + iUnit1 + ":j" + jUnit1] = this.matchSelectUnit2;
+                this.matchMatrixUnit["i" + iUnit1 + ":j" + jUnit1].posColumnI = iUnit1;
+                this.matchMatrixUnit["i" + iUnit1 + ":j" + jUnit1].posRowJ = jUnit1;
+                this.matchMatrixUnit["i" + iUnit1 + ":j" + jUnit1].name = "i" + iUnit1 + ":j" + jUnit1;
+                this.matchMatrixUnit["i" + iUnit2 + ":j" + jUnit2] = this.matchSelectUnit1;
+                this.matchMatrixUnit["i" + iUnit2 + ":j" + jUnit2].posColumnI = iUnit2;
+                this.matchMatrixUnit["i" + iUnit2 + ":j" + jUnit2].posRowJ = jUnit2;
+                this.matchMatrixUnit["i" + iUnit2 + ":j" + jUnit2].name = "i" + iUnit2 + ":j" + jUnit2;
+                this.tween1 = this.game.add.tween(this.matchMatrixUnit["i" + iUnit1 + ":j" + jUnit1]);
+                this.tween1.to({ x: this.matchMatrixFrontPosition["i" + iUnit1 + ":j" + jUnit1].x, y: this.matchMatrixFrontPosition["i" + iUnit1 + ":j" + jUnit1].y }, 250, 'Linear');
+                this.tween1.onComplete.add(this.onTweenComplete, this);
+                this.tween2 = this.game.add.tween(this.matchMatrixUnit["i" + iUnit2 + ":j" + jUnit2]);
+                this.tween2.to({ x: this.matchMatrixFrontPosition["i" + iUnit2 + ":j" + jUnit2].x, y: this.matchMatrixFrontPosition["i" + iUnit2 + ":j" + jUnit2].y }, 250, 'Linear');
+                this.tween2.onComplete.add(this.onTweenComplete, this);
+                this.tween1.start();
+                this.tween2.start();
+                Utilits.Data.debugLog("TWEEN!", "START");
+            }
+            else {
+                this.matchCellColorBack();
+                //this.matchSelectUnitsClear();
+            }
+        };
+        Field.prototype.onTweenComplete = function (event) {
+            if (this.tween1.isRunning === false && this.tween2.isRunning === false) {
+                this.matchCellColorBack();
+                Utilits.Data.debugLog("TWEEN!", "STOP");
+            }
         };
         Field.MATCH_COLUMNS = 6;
         Field.MATCH_ROWS = 6;

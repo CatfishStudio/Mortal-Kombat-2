@@ -25,5 +25,14 @@ module Match3 {
             this.drawRoundedRect(0, 0, Field.MATCH_CELL_WIDTH, Field.MATCH_CELL_HEIGHT, 15);
             this.endFill();
         }
+
+        public defaultCell():void {
+            this.clear();
+            this.lineStyle(1, 0x000000, 0.85);
+            this.beginFill(0x000000, 0.50);
+            this.drawRoundedRect(0, 0, Field.MATCH_CELL_WIDTH, Field.MATCH_CELL_HEIGHT, 15);
+            this.endFill();
+        }
+
     }
 }
