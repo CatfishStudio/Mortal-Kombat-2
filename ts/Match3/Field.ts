@@ -32,7 +32,7 @@ module Match3 {
         private matchMatrixUnit:Unit[][];   // Матрица юнитов на игровом поле
         private matchMatrixFrontPosition:IPoint[];  // Матрица позиций x,y юнитов игрового поля
         private matchMatrixBackPosition:IPoint[];   // Матрица позиций x,y юнитов за пределами игрового поля
-        private matchMoveDownProcesses:Unit[];      // запущенные процессы спуска юнитов
+        private matchMoveDownProcesses:boolean[];   // запущенные процессы спуска юнитов
 
         private matchSelectUnit1:Unit;  // выбранный первый юнит
         private matchSelectUnit2:Unit;  // выбран второй юнит
@@ -225,28 +225,237 @@ module Match3 {
 
                 this.tween1 = this.game.add.tween(this.matchMatrixUnit["i"+iUnit1+":j"+jUnit1]);
                 this.tween1.to({ x: this.matchMatrixFrontPosition["i"+iUnit1+":j"+jUnit1].x, y: this.matchMatrixFrontPosition["i"+iUnit1+":j"+jUnit1].y }, 250, 'Linear');
-                this.tween1.onComplete.add(this.onTweenComplete, this);
+                this.tween1.onComplete.add(this.onCompleteMatchExchangeUnits, this);
                 this.tween2 = this.game.add.tween(this.matchMatrixUnit["i"+iUnit2+":j"+jUnit2]);
                 this.tween2.to({ x: this.matchMatrixFrontPosition["i"+iUnit2+":j"+jUnit2].x, y: this.matchMatrixFrontPosition["i"+iUnit2+":j"+jUnit2].y }, 250, 'Linear');
-                this.tween2.onComplete.add(this.onTweenComplete, this);
+                this.tween2.onComplete.add(this.onCompleteMatchExchangeUnits, this);
 
                 this.tween1.start();
                 this.tween2.start();
 
-                Utilits.Data.debugLog("TWEEN!", "START");
+                Utilits.Data.debugLog("matchExchangeUnits", "Tween: START");
             }else{
                 this.matchCellColorBack();
                 this.matchSelectUnitsClear();
             }
         }
 
-        private onTweenComplete(event:any)
+        private onCompleteMatchExchangeUnits(event:any)
         {
             if(this.tween1.isRunning === false && this.tween2.isRunning === false){
                 this.matchCellColorBack();
-                Utilits.Data.debugLog("TWEEN!", "STOP");
+                this.matchCheckField(false);
+                Utilits.Data.debugLog("onCompleteMatchExchangeUnits", "Tween: STOP");
             }
         }
+
+        private matchBackExchangeUnits():void
+        {
+            let iUnit1:number = this.matchSelectUnit1.posColumnI;
+            let jUnit1:number = this.matchSelectUnit1.posRowJ;
+            let iUnit2:number = this.matchSelectUnit2.posColumnI;
+            let jUnit2:number = this.matchSelectUnit2.posRowJ;
+
+            this.matchMatrixUnit["i"+iUnit1+":j"+jUnit1] = this.matchSelectUnit2;
+			this.matchMatrixUnit["i"+iUnit1+":j"+jUnit1].posColumnI = iUnit1;
+			this.matchMatrixUnit["i"+iUnit1+":j"+jUnit1].posRowJ = jUnit1;
+			this.matchMatrixUnit["i"+iUnit1+":j"+jUnit1].name = "i"+iUnit1+":j"+jUnit1;
+
+			this.matchMatrixUnit["i"+iUnit2+":j"+jUnit2] = this.matchSelectUnit1;
+			this.matchMatrixUnit["i"+iUnit2+":j"+jUnit2].posColumnI = iUnit2;
+			this.matchMatrixUnit["i"+iUnit2+":j"+jUnit2].posRowJ = jUnit2;
+            this.matchMatrixUnit["i"+iUnit2+":j"+jUnit2].name = "i"+iUnit2+":j"+jUnit2;
+            
+            this.tween1 = this.game.add.tween(this.matchMatrixUnit["i"+iUnit1+":j"+jUnit1]);
+            this.tween1.to({ x: this.matchMatrixFrontPosition["i"+iUnit1+":j"+jUnit1].x, y: this.matchMatrixFrontPosition["i"+iUnit1+":j"+jUnit1].y }, 250, 'Linear');
+            this.tween1.onComplete.add(this.matchSelectUnitsClear, this);
+            this.tween2 = this.game.add.tween(this.matchMatrixUnit["i"+iUnit2+":j"+jUnit2]);
+            this.tween2.to({ x: this.matchMatrixFrontPosition["i"+iUnit2+":j"+jUnit2].x, y: this.matchMatrixFrontPosition["i"+iUnit2+":j"+jUnit2].y }, 250, 'Linear');
+            this.tween2.onComplete.add(this.matchSelectUnitsClear, this);
+
+            this.tween1.start();
+            this.tween2.start();
+
+            Utilits.Data.debugLog("matchBackExchangeUnits", "Tween: START");
+        }
+
+        private matchSelectUnitsClear():void
+        {
+            if(this.tween1.isRunning === false && this.tween2.isRunning === false){
+                this.matchSelectUnit1 = null;
+                this.matchSelectUnit2 = null;
+                this.matchFieldBlocked = false;
+                Utilits.Data.debugLog("matchSelectUnitsClear", "Tween: STOP");
+            }
+        }
+
+        /* Поиск групп ============================================================================== */
+        private matchCheckField(afterDown:boolean):void
+        {
+            if(this.parent !== null){
+                this.matchMoveDownProcesses = [];
+                if(this.matchCheckFieldFull())  // группы были найдены
+                {
+                    parent.timer.timerStop();   // останавливаем таймер
+                    this.matchMoveDownUnits();  // спускаем юниты
+                }else{ // группы не найдены
+                    if(afterDown === false) // первый спуск юнитов
+                    {
+                        this.matchBackExchangeUnits();  // возвращаем выбранные юниты на места
+                    }else{ 
+                        this.matchSelectUnitsClear();   // очистка и разблокировка поля
+                        if(parent.level.levelStatus === parent.level.LEVEL_STATUS_BATTLE) parent.timer.timerStart();				// запускаем таймер
+                    }
+                }
+            }else{
+                // УДАЛЯЕТСЯ ТРИ В РЯД ЕСЛИ НЕТ УРОВНЯ
+                parent.matchClose();
+            }
+        }
+
+        /* Общая проверка колонок и строк (3-и и более в ряд) */
+        private matchCheckFieldFull():boolean
+        {
+            let resultCheck:boolean = false;
+            /* i - столбец; j - строка */
+			for(let i:number = 0; i < Field.MATCH_COLUMNS; i++)
+			{
+                if(this.matchCheckColumn(i) === true) resultCheck = true;
+			}
+			for(let j:number = 0; j < Field.MATCH_ROWS; j++)
+			{
+                if(this.matchCheckRow(j) === true) resultCheck = true;	
+			}
+			return resultCheck;
+        }
+
+        /* Проверка колонки (3-и и более в ряд) */
+        private matchCheckColumn(column:number):boolean
+        {
+            let resultCheckColumn:boolean = false;
+            /* просматриваем  в столбце (по строкам) */
+            for(let j:number = 0; j < Field.MATCH_ROWS; j++)
+			{
+				if(j < Field.MATCH_ROWS - 2)
+				{
+					if(this.matchMatrixUnit["i"+column+":j"+j].unitType !== Field.MATCH_HIT_0)
+					{
+						/* Группа из 3-х объектов */
+						if(this.matchMatrixUnit["i"+column+":j"+j].unitType === this.matchMatrixUnit["i"+column+":j"+(j+1)].unitType && this.matchMatrixUnit["i"+column+":j"+j].unitType === this.matchMatrixUnit["i"+column+":j"+(j+2)].unitType)
+						{
+							resultCheckColumn = true;
+
+							/* Группа из 4-х кристалов */
+							if(j < Field.MATCH_ROWS - 3)
+							{
+								if(this.matchMatrixUnit["i"+column+":j"+j].unitType === this.matchMatrixUnit["i"+column+":j"+(j+3)].unitType)
+								{
+									/* Группа из 5-ти кристалов */
+									if(j < Field.MATCH_ROWS - 4)
+									{
+										if(this.matchMatrixUnit["i"+column+":j"+j].unitType === this.matchMatrixUnit["i"+column+":j"+(j+4)].unitType)
+										{
+											/* Удаляем группу из 5 юнитов */
+											this.matchRemoveUnit(column, j, "col", this.matchMatrixUnit["i"+column+":j"+j].unitType, 5);
+                                            j += 2;
+										}else{
+											/* Удаляем группу из 4 юнитов */
+											this.matchRemoveUnit(column, j, "col", this.matchMatrixUnit["i"+column+":j"+j].unitType, 4);
+                                            j += 1;
+										}
+									}else{
+										/* Удаляем группу из 4 юнитов */
+										this.matchRemoveUnit(column, j, "col", this.matchMatrixUnit["i"+column+":j"+j].unitType, 4);
+                                        j += 1;
+									}
+								}else{
+									/* Удаляем группу из 3 юнитов */
+									this.matchRemoveUnit(column, j, "col", this.matchMatrixUnit["i"+column+":j"+j].unitType, 3);
+								}
+							}else{
+								/* Удаляем группу из 3 юнитов */
+								this.matchRemoveUnit(column, j, "col", this.matchMatrixUnit["i"+column+":j"+j].unitType, 3);
+							}
+						}
+					}
+				}else{
+					break;
+				}
+			}
+            return resultCheckColumn;
+        }
+
+        /* Проверка строки (3-и и более в ряд) */
+        private matchCheckRow(row:number):boolean
+        {
+            let resultCheckRow:boolean = false;
+            /* просматриваем в строке (по столбцам) */
+            for(let i:number = 0; i < Field.MATCH_COLUMNS; i++)
+			{
+				if(i < Field.MATCH_COLUMNS - 2)
+				{
+					if(this.matchMatrixUnit["i"+i+":j"+row].unitType !== Field.MATCH_HIT_0)
+					{
+						/* Группа из 3-х объектов */
+						if(this.matchMatrixUnit["i"+i+":j"+row].unitType === this.matchMatrixUnit["i"+(i+1)+":j"+row].unitType && this.matchMatrixUnit["i"+i+":j"+row].unitType === this.matchMatrixUnit["i"+(i+2)+":j"+row].unitType)
+						{
+							resultCheckRow = true;
+
+							/* Группа из 4-х кристалов */
+							if(i < Field.MATCH_COLUMNS - 3)
+							{
+								if(this.matchMatrixUnit["i"+i+":j"+row].unitType === this.matchMatrixUnit["i"+(i+3)+":j"+row].unitType)
+								{
+									/* Группа из 5-ти кристалов */
+									if(i < Field.MATCH_COLUMNS - 4)
+									{
+										if(this.matchMatrixUnit["i"+i+":j"+row].unitType === this.matchMatrixUnit["i"+(i+4)+":j"+row].unitType)
+										{
+											/* Удаляем группу из 5 юнитов */
+											this.matchRemoveUnit(i, row, "row", this.matchMatrixUnit["i"+i+":j"+row].unitType, 5);
+                                            i += 2;
+										}else{
+											/* Удаляем группу из 4 юнитов */
+											this.matchRemoveUnit(i, row, "row", this.matchMatrixUnit["i"+i+":j"+row].unitType, 4);
+                                            i += 1;
+										}
+									}else{
+										/* Удаляем группу из 4 юнитов */
+										this.matchRemoveUnit(i, row, "row", this.matchMatrixUnit["i"+i+":j"+row].unitType, 4);
+                                        i += 1;
+									}
+								}else{
+									/* Удаляем группу из 3 юнитов */
+									this.matchRemoveUnit(i, row, "row", this.matchMatrixUnit["i"+i+":j"+row].unitType, 3);
+								}
+							}else{
+								/* Удаляем группу из 3 юнитов */
+								this.matchRemoveUnit(i, row, "row", this.matchMatrixUnit["i"+i+":j"+row].unitType, 3);
+							}
+						}
+					}
+				}else{
+					break;
+				}
+			}
+			return resultCheckRow;
+        }
+
+        /* Удаление юнитов */
+        private matchRemoveUnit(col:number, row:number, check:String, hitType:any, hitCount:number):void
+        {
+            
+        }
+
+
+
+
+
+
+
+
+
+
 
     }
 }

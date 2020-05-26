@@ -352,23 +352,56 @@ var Match3;
                 this.matchMatrixUnit["i" + iUnit2 + ":j" + jUnit2].name = "i" + iUnit2 + ":j" + jUnit2;
                 this.tween1 = this.game.add.tween(this.matchMatrixUnit["i" + iUnit1 + ":j" + jUnit1]);
                 this.tween1.to({ x: this.matchMatrixFrontPosition["i" + iUnit1 + ":j" + jUnit1].x, y: this.matchMatrixFrontPosition["i" + iUnit1 + ":j" + jUnit1].y }, 250, 'Linear');
-                this.tween1.onComplete.add(this.onTweenComplete, this);
+                this.tween1.onComplete.add(this.onCompleteMatchExchangeUnits, this);
                 this.tween2 = this.game.add.tween(this.matchMatrixUnit["i" + iUnit2 + ":j" + jUnit2]);
                 this.tween2.to({ x: this.matchMatrixFrontPosition["i" + iUnit2 + ":j" + jUnit2].x, y: this.matchMatrixFrontPosition["i" + iUnit2 + ":j" + jUnit2].y }, 250, 'Linear');
-                this.tween2.onComplete.add(this.onTweenComplete, this);
+                this.tween2.onComplete.add(this.onCompleteMatchExchangeUnits, this);
                 this.tween1.start();
                 this.tween2.start();
-                Utilits.Data.debugLog("TWEEN!", "START");
+                Utilits.Data.debugLog("matchExchangeUnits", "Tween: START");
             }
             else {
                 this.matchCellColorBack();
-                //this.matchSelectUnitsClear();
+                this.matchSelectUnitsClear();
             }
         };
-        Field.prototype.onTweenComplete = function (event) {
+        Field.prototype.onCompleteMatchExchangeUnits = function (event) {
             if (this.tween1.isRunning === false && this.tween2.isRunning === false) {
                 this.matchCellColorBack();
-                Utilits.Data.debugLog("TWEEN!", "STOP");
+                //this.matchCheckField(false);
+                this.matchSelectUnitsClear();
+                Utilits.Data.debugLog("onCompleteMatchExchangeUnits", "Tween: STOP");
+            }
+        };
+        Field.prototype.matchBackExchangeUnits = function () {
+            var iUnit1 = this.matchSelectUnit1.posColumnI;
+            var jUnit1 = this.matchSelectUnit1.posRowJ;
+            var iUnit2 = this.matchSelectUnit2.posColumnI;
+            var jUnit2 = this.matchSelectUnit2.posRowJ;
+            this.matchMatrixUnit["i" + iUnit1 + ":j" + jUnit1] = this.matchSelectUnit2;
+            this.matchMatrixUnit["i" + iUnit1 + ":j" + jUnit1].posColumnI = iUnit1;
+            this.matchMatrixUnit["i" + iUnit1 + ":j" + jUnit1].posRowJ = jUnit1;
+            this.matchMatrixUnit["i" + iUnit1 + ":j" + jUnit1].name = "i" + iUnit1 + ":j" + jUnit1;
+            this.matchMatrixUnit["i" + iUnit2 + ":j" + jUnit2] = this.matchSelectUnit1;
+            this.matchMatrixUnit["i" + iUnit2 + ":j" + jUnit2].posColumnI = iUnit2;
+            this.matchMatrixUnit["i" + iUnit2 + ":j" + jUnit2].posRowJ = jUnit2;
+            this.matchMatrixUnit["i" + iUnit2 + ":j" + jUnit2].name = "i" + iUnit2 + ":j" + jUnit2;
+            this.tween1 = this.game.add.tween(this.matchMatrixUnit["i" + iUnit1 + ":j" + jUnit1]);
+            this.tween1.to({ x: this.matchMatrixFrontPosition["i" + iUnit1 + ":j" + jUnit1].x, y: this.matchMatrixFrontPosition["i" + iUnit1 + ":j" + jUnit1].y }, 250, 'Linear');
+            this.tween1.onComplete.add(this.matchSelectUnitsClear, this);
+            this.tween2 = this.game.add.tween(this.matchMatrixUnit["i" + iUnit2 + ":j" + jUnit2]);
+            this.tween2.to({ x: this.matchMatrixFrontPosition["i" + iUnit2 + ":j" + jUnit2].x, y: this.matchMatrixFrontPosition["i" + iUnit2 + ":j" + jUnit2].y }, 250, 'Linear');
+            this.tween2.onComplete.add(this.matchSelectUnitsClear, this);
+            this.tween1.start();
+            this.tween2.start();
+            Utilits.Data.debugLog("matchBackExchangeUnits", "Tween: START");
+        };
+        Field.prototype.matchSelectUnitsClear = function () {
+            if (this.tween1.isRunning === false && this.tween2.isRunning === false) {
+                this.matchSelectUnit1 = null;
+                this.matchSelectUnit2 = null;
+                this.matchFieldBlocked = false;
+                Utilits.Data.debugLog("matchSelectUnitsClear", "Tween: STOP");
             }
         };
         Field.MATCH_COLUMNS = 6;
