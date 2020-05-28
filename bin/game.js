@@ -192,12 +192,14 @@ var Match3;
 (function (Match3) {
     var Cell = Match3.Cell;
     var Unit = Match3.Unit;
+    var Timer = Match3.Timer;
     var Field = /** @class */ (function (_super) {
         __extends(Field, _super);
         function Field(game, parent) {
             var _this = _super.call(this, game, parent) || this;
             _this.updateTransform();
             _this.init();
+            _this.createTimer();
             return _this;
         }
         Field.prototype.init = function () {
@@ -205,6 +207,33 @@ var Match3;
             this.matchSelectUnit2 = null;
             this.matchFieldBlocked = false;
             this.modeAI = false;
+            this.statusAction = Field.ACTION_PLAYER;
+        };
+        /* Таймер */
+        Field.prototype.createTimer = function () {
+            this.timer = new Timer(this.game, 340, 12, Images.Tablo);
+            this.timer.event.add(this.onTimerEnd, this);
+            this.addChild(this.timer);
+            this.timer.setMessage("Ваш ход");
+            this.timer.runTimer();
+        };
+        Field.prototype.onTimerEnd = function (event) {
+            if (event === Timer.TIMER_END) {
+                this.endTurn();
+            }
+        };
+        Field.prototype.endTurn = function () {
+            Utilits.Data.debugLog("endTurn", this.statusAction);
+            if (this.statusAction === Field.ACTION_PLAYER) {
+                this.statusAction = Field.ACTION_AI;
+                this.matchFieldBlocked = true;
+                this.timer.setMessage("Ход противника");
+            }
+            else {
+                this.statusAction = Field.ACTION_PLAYER;
+                this.matchFieldBlocked = false;
+                this.timer.setMessage("Ваш ход");
+            }
         };
         /* Инициализация матриц позиций ================================================================ */
         Field.prototype.initMatchMatrixPosition = function () {
@@ -368,8 +397,7 @@ var Match3;
         Field.prototype.onCompleteMatchExchangeUnits = function (event) {
             if (this.tween1.isRunning === false && this.tween2.isRunning === false) {
                 this.matchCellColorBack();
-                //this.matchCheckField(false);
-                this.matchSelectUnitsClear();
+                this.matchCheckField(false);
                 Utilits.Data.debugLog("onCompleteMatchExchangeUnits", "Tween: STOP");
             }
         };
@@ -404,6 +432,150 @@ var Match3;
                 Utilits.Data.debugLog("matchSelectUnitsClear", "Tween: STOP");
             }
         };
+        /* Поиск групп ============================================================================== */
+        Field.prototype.matchCheckField = function (afterDown) {
+            if (this.parent !== null) {
+                this.matchMoveDownProcesses = [];
+                if (this.matchCheckFieldFull()) // группы были найдены
+                 {
+                    this.timer.stopTimer(); // останавливаем таймер
+                    //this.matchMoveDownUnits();  // спускаем юниты
+                }
+                else { // группы не найдены
+                    if (afterDown === false) // первый спуск юнитов
+                     {
+                        this.matchBackExchangeUnits(); // возвращаем выбранные юниты на места
+                    }
+                    else {
+                        this.matchSelectUnitsClear(); // очистка и разблокировка поля
+                        // (!) ///////////////////if(parent.level.levelStatus === parent.level.LEVEL_STATUS_BATTLE) parent.timer.timerStart();				// запускаем таймер
+                        this.timer.runTimer(); // запускаем таймер
+                    }
+                }
+            }
+            else {
+                // УДАЛЯЕТСЯ ТРИ В РЯД ЕСЛИ НЕТ УРОВНЯ
+                //parent.matchClose();
+                this.removeAll();
+            }
+        };
+        /* Общая проверка колонок и строк (3-и и более в ряд) */
+        Field.prototype.matchCheckFieldFull = function () {
+            var resultCheck = false;
+            /* i - столбец; j - строка */
+            for (var i = 0; i < Field.MATCH_COLUMNS; i++) {
+                if (this.matchCheckColumn(i) === true)
+                    resultCheck = true;
+            }
+            for (var j = 0; j < Field.MATCH_ROWS; j++) {
+                if (this.matchCheckRow(j) === true)
+                    resultCheck = true;
+            }
+            return resultCheck;
+        };
+        /* Проверка колонки (3-и и более в ряд) */
+        Field.prototype.matchCheckColumn = function (column) {
+            var resultCheckColumn = false;
+            /* просматриваем  в столбце (по строкам) */
+            for (var j = 0; j < Field.MATCH_ROWS; j++) {
+                if (j < Field.MATCH_ROWS - 2) {
+                    if (this.matchMatrixUnit["i" + column + ":j" + j].unitType !== Field.MATCH_HIT_0) {
+                        /* Группа из 3-х объектов */
+                        if (this.matchMatrixUnit["i" + column + ":j" + j].unitType === this.matchMatrixUnit["i" + column + ":j" + (j + 1)].unitType && this.matchMatrixUnit["i" + column + ":j" + j].unitType === this.matchMatrixUnit["i" + column + ":j" + (j + 2)].unitType) {
+                            resultCheckColumn = true;
+                            /* Группа из 4-х кристалов */
+                            if (j < Field.MATCH_ROWS - 3) {
+                                if (this.matchMatrixUnit["i" + column + ":j" + j].unitType === this.matchMatrixUnit["i" + column + ":j" + (j + 3)].unitType) {
+                                    /* Группа из 5-ти кристалов */
+                                    if (j < Field.MATCH_ROWS - 4) {
+                                        if (this.matchMatrixUnit["i" + column + ":j" + j].unitType === this.matchMatrixUnit["i" + column + ":j" + (j + 4)].unitType) {
+                                            /* Удаляем группу из 5 юнитов */
+                                            this.matchRemoveUnit(column, j, "col", this.matchMatrixUnit["i" + column + ":j" + j].unitType, 5);
+                                            j += 2;
+                                        }
+                                        else {
+                                            /* Удаляем группу из 4 юнитов */
+                                            this.matchRemoveUnit(column, j, "col", this.matchMatrixUnit["i" + column + ":j" + j].unitType, 4);
+                                            j += 1;
+                                        }
+                                    }
+                                    else {
+                                        /* Удаляем группу из 4 юнитов */
+                                        this.matchRemoveUnit(column, j, "col", this.matchMatrixUnit["i" + column + ":j" + j].unitType, 4);
+                                        j += 1;
+                                    }
+                                }
+                                else {
+                                    /* Удаляем группу из 3 юнитов */
+                                    this.matchRemoveUnit(column, j, "col", this.matchMatrixUnit["i" + column + ":j" + j].unitType, 3);
+                                }
+                            }
+                            else {
+                                /* Удаляем группу из 3 юнитов */
+                                this.matchRemoveUnit(column, j, "col", this.matchMatrixUnit["i" + column + ":j" + j].unitType, 3);
+                            }
+                        }
+                    }
+                }
+                else {
+                    break;
+                }
+            }
+            return resultCheckColumn;
+        };
+        /* Проверка строки (3-и и более в ряд) */
+        Field.prototype.matchCheckRow = function (row) {
+            var resultCheckRow = false;
+            /* просматриваем в строке (по столбцам) */
+            for (var i = 0; i < Field.MATCH_COLUMNS; i++) {
+                if (i < Field.MATCH_COLUMNS - 2) {
+                    if (this.matchMatrixUnit["i" + i + ":j" + row].unitType !== Field.MATCH_HIT_0) {
+                        /* Группа из 3-х объектов */
+                        if (this.matchMatrixUnit["i" + i + ":j" + row].unitType === this.matchMatrixUnit["i" + (i + 1) + ":j" + row].unitType && this.matchMatrixUnit["i" + i + ":j" + row].unitType === this.matchMatrixUnit["i" + (i + 2) + ":j" + row].unitType) {
+                            resultCheckRow = true;
+                            /* Группа из 4-х кристалов */
+                            if (i < Field.MATCH_COLUMNS - 3) {
+                                if (this.matchMatrixUnit["i" + i + ":j" + row].unitType === this.matchMatrixUnit["i" + (i + 3) + ":j" + row].unitType) {
+                                    /* Группа из 5-ти кристалов */
+                                    if (i < Field.MATCH_COLUMNS - 4) {
+                                        if (this.matchMatrixUnit["i" + i + ":j" + row].unitType === this.matchMatrixUnit["i" + (i + 4) + ":j" + row].unitType) {
+                                            /* Удаляем группу из 5 юнитов */
+                                            this.matchRemoveUnit(i, row, "row", this.matchMatrixUnit["i" + i + ":j" + row].unitType, 5);
+                                            i += 2;
+                                        }
+                                        else {
+                                            /* Удаляем группу из 4 юнитов */
+                                            this.matchRemoveUnit(i, row, "row", this.matchMatrixUnit["i" + i + ":j" + row].unitType, 4);
+                                            i += 1;
+                                        }
+                                    }
+                                    else {
+                                        /* Удаляем группу из 4 юнитов */
+                                        this.matchRemoveUnit(i, row, "row", this.matchMatrixUnit["i" + i + ":j" + row].unitType, 4);
+                                        i += 1;
+                                    }
+                                }
+                                else {
+                                    /* Удаляем группу из 3 юнитов */
+                                    this.matchRemoveUnit(i, row, "row", this.matchMatrixUnit["i" + i + ":j" + row].unitType, 3);
+                                }
+                            }
+                            else {
+                                /* Удаляем группу из 3 юнитов */
+                                this.matchRemoveUnit(i, row, "row", this.matchMatrixUnit["i" + i + ":j" + row].unitType, 3);
+                            }
+                        }
+                    }
+                }
+                else {
+                    break;
+                }
+            }
+            return resultCheckRow;
+        };
+        /* Удаление юнитов */
+        Field.prototype.matchRemoveUnit = function (col, row, check, hitType, hitCount) {
+        };
         Field.MATCH_COLUMNS = 6;
         Field.MATCH_ROWS = 6;
         Field.MATCH_CELL_WIDTH = 82;
@@ -417,6 +589,8 @@ var Match3;
         Field.MATCH_HIT_3 = "HIT_3";
         Field.MATCH_HIT_4 = "HIT_4";
         Field.MATCH_HIT_5 = "HIT_5";
+        Field.ACTION_PLAYER = "action_player";
+        Field.ACTION_AI = "action_ai";
         return Field;
     }(Phaser.Group));
     Match3.Field = Field;

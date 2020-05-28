@@ -4,6 +4,7 @@
 module Match3 {
     import Cell = Match3.Cell;
     import Unit = Match3.Unit;
+    import Timer = Match3.Timer;
 
     export interface IPoint {
         x:number;
@@ -25,6 +26,10 @@ module Match3 {
 		public static MATCH_HIT_4 = "HIT_4";
         public static MATCH_HIT_5 = "HIT_5";
         
+        public static ACTION_PLAYER = "action_player";
+        public static ACTION_AI = "action_ai";
+
+        private timer: Timer;
         private tween1:Phaser.Tween;
         private tween2:Phaser.Tween;
 
@@ -40,11 +45,13 @@ module Match3 {
         private matchFieldBlocked:boolean;  // блокирование игрового поля
         private modeAI:boolean;             // режим искуственного интелекта (по умолчанию отключен в начале)
         private matchLevelJSON:any;      // json игрового поля
+        private statusAction:String;    // статус активного игрока
 
         constructor(game:Phaser.Game, parent:any){
             super(game, parent);
             this.updateTransform();
             this.init();
+            this.createTimer();
         }
 
         private init():void{
@@ -52,6 +59,35 @@ module Match3 {
             this.matchSelectUnit2 = null;
             this.matchFieldBlocked = false;
             this.modeAI = false;
+            this.statusAction = Field.ACTION_PLAYER;
+        }
+
+        /* Таймер */
+        private createTimer(): void {
+            this.timer = new Timer(this.game, 340, 12, Images.Tablo);
+            this.timer.event.add(this.onTimerEnd, this);
+            this.addChild(this.timer);
+            this.timer.setMessage("Ваш ход");
+            this.timer.runTimer();
+        } 
+
+        private onTimerEnd(event): void {
+            if (event === Timer.TIMER_END) {
+                this.endTurn();
+            }
+        }
+
+        private endTurn(): void {
+            Utilits.Data.debugLog("endTurn", this.statusAction);
+            if(this.statusAction === Field.ACTION_PLAYER){
+                this.statusAction = Field.ACTION_AI;
+                this.matchFieldBlocked = true;
+                this.timer.setMessage("Ход противника");
+            }else{
+                this.statusAction = Field.ACTION_PLAYER;
+                this.matchFieldBlocked = false;
+                this.timer.setMessage("Ваш ход");
+            }
         }
 
         /* Инициализация матриц позиций ================================================================ */
@@ -296,7 +332,7 @@ module Match3 {
                 this.matchMoveDownProcesses = [];
                 if(this.matchCheckFieldFull())  // группы были найдены
                 {
-                    parent.timer.timerStop();   // останавливаем таймер
+                    this.timer.stopTimer();   // останавливаем таймер
                     this.matchMoveDownUnits();  // спускаем юниты
                 }else{ // группы не найдены
                     if(afterDown === false) // первый спуск юнитов
@@ -304,12 +340,14 @@ module Match3 {
                         this.matchBackExchangeUnits();  // возвращаем выбранные юниты на места
                     }else{ 
                         this.matchSelectUnitsClear();   // очистка и разблокировка поля
-                        if(parent.level.levelStatus === parent.level.LEVEL_STATUS_BATTLE) parent.timer.timerStart();				// запускаем таймер
+                        // (!) ///////////////////if(parent.level.levelStatus === parent.level.LEVEL_STATUS_BATTLE) parent.timer.timerStart();				// запускаем таймер
+                        this.timer.runTimer();				// запускаем таймер
                     }
                 }
             }else{
                 // УДАЛЯЕТСЯ ТРИ В РЯД ЕСЛИ НЕТ УРОВНЯ
-                parent.matchClose();
+                //parent.matchClose();
+                this.removeAll();
             }
         }
 
