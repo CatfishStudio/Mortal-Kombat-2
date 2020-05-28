@@ -58,7 +58,7 @@ module MortalKombat {
         }
 
         public shutdown(){
-            this.field.removeAll();
+            this.field.shutdown();
             this.groupContent.removeAll();
             this.game.stage.removeChildren();
         }

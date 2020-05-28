@@ -62,6 +62,16 @@ module Match3 {
             this.statusAction = Field.ACTION_PLAYER;
         }
 
+        public shutdown(){
+            this.timer.shutdown();
+            this.tween1.stop();
+            this.tween1 = null;
+            this.tween2.stop();
+            this.tween2 = null;
+            this.removeChildren();
+            this.removeAll();
+        }
+
         /* Таймер */
         private createTimer(): void {
             this.timer = new Timer(this.game, 340, 12, Images.Tablo);
@@ -346,8 +356,7 @@ module Match3 {
                 }
             }else{
                 // УДАЛЯЕТСЯ ТРИ В РЯД ЕСЛИ НЕТ УРОВНЯ
-                //parent.matchClose();
-                this.removeAll();
+                this.shutdown();
             }
         }
 
