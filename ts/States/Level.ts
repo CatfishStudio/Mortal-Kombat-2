@@ -53,8 +53,14 @@ module MortalKombat {
 
             let valueJSON = this.game.cache.getJSON(GameData.Data.levels[GameData.Data.tournamentProgress][1]);
             this.field = new Field(this.game, this.groupContent);
+            this.field.event.add(this.onMatch, this);
             this.field.createMatchField(valueJSON);
+        }
 
+        /* Произошло событие match на поле */
+        public onMatch(hitType:any, hitCount:number):void
+        {
+            Utilits.Data.debugLog("LEVEL: match |", "type=" + hitType + " | count=" + hitCount);
         }
 
         public shutdown(){

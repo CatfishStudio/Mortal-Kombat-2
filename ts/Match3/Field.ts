@@ -29,6 +29,8 @@ module Match3 {
         public static ACTION_PLAYER = "action_player";
         public static ACTION_AI = "action_ai";
 
+        public event: Phaser.Signal;
+
         private timer: Timer;
         private tween1:Phaser.Tween;
         private tween2:Phaser.Tween;
@@ -60,6 +62,7 @@ module Match3 {
             this.matchFieldBlocked = false;
             this.modeAI = false;
             this.statusAction = Field.ACTION_PLAYER;
+            this.event = new Phaser.Signal();
         }
 
         public shutdown(){
@@ -343,7 +346,7 @@ module Match3 {
                 if(this.matchCheckFieldFull())  // группы были найдены
                 {
                     this.timer.stopTimer();   // останавливаем таймер
-                    this.matchMoveDownUnits();  // спускаем юниты
+                    /////////////this.matchMoveDownUnits();  // спускаем юниты
                 }else{ // группы не найдены
                     if(afterDown === false) // первый спуск юнитов
                     {
@@ -491,7 +494,7 @@ module Match3 {
         /* Удаление юнитов */
         private matchRemoveUnit(col:number, row:number, check:String, hitType:any, hitCount:number):void
         {
-            
+            this.event.dispatch(hitType, hitCount); // возвращаем событие в Level
         }
 
 

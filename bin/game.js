@@ -208,6 +208,16 @@ var Match3;
             this.matchFieldBlocked = false;
             this.modeAI = false;
             this.statusAction = Field.ACTION_PLAYER;
+            this.event = new Phaser.Signal();
+        };
+        Field.prototype.shutdown = function () {
+            this.timer.shutdown();
+            this.tween1.stop();
+            this.tween1 = null;
+            this.tween2.stop();
+            this.tween2 = null;
+            this.removeChildren();
+            this.removeAll();
         };
         /* Таймер */
         Field.prototype.createTimer = function () {
@@ -439,7 +449,7 @@ var Match3;
                 if (this.matchCheckFieldFull()) // группы были найдены
                  {
                     this.timer.stopTimer(); // останавливаем таймер
-                    //this.matchMoveDownUnits();  // спускаем юниты
+                    /////////////this.matchMoveDownUnits();  // спускаем юниты
                 }
                 else { // группы не найдены
                     if (afterDown === false) // первый спуск юнитов
@@ -455,8 +465,7 @@ var Match3;
             }
             else {
                 // УДАЛЯЕТСЯ ТРИ В РЯД ЕСЛИ НЕТ УРОВНЯ
-                //parent.matchClose();
-                this.removeAll();
+                this.shutdown();
             }
         };
         /* Общая проверка колонок и строк (3-и и более в ряд) */
@@ -575,6 +584,7 @@ var Match3;
         };
         /* Удаление юнитов */
         Field.prototype.matchRemoveUnit = function (col, row, check, hitType, hitCount) {
+            this.event.dispatch(hitType, hitCount); // возвращаем событие в Level
         };
         Field.MATCH_COLUMNS = 6;
         Field.MATCH_ROWS = 6;
@@ -2685,10 +2695,15 @@ var MortalKombat;
             this.groupContent.addChild(this.helpButton);
             var valueJSON = this.game.cache.getJSON(GameData.Data.levels[GameData.Data.tournamentProgress][1]);
             this.field = new Field(this.game, this.groupContent);
+            this.field.event.add(this.onMatch, this);
             this.field.createMatchField(valueJSON);
         };
+        /* Произошло событие match на поле */
+        Level.prototype.onMatch = function (hitType, hitCount) {
+            Utilits.Data.debugLog("LEVEL: match |", "type=" + hitType + " | count=" + hitCount);
+        };
         Level.prototype.shutdown = function () {
-            this.field.removeAll();
+            this.field.shutdown();
             this.groupContent.removeAll();
             this.game.stage.removeChildren();
         };
