@@ -133,10 +133,19 @@ var Match3;
             return _this;
         }
         Cell.prototype.init = function () {
+            this.flastSprite = new Phaser.Sprite(this.game, -45, -25, Atlases.Flash, 0);
+            this.addChild(this.flastSprite);
+            this.animation = this.flastSprite.animations.add(Atlases.Flash, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+            this.animation.onComplete.add(this.onComplete, this);
             this.lineStyle(1, 0x000000, 0.85);
             this.beginFill(0x000000, 0.50);
             this.drawRoundedRect(0, 0, Match3.Field.MATCH_CELL_WIDTH, Match3.Field.MATCH_CELL_HEIGHT, 15);
             this.endFill();
+        };
+        Cell.prototype.onComplete = function (sprite, animation) {
+        };
+        Cell.prototype.flash = function () {
+            this.animation.play(10, false, false);
         };
         Cell.prototype.changeUnit = function (unitType) {
             this.clear();
@@ -606,18 +615,21 @@ var Match3;
                 if (hitCount === 3) {
                     this.matchMatrixUnit["i" + col + ":j" + row].alpha = 0.0;
                     //this.matchAnimationRemoveUnit(this.matchMatrixUnit["i"+col+":j"+row].position.x, this.matchMatrixUnit["i"+col+":j"+row].position.y); // анимация вспышка.
+                    this.matchMatrixCell["i" + col + ":j" + row].flash();
                     this.matchMatrixUnit["i" + col + ":j" + row].flagRemove = true;
                     this.matchMatrixUnit["i" + col + ":j" + row].position.x = this.matchMatrixBackPosition["i" + col + ":j" + row].x;
                     this.matchMatrixUnit["i" + col + ":j" + row].position.y = this.matchMatrixBackPosition["i" + col + ":j" + row].y;
                     this.matchMoveDownProcesses["i" + col + ":j" + row] = true;
                     this.matchMatrixUnit["i" + (col + 1) + ":j" + row].alpha = 0.0;
                     //this.matchAnimationRemoveUnit(this.matchMatrixUnit["i"+(col+1)+":j"+row].position.x, this.matchMatrixUnit["i"+(col+1)+":j"+row].position.y); // анимация вспышка.
+                    this.matchMatrixCell["i" + (col + 1) + ":j" + row].flash();
                     this.matchMatrixUnit["i" + (col + 1) + ":j" + row].flagRemove = true;
                     this.matchMatrixUnit["i" + (col + 1) + ":j" + row].position.x = this.matchMatrixBackPosition["i" + (col + 1) + ":j" + row].x;
                     this.matchMatrixUnit["i" + (col + 1) + ":j" + row].position.y = this.matchMatrixBackPosition["i" + (col + 1) + ":j" + row].y;
                     this.matchMoveDownProcesses["i" + (col + 1) + ":j" + row] = true;
                     this.matchMatrixUnit["i" + (col + 2) + ":j" + row].alpha = 0.0;
                     //this.matchAnimationRemoveUnit(that.matchMatrixUnit["i"+(col+2)+":j"+row].position.x, this.matchMatrixUnit["i"+(col+2)+":j"+row].position.y); // анимация вспышка.
+                    this.matchMatrixCell["i" + (col + 2) + ":j" + row].flash();
                     this.matchMatrixUnit["i" + (col + 2) + ":j" + row].flagRemove = true;
                     this.matchMatrixUnit["i" + (col + 2) + ":j" + row].position.x = this.matchMatrixBackPosition["i" + (col + 2) + ":j" + row].x;
                     this.matchMatrixUnit["i" + (col + 2) + ":j" + row].position.y = this.matchMatrixBackPosition["i" + (col + 2) + ":j" + row].y;
