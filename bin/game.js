@@ -438,7 +438,8 @@ var Match3;
             if (this.tween1.isRunning === false && this.tween2.isRunning === false) {
                 this.matchSelectUnit1 = null;
                 this.matchSelectUnit2 = null;
-                this.matchFieldBlocked = false;
+                if (this.statusAction === Field.ACTION_PLAYER)
+                    this.matchFieldBlocked = false;
                 Utilits.Data.debugLog("matchSelectUnitsClear", "Tween: STOP");
             }
         };
@@ -449,7 +450,7 @@ var Match3;
                 if (this.matchCheckFieldFull()) // группы были найдены
                  {
                     this.timer.stopTimer(); // останавливаем таймер
-                    /////////////this.matchMoveDownUnits();  // спускаем юниты
+                    //////////////////////this.matchMoveDownUnits();  // спускаем юниты
                 }
                 else { // группы не найдены
                     if (afterDown === false) // первый спуск юнитов
