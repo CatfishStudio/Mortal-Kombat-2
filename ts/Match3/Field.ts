@@ -213,13 +213,21 @@ module Match3 {
         {
             Utilits.Data.debugLog('onMatchUnitClick:', unit);
             if(this.matchFieldBlocked === false){
+                
                 this.matchCellColorSelect(unit.unitType, unit.posColumnI, unit.posRowJ);
                 if(this.matchSelectUnit1 === null || this.matchSelectUnit1 === undefined){
                     this.matchSelectUnit1 = unit;
                 }else{
-                    if(this.matchSelectUnit2 === null || this.matchSelectUnit2 === undefined){
-                        this.matchSelectUnit2 = unit;
-                        this.matchExchangeUnits(); // меняем юниты местами
+                    if(this.matchSelectUnit1.name === unit.name){
+                        this.matchCellColorBack();
+                        this.matchSelectUnit1 === null;
+                        this.matchSelectUnit2 === null;
+                        if(this.statusAction === Field.ACTION_PLAYER) this.matchFieldBlocked = false;
+                    }else{
+                        if(this.matchSelectUnit2 === null || this.matchSelectUnit2 === undefined){
+                            this.matchSelectUnit2 = unit;
+                            this.matchExchangeUnits(); // меняем юниты местами
+                        }
                     }
                 }
             }
@@ -496,7 +504,34 @@ module Match3 {
         {
             this.event.dispatch(hitType, hitCount); // возвращаем событие в Level
 
-
+            if(check === "row")
+            {
+                if(hitCount === 3)
+                {
+                    this.matchMatrixUnit["i"+col+":j"+row].alpha = 0.0;
+                    //this.matchAnimationRemoveUnit(this.matchMatrixUnit["i"+col+":j"+row].position.x, this.matchMatrixUnit["i"+col+":j"+row].position.y); // анимация вспышка.
+					this.matchMatrixUnit["i"+col+":j"+row].flagRemove = true;
+					this.matchMatrixUnit["i"+col+":j"+row].position.x = this.matchMatrixBackPosition["i"+col+":j"+row].x;
+                    this.matchMatrixUnit["i"+col+":j"+row].position.y = this.matchMatrixBackPosition["i"+col+":j"+row].y;
+                    this.matchMoveDownProcesses["i"+col+":j"+row] = true;
+                    this.matchMatrixUnit["i"+(col+1)+":j"+row].alpha = 0.0;
+					//this.matchAnimationRemoveUnit(this.matchMatrixUnit["i"+(col+1)+":j"+row].position.x, this.matchMatrixUnit["i"+(col+1)+":j"+row].position.y); // анимация вспышка.
+					this.matchMatrixUnit["i"+(col+1)+":j"+row].flagRemove = true;
+					this.matchMatrixUnit["i"+(col+1)+":j"+row].position.x = this.matchMatrixBackPosition["i"+(col+1)+":j"+row].x;
+					this.matchMatrixUnit["i"+(col+1)+":j"+row].position.y = this.matchMatrixBackPosition["i"+(col+1)+":j"+row].y;
+					this.matchMoveDownProcesses["i"+(col+1)+":j"+row] = true;
+					this.matchMatrixUnit["i"+(col+2)+":j"+row].alpha = 0.0;
+					//this.matchAnimationRemoveUnit(that.matchMatrixUnit["i"+(col+2)+":j"+row].position.x, this.matchMatrixUnit["i"+(col+2)+":j"+row].position.y); // анимация вспышка.
+					this.matchMatrixUnit["i"+(col+2)+":j"+row].flagRemove = true;
+					this.matchMatrixUnit["i"+(col+2)+":j"+row].position.x = this.matchMatrixBackPosition["i"+(col+2)+":j"+row].x;
+					this.matchMatrixUnit["i"+(col+2)+":j"+row].position.y = this.matchMatrixBackPosition["i"+(col+2)+":j"+row].y;
+					this.matchMoveDownProcesses["i"+(col+2)+":j"+row] = true;
+                }
+            }
+            if(check === "col")
+            {
+                
+            }
         }
 
 
