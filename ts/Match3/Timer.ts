@@ -23,7 +23,7 @@ module Match3 {
         private init(): void {
             this.event = new Phaser.Signal();
 
-            this.count = 30;
+            this.count = 10;
 
             this.timer = this.game.time.create(false);
             this.timer.loop(1000, this.onTimerComplete, this);
@@ -44,7 +44,7 @@ module Match3 {
 
             if (this.count === 0) {
                 this.event.dispatch(Timer.TIMER_END);
-                this.count = 30;
+                this.count = 10;
                 Utilits.Data.debugLog("TIMER:", "ON COMPLETE");
             }
         }
@@ -66,13 +66,13 @@ module Match3 {
 
         public stopTimer(): void {
             this.timer.stop(false);
-            this.count = 30;
+            this.count = 10;
             this.setMessage("............................");
             Utilits.Data.debugLog("TIMER:", "STOP");
         }
 
         public resetTimer(): void {
-            this.count = 30;
+            this.count = 10;
         }
 
         public setMessage(value: string): void {

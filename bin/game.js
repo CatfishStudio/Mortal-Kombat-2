@@ -63,7 +63,7 @@ var Match3;
         };
         Timer.prototype.init = function () {
             this.event = new Phaser.Signal();
-            this.count = 30;
+            this.count = 10;
             this.timer = this.game.time.create(false);
             this.timer.loop(1000, this.onTimerComplete, this);
             this.timerText = this.game.add.text(45, 12, "0:" + this.count.toString(), { font: "bold 24px arial", fill: "#FFFFFF", align: "left" });
@@ -81,7 +81,7 @@ var Match3;
             }
             if (this.count === 0) {
                 this.event.dispatch(Timer.TIMER_END);
-                this.count = 30;
+                this.count = 10;
                 Utilits.Data.debugLog("TIMER:", "ON COMPLETE");
             }
         };
@@ -102,12 +102,12 @@ var Match3;
         };
         Timer.prototype.stopTimer = function () {
             this.timer.stop(false);
-            this.count = 30;
+            this.count = 10;
             this.setMessage("............................");
             Utilits.Data.debugLog("TIMER:", "STOP");
         };
         Timer.prototype.resetTimer = function () {
-            this.count = 30;
+            this.count = 10;
         };
         Timer.prototype.setMessage = function (value) {
             if (this.messageText !== undefined && this.messageText !== null) {
@@ -236,12 +236,18 @@ var Match3;
             Utilits.Data.debugLog("endTurn", this.statusAction);
             if (this.statusAction === Field.ACTION_PLAYER) {
                 this.statusAction = Field.ACTION_AI;
+                this.matchCellColorBack();
                 this.matchFieldBlocked = true;
+                this.matchSelectUnit1 = null;
+                this.matchSelectUnit2 = null;
                 this.timer.setMessage("Ход противника");
             }
             else {
                 this.statusAction = Field.ACTION_PLAYER;
+                this.matchCellColorBack();
                 this.matchFieldBlocked = false;
+                this.matchSelectUnit1 = null;
+                this.matchSelectUnit2 = null;
                 this.timer.setMessage("Ваш ход");
             }
         };
@@ -340,7 +346,7 @@ var Match3;
         };
         /* Событие: нажатие на юнит */
         Field.prototype.onMatchUnitClick = function (unit) {
-            Utilits.Data.debugLog('onMatchUnitClick:', unit);
+            Utilits.Data.debugLog('onMatchUnitClick: CLICK', unit);
             if (this.matchFieldBlocked === false) {
                 this.matchCellColorSelect(unit.unitType, unit.posColumnI, unit.posRowJ);
                 if (this.matchSelectUnit1 === null || this.matchSelectUnit1 === undefined) {
@@ -349,10 +355,11 @@ var Match3;
                 else {
                     if (this.matchSelectUnit1.name === unit.name) {
                         this.matchCellColorBack();
-                        this.matchSelectUnit1 === null;
-                        this.matchSelectUnit2 === null;
+                        this.matchSelectUnit1 = null;
+                        this.matchSelectUnit2 = null;
                         if (this.statusAction === Field.ACTION_PLAYER)
                             this.matchFieldBlocked = false;
+                        Utilits.Data.debugLog('onMatchUnitClick: RESET', [this.matchSelectUnit1, this.matchSelectUnit2]);
                     }
                     else {
                         if (this.matchSelectUnit2 === null || this.matchSelectUnit2 === undefined) {
@@ -362,7 +369,7 @@ var Match3;
                     }
                 }
             }
-            Utilits.Data.debugLog('onMatchUnitClick:', [this.matchSelectUnit1, this.matchSelectUnit2]);
+            Utilits.Data.debugLog('onMatchUnitClick: TOTAL', [this.matchSelectUnit1, this.matchSelectUnit2]);
         };
         /* Событие: свайп кристалов */
         Field.prototype.onMatchUnitEndClick = function (unit) {

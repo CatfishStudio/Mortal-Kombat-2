@@ -94,11 +94,17 @@ module Match3 {
             Utilits.Data.debugLog("endTurn", this.statusAction);
             if(this.statusAction === Field.ACTION_PLAYER){
                 this.statusAction = Field.ACTION_AI;
+                this.matchCellColorBack();
                 this.matchFieldBlocked = true;
+                this.matchSelectUnit1 = null;
+                this.matchSelectUnit2 = null;
                 this.timer.setMessage("Ход противника");
             }else{
                 this.statusAction = Field.ACTION_PLAYER;
+                this.matchCellColorBack();
                 this.matchFieldBlocked = false;
+                this.matchSelectUnit1 = null;
+                this.matchSelectUnit2 = null;
                 this.timer.setMessage("Ваш ход");
             }
         }
@@ -211,7 +217,7 @@ module Match3 {
         /* Событие: нажатие на юнит */
         public onMatchUnitClick(unit):void
         {
-            Utilits.Data.debugLog('onMatchUnitClick:', unit);
+            Utilits.Data.debugLog('onMatchUnitClick: CLICK', unit);
             if(this.matchFieldBlocked === false){
                 
                 this.matchCellColorSelect(unit.unitType, unit.posColumnI, unit.posRowJ);
@@ -220,9 +226,10 @@ module Match3 {
                 }else{
                     if(this.matchSelectUnit1.name === unit.name){
                         this.matchCellColorBack();
-                        this.matchSelectUnit1 === null;
-                        this.matchSelectUnit2 === null;
+                        this.matchSelectUnit1 = null;
+                        this.matchSelectUnit2 = null;
                         if(this.statusAction === Field.ACTION_PLAYER) this.matchFieldBlocked = false;
+                        Utilits.Data.debugLog('onMatchUnitClick: RESET', [this.matchSelectUnit1, this.matchSelectUnit2]);
                     }else{
                         if(this.matchSelectUnit2 === null || this.matchSelectUnit2 === undefined){
                             this.matchSelectUnit2 = unit;
@@ -231,7 +238,7 @@ module Match3 {
                     }
                 }
             }
-            Utilits.Data.debugLog('onMatchUnitClick:', [this.matchSelectUnit1, this.matchSelectUnit2]);
+            Utilits.Data.debugLog('onMatchUnitClick: TOTAL', [this.matchSelectUnit1, this.matchSelectUnit2]);
         }
 
         /* Событие: свайп кристалов */
