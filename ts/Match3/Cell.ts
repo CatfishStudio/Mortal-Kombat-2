@@ -22,10 +22,11 @@ module Match3 {
         }
 
         private onComplete(sprite, animation): void {
-                        
+            this.flastSprite.alpha = 0;
         }
 
         public flash():void {
+            this.flastSprite.alpha = 1;
             this.animation.play(10, false, false);
         }
 

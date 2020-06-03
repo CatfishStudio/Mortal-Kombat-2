@@ -143,8 +143,10 @@ var Match3;
             this.endFill();
         };
         Cell.prototype.onComplete = function (sprite, animation) {
+            this.flastSprite.alpha = 0;
         };
         Cell.prototype.flash = function () {
+            this.flastSprite.alpha = 1;
             this.animation.play(10, false, false);
         };
         Cell.prototype.changeUnit = function (unitType) {
@@ -614,29 +616,162 @@ var Match3;
             if (check === "row") {
                 if (hitCount === 3) {
                     this.matchMatrixUnit["i" + col + ":j" + row].alpha = 0.0;
-                    //this.matchAnimationRemoveUnit(this.matchMatrixUnit["i"+col+":j"+row].position.x, this.matchMatrixUnit["i"+col+":j"+row].position.y); // анимация вспышка.
                     this.matchMatrixCell["i" + col + ":j" + row].flash();
                     this.matchMatrixUnit["i" + col + ":j" + row].flagRemove = true;
                     this.matchMatrixUnit["i" + col + ":j" + row].position.x = this.matchMatrixBackPosition["i" + col + ":j" + row].x;
                     this.matchMatrixUnit["i" + col + ":j" + row].position.y = this.matchMatrixBackPosition["i" + col + ":j" + row].y;
                     this.matchMoveDownProcesses["i" + col + ":j" + row] = true;
                     this.matchMatrixUnit["i" + (col + 1) + ":j" + row].alpha = 0.0;
-                    //this.matchAnimationRemoveUnit(this.matchMatrixUnit["i"+(col+1)+":j"+row].position.x, this.matchMatrixUnit["i"+(col+1)+":j"+row].position.y); // анимация вспышка.
                     this.matchMatrixCell["i" + (col + 1) + ":j" + row].flash();
                     this.matchMatrixUnit["i" + (col + 1) + ":j" + row].flagRemove = true;
                     this.matchMatrixUnit["i" + (col + 1) + ":j" + row].position.x = this.matchMatrixBackPosition["i" + (col + 1) + ":j" + row].x;
                     this.matchMatrixUnit["i" + (col + 1) + ":j" + row].position.y = this.matchMatrixBackPosition["i" + (col + 1) + ":j" + row].y;
                     this.matchMoveDownProcesses["i" + (col + 1) + ":j" + row] = true;
                     this.matchMatrixUnit["i" + (col + 2) + ":j" + row].alpha = 0.0;
-                    //this.matchAnimationRemoveUnit(that.matchMatrixUnit["i"+(col+2)+":j"+row].position.x, this.matchMatrixUnit["i"+(col+2)+":j"+row].position.y); // анимация вспышка.
                     this.matchMatrixCell["i" + (col + 2) + ":j" + row].flash();
                     this.matchMatrixUnit["i" + (col + 2) + ":j" + row].flagRemove = true;
                     this.matchMatrixUnit["i" + (col + 2) + ":j" + row].position.x = this.matchMatrixBackPosition["i" + (col + 2) + ":j" + row].x;
                     this.matchMatrixUnit["i" + (col + 2) + ":j" + row].position.y = this.matchMatrixBackPosition["i" + (col + 2) + ":j" + row].y;
                     this.matchMoveDownProcesses["i" + (col + 2) + ":j" + row] = true;
                 }
+                if (hitCount === 4) {
+                    this.matchMatrixUnit["i" + col + ":j" + row].alpha = 0.0;
+                    this.matchMatrixCell["i" + col + ":j" + row].flash();
+                    this.matchMatrixUnit["i" + col + ":j" + row].flagRemove = true;
+                    this.matchMatrixUnit["i" + col + ":j" + row].position.x = this.matchMatrixBackPosition["i" + col + ":j" + row].x;
+                    this.matchMatrixUnit["i" + col + ":j" + row].position.y = this.matchMatrixBackPosition["i" + col + ":j" + row].y;
+                    this.matchMoveDownProcesses["i" + col + ":j" + row] = true;
+                    this.matchMatrixUnit["i" + (col + 1) + ":j" + row].alpha = 0.0;
+                    this.matchMatrixCell["i" + (col + 1) + ":j" + row].flash();
+                    this.matchMatrixUnit["i" + (col + 1) + ":j" + row].flagRemove = true;
+                    this.matchMatrixUnit["i" + (col + 1) + ":j" + row].position.x = this.matchMatrixBackPosition["i" + (col + 1) + ":j" + row].x;
+                    this.matchMatrixUnit["i" + (col + 1) + ":j" + row].position.y = this.matchMatrixBackPosition["i" + (col + 1) + ":j" + row].y;
+                    this.matchMoveDownProcesses["i" + (col + 1) + ":j" + row] = true;
+                    this.matchMatrixUnit["i" + (col + 2) + ":j" + row].alpha = 0.0;
+                    this.matchMatrixCell["i" + (col + 2) + ":j" + row].flash();
+                    this.matchMatrixUnit["i" + (col + 2) + ":j" + row].flagRemove = true;
+                    this.matchMatrixUnit["i" + (col + 2) + ":j" + row].position.x = this.matchMatrixBackPosition["i" + (col + 2) + ":j" + row].x;
+                    this.matchMatrixUnit["i" + (col + 2) + ":j" + row].position.y = this.matchMatrixBackPosition["i" + (col + 2) + ":j" + row].y;
+                    this.matchMoveDownProcesses["i" + (col + 2) + ":j" + row] = true;
+                    this.matchMatrixUnit["i" + (col + 3) + ":j" + row].alpha = 0.0;
+                    this.matchMatrixCell["i" + (col + 3) + ":j" + row].flash();
+                    this.matchMatrixUnit["i" + (col + 3) + ":j" + row].flagRemove = true;
+                    this.matchMatrixUnit["i" + (col + 3) + ":j" + row].position.x = this.matchMatrixBackPosition["i" + (col + 3) + ":j" + row].x;
+                    this.matchMatrixUnit["i" + (col + 3) + ":j" + row].position.y = this.matchMatrixBackPosition["i" + (col + 3) + ":j" + row].y;
+                    this.matchMoveDownProcesses["i" + (col + 3) + ":j" + row] = true;
+                }
+                if (hitCount === 5) {
+                    this.matchMatrixUnit["i" + col + ":j" + row].alpha = 0.0;
+                    this.matchMatrixCell["i" + col + ":j" + row].flash();
+                    this.matchMatrixUnit["i" + col + ":j" + row].flagRemove = true;
+                    this.matchMatrixUnit["i" + col + ":j" + row].position.x = this.matchMatrixBackPosition["i" + col + ":j" + row].x;
+                    this.matchMatrixUnit["i" + col + ":j" + row].position.y = this.matchMatrixBackPosition["i" + col + ":j" + row].y;
+                    this.matchMoveDownProcesses["i" + col + ":j" + row] = true;
+                    this.matchMatrixUnit["i" + (col + 1) + ":j" + row].alpha = 0.0;
+                    this.matchMatrixCell["i" + (col + 1) + ":j" + row].flash();
+                    this.matchMatrixUnit["i" + (col + 1) + ":j" + row].flagRemove = true;
+                    this.matchMatrixUnit["i" + (col + 1) + ":j" + row].position.x = this.matchMatrixBackPosition["i" + (col + 1) + ":j" + row].x;
+                    this.matchMatrixUnit["i" + (col + 1) + ":j" + row].position.y = this.matchMatrixBackPosition["i" + (col + 1) + ":j" + row].y;
+                    this.matchMoveDownProcesses["i" + (col + 1) + ":j" + row] = true;
+                    this.matchMatrixUnit["i" + (col + 2) + ":j" + row].alpha = 0.0;
+                    this.matchMatrixCell["i" + (col + 2) + ":j" + row].flash();
+                    this.matchMatrixUnit["i" + (col + 2) + ":j" + row].flagRemove = true;
+                    this.matchMatrixUnit["i" + (col + 2) + ":j" + row].position.x = this.matchMatrixBackPosition["i" + (col + 2) + ":j" + row].x;
+                    this.matchMatrixUnit["i" + (col + 2) + ":j" + row].position.y = this.matchMatrixBackPosition["i" + (col + 2) + ":j" + row].y;
+                    this.matchMoveDownProcesses["i" + (col + 2) + ":j" + row] = true;
+                    this.matchMatrixUnit["i" + (col + 3) + ":j" + row].alpha = 0.0;
+                    this.matchMatrixCell["i" + (col + 3) + ":j" + row].flash();
+                    this.matchMatrixUnit["i" + (col + 3) + ":j" + row].flagRemove = true;
+                    this.matchMatrixUnit["i" + (col + 3) + ":j" + row].position.x = this.matchMatrixBackPosition["i" + (col + 3) + ":j" + row].x;
+                    this.matchMatrixUnit["i" + (col + 3) + ":j" + row].position.y = this.matchMatrixBackPosition["i" + (col + 3) + ":j" + row].y;
+                    this.matchMoveDownProcesses["i" + (col + 3) + ":j" + row] = true;
+                    this.matchMatrixUnit["i" + (col + 4) + ":j" + row].alpha = 0.0;
+                    this.matchMatrixCell["i" + (col + 4) + ":j" + row].flash();
+                    this.matchMatrixUnit["i" + (col + 4) + ":j" + row].flagRemove = true;
+                    this.matchMatrixUnit["i" + (col + 4) + ":j" + row].position.x = this.matchMatrixBackPosition["i" + (col + 4) + ":j" + row].x;
+                    this.matchMatrixUnit["i" + (col + 4) + ":j" + row].position.y = this.matchMatrixBackPosition["i" + (col + 4) + ":j" + row].y;
+                    this.matchMoveDownProcesses["i" + (col + 4) + ":j" + row] = true;
+                }
             }
             if (check === "col") {
+                if (hitCount === 3) {
+                    this.matchMatrixUnit["i" + col + ":j" + row].alpha = 0.0;
+                    this.matchMatrixCell["i" + col + ":j" + row].flash();
+                    this.matchMatrixUnit["i" + col + ":j" + row].flagRemove = true;
+                    this.matchMatrixUnit["i" + col + ":j" + row].position.x = this.matchMatrixBackPosition["i" + col + ":j" + row].x;
+                    this.matchMatrixUnit["i" + col + ":j" + row].position.y = this.matchMatrixBackPosition["i" + col + ":j" + row].y;
+                    this.matchMoveDownProcesses["i" + col + ":j" + row] = true;
+                    this.matchMatrixUnit["i" + col + ":j" + (row + 1)].alpha = 0.0;
+                    this.matchMatrixCell["i" + col + ":j" + (row + 1)].flash();
+                    this.matchMatrixUnit["i" + col + ":j" + (row + 1)].flagRemove = true;
+                    this.matchMatrixUnit["i" + col + ":j" + (row + 1)].position.x = this.matchMatrixBackPosition["i" + col + ":j" + (row + 1)].x;
+                    this.matchMatrixUnit["i" + col + ":j" + (row + 1)].position.y = this.matchMatrixBackPosition["i" + col + ":j" + (row + 1)].y;
+                    this.matchMoveDownProcesses["i" + col + ":j" + (row + 1)] = true;
+                    this.matchMatrixUnit["i" + col + ":j" + (row + 2)].alpha = 0.0;
+                    this.matchMatrixCell["i" + col + ":j" + (row + 2)].flash();
+                    this.matchMatrixUnit["i" + col + ":j" + (row + 2)].flagRemove = true;
+                    this.matchMatrixUnit["i" + col + ":j" + (row + 2)].position.x = this.matchMatrixBackPosition["i" + col + ":j" + (row + 2)].x;
+                    this.matchMatrixUnit["i" + col + ":j" + (row + 2)].position.y = this.matchMatrixBackPosition["i" + col + ":j" + (row + 2)].y;
+                    this.matchMoveDownProcesses["i" + col + ":j" + (row + 2)] = true;
+                }
+                if (hitCount === 4) {
+                    this.matchMatrixUnit["i" + col + ":j" + row].alpha = 0.0;
+                    this.matchMatrixCell["i" + col + ":j" + row].flash();
+                    this.matchMatrixUnit["i" + col + ":j" + row].flagRemove = true;
+                    this.matchMatrixUnit["i" + col + ":j" + row].position.x = this.matchMatrixBackPosition["i" + col + ":j" + row].x;
+                    this.matchMatrixUnit["i" + col + ":j" + row].position.y = this.matchMatrixBackPosition["i" + col + ":j" + row].y;
+                    this.matchMoveDownProcesses["i" + col + ":j" + row] = true;
+                    this.matchMatrixUnit["i" + col + ":j" + (row + 1)].alpha = 0.0;
+                    this.matchMatrixCell["i" + col + ":j" + (row + 1)].flash();
+                    this.matchMatrixUnit["i" + col + ":j" + (row + 1)].flagRemove = true;
+                    this.matchMatrixUnit["i" + col + ":j" + (row + 1)].position.x = this.matchMatrixBackPosition["i" + col + ":j" + (row + 1)].x;
+                    this.matchMatrixUnit["i" + col + ":j" + (row + 1)].position.y = this.matchMatrixBackPosition["i" + col + ":j" + (row + 1)].y;
+                    this.matchMoveDownProcesses["i" + col + ":j" + (row + 1)] = true;
+                    this.matchMatrixUnit["i" + col + ":j" + (row + 2)].alpha = 0.0;
+                    this.matchMatrixCell["i" + col + ":j" + (row + 2)].flash();
+                    this.matchMatrixUnit["i" + col + ":j" + (row + 2)].flagRemove = true;
+                    this.matchMatrixUnit["i" + col + ":j" + (row + 2)].position.x = this.matchMatrixBackPosition["i" + col + ":j" + (row + 2)].x;
+                    this.matchMatrixUnit["i" + col + ":j" + (row + 2)].position.y = this.matchMatrixBackPosition["i" + col + ":j" + (row + 2)].y;
+                    this.matchMoveDownProcesses["i" + col + ":j" + (row + 2)] = true;
+                    this.matchMatrixUnit["i" + col + ":j" + (row + 3)].alpha = 0.0;
+                    this.matchMatrixCell["i" + col + ":j" + (row + 3)].flash();
+                    this.matchMatrixUnit["i" + col + ":j" + (row + 3)].flagRemove = true;
+                    this.matchMatrixUnit["i" + col + ":j" + (row + 3)].position.x = this.matchMatrixBackPosition["i" + col + ":j" + (row + 3)].x;
+                    this.matchMatrixUnit["i" + col + ":j" + (row + 3)].position.y = this.matchMatrixBackPosition["i" + col + ":j" + (row + 3)].y;
+                    this.matchMoveDownProcesses["i" + col + ":j" + (row + 3)] = true;
+                }
+                if (hitCount === 5) {
+                    this.matchMatrixUnit["i" + col + ":j" + row].alpha = 0.0;
+                    this.matchMatrixCell["i" + col + ":j" + row].flash();
+                    this.matchMatrixUnit["i" + col + ":j" + row].flagRemove = true;
+                    this.matchMatrixUnit["i" + col + ":j" + row].position.x = this.matchMatrixBackPosition["i" + col + ":j" + row].x;
+                    this.matchMatrixUnit["i" + col + ":j" + row].position.y = this.matchMatrixBackPosition["i" + col + ":j" + row].y;
+                    this.matchMoveDownProcesses["i" + col + ":j" + row] = true;
+                    this.matchMatrixUnit["i" + col + ":j" + (row + 1)].alpha = 0.0;
+                    this.matchMatrixCell["i" + col + ":j" + (row + 1)].flash();
+                    this.matchMatrixUnit["i" + col + ":j" + (row + 1)].flagRemove = true;
+                    this.matchMatrixUnit["i" + col + ":j" + (row + 1)].position.x = this.matchMatrixBackPosition["i" + col + ":j" + (row + 1)].x;
+                    this.matchMatrixUnit["i" + col + ":j" + (row + 1)].position.y = this.matchMatrixBackPosition["i" + col + ":j" + (row + 1)].y;
+                    this.matchMoveDownProcesses["i" + col + ":j" + (row + 1)] = true;
+                    this.matchMatrixUnit["i" + col + ":j" + (row + 2)].alpha = 0.0;
+                    this.matchMatrixCell["i" + col + ":j" + (row + 2)].flash();
+                    this.matchMatrixUnit["i" + col + ":j" + (row + 2)].flagRemove = true;
+                    this.matchMatrixUnit["i" + col + ":j" + (row + 2)].position.x = this.matchMatrixBackPosition["i" + col + ":j" + (row + 2)].x;
+                    this.matchMatrixUnit["i" + col + ":j" + (row + 2)].position.y = this.matchMatrixBackPosition["i" + col + ":j" + (row + 2)].y;
+                    this.matchMoveDownProcesses["i" + col + ":j" + (row + 2)] = true;
+                    this.matchMatrixUnit["i" + col + ":j" + (row + 3)].alpha = 0.0;
+                    this.matchMatrixCell["i" + col + ":j" + (row + 3)].flash();
+                    this.matchMatrixUnit["i" + col + ":j" + (row + 3)].flagRemove = true;
+                    this.matchMatrixUnit["i" + col + ":j" + (row + 3)].position.x = this.matchMatrixBackPosition["i" + col + ":j" + (row + 3)].x;
+                    this.matchMatrixUnit["i" + col + ":j" + (row + 3)].position.y = this.matchMatrixBackPosition["i" + col + ":j" + (row + 3)].y;
+                    this.matchMoveDownProcesses["i" + col + ":j" + (row + 3)] = true;
+                    this.matchMatrixUnit["i" + col + ":j" + (row + 4)].alpha = 0.0;
+                    this.matchMatrixCell["i" + col + ":j" + (row + 4)].flash();
+                    this.matchMatrixUnit["i" + col + ":j" + (row + 4)].flagRemove = true;
+                    this.matchMatrixUnit["i" + col + ":j" + (row + 4)].position.x = this.matchMatrixBackPosition["i" + col + ":j" + (row + 4)].x;
+                    this.matchMatrixUnit["i" + col + ":j" + (row + 4)].position.y = this.matchMatrixBackPosition["i" + col + ":j" + (row + 4)].y;
+                    this.matchMoveDownProcesses["i" + col + ":j" + (row + 4)] = true;
+                }
             }
         };
         Field.MATCH_COLUMNS = 6;
