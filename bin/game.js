@@ -326,11 +326,11 @@ var Match3;
                         }
                         if (valueJSON.Level.cell[index].cellObject === Field.MATCH_HIT_4) {
                             unit = new Unit(this.game, xUnit, yUnit, Images.capRaiden);
-                            unit.unitType = Constants.TWIST;
+                            unit.unitType = Constants.UPPERCUT;
                         }
                         if (valueJSON.Level.cell[index].cellObject === Field.MATCH_HIT_5) {
                             unit = new Unit(this.game, xUnit, yUnit, Images.capReptile);
-                            unit.unitType = Constants.UPPERCUT;
+                            unit.unitType = Constants.TWIST;
                         }
                         unit.name = "i" + iUnit + ":j" + jUnit;
                         unit.interactive = true;
@@ -477,7 +477,7 @@ var Match3;
                 if (this.matchCheckFieldFull()) // группы были найдены
                  {
                     this.timer.stopTimer(); // останавливаем таймер
-                    //////////////////////this.matchMoveDownUnits();  // спускаем юниты
+                    this.matchMoveDownUnits(); // спускаем юниты
                 }
                 else { // группы не найдены
                     if (afterDown === false) // первый спуск юнитов
@@ -773,6 +773,99 @@ var Match3;
                     this.matchMoveDownProcesses["i" + col + ":j" + (row + 4)] = true;
                 }
             }
+        };
+        /* Спуск юнитов вниз на свободные позиции */
+        Field.prototype.matchMoveDownUnits = function () {
+            for (var i = 0; i < Field.MATCH_COLUMNS; i++) {
+                for (var j = Field.MATCH_ROWS - 1; j >= 0; j--) {
+                    if (this.matchMatrixUnit["i" + i + ":j" + j].flagRemove === true && this.matchMatrixUnit["i" + i + ":j" + j].unitType !== Field.MATCH_HIT_0) {
+                        for (var k = j; k >= 0; k--) {
+                            if (this.matchMatrixUnit["i" + i + ":j" + k].flagRemove === false && this.matchMatrixUnit["i" + i + ":j" + k].unitType !== Field.MATCH_HIT_0) {
+                                var removeUnit = this.matchMatrixUnit["i" + i + ":j" + j]; // удалённый юнит
+                                this.matchMatrixUnit["i" + i + ":j" + j] = this.matchMatrixUnit["i" + i + ":j" + k]; // перемещаем не удалённый юнит
+                                this.matchMatrixUnit["i" + i + ":j" + j].name = "i" + i + ":j" + j;
+                                this.matchMatrixUnit["i" + i + ":j" + j].flagRemove = false;
+                                this.matchMatrixUnit["i" + i + ":j" + j].posColumnI = i;
+                                this.matchMatrixUnit["i" + i + ":j" + j].posRowJ = j;
+                                this.matchMoveDownProcesses["i" + i + ":j" + j] = true;
+                                this.matchMatrixUnit["i" + i + ":j" + k] = removeUnit; // удалённый юнит ставим на место перемещённой
+                                this.matchMatrixUnit["i" + i + ":j" + k].name = "i" + i + ":j" + k;
+                                this.matchMatrixUnit["i" + i + ":j" + k].flagRemove = true;
+                                this.matchMatrixUnit["i" + i + ":j" + k].posColumnI = i;
+                                this.matchMatrixUnit["i" + i + ":j" + k].posRowJ = k;
+                                this.matchMoveDownProcesses["i" + i + ":j" + k] = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            this.matchMoveDownNewUnits();
+        };
+        Field.prototype.onCompleteMatchMoveDownUnits = function () {
+            this.matchMoveDownNewUnits();
+        };
+        Field.prototype.matchMoveDownNewUnits = function () {
+            for (var i = 0; i < Field.MATCH_COLUMNS; i++) {
+                for (var j = Field.MATCH_ROWS - 1; j >= 0; j--) {
+                    if (this.matchMoveDownProcesses["i" + i + ":j" + j] === true && this.matchMatrixUnit["i" + i + ":j" + j].flagRemove === false && this.matchMatrixUnit["i" + i + ":j" + j].unitType !== Field.MATCH_HIT_0) {
+                        this.matchMatrixUnit["i" + i + ":j" + j].flagRemove = false;
+                        this.tweenDown = this.game.add.tween(this.matchMatrixUnit["i" + i + ":j" + j]);
+                        this.tweenDown.to({ alpha: 1.0 }, 500);
+                        this.tweenDown.to({ x: this.matchMatrixFrontPosition["i" + i + ":j" + j].x, y: this.matchMatrixFrontPosition["i" + i + ":j" + j].y }, 500);
+                        this.tweenDown.to({ x: this.matchMatrixFrontPosition["i" + i + ":j" + j].x, y: this.matchMatrixFrontPosition["i" + i + ":j" + j].y - 5 }, 100);
+                        this.tweenDown.to({ x: this.matchMatrixFrontPosition["i" + i + ":j" + j].x, y: this.matchMatrixFrontPosition["i" + i + ":j" + j].y }, 50);
+                        this.tweenDown.onComplete.add(this.onCompleteMatchMoveDownNewUnits, this);
+                        this.tweenDown.start();
+                    }
+                    else {
+                        if (this.matchMoveDownProcesses["i" + i + ":j" + j] === true && this.matchMatrixUnit["i" + i + ":j" + j].flagRemove === true && this.matchMatrixUnit["i" + i + ":j" + j].unitType !== Field.MATCH_HIT_0) {
+                            var indexRandom = Math.random() / 0.1;
+                            var index = Math.round(indexRandom);
+                            this.matchMatrixUnit["i" + i + ":j" + j].loadTexture(Images.capShangTsung);
+                            if (index >= 0 && index <= 2) {
+                                //that.matchMatrixUnit["i"+i+":j"+j].texture = parent.assets.getAsset("hit1Texture");
+                                //(this.matchMatrixUnit["i"+i+":j"+j] as Unit).texture = this.game.add.renderTexture(80, 80, Images.capShangTsung);
+                                //(this.matchMatrixUnit["i"+i+":j"+j] as Unit).loadTexture(Images.capShangTsung);
+                                this.matchMatrixUnit["i" + i + ":j" + j].unitType = Constants.LEG;
+                                this.matchMatrixUnit["i" + i + ":j" + j].flagRemove = false;
+                            }
+                            if (index > 2 && index <= 4) {
+                                //(this.matchMatrixUnit["i"+i+":j"+j] as Unit).loadTexture(Images.capJax);
+                                this.matchMatrixUnit["i" + i + ":j" + j].unitType = Constants.HAND;
+                                this.matchMatrixUnit["i" + i + ":j" + j].flagRemove = false;
+                            }
+                            if (index > 4 && index <= 6) {
+                                //(this.matchMatrixUnit["i"+i+":j"+j] as Unit).loadTexture(Images.capMileena);
+                                this.matchMatrixUnit["i" + i + ":j" + j].unitType = Constants.BLOCK;
+                                this.matchMatrixUnit["i" + i + ":j" + j].flagRemove = false;
+                            }
+                            if (index > 6 && index <= 8) {
+                                //(this.matchMatrixUnit["i"+i+":j"+j] as Unit).loadTexture(Images.capRaiden);
+                                this.matchMatrixUnit["i" + i + ":j" + j].unitType = Constants.UPPERCUT;
+                                this.matchMatrixUnit["i" + i + ":j" + j].flagRemove = false;
+                            }
+                            if (index > 8 && index <= 10) {
+                                //(this.matchMatrixUnit["i"+i+":j"+j] as Unit).loadTexture(Images.capReptile);
+                                this.matchMatrixUnit["i" + i + ":j" + j].unitType = Constants.TWIST;
+                                this.matchMatrixUnit["i" + i + ":j" + j].flagRemove = false;
+                            }
+                            this.tweenDown = this.game.add.tween(this.matchMatrixUnit["i" + i + ":j" + j]);
+                            this.tweenDown.to({ alpha: 1.0 }, 500);
+                            this.tweenDown.to({ x: this.matchMatrixFrontPosition["i" + i + ":j" + j].x, y: this.matchMatrixFrontPosition["i" + i + ":j" + j].y }, 500);
+                            this.tweenDown.to({ x: this.matchMatrixFrontPosition["i" + i + ":j" + j].x, y: this.matchMatrixFrontPosition["i" + i + ":j" + j].y - 5 }, 100);
+                            this.tweenDown.to({ x: this.matchMatrixFrontPosition["i" + i + ":j" + j].x, y: this.matchMatrixFrontPosition["i" + i + ":j" + j].y }, 50);
+                            this.tweenDown.onComplete.add(this.onCompleteMatchMoveDownNewUnits, this);
+                            this.tweenDown.start();
+                        }
+                    }
+                }
+            }
+        };
+        Field.prototype.onCompleteMatchMoveDownNewUnits = function () {
+            Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits: NAME", this.name);
+            var result = false;
+            //this.matchMoveDownProcesses[this.name] = false;
         };
         Field.MATCH_COLUMNS = 6;
         Field.MATCH_ROWS = 6;

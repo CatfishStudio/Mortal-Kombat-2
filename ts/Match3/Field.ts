@@ -34,6 +34,7 @@ module Match3 {
         private timer: Timer;
         private tween1:Phaser.Tween;
         private tween2:Phaser.Tween;
+        private tweenDown:Phaser.Tween;
 
         private matchMatrixCell:Cell[][];   // Матрица ячеек игрового поля
         private matchMatrixUnit:Unit[][];   // Матрица юнитов на игровом поле
@@ -185,11 +186,11 @@ module Match3 {
                         }
                         if(valueJSON.Level.cell[index].cellObject === Field.MATCH_HIT_4) {
                             unit = new Unit(this.game, xUnit, yUnit, Images.capRaiden);
-                            unit.unitType = Constants.TWIST;
+                            unit.unitType = Constants.UPPERCUT;
                         }
                         if(valueJSON.Level.cell[index].cellObject === Field.MATCH_HIT_5) {
                             unit = new Unit(this.game, xUnit, yUnit, Images.capReptile);
-                            unit.unitType = Constants.UPPERCUT;
+                            unit.unitType = Constants.TWIST;
                         }
                         unit.name = "i"+iUnit+":j"+jUnit;
                         unit.interactive = true;
@@ -361,7 +362,7 @@ module Match3 {
                 if(this.matchCheckFieldFull())  // группы были найдены
                 {
                     this.timer.stopTimer();   // останавливаем таймер
-                    //////////////////////this.matchMoveDownUnits();  // спускаем юниты
+                    this.matchMoveDownUnits();  // спускаем юниты
                 }else{ // группы не найдены
                     if(afterDown === false) // первый спуск юнитов
                     {
@@ -682,11 +683,120 @@ module Match3 {
             }
         }
 
+        /* Спуск юнитов вниз на свободные позиции */
+        private matchMoveDownUnits():void
+        {
+            for(let i = 0; i < Field.MATCH_COLUMNS; i++)
+            {
+                for(let j = Field.MATCH_ROWS-1; j >= 0; j--)
+                {
+                    if(this.matchMatrixUnit["i"+i+":j"+j].flagRemove === true && this.matchMatrixUnit["i"+i+":j"+j].unitType !== Field.MATCH_HIT_0)
+                    {
+                        for(let k = j; k >= 0; k--)
+                        {
+                            if(this.matchMatrixUnit["i"+i+":j"+k].flagRemove === false && this.matchMatrixUnit["i"+i+":j"+k].unitType !== Field.MATCH_HIT_0)
+							{
+								let removeUnit:Unit = this.matchMatrixUnit["i"+i+":j"+j]; // удалённый юнит
 
+								this.matchMatrixUnit["i"+i+":j"+j] = this.matchMatrixUnit["i"+i+":j"+k]; // перемещаем не удалённый юнит
+								this.matchMatrixUnit["i"+i+":j"+j].name = "i"+i+":j"+j;
+								this.matchMatrixUnit["i"+i+":j"+j].flagRemove = false;
+								this.matchMatrixUnit["i"+i+":j"+j].posColumnI = i;
+								this.matchMatrixUnit["i"+i+":j"+j].posRowJ = j;
+								this.matchMoveDownProcesses["i"+i+":j"+j] = true;
 
+								this.matchMatrixUnit["i"+i+":j"+k] = removeUnit;	// удалённый юнит ставим на место перемещённой
+								this.matchMatrixUnit["i"+i+":j"+k].name = "i"+i+":j"+k;
+								this.matchMatrixUnit["i"+i+":j"+k].flagRemove = true;
+								this.matchMatrixUnit["i"+i+":j"+k].posColumnI = i;
+								this.matchMatrixUnit["i"+i+":j"+k].posRowJ = k;
+								this.matchMoveDownProcesses["i"+i+":j"+k] = true;
+								
+								break;
+							}
+                        }
+                    }
+                }
+            }
+            this.matchMoveDownNewUnits();
+        }
 
+        private onCompleteMatchMoveDownUnits():void
+        {
+            this.matchMoveDownNewUnits();
+        }
 
+        private matchMoveDownNewUnits():void
+        {
+            for(let i = 0; i < Field.MATCH_COLUMNS; i++)
+            {
+                for(let j = Field.MATCH_ROWS-1; j >= 0; j--)
+                {
+                    if(this.matchMoveDownProcesses["i"+i+":j"+j] === true && this.matchMatrixUnit["i"+i+":j"+j].flagRemove === false && this.matchMatrixUnit["i"+i+":j"+j].unitType !== Field.MATCH_HIT_0)
+                    {
+                        this.matchMatrixUnit["i"+i+":j"+j].flagRemove = false; 
+                        this.tweenDown = this.game.add.tween(this.matchMatrixUnit["i"+i+":j"+j]);
+                        this.tweenDown.to({alpha: 1.0}, 500);
+                        this.tweenDown.to({x: this.matchMatrixFrontPosition["i"+i+":j"+j].x, y: this.matchMatrixFrontPosition["i"+i+":j"+j].y}, 500);
+                        this.tweenDown.to({x: this.matchMatrixFrontPosition["i"+i+":j"+j].x, y: this.matchMatrixFrontPosition["i"+i+":j"+j].y - 5}, 100);
+                        this.tweenDown.to({x: this.matchMatrixFrontPosition["i"+i+":j"+j].x, y: this.matchMatrixFrontPosition["i"+i+":j"+j].y}, 50);
+                        this.tweenDown.onComplete.add(this.onCompleteMatchMoveDownNewUnits, this);
+                        this.tweenDown.start();
+                    }else{
+                        if(this.matchMoveDownProcesses["i"+i+":j"+j] === true && this.matchMatrixUnit["i"+i+":j"+j].flagRemove === true && this.matchMatrixUnit["i"+i+":j"+j].unitType !== Field.MATCH_HIT_0)
+                        {
+                            let indexRandom = Math.random() / 0.1;
+                            let index = Math.round(indexRandom);
+                            if (index >= 0 && index <= 2) 
+                            {
+                                (this.matchMatrixUnit["i"+i+":j"+j] as Unit).loadTexture(Images.capShangTsung);
+                                this.matchMatrixUnit["i"+i+":j"+j].unitType = Constants.LEG;
+                                this.matchMatrixUnit["i"+i+":j"+j].flagRemove = false;
+                            }
+                            if (index > 2 && index <= 4)
+                            {
+                                (this.matchMatrixUnit["i"+i+":j"+j] as Unit).loadTexture(Images.capJax);
+                                this.matchMatrixUnit["i"+i+":j"+j].unitType = Constants.HAND;
+                                this.matchMatrixUnit["i"+i+":j"+j].flagRemove = false;
+                            }
+                            if (index > 4 && index <= 6)
+                            {
+                                (this.matchMatrixUnit["i"+i+":j"+j] as Unit).loadTexture(Images.capMileena);
+                                this.matchMatrixUnit["i"+i+":j"+j].unitType = Constants.BLOCK;
+                                this.matchMatrixUnit["i"+i+":j"+j].flagRemove = false;
+                            }
+                            if (index > 6 && index <= 8)
+                            {
+                                (this.matchMatrixUnit["i"+i+":j"+j] as Unit).loadTexture(Images.capRaiden);
+                                this.matchMatrixUnit["i"+i+":j"+j].unitType = Constants.UPPERCUT;
+                                this.matchMatrixUnit["i"+i+":j"+j].flagRemove = false;
+                            }
+                            if (index > 8 && index <= 10)
+                            {
+                                (this.matchMatrixUnit["i"+i+":j"+j] as Unit).loadTexture(Images.capReptile);
+                                this.matchMatrixUnit["i"+i+":j"+j].unitType = Constants.TWIST;
+                                this.matchMatrixUnit["i"+i+":j"+j].flagRemove = false;
+                            }
 
+                            this.tweenDown = this.game.add.tween(this.matchMatrixUnit["i"+i+":j"+j]);
+                            this.tweenDown.to({alpha: 1.0}, 500);
+                            this.tweenDown.to({x: this.matchMatrixFrontPosition["i"+i+":j"+j].x, y: this.matchMatrixFrontPosition["i"+i+":j"+j].y}, 500);
+                            this.tweenDown.to({x: this.matchMatrixFrontPosition["i"+i+":j"+j].x, y: this.matchMatrixFrontPosition["i"+i+":j"+j].y - 5}, 100);
+                            this.tweenDown.to({x: this.matchMatrixFrontPosition["i"+i+":j"+j].x, y: this.matchMatrixFrontPosition["i"+i+":j"+j].y}, 50);
+                            this.tweenDown.onComplete.add(this.onCompleteMatchMoveDownNewUnits, this);
+                            this.tweenDown.start();
+                        }
+                    }
+                }
+            }
+        }
+
+        private onCompleteMatchMoveDownNewUnits():void
+        {
+            Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits: NAME", this.name);
+            let result = false;
+            //this.matchMoveDownProcesses[this.name] = false;
+        }
 
 
 
