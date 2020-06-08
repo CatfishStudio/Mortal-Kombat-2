@@ -11,6 +11,7 @@ module Match3 {
 
         private init(): void {
             this.flastSprite = new Phaser.Sprite(this.game, -45, -25, Atlases.Flash, 0);
+            this.flastSprite.alpha = 0;
             this.addChild(this.flastSprite);
             this.animation = this.flastSprite.animations.add(Atlases.Flash, [0,1,2,3,4,5,6,7,8,9,10]);
             this.animation.onComplete.add(this.onComplete, this);

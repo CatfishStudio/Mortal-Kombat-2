@@ -791,11 +791,26 @@ module Match3 {
             }
         }
 
-        private onCompleteMatchMoveDownNewUnits():void
+        private onCompleteMatchMoveDownNewUnits(unit:Unit):void
         {
-            Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits: NAME", this.name);
+            Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", unit.name);
             let result = false;
-            //this.matchMoveDownProcesses[this.name] = false;
+            this.matchMoveDownProcesses[unit.name] = false;
+            this.matchMoveDownProcesses.forEach(process => {
+                if(process === true){
+                    result = true;
+                    return;
+                } 
+            });
+            if(result === false) // анимация завершена
+			{
+					if(this.matchCheckCombinations() === true) // Возможные ходы определены
+					{
+							this.matchCheckField(true);	// проверка групп 3-и в ряд
+					}else{	// нет возможности ходов
+							this.matchUpdateField(); // обновление игрового поля
+					}
+			}
         }
 
 

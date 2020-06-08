@@ -134,6 +134,7 @@ var Match3;
         }
         Cell.prototype.init = function () {
             this.flastSprite = new Phaser.Sprite(this.game, -45, -25, Atlases.Flash, 0);
+            this.flastSprite.alpha = 0;
             this.addChild(this.flastSprite);
             this.animation = this.flastSprite.animations.add(Atlases.Flash, [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
             this.animation.onComplete.add(this.onComplete, this);
@@ -822,31 +823,28 @@ var Match3;
                         if (this.matchMoveDownProcesses["i" + i + ":j" + j] === true && this.matchMatrixUnit["i" + i + ":j" + j].flagRemove === true && this.matchMatrixUnit["i" + i + ":j" + j].unitType !== Field.MATCH_HIT_0) {
                             var indexRandom = Math.random() / 0.1;
                             var index = Math.round(indexRandom);
-                            this.matchMatrixUnit["i" + i + ":j" + j].loadTexture(Images.capShangTsung);
                             if (index >= 0 && index <= 2) {
-                                //that.matchMatrixUnit["i"+i+":j"+j].texture = parent.assets.getAsset("hit1Texture");
-                                //(this.matchMatrixUnit["i"+i+":j"+j] as Unit).texture = this.game.add.renderTexture(80, 80, Images.capShangTsung);
-                                //(this.matchMatrixUnit["i"+i+":j"+j] as Unit).loadTexture(Images.capShangTsung);
+                                this.matchMatrixUnit["i" + i + ":j" + j].loadTexture(Images.capShangTsung);
                                 this.matchMatrixUnit["i" + i + ":j" + j].unitType = Constants.LEG;
                                 this.matchMatrixUnit["i" + i + ":j" + j].flagRemove = false;
                             }
                             if (index > 2 && index <= 4) {
-                                //(this.matchMatrixUnit["i"+i+":j"+j] as Unit).loadTexture(Images.capJax);
+                                this.matchMatrixUnit["i" + i + ":j" + j].loadTexture(Images.capJax);
                                 this.matchMatrixUnit["i" + i + ":j" + j].unitType = Constants.HAND;
                                 this.matchMatrixUnit["i" + i + ":j" + j].flagRemove = false;
                             }
                             if (index > 4 && index <= 6) {
-                                //(this.matchMatrixUnit["i"+i+":j"+j] as Unit).loadTexture(Images.capMileena);
+                                this.matchMatrixUnit["i" + i + ":j" + j].loadTexture(Images.capMileena);
                                 this.matchMatrixUnit["i" + i + ":j" + j].unitType = Constants.BLOCK;
                                 this.matchMatrixUnit["i" + i + ":j" + j].flagRemove = false;
                             }
                             if (index > 6 && index <= 8) {
-                                //(this.matchMatrixUnit["i"+i+":j"+j] as Unit).loadTexture(Images.capRaiden);
+                                this.matchMatrixUnit["i" + i + ":j" + j].loadTexture(Images.capRaiden);
                                 this.matchMatrixUnit["i" + i + ":j" + j].unitType = Constants.UPPERCUT;
                                 this.matchMatrixUnit["i" + i + ":j" + j].flagRemove = false;
                             }
                             if (index > 8 && index <= 10) {
-                                //(this.matchMatrixUnit["i"+i+":j"+j] as Unit).loadTexture(Images.capReptile);
+                                this.matchMatrixUnit["i" + i + ":j" + j].loadTexture(Images.capReptile);
                                 this.matchMatrixUnit["i" + i + ":j" + j].unitType = Constants.TWIST;
                                 this.matchMatrixUnit["i" + i + ":j" + j].flagRemove = false;
                             }
@@ -862,10 +860,26 @@ var Match3;
                 }
             }
         };
-        Field.prototype.onCompleteMatchMoveDownNewUnits = function () {
-            Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits: NAME", this.name);
+        Field.prototype.onCompleteMatchMoveDownNewUnits = function (unit) {
+            Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", unit.name);
             var result = false;
-            //this.matchMoveDownProcesses[this.name] = false;
+            this.matchMoveDownProcesses[unit.name] = false;
+            this.matchMoveDownProcesses.forEach(function (process) {
+                if (process === true) {
+                    result = true;
+                    return;
+                }
+            });
+            if (result === false) // анимация завершена
+             {
+                if (this.matchCheckCombinations() === true) // Возможные ходы определены
+                 {
+                    this.matchCheckField(true); // проверка групп 3-и в ряд
+                }
+                else { // нет возможности ходов
+                    this.matchUpdateField(); // обновление игрового поля
+                }
+            }
         };
         Field.MATCH_COLUMNS = 6;
         Field.MATCH_ROWS = 6;
