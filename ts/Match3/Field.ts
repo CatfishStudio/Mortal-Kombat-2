@@ -813,7 +813,242 @@ module Match3 {
 			}
         }
 
+        private matchCheckCombinations():boolean
+        {
+            /*	   0  1  2  3  4  5
+			* 	0:[0][0][0][0][1][0]
+				1:[0][0][1][1][0][1]
+				2:[0][0][0][0][1][0]
+				3:[0][0][0][0][0][0]
+				4:[0][0][0][0][0][0]
+				5:[0][0][0][0][0][0]
+			 * */
+            for(let i:number = 0; i < Field.MATCH_COLUMNS; i++)
+			{
+				for(let j:number = 0; j < Field.MATCH_ROWS; j++)
+				{
+					if(this.matchMatrixUnit["i"+i+":j"+j].unitType != Field.MATCH_HIT_0)
+					{
+						// ПРОВЕРКА СТРОКИ
+						if(j == 0)
+						{
+							//[1][1][X][1]
+							if((i + 3) < Field.MATCH_COLUMNS){
+								if(this.matchMatrixUnit["i"+(i+2)+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+(i+1)+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+(i+3)+":j"+j].unitType != Field.MATCH_HIT_0){
+									if(this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+(i+1)+":j"+j].unitType && this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+(i+3)+":j"+j].unitType) { return true; }
+								}
+							}
+							//[1][X][1][1]
+							if((i + 3) < Field.MATCH_COLUMNS){
+								if(this.matchMatrixUnit["i"+(i+1)+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+(i+2)+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+(i+3)+":j"+j].unitType != Field.MATCH_HIT_0){
+									if(this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+(i+2)+":j"+j].unitType && this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+(i+3)+":j"+j].unitType) { return true; }
+								}
+							}
+							//[0][1][X][1]
+							//[0][0][1][0]
+							if((i + 2) < Field.MATCH_COLUMNS && (j + 1) < Field.MATCH_ROWS){
+								if(this.matchMatrixUnit["i"+(i+1)+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+(i+1)+":j"+(j+1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+(i+2)+":j"+j].unitType != Field.MATCH_HIT_0){
+									if(this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+(i+1)+":j"+(j+1)].unitType && this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+(i+2)+":j"+j].unitType) { return true; }
+								}
+							}
+							//[0][1][1][X]
+							//[0][0][0][1]
+							if((i + 2) < Field.MATCH_COLUMNS && (j + 1) < Field.MATCH_ROWS){
+								if(this.matchMatrixUnit["i"+(i+2)+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+(i+1)+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+(i+2)+":j"+j].unitType != Field.MATCH_HIT_0){
+									if(this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+(i+1)+":j"+j].unitType && this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+(i+2)+":j"+(j+1)].unitType) { return true; }
+								}
+							}
+							//[0][X][1][1]
+							//[0][1][0][0]
+							if((i + 2) < Field.MATCH_COLUMNS && (j + 1) < Field.MATCH_ROWS){
+								if(this.matchMatrixUnit["i"+i+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+(j+1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+(i+1)+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+(i+2)+":j"+j].unitType != Field.MATCH_HIT_0){
+									if(this.matchMatrixUnit["i"+i+":j"+(j+1)].unitType == this.matchMatrixUnit["i"+(i+1)+":j"+j].unitType && this.matchMatrixUnit["i"+i+":j"+(j+1)].unitType == this.matchMatrixUnit["i"+(i+2)+":j"+j].unitType) { return true; }
+								}
+							}
+						}else{
+							//[1][1][X][1]
+							if((i + 3) < Field.MATCH_COLUMNS){
+								if(this.matchMatrixUnit["i"+(i+2)+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+(i+1)+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+(i+3)+":j"+j].unitType != Field.MATCH_HIT_0){
+									if(this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+(i+1)+":j"+j].unitType && this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+(i+3)+":j"+j].unitType) { return true; }
+								}
+							}
+							//[1][X][1][1]
+							if((i + 3) < Field.MATCH_COLUMNS){
+								if(this.matchMatrixUnit["i"+(i+1)+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+(i+2)+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+(i+3)+":j"+j].unitType != Field.MATCH_HIT_0){
+									if(this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+(i+2)+":j"+j].unitType && this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+(i+3)+":j"+j].unitType) { return true; }
+								}
+							}
+							//[0][1][1][X]
+							//[0][0][0][1]
+							if((i + 2) < Field.MATCH_COLUMNS && (j + 1) < Field.MATCH_ROWS){
+								if(this.matchMatrixUnit["i"+(i+2)+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+(i+1)+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+(i+2)+":j"+(j+1)].unitType != Field.MATCH_HIT_0){
+									if(this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+(i+1)+":j"+j].unitType && this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+(i+2)+":j"+(j+1)].unitType) { return true; }
+								}
+							}
+							//[0][0][0][1]
+							//[0][1][1][X]
+							if((i + 2) < Field.MATCH_COLUMNS && (j - 1) >=0){
+								if(this.matchMatrixUnit["i"+(i+2)+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+(i+1)+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+(i+2)+":j"+(j-1)].unitType != Field.MATCH_HIT_0){
+									if(this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+(i+1)+":j"+j].unitType && this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+(i+2)+":j"+(j-1)].unitType) { return true; }
+								}
+							}
+							//[0][X][1][1]
+							//[0][1][0][0]
+							if((i + 2) < Field.MATCH_COLUMNS && (j + 1) < Field.MATCH_ROWS){
+								if(this.matchMatrixUnit["i"+i+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+(j+1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+(i+1)+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+(i+2)+":j"+j].unitType != Field.MATCH_HIT_0){
+									if(this.matchMatrixUnit["i"+i+":j"+(j+1)].unitType == this.matchMatrixUnit["i"+(i+1)+":j"+j].unitType && this.matchMatrixUnit["i"+i+":j"+(j+1)].unitType == this.matchMatrixUnit["i"+(i+2)+":j"+j].unitType) { return true; }
+								}
+							}
+							//[0][1][0][0]
+							//[0][X][1][1]
+							if((i + 2) < Field.MATCH_COLUMNS && (j + 1) < Field.MATCH_ROWS){
+								if(this.matchMatrixUnit["i"+i+":j"+(j+1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+(i+1)+":j"+(j+1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+(i+2)+":j"+(j+1)].unitType != Field.MATCH_HIT_0){
+									if(this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+(i+1)+":j"+(j+1)].unitType && this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+(i+2)+":j"+(j+1)].unitType) { return true; }
+								}
+							}
+							//[0][0][1][0]
+							//[0][1][X][1]
+							if((i + 2) < Field.MATCH_COLUMNS && (j - 1) >= 0){
+								if(this.matchMatrixUnit["i"+(i+1)+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+(i+1)+":j"+(j-1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+(i+2)+":j"+j].unitType != Field.MATCH_HIT_0){
+									if(this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+(i+1)+":j"+(j-1)].unitType && this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+(i+2)+":j"+j].unitType) { return true; }
+								}
+							}
+							//[0][1][X][1]
+							//[0][0][1][0]
+							if((i + 2) < Field.MATCH_COLUMNS && (j + 1) < Field.MATCH_ROWS){
+								if(this.matchMatrixUnit["i"+(i+1)+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+(i+1)+":j"+(j+1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+(i+2)+":j"+j].unitType != Field.MATCH_HIT_0){
+									if(this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+(i+1)+":j"+(j+1)].unitType && this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+(i+2)+":j"+j].unitType) { return true; }
+								}
+							}
+						}
 
+						// ПРОВЕРКА КОЛОНКИ
+						if(i == 0)
+						{
+							//[1]
+							//[1]
+							//[X]
+							//[1]
+							if((j + 3) < Field.MATCH_ROWS){
+								if(this.matchMatrixUnit["i"+i+":j"+(j+2)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+(j+1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+(j+3)].unitType != Field.MATCH_HIT_0){
+									if(this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+i+":j"+(j+1)].unitType && this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+i+":j"+(j+3)].unitType) { return true; }
+								}
+							}
+							//[1]
+							//[X]
+							//[1]
+							//[1]
+							if((j + 3) < Field.MATCH_ROWS){
+								if(this.matchMatrixUnit["i"+i+":j"+(j+1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+(j+2)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+(j+3)].unitType != Field.MATCH_HIT_0){
+									if(this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+i+":j"+(j+2)].unitType && this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+i+":j"+(j+3)].unitType) { return true; }
+								}
+							}
+							//[1][0]
+							//[X][1]
+							//[1][0]
+							//[0][0]
+							if((j + 2) < Field.MATCH_ROWS && (i + 1) < Field.MATCH_COLUMNS){
+								if(this.matchMatrixUnit["i"+i+":j"+(j+1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+(i+1)+":j"+(j+1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+(j+2)].unitType != Field.MATCH_HIT_0){
+									if(this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+(i+1)+":j"+(j+1)].unitType && this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+i+":j"+(j+2)].unitType) { return true; }
+								}
+							}
+							//[1][0]
+							//[1][0]
+							//[X][1]
+							//[0][0]
+							if((j + 2) < Field.MATCH_ROWS && (i + 1) < Field.MATCH_COLUMNS){
+								if(this.matchMatrixUnit["i"+i+":j"+(j+2)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+(j+1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+(i+1)+":j"+(j+2)].unitType != Field.MATCH_HIT_0){
+									if(this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+i+":j"+(j+1)].unitType && this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+(i+1)+":j"+(j+2)].unitType) { return true; }
+								}
+							}
+							//[X][1]
+							//[1][0]
+							//[1][0]
+							//[0][0]
+							if((j + 2) < Field.MATCH_ROWS && (i + 1) < Field.MATCH_COLUMNS){
+								if(this.matchMatrixUnit["i"+i+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+(i+1)+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+(j+1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+(j+2)].unitType != Field.MATCH_HIT_0){
+									if(this.matchMatrixUnit["i"+(i+1)+":j"+j].unitType == this.matchMatrixUnit["i"+i+":j"+(j+1)].unitType && this.matchMatrixUnit["i"+(i+1)+":j"+j].unitType == this.matchMatrixUnit["i"+i+":j"+(j+2)].unitType) { return true; }
+								}
+							}
+						}else{
+							//[1]
+							//[1]
+							//[X]
+							//[1]
+							if((j + 3) < Field.MATCH_ROWS){
+								if(this.matchMatrixUnit["i"+i+":j"+(j+2)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+(j+1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+(j+3)].unitType != Field.MATCH_HIT_0){
+									if(this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+i+":j"+(j+1)].unitType && this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+i+":j"+(j+3)].unitType) { return true; }
+								}
+							}
+							//[1]
+							//[X]
+							//[1]
+							//[1]
+							if((j + 3) < Field.MATCH_ROWS){
+								if(this.matchMatrixUnit["i"+i+":j"+(j+1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+(j+2)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+(j+3)].unitType != Field.MATCH_HIT_0){
+									if(this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+i+":j"+(j+2)].unitType && this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+i+":j"+(j+3)].unitType) { return true; }
+								}
+							}
+							//[1][0]
+							//[X][1]
+							//[1][0]
+							//[0][0]
+							if((j + 2) < Field.MATCH_ROWS && (i + 1) < Field.MATCH_COLUMNS){
+								if(this.matchMatrixUnit["i"+i+":j"+(j+1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+(i+1)+":j"+(j+1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+(j+2)].unitType != Field.MATCH_HIT_0){
+									if(this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+(i+1)+":j"+(j+1)].unitType && this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+i+":j"+(j+2)].unitType) { return true; }
+								}
+							}
+							//[0][1]
+							//[1][X]
+							//[0][1]
+							//[0][0]
+							if((j + 2) < Field.MATCH_ROWS && (i - 1) >= 0){
+								if(this.matchMatrixUnit["i"+i+":j"+(j+1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+(i-1)+":j"+(j+1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+(j+2)].unitType != Field.MATCH_HIT_0){
+									if(this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+(i-1)+":j"+(j+1)].unitType && this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+i+":j"+(j+2)].unitType) { return true; }
+								}
+							}
+							//[1][0]
+							//[1][0]
+							//[X][1]
+							//[0][0]
+							if((j + 2) < Field.MATCH_ROWS && (i + 1) < Field.MATCH_COLUMNS){
+								if(this.matchMatrixUnit["i"+i+":j"+(j+2)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+(j+1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+(i+1)+":j"+(j+2)].unitType != Field.MATCH_HIT_0){
+									if(this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+i+":j"+(j+1)].unitType && this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+(i+1)+":j"+(j+2)].unitType) { return true; }
+								}
+							}
+							//[X][1]
+							//[1][0]
+							//[1][0]
+							//[0][0]
+							if((j + 2) < Field.MATCH_ROWS && (i + 1) < Field.MATCH_COLUMNS){
+								if(this.matchMatrixUnit["i"+i+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+(i+1)+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+(j+1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+(j+2)].unitType != Field.MATCH_HIT_0){
+									if(this.matchMatrixUnit["i"+(i+1)+":j"+j].unitType == this.matchMatrixUnit["i"+i+":j"+(j+1)].unitType && this.matchMatrixUnit["i"+(i+1)+":j"+j].unitType == this.matchMatrixUnit["i"+i+":j"+(j+2)].unitType) { return true; }
+								}
+							}
+							//[0][1]
+							//[0][1]
+							//[1][X]
+							//[0][0]
+							if((j + 2) < Field.MATCH_ROWS && (i - 1) >= 0){
+								if(this.matchMatrixUnit["i"+i+":j"+(j+2)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+(j+1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+(i-1)+":j"+(j+2)].unitType != Field.MATCH_HIT_0){
+									if(this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+i+":j"+(j+1)].unitType && this.matchMatrixUnit["i"+i+":j"+j].unitType == this.matchMatrixUnit["i"+(i-1)+":j"+(j+2)].unitType) { return true; }
+								}
+							}
+							//[1][X]
+							//[0][1]
+							//[0][1]
+							//[0][0]
+							if((j + 2) < Field.MATCH_ROWS && (i - 1) >= 0){
+								if(this.matchMatrixUnit["i"+i+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+(i-1)+":j"+j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+(j+1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i"+i+":j"+(j+2)].unitType != Field.MATCH_HIT_0){
+									if(this.matchMatrixUnit["i"+(i-1)+":j"+j].unitType == this.matchMatrixUnit["i"+i+":j"+(j+1)].unitType && this.matchMatrixUnit["i"+(i-1)+":j"+j].unitType == this.matchMatrixUnit["i"+i+":j"+(j+2)].unitType) { return true; }
+								}
+							}
+						}
+					}
+				}
+			}
+			return false;
+        }
 
 
 
