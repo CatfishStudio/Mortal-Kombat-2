@@ -1050,6 +1050,69 @@ module Match3 {
 			return false;
         }
 
+        private matchUpdateField():void
+        {
+            this.matchMoveDownProcesses = [];
+            let indexRandom = Math.random() / 0.1;
+            let indexLevel = Math.round(indexRandom);
+            let valueJSON = this.game.cache.getJSON(GameData.Data.levels[indexLevel][1]);
+            
+            let index = 0;
+            for(let i:number = 0; i < Field.MATCH_COLUMNS; i++)
+            {
+                for(let j:number = 0; j < Field.MATCH_ROWS; j++)
+                {
+                    if(this.matchLevelJSON.Level.cell[index].cellObject !== Field.MATCH_HIT_0)
+                    {
+                        this.matchMatrixUnit["i"+i+":j"+j].flagRemove = false;
+						this.matchMatrixUnit["i"+i+":j"+j].position.x = this.matchMatrixBackPosition["i"+i+":j"+j].x;
+						this.matchMatrixUnit["i"+i+":j"+j].position.y = this.matchMatrixBackPosition["i"+i+":j"+j].y;
+                        this.matchMoveDownProcesses["i"+i+":j"+j] = true;
+                        
+                        if(valueJSON.Level.cell[index].cellObject === Field.MATCH_HIT_1)
+						{
+                            (this.matchMatrixUnit["i"+i+":j"+j] as Unit).loadTexture(Images.capShangTsung);
+                            this.matchMatrixUnit["i"+i+":j"+j].unitType = Constants.LEG;
+                        }
+                        if(valueJSON.Level.cell[index].cellObject === Field.MATCH_HIT_2)
+						{
+							(this.matchMatrixUnit["i"+i+":j"+j] as Unit).loadTexture(Images.capJax);
+	                        this.matchMatrixUnit["i"+i+":j"+j].unitType = Constants.HAND;
+						}
+						if(valueJSON.Level.cell[index].cellObject === Field.MATCH_HIT_3)
+						{
+							(this.matchMatrixUnit["i"+i+":j"+j] as Unit).loadTexture(Images.capMileena);
+	                        this.matchMatrixUnit["i"+i+":j"+j].unitType = Constants.BLOCK;
+						}
+						if(valueJSON.Level.cell[index].cellObject === Field.MATCH_HIT_4)
+						{
+							(this.matchMatrixUnit["i"+i+":j"+j] as Unit).loadTexture(Images.capRaiden);
+	                        this.matchMatrixUnit["i"+i+":j"+j].unitType = Constants.UPPERCUT;
+						}
+						if(valueJSON.Level.cell[index].cellObject === Field.MATCH_HIT_5)
+						{
+							(this.matchMatrixUnit["i"+i+":j"+j] as Unit).loadTexture(Images.capReptile);
+	                        this.matchMatrixUnit["i"+i+":j"+j].unitType = Constants.TWIST;
+                        }
+                        
+                        /* Спускаем удалённые юниты */
+
+                        this.tweenDown = this.game.add.tween(this.matchMatrixUnit["i"+i+":j"+j]);
+                        this.tweenDown.to({alpha: 1.0}, 500);
+                        this.tweenDown.to({x: this.matchMatrixFrontPosition["i"+i+":j"+j].x, y: this.matchMatrixFrontPosition["i"+i+":j"+j].y}, 500);
+                        this.tweenDown.onComplete.add(this.onCompleteMatchMoveDownNewUnits, this.matchMatrixUnit["i"+i+":j"+j]);
+                        this.tweenDown.start();
+
+                        /* Возвращаем цвет ячейки по умолчанию */
+                        this.matchMatrixCell["i"+i+":j"+j].defaultCell();
+                    }
+                    index++;
+                }
+            }
+        }
+
+        /* Ход искусственного интеллекта ============================================================== */
+        
 
 
     }
