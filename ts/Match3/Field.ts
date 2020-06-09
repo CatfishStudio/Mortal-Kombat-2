@@ -94,19 +94,20 @@ module Match3 {
         private endTurn(): void {
             Utilits.Data.debugLog("endTurn", this.statusAction);
             if(this.statusAction === Field.ACTION_PLAYER){
+                this.timer.setMessage("Ход противника");
                 this.statusAction = Field.ACTION_AI;
                 this.matchCellColorBack();
                 this.matchFieldBlocked = true;
                 this.matchSelectUnit1 = null;
                 this.matchSelectUnit2 = null;
-                this.timer.setMessage("Ход противника");
+                this.matchActionAI();
             }else{
                 this.statusAction = Field.ACTION_PLAYER;
+                this.timer.setMessage("Ваш ход");
                 this.matchCellColorBack();
                 this.matchFieldBlocked = false;
                 this.matchSelectUnit1 = null;
                 this.matchSelectUnit2 = null;
-                this.timer.setMessage("Ваш ход");
             }
         }
 
@@ -1606,9 +1607,7 @@ module Match3 {
 			}
         }
 
-
-
-
+        
 
     }
 }
