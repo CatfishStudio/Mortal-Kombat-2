@@ -211,7 +211,7 @@ var Match3;
             var _this = _super.call(this, game, parent) || this;
             _this.updateTransform();
             _this.init();
-            _this.createTimer();
+            _this.createTimers();
             return _this;
         }
         Field.prototype.init = function () {
@@ -232,12 +232,27 @@ var Match3;
             this.removeAll();
         };
         /* Таймер */
-        Field.prototype.createTimer = function () {
+        Field.prototype.createTimers = function () {
+            this.timerAI = this.game.time.create(false);
+            this.timerAI.loop(1000, this.onTimerComplete, this);
             this.timer = new Timer(this.game, 340, 12, Images.Tablo);
             this.timer.event.add(this.onTimerEnd, this);
             this.addChild(this.timer);
             this.timer.setMessage("Ваш ход");
             this.timer.runTimer();
+        };
+        Field.prototype.onTimerComplete = function (event) {
+            Utilits.Data.debugLog("timerAI", this.statusAction + " | " + this.matchFieldBlocked);
+            if (this.tween1 !== undefined && this.tween2 !== undefined) {
+                if (this.tween1.isRunning === false && this.tween2.isRunning === false) {
+                    this.timerAI.stop();
+                    this.matchActionAI();
+                }
+            }
+            else {
+                this.timerAI.stop();
+                this.matchActionAI();
+            }
         };
         Field.prototype.onTimerEnd = function (event) {
             if (event === Timer.TIMER_END) {
@@ -247,20 +262,22 @@ var Match3;
         Field.prototype.endTurn = function () {
             Utilits.Data.debugLog("endTurn", this.statusAction);
             if (this.statusAction === Field.ACTION_PLAYER) {
+                this.timer.setMessage("Ход противника");
                 this.statusAction = Field.ACTION_AI;
                 this.matchCellColorBack();
                 this.matchFieldBlocked = true;
                 this.matchSelectUnit1 = null;
                 this.matchSelectUnit2 = null;
-                this.timer.setMessage("Ход противника");
+                this.timerAI.loop(1000, this.onTimerComplete, this);
+                this.timerAI.start(1000);
             }
             else {
                 this.statusAction = Field.ACTION_PLAYER;
+                this.timer.setMessage("Ваш ход");
                 this.matchCellColorBack();
                 this.matchFieldBlocked = false;
                 this.matchSelectUnit1 = null;
                 this.matchSelectUnit2 = null;
-                this.timer.setMessage("Ваш ход");
             }
         };
         /* Инициализация матриц позиций ================================================================ */
@@ -486,8 +503,9 @@ var Match3;
                         this.matchBackExchangeUnits(); // возвращаем выбранные юниты на места
                     }
                     else {
-                        this.matchSelectUnitsClear(); // очистка и разблокировка поля
-                        // (!) ///////////////////if(parent.level.levelStatus === parent.level.LEVEL_STATUS_BATTLE) parent.timer.timerStart();				// запускаем таймер
+                        //this.matchSelectUnitsClear();   // очистка и разблокировка поля
+                        this.timerAI.stop();
+                        this.endTurn();
                         this.timer.runTimer(); // запускаем таймер
                     }
                 }
@@ -879,6 +897,776 @@ var Match3;
                 else { // нет возможности ходов
                     this.matchUpdateField(); // обновление игрового поля
                 }
+            }
+        };
+        Field.prototype.matchCheckCombinations = function () {
+            /*	   0  1  2  3  4  5
+            * 	0:[0][0][0][0][1][0]
+                1:[0][0][1][1][0][1]
+                2:[0][0][0][0][1][0]
+                3:[0][0][0][0][0][0]
+                4:[0][0][0][0][0][0]
+                5:[0][0][0][0][0][0]
+             * */
+            for (var i = 0; i < Field.MATCH_COLUMNS; i++) {
+                for (var j = 0; j < Field.MATCH_ROWS; j++) {
+                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0) {
+                        // ПРОВЕРКА СТРОКИ
+                        if (j == 0) {
+                            //[1][1][X][1]
+                            if ((i + 3) < Field.MATCH_COLUMNS) {
+                                if (this.matchMatrixUnit["i" + (i + 2) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 3) + ":j" + j].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 3) + ":j" + j].unitType) {
+                                        return true;
+                                    }
+                                }
+                            }
+                            //[1][X][1][1]
+                            if ((i + 3) < Field.MATCH_COLUMNS) {
+                                if (this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 2) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 3) + ":j" + j].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 2) + ":j" + j].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 3) + ":j" + j].unitType) {
+                                        return true;
+                                    }
+                                }
+                            }
+                            //[0][1][X][1]
+                            //[0][0][1][0]
+                            if ((i + 2) < Field.MATCH_COLUMNS && (j + 1) < Field.MATCH_ROWS) {
+                                if (this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 1) + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 2) + ":j" + j].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 1) + ":j" + (j + 1)].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 2) + ":j" + j].unitType) {
+                                        return true;
+                                    }
+                                }
+                            }
+                            //[0][1][1][X]
+                            //[0][0][0][1]
+                            if ((i + 2) < Field.MATCH_COLUMNS && (j + 1) < Field.MATCH_ROWS) {
+                                if (this.matchMatrixUnit["i" + (i + 2) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 2) + ":j" + j].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 2) + ":j" + (j + 1)].unitType) {
+                                        return true;
+                                    }
+                                }
+                            }
+                            //[0][X][1][1]
+                            //[0][1][0][0]
+                            if ((i + 2) < Field.MATCH_COLUMNS && (j + 1) < Field.MATCH_ROWS) {
+                                if (this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 2) + ":j" + j].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType == this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType && this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType == this.matchMatrixUnit["i" + (i + 2) + ":j" + j].unitType) {
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                        else {
+                            //[1][1][X][1]
+                            if ((i + 3) < Field.MATCH_COLUMNS) {
+                                if (this.matchMatrixUnit["i" + (i + 2) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 3) + ":j" + j].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 3) + ":j" + j].unitType) {
+                                        return true;
+                                    }
+                                }
+                            }
+                            //[1][X][1][1]
+                            if ((i + 3) < Field.MATCH_COLUMNS) {
+                                if (this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 2) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 3) + ":j" + j].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 2) + ":j" + j].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 3) + ":j" + j].unitType) {
+                                        return true;
+                                    }
+                                }
+                            }
+                            //[0][1][1][X]
+                            //[0][0][0][1]
+                            if ((i + 2) < Field.MATCH_COLUMNS && (j + 1) < Field.MATCH_ROWS) {
+                                if (this.matchMatrixUnit["i" + (i + 2) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 2) + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 2) + ":j" + (j + 1)].unitType) {
+                                        return true;
+                                    }
+                                }
+                            }
+                            //[0][0][0][1]
+                            //[0][1][1][X]
+                            if ((i + 2) < Field.MATCH_COLUMNS && (j - 1) >= 0) {
+                                if (this.matchMatrixUnit["i" + (i + 2) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 2) + ":j" + (j - 1)].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 2) + ":j" + (j - 1)].unitType) {
+                                        return true;
+                                    }
+                                }
+                            }
+                            //[0][X][1][1]
+                            //[0][1][0][0]
+                            if ((i + 2) < Field.MATCH_COLUMNS && (j + 1) < Field.MATCH_ROWS) {
+                                if (this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 2) + ":j" + j].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType == this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType && this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType == this.matchMatrixUnit["i" + (i + 2) + ":j" + j].unitType) {
+                                        return true;
+                                    }
+                                }
+                            }
+                            //[0][1][0][0]
+                            //[0][X][1][1]
+                            if ((i + 2) < Field.MATCH_COLUMNS && (j + 1) < Field.MATCH_ROWS) {
+                                if (this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 1) + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 2) + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 1) + ":j" + (j + 1)].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 2) + ":j" + (j + 1)].unitType) {
+                                        return true;
+                                    }
+                                }
+                            }
+                            //[0][0][1][0]
+                            //[0][1][X][1]
+                            if ((i + 2) < Field.MATCH_COLUMNS && (j - 1) >= 0) {
+                                if (this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 1) + ":j" + (j - 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 2) + ":j" + j].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 1) + ":j" + (j - 1)].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 2) + ":j" + j].unitType) {
+                                        return true;
+                                    }
+                                }
+                            }
+                            //[0][1][X][1]
+                            //[0][0][1][0]
+                            if ((i + 2) < Field.MATCH_COLUMNS && (j + 1) < Field.MATCH_ROWS) {
+                                if (this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 1) + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 2) + ":j" + j].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 1) + ":j" + (j + 1)].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 2) + ":j" + j].unitType) {
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                        // ПРОВЕРКА КОЛОНКИ
+                        if (i == 0) {
+                            //[1]
+                            //[1]
+                            //[X]
+                            //[1]
+                            if ((j + 3) < Field.MATCH_ROWS) {
+                                if (this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 3)].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + i + ":j" + (j + 3)].unitType) {
+                                        return true;
+                                    }
+                                }
+                            }
+                            //[1]
+                            //[X]
+                            //[1]
+                            //[1]
+                            if ((j + 3) < Field.MATCH_ROWS) {
+                                if (this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 3)].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + i + ":j" + (j + 3)].unitType) {
+                                        return true;
+                                    }
+                                }
+                            }
+                            //[1][0]
+                            //[X][1]
+                            //[1][0]
+                            //[0][0]
+                            if ((j + 2) < Field.MATCH_ROWS && (i + 1) < Field.MATCH_COLUMNS) {
+                                if (this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 1) + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 1) + ":j" + (j + 1)].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType) {
+                                        return true;
+                                    }
+                                }
+                            }
+                            //[1][0]
+                            //[1][0]
+                            //[X][1]
+                            //[0][0]
+                            if ((j + 2) < Field.MATCH_ROWS && (i + 1) < Field.MATCH_COLUMNS) {
+                                if (this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 1) + ":j" + (j + 2)].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 1) + ":j" + (j + 2)].unitType) {
+                                        return true;
+                                    }
+                                }
+                            }
+                            //[X][1]
+                            //[1][0]
+                            //[1][0]
+                            //[0][0]
+                            if ((j + 2) < Field.MATCH_ROWS && (i + 1) < Field.MATCH_COLUMNS) {
+                                if (this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType == this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType && this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType == this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType) {
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                        else {
+                            //[1]
+                            //[1]
+                            //[X]
+                            //[1]
+                            if ((j + 3) < Field.MATCH_ROWS) {
+                                if (this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 3)].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + i + ":j" + (j + 3)].unitType) {
+                                        return true;
+                                    }
+                                }
+                            }
+                            //[1]
+                            //[X]
+                            //[1]
+                            //[1]
+                            if ((j + 3) < Field.MATCH_ROWS) {
+                                if (this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 3)].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + i + ":j" + (j + 3)].unitType) {
+                                        return true;
+                                    }
+                                }
+                            }
+                            //[1][0]
+                            //[X][1]
+                            //[1][0]
+                            //[0][0]
+                            if ((j + 2) < Field.MATCH_ROWS && (i + 1) < Field.MATCH_COLUMNS) {
+                                if (this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 1) + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 1) + ":j" + (j + 1)].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType) {
+                                        return true;
+                                    }
+                                }
+                            }
+                            //[0][1]
+                            //[1][X]
+                            //[0][1]
+                            //[0][0]
+                            if ((j + 2) < Field.MATCH_ROWS && (i - 1) >= 0) {
+                                if (this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i - 1) + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i - 1) + ":j" + (j + 1)].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType) {
+                                        return true;
+                                    }
+                                }
+                            }
+                            //[1][0]
+                            //[1][0]
+                            //[X][1]
+                            //[0][0]
+                            if ((j + 2) < Field.MATCH_ROWS && (i + 1) < Field.MATCH_COLUMNS) {
+                                if (this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 1) + ":j" + (j + 2)].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 1) + ":j" + (j + 2)].unitType) {
+                                        return true;
+                                    }
+                                }
+                            }
+                            //[X][1]
+                            //[1][0]
+                            //[1][0]
+                            //[0][0]
+                            if ((j + 2) < Field.MATCH_ROWS && (i + 1) < Field.MATCH_COLUMNS) {
+                                if (this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType == this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType && this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType == this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType) {
+                                        return true;
+                                    }
+                                }
+                            }
+                            //[0][1]
+                            //[0][1]
+                            //[1][X]
+                            //[0][0]
+                            if ((j + 2) < Field.MATCH_ROWS && (i - 1) >= 0) {
+                                if (this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i - 1) + ":j" + (j + 2)].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i - 1) + ":j" + (j + 2)].unitType) {
+                                        return true;
+                                    }
+                                }
+                            }
+                            //[1][X]
+                            //[0][1]
+                            //[0][1]
+                            //[0][0]
+                            if ((j + 2) < Field.MATCH_ROWS && (i - 1) >= 0) {
+                                if (this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i - 1) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + (i - 1) + ":j" + j].unitType == this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType && this.matchMatrixUnit["i" + (i - 1) + ":j" + j].unitType == this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType) {
+                                        return true;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return false;
+        };
+        Field.prototype.matchUpdateField = function () {
+            this.matchMoveDownProcesses = [];
+            var indexRandom = Math.random() / 0.1;
+            var indexLevel = Math.round(indexRandom);
+            var valueJSON = this.game.cache.getJSON(GameData.Data.levels[indexLevel][1]);
+            var index = 0;
+            for (var i = 0; i < Field.MATCH_COLUMNS; i++) {
+                for (var j = 0; j < Field.MATCH_ROWS; j++) {
+                    if (this.matchLevelJSON.Level.cell[index].cellObject !== Field.MATCH_HIT_0) {
+                        this.matchMatrixUnit["i" + i + ":j" + j].flagRemove = false;
+                        this.matchMatrixUnit["i" + i + ":j" + j].position.x = this.matchMatrixBackPosition["i" + i + ":j" + j].x;
+                        this.matchMatrixUnit["i" + i + ":j" + j].position.y = this.matchMatrixBackPosition["i" + i + ":j" + j].y;
+                        this.matchMoveDownProcesses["i" + i + ":j" + j] = true;
+                        if (valueJSON.Level.cell[index].cellObject === Field.MATCH_HIT_1) {
+                            this.matchMatrixUnit["i" + i + ":j" + j].loadTexture(Images.capShangTsung);
+                            this.matchMatrixUnit["i" + i + ":j" + j].unitType = Constants.LEG;
+                        }
+                        if (valueJSON.Level.cell[index].cellObject === Field.MATCH_HIT_2) {
+                            this.matchMatrixUnit["i" + i + ":j" + j].loadTexture(Images.capJax);
+                            this.matchMatrixUnit["i" + i + ":j" + j].unitType = Constants.HAND;
+                        }
+                        if (valueJSON.Level.cell[index].cellObject === Field.MATCH_HIT_3) {
+                            this.matchMatrixUnit["i" + i + ":j" + j].loadTexture(Images.capMileena);
+                            this.matchMatrixUnit["i" + i + ":j" + j].unitType = Constants.BLOCK;
+                        }
+                        if (valueJSON.Level.cell[index].cellObject === Field.MATCH_HIT_4) {
+                            this.matchMatrixUnit["i" + i + ":j" + j].loadTexture(Images.capRaiden);
+                            this.matchMatrixUnit["i" + i + ":j" + j].unitType = Constants.UPPERCUT;
+                        }
+                        if (valueJSON.Level.cell[index].cellObject === Field.MATCH_HIT_5) {
+                            this.matchMatrixUnit["i" + i + ":j" + j].loadTexture(Images.capReptile);
+                            this.matchMatrixUnit["i" + i + ":j" + j].unitType = Constants.TWIST;
+                        }
+                        /* Спускаем удалённые юниты */
+                        this.tweenDown = this.game.add.tween(this.matchMatrixUnit["i" + i + ":j" + j]);
+                        this.tweenDown.to({ alpha: 1.0 }, 500);
+                        this.tweenDown.to({ x: this.matchMatrixFrontPosition["i" + i + ":j" + j].x, y: this.matchMatrixFrontPosition["i" + i + ":j" + j].y }, 500);
+                        this.tweenDown.onComplete.add(this.onCompleteMatchMoveDownNewUnits, this.matchMatrixUnit["i" + i + ":j" + j]);
+                        this.tweenDown.start();
+                        /* Возвращаем цвет ячейки по умолчанию */
+                        this.matchMatrixCell["i" + i + ":j" + j].defaultCell();
+                    }
+                    index++;
+                }
+            }
+        };
+        /* Ход искусственного интеллекта ============================================================== */
+        Field.prototype.matchGetPriorityUnit = function (unitType) {
+            if (unitType === Constants.LEG) {
+                return 1;
+            }
+            if (unitType === Constants.HAND) {
+                return 2;
+            }
+            if (unitType === Constants.BLOCK) {
+                var typeRandom = Math.random() / 0.1;
+                var uType = Math.round(typeRandom);
+                return uType;
+            }
+            if (unitType === Constants.UPPERCUT) {
+                return 4;
+            }
+            if (unitType === Constants.TWIST) {
+                return 5;
+            }
+            return 0;
+        };
+        Field.prototype.matchActionAI = function () {
+            /*	   0  1  2  3  4  5
+            * 	0:[0][0][0][0][1][0]
+                1:[0][0][1][1][0][1]
+                2:[0][0][0][0][1][0]
+                3:[0][0][0][0][0][0]
+                4:[0][0][0][0][0][0]
+                5:[0][0][0][0][0][0]
+             * */
+            var priorityUnit = 0;
+            var lastpriorityUnit = 0;
+            for (var i = 0; i < Field.MATCH_COLUMNS; i++) {
+                for (var j = 0; j < Field.MATCH_ROWS; j++) {
+                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0) {
+                        // ПРОВЕРКА СТРОКИ
+                        if (j == 0) {
+                            //[1][1][X][1]
+                            if ((i + 3) < Field.MATCH_COLUMNS) {
+                                if (this.matchMatrixUnit["i" + (i + 2) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 3) + ":j" + j].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 3) + ":j" + j].unitType) {
+                                        priorityUnit = this.matchGetPriorityUnit(this.matchMatrixUnit["i" + i + ":j" + j].unitType);
+                                        if (priorityUnit > lastpriorityUnit) {
+                                            this.matchSelectUnit1 = this.matchMatrixUnit["i" + (i + 2) + ":j" + j];
+                                            this.matchSelectUnit2 = this.matchMatrixUnit["i" + (i + 3) + ":j" + j];
+                                            lastpriorityUnit = priorityUnit;
+                                        }
+                                    }
+                                }
+                            }
+                            //[1][X][1][1]
+                            if ((i + 3) < Field.MATCH_COLUMNS) {
+                                if (this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 2) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 3) + ":j" + j].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 2) + ":j" + j].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 3) + ":j" + j].unitType) {
+                                        priorityUnit = this.matchGetPriorityUnit(this.matchMatrixUnit["i" + i + ":j" + j].unitType);
+                                        if (priorityUnit > lastpriorityUnit) {
+                                            this.matchSelectUnit1 = this.matchMatrixUnit["i" + i + ":j" + j];
+                                            this.matchSelectUnit2 = this.matchMatrixUnit["i" + (i + 1) + ":j" + j];
+                                            lastpriorityUnit = priorityUnit;
+                                        }
+                                    }
+                                }
+                            }
+                            //[0][1][X][1]
+                            //[0][0][1][0]
+                            if ((i + 2) < Field.MATCH_COLUMNS && (j + 1) < Field.MATCH_ROWS) {
+                                if (this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 1) + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 2) + ":j" + j].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 1) + ":j" + (j + 1)].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 2) + ":j" + j].unitType) {
+                                        priorityUnit = this.matchGetPriorityUnit(this.matchMatrixUnit["i" + i + ":j" + j].unitType);
+                                        if (priorityUnit > lastpriorityUnit) {
+                                            this.matchSelectUnit1 = this.matchMatrixUnit["i" + (i + 1) + ":j" + j];
+                                            this.matchSelectUnit2 = this.matchMatrixUnit["i" + (i + 1) + ":j" + (j + 1)];
+                                            lastpriorityUnit = priorityUnit;
+                                        }
+                                    }
+                                }
+                            }
+                            //[0][1][1][X]
+                            //[0][0][0][1]
+                            if ((i + 2) < Field.MATCH_COLUMNS && (j + 1) < Field.MATCH_ROWS) {
+                                if (this.matchMatrixUnit["i" + (i + 2) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 2) + ":j" + j].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 2) + ":j" + (j + 1)].unitType) {
+                                        priorityUnit = this.matchGetPriorityUnit(this.matchMatrixUnit["i" + i + ":j" + j].unitType);
+                                        if (priorityUnit > lastpriorityUnit) {
+                                            this.matchSelectUnit1 = this.matchMatrixUnit["i" + (i + 2) + ":j" + j];
+                                            this.matchSelectUnit2 = this.matchMatrixUnit["i" + (i + 2) + ":j" + (j + 1)];
+                                            lastpriorityUnit = priorityUnit;
+                                        }
+                                    }
+                                }
+                            }
+                            //[0][X][1][1]
+                            //[0][1][0][0]
+                            if ((i + 2) < Field.MATCH_COLUMNS && (j + 1) < Field.MATCH_ROWS) {
+                                if (this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 2) + ":j" + j].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType == this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType && this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType == this.matchMatrixUnit["i" + (i + 2) + ":j" + j].unitType) {
+                                        priorityUnit = this.matchGetPriorityUnit(this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType);
+                                        if (priorityUnit > lastpriorityUnit) {
+                                            this.matchSelectUnit1 = this.matchMatrixUnit["i" + i + ":j" + j];
+                                            this.matchSelectUnit2 = this.matchMatrixUnit["i" + i + ":j" + (j + 1)];
+                                            lastpriorityUnit = priorityUnit;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else {
+                            //[1][1][X][1]
+                            if ((i + 3) < Field.MATCH_COLUMNS) {
+                                if (this.matchMatrixUnit["i" + (i + 2) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 3) + ":j" + j].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 3) + ":j" + j].unitType) {
+                                        priorityUnit = this.matchGetPriorityUnit(this.matchMatrixUnit["i" + i + ":j" + j].unitType);
+                                        if (priorityUnit > lastpriorityUnit) {
+                                            this.matchSelectUnit1 = this.matchMatrixUnit["i" + (i + 2) + ":j" + j];
+                                            this.matchSelectUnit2 = this.matchMatrixUnit["i" + (i + 3) + ":j" + j];
+                                            lastpriorityUnit = priorityUnit;
+                                        }
+                                    }
+                                }
+                            }
+                            //[1][X][1][1]
+                            if ((i + 3) < Field.MATCH_COLUMNS) {
+                                if (this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 2) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 3) + ":j" + j].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 2) + ":j" + j].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 3) + ":j" + j].unitType) {
+                                        priorityUnit = this.matchGetPriorityUnit(this.matchMatrixUnit["i" + i + ":j" + j].unitType);
+                                        if (priorityUnit > lastpriorityUnit) {
+                                            this.matchSelectUnit1 = this.matchMatrixUnit["i" + i + ":j" + j];
+                                            this.matchSelectUnit2 = this.matchMatrixUnit["i" + (i + 1) + ":j" + j];
+                                            lastpriorityUnit = priorityUnit;
+                                        }
+                                    }
+                                }
+                            }
+                            //[0][1][1][X]
+                            //[0][0][0][1]
+                            if ((i + 2) < Field.MATCH_COLUMNS && (j + 1) < Field.MATCH_ROWS) {
+                                if (this.matchMatrixUnit["i" + (i + 2) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 2) + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 2) + ":j" + (j + 1)].unitType) {
+                                        priorityUnit = this.matchGetPriorityUnit(this.matchMatrixUnit["i" + i + ":j" + j].unitType);
+                                        if (priorityUnit > lastpriorityUnit) {
+                                            this.matchSelectUnit1 = this.matchMatrixUnit["i" + (i + 2) + ":j" + j];
+                                            this.matchSelectUnit2 = this.matchMatrixUnit["i" + (i + 2) + ":j" + (j + 1)];
+                                            lastpriorityUnit = priorityUnit;
+                                        }
+                                    }
+                                }
+                            }
+                            //[0][0][0][1]
+                            //[0][1][1][X]
+                            if ((i + 2) < Field.MATCH_COLUMNS && (j - 1) >= 0) {
+                                if (this.matchMatrixUnit["i" + (i + 2) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 2) + ":j" + (j - 1)].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 2) + ":j" + (j - 1)].unitType) {
+                                        priorityUnit = this.matchGetPriorityUnit(this.matchMatrixUnit["i" + i + ":j" + j].unitType);
+                                        if (priorityUnit > lastpriorityUnit) {
+                                            this.matchSelectUnit1 = this.matchMatrixUnit["i" + (i + 2) + ":j" + (j - 1)];
+                                            this.matchSelectUnit2 = this.matchMatrixUnit["i" + (i + 2) + ":j" + j];
+                                            lastpriorityUnit = priorityUnit;
+                                        }
+                                    }
+                                }
+                            }
+                            //[0][X][1][1]
+                            //[0][1][0][0]
+                            if ((i + 2) < Field.MATCH_COLUMNS && (j + 1) < Field.MATCH_ROWS) {
+                                if (this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 2) + ":j" + j].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType == this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType && this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType == this.matchMatrixUnit["i" + (i + 2) + ":j" + j].unitType) {
+                                        priorityUnit = this.matchGetPriorityUnit(this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType);
+                                        if (priorityUnit > lastpriorityUnit) {
+                                            this.matchSelectUnit1 = this.matchMatrixUnit["i" + i + ":j" + j];
+                                            this.matchSelectUnit2 = this.matchMatrixUnit["i" + i + ":j" + (j + 1)];
+                                            lastpriorityUnit = priorityUnit;
+                                        }
+                                    }
+                                }
+                            }
+                            //[0][1][0][0]
+                            //[0][X][1][1]
+                            if ((i + 2) < Field.MATCH_COLUMNS && (j + 1) < Field.MATCH_ROWS) {
+                                if (this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 1) + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 2) + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 1) + ":j" + (j + 1)].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 2) + ":j" + (j + 1)].unitType) {
+                                        priorityUnit = this.matchGetPriorityUnit(this.matchMatrixUnit["i" + i + ":j" + j].unitType);
+                                        if (priorityUnit > lastpriorityUnit) {
+                                            this.matchSelectUnit1 = this.matchMatrixUnit["i" + i + ":j" + j];
+                                            this.matchSelectUnit2 = this.matchMatrixUnit["i" + i + ":j" + (j + 1)];
+                                            lastpriorityUnit = priorityUnit;
+                                        }
+                                    }
+                                }
+                            }
+                            //[0][0][1][0]
+                            //[0][1][X][1]
+                            if ((i + 2) < Field.MATCH_COLUMNS && (j - 1) >= 0) {
+                                if (this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 1) + ":j" + (j - 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 2) + ":j" + j].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 1) + ":j" + (j - 1)].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 2) + ":j" + j].unitType) {
+                                        priorityUnit = this.matchGetPriorityUnit(this.matchMatrixUnit["i" + i + ":j" + j].unitType);
+                                        if (priorityUnit > lastpriorityUnit) {
+                                            this.matchSelectUnit1 = this.matchMatrixUnit["i" + (i + 1) + ":j" + (j - 1)];
+                                            this.matchSelectUnit2 = this.matchMatrixUnit["i" + (i + 1) + ":j" + j];
+                                            lastpriorityUnit = priorityUnit;
+                                        }
+                                    }
+                                }
+                            }
+                            //[0][1][X][1]
+                            //[0][0][1][0]
+                            if ((i + 2) < Field.MATCH_COLUMNS && (j + 1) < Field.MATCH_ROWS) {
+                                if (this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 1) + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 2) + ":j" + j].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 1) + ":j" + (j + 1)].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 2) + ":j" + j].unitType) {
+                                        priorityUnit = this.matchGetPriorityUnit(this.matchMatrixUnit["i" + i + ":j" + j].unitType);
+                                        if (priorityUnit > lastpriorityUnit) {
+                                            this.matchSelectUnit1 = this.matchMatrixUnit["i" + (i + 1) + ":j" + j];
+                                            this.matchSelectUnit2 = this.matchMatrixUnit["i" + (i + 1) + ":j" + (j + 1)];
+                                            lastpriorityUnit = priorityUnit;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        // ПРОВЕРКА КОЛОНКИ
+                        if (i == 0) {
+                            //[1]
+                            //[1]
+                            //[X]
+                            //[1]
+                            if ((j + 3) < Field.MATCH_ROWS) {
+                                if (this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 3)].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + i + ":j" + (j + 3)].unitType) {
+                                        priorityUnit = this.matchGetPriorityUnit(this.matchMatrixUnit["i" + i + ":j" + j].unitType);
+                                        if (priorityUnit > lastpriorityUnit) {
+                                            this.matchSelectUnit1 = this.matchMatrixUnit["i" + i + ":j" + (j + 2)];
+                                            this.matchSelectUnit2 = this.matchMatrixUnit["i" + i + ":j" + (j + 3)];
+                                            lastpriorityUnit = priorityUnit;
+                                        }
+                                    }
+                                }
+                            }
+                            //[1]
+                            //[X]
+                            //[1]
+                            //[1]
+                            if ((j + 3) < Field.MATCH_ROWS) {
+                                if (this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 3)].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + i + ":j" + (j + 3)].unitType) {
+                                        priorityUnit = this.matchGetPriorityUnit(this.matchMatrixUnit["i" + i + ":j" + j].unitType);
+                                        if (priorityUnit > lastpriorityUnit) {
+                                            this.matchSelectUnit1 = this.matchMatrixUnit["i" + i + ":j" + j];
+                                            this.matchSelectUnit2 = this.matchMatrixUnit["i" + i + ":j" + (j + 1)];
+                                            lastpriorityUnit = priorityUnit;
+                                        }
+                                    }
+                                }
+                            }
+                            //[1][0]
+                            //[X][1]
+                            //[1][0]
+                            //[0][0]
+                            if ((j + 2) < Field.MATCH_ROWS && (i + 1) < Field.MATCH_COLUMNS) {
+                                if (this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 1) + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 1) + ":j" + (j + 1)].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType) {
+                                        priorityUnit = this.matchGetPriorityUnit(this.matchMatrixUnit["i" + i + ":j" + j].unitType);
+                                        if (priorityUnit > lastpriorityUnit) {
+                                            this.matchSelectUnit1 = this.matchMatrixUnit["i" + i + ":j" + (j + 1)];
+                                            this.matchSelectUnit2 = this.matchMatrixUnit["i" + (i + 1) + ":j" + (j + 1)];
+                                            lastpriorityUnit = priorityUnit;
+                                        }
+                                    }
+                                }
+                            }
+                            //[1][0]
+                            //[1][0]
+                            //[X][1]
+                            //[0][0]
+                            if ((j + 2) < Field.MATCH_ROWS && (i + 1) < Field.MATCH_COLUMNS) {
+                                if (this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 1) + ":j" + (j + 2)].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 1) + ":j" + (j + 2)].unitType) {
+                                        priorityUnit = this.matchGetPriorityUnit(this.matchMatrixUnit["i" + i + ":j" + j].unitType);
+                                        if (priorityUnit > lastpriorityUnit) {
+                                            this.matchSelectUnit1 = this.matchMatrixUnit["i" + i + ":j" + (j + 2)];
+                                            this.matchSelectUnit2 = this.matchMatrixUnit["i" + (i + 1) + ":j" + (j + 2)];
+                                            lastpriorityUnit = priorityUnit;
+                                        }
+                                    }
+                                }
+                            }
+                            //[X][1]
+                            //[1][0]
+                            //[1][0]
+                            //[0][0]
+                            if ((j + 2) < Field.MATCH_ROWS && (i + 1) < Field.MATCH_COLUMNS) {
+                                if (this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType == this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType && this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType == this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType) {
+                                        priorityUnit = this.matchGetPriorityUnit(this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType);
+                                        if (priorityUnit > lastpriorityUnit) {
+                                            this.matchSelectUnit1 = this.matchMatrixUnit["i" + i + ":j" + j];
+                                            this.matchSelectUnit2 = this.matchMatrixUnit["i" + (i + 1) + ":j" + j];
+                                            lastpriorityUnit = priorityUnit;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else {
+                            //[1]
+                            //[1]
+                            //[X]
+                            //[1]
+                            if ((j + 3) < Field.MATCH_ROWS) {
+                                if (this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 3)].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + i + ":j" + (j + 3)].unitType) {
+                                        priorityUnit = this.matchGetPriorityUnit(this.matchMatrixUnit["i" + i + ":j" + j].unitType);
+                                        if (priorityUnit > lastpriorityUnit) {
+                                            this.matchSelectUnit1 = this.matchMatrixUnit["i" + i + ":j" + (j + 2)];
+                                            this.matchSelectUnit2 = this.matchMatrixUnit["i" + i + ":j" + (j + 3)];
+                                            lastpriorityUnit = priorityUnit;
+                                        }
+                                    }
+                                }
+                            }
+                            //[1]
+                            //[X]
+                            //[1]
+                            //[1]
+                            if ((j + 3) < Field.MATCH_ROWS) {
+                                if (this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 3)].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + i + ":j" + (j + 3)].unitType) {
+                                        priorityUnit = this.matchGetPriorityUnit(this.matchMatrixUnit["i" + i + ":j" + j].unitType);
+                                        if (priorityUnit > lastpriorityUnit) {
+                                            this.matchSelectUnit1 = this.matchMatrixUnit["i" + i + ":j" + j];
+                                            this.matchSelectUnit2 = this.matchMatrixUnit["i" + i + ":j" + (j + 1)];
+                                            lastpriorityUnit = priorityUnit;
+                                        }
+                                    }
+                                }
+                            }
+                            //[1][0]
+                            //[X][1]
+                            //[1][0]
+                            //[0][0]
+                            if ((j + 2) < Field.MATCH_ROWS && (i + 1) < Field.MATCH_COLUMNS) {
+                                if (this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 1) + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 1) + ":j" + (j + 1)].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType) {
+                                        priorityUnit = this.matchGetPriorityUnit(this.matchMatrixUnit["i" + i + ":j" + j].unitType);
+                                        if (priorityUnit > lastpriorityUnit) {
+                                            this.matchSelectUnit1 = this.matchMatrixUnit["i" + i + ":j" + (j + 1)];
+                                            this.matchSelectUnit2 = this.matchMatrixUnit["i" + (i + 1) + ":j" + (j + 1)];
+                                            lastpriorityUnit = priorityUnit;
+                                        }
+                                    }
+                                }
+                            }
+                            //[0][1]
+                            //[1][X]
+                            //[0][1]
+                            //[0][0]
+                            if ((j + 2) < Field.MATCH_ROWS && (i - 1) >= 0) {
+                                if (this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i - 1) + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i - 1) + ":j" + (j + 1)].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType) {
+                                        priorityUnit = this.matchGetPriorityUnit(this.matchMatrixUnit["i" + i + ":j" + j].unitType);
+                                        if (priorityUnit > lastpriorityUnit) {
+                                            this.matchSelectUnit1 = this.matchMatrixUnit["i" + (i - 1) + ":j" + (j + 1)];
+                                            this.matchSelectUnit2 = this.matchMatrixUnit["i" + i + ":j" + (j + 1)];
+                                            lastpriorityUnit = priorityUnit;
+                                        }
+                                    }
+                                }
+                            }
+                            //[1][0]
+                            //[1][0]
+                            //[X][1]
+                            //[0][0]
+                            if ((j + 2) < Field.MATCH_ROWS && (i + 1) < Field.MATCH_COLUMNS) {
+                                if (this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 1) + ":j" + (j + 2)].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i + 1) + ":j" + (j + 2)].unitType) {
+                                        priorityUnit = this.matchGetPriorityUnit(this.matchMatrixUnit["i" + i + ":j" + j].unitType);
+                                        if (priorityUnit > lastpriorityUnit) {
+                                            this.matchSelectUnit1 = this.matchMatrixUnit["i" + i + ":j" + (j + 2)];
+                                            this.matchSelectUnit2 = this.matchMatrixUnit["i" + (i + 1) + ":j" + (j + 2)];
+                                            lastpriorityUnit = priorityUnit;
+                                        }
+                                    }
+                                }
+                            }
+                            //[X][1]
+                            //[1][0]
+                            //[1][0]
+                            //[0][0]
+                            if ((j + 2) < Field.MATCH_ROWS && (i + 1) < Field.MATCH_COLUMNS) {
+                                if (this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType == this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType && this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType == this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType) {
+                                        priorityUnit = this.matchGetPriorityUnit(this.matchMatrixUnit["i" + (i + 1) + ":j" + j].unitType);
+                                        if (priorityUnit > lastpriorityUnit) {
+                                            this.matchSelectUnit1 = this.matchMatrixUnit["i" + i + ":j" + j];
+                                            this.matchSelectUnit2 = this.matchMatrixUnit["i" + (i + 1) + ":j" + j];
+                                            lastpriorityUnit = priorityUnit;
+                                        }
+                                    }
+                                }
+                            }
+                            //[0][1]
+                            //[0][1]
+                            //[1][X]
+                            //[0][0]
+                            if ((j + 2) < Field.MATCH_ROWS && (i - 1) >= 0) {
+                                if (this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i - 1) + ":j" + (j + 2)].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType && this.matchMatrixUnit["i" + i + ":j" + j].unitType == this.matchMatrixUnit["i" + (i - 1) + ":j" + (j + 2)].unitType) {
+                                        priorityUnit = this.matchGetPriorityUnit(this.matchMatrixUnit["i" + i + ":j" + j].unitType);
+                                        if (priorityUnit > lastpriorityUnit) {
+                                            this.matchSelectUnit1 = this.matchMatrixUnit["i" + (i - 1) + ":j" + (j + 2)];
+                                            this.matchSelectUnit2 = this.matchMatrixUnit["i" + i + ":j" + (j + 2)];
+                                            lastpriorityUnit = priorityUnit;
+                                        }
+                                    }
+                                }
+                            }
+                            //[1][X]
+                            //[0][1]
+                            //[0][1]
+                            //[0][0]
+                            if ((j + 2) < Field.MATCH_ROWS && (i - 1) >= 0) {
+                                if (this.matchMatrixUnit["i" + i + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + (i - 1) + ":j" + j].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType != Field.MATCH_HIT_0 && this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType != Field.MATCH_HIT_0) {
+                                    if (this.matchMatrixUnit["i" + (i - 1) + ":j" + j].unitType == this.matchMatrixUnit["i" + i + ":j" + (j + 1)].unitType && this.matchMatrixUnit["i" + (i - 1) + ":j" + j].unitType == this.matchMatrixUnit["i" + i + ":j" + (j + 2)].unitType) {
+                                        priorityUnit = this.matchGetPriorityUnit(this.matchMatrixUnit["i" + (i - 1) + ":j" + j].unitType);
+                                        if (priorityUnit > lastpriorityUnit) {
+                                            this.matchSelectUnit1 = this.matchMatrixUnit["i" + (i - 1) + ":j" + j];
+                                            this.matchSelectUnit2 = this.matchMatrixUnit["i" + i + ":j" + j];
+                                            lastpriorityUnit = priorityUnit;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (this.matchSelectUnit1 !== null && this.matchSelectUnit2 !== null) {
+                this.matchExchangeUnits(); // меняем юниты местами
+            }
+            else {
+                this.matchActionAI();
             }
         };
         Field.MATCH_COLUMNS = 6;

@@ -31,7 +31,8 @@ module Match3 {
 
         public event: Phaser.Signal;
 
-        private timer: Timer;
+		private timer: Timer;
+		private timerAI: Phaser.Timer;
         private tween1:Phaser.Tween;
         private tween2:Phaser.Tween;
         private tweenDown:Phaser.Tween;
@@ -54,7 +55,7 @@ module Match3 {
             super(game, parent);
             this.updateTransform();
             this.init();
-            this.createTimer();
+            this.createTimers();
         }
 
         private init():void{
@@ -77,13 +78,29 @@ module Match3 {
         }
 
         /* Таймер */
-        private createTimer(): void {
+        private createTimers(): void {
+			this.timerAI = this.game.time.create(false);
+			this.timerAI.loop(1000, this.onTimerComplete, this);
+
             this.timer = new Timer(this.game, 340, 12, Images.Tablo);
             this.timer.event.add(this.onTimerEnd, this);
             this.addChild(this.timer);
             this.timer.setMessage("Ваш ход");
             this.timer.runTimer();
-        } 
+		} 
+		
+		private onTimerComplete(event):void {
+			Utilits.Data.debugLog("timerAI", this.statusAction + " | " + this.matchFieldBlocked);
+			if(this.tween1 !== undefined && this.tween2 !== undefined){
+				if(this.tween1.isRunning === false && this.tween2.isRunning === false){
+					this.timerAI.stop();
+					this.matchActionAI();
+				}
+			}else{
+				this.timerAI.stop();
+				this.matchActionAI();
+			}
+		}
 
         private onTimerEnd(event): void {
             if (event === Timer.TIMER_END) {
@@ -99,8 +116,9 @@ module Match3 {
                 this.matchCellColorBack();
                 this.matchFieldBlocked = true;
                 this.matchSelectUnit1 = null;
-                this.matchSelectUnit2 = null;
-                this.matchActionAI();
+				this.matchSelectUnit2 = null;
+				this.timerAI.loop(1000, this.onTimerComplete, this);
+				this.timerAI.start(1000);
             }else{
                 this.statusAction = Field.ACTION_PLAYER;
                 this.timer.setMessage("Ваш ход");
@@ -350,12 +368,12 @@ module Match3 {
             if(this.tween1.isRunning === false && this.tween2.isRunning === false){
                 this.matchSelectUnit1 = null;
                 this.matchSelectUnit2 = null;
-                if(this.statusAction === Field.ACTION_PLAYER) this.matchFieldBlocked = false;
-                Utilits.Data.debugLog("matchSelectUnitsClear", "Tween: STOP");
+				if(this.statusAction === Field.ACTION_PLAYER) this.matchFieldBlocked = false;
+				Utilits.Data.debugLog("matchSelectUnitsClear", "Tween: STOP");
             }
-        }
-
-        /* Поиск групп ============================================================================== */
+		}
+		
+		/* Поиск групп ============================================================================== */
         private matchCheckField(afterDown:boolean):void
         {
             if(this.parent !== null){
@@ -369,8 +387,9 @@ module Match3 {
                     {
                         this.matchBackExchangeUnits();  // возвращаем выбранные юниты на места
                     }else{ 
-                        this.matchSelectUnitsClear();   // очистка и разблокировка поля
-                        // (!) ///////////////////if(parent.level.levelStatus === parent.level.LEVEL_STATUS_BATTLE) parent.timer.timerStart();				// запускаем таймер
+						//this.matchSelectUnitsClear();   // очистка и разблокировка поля
+						this.timerAI.stop();
+						this.endTurn();
                         this.timer.runTimer();				// запускаем таймер
                     }
                 }
