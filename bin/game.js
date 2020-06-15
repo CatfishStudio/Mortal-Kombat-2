@@ -882,12 +882,35 @@ var Match3;
             Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", unit.name);
             var result = false;
             this.matchMoveDownProcesses[unit.name] = false;
-            this.matchMoveDownProcesses.forEach(function (process) {
-                if (process === true) {
+            Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", this.matchMoveDownProcesses);
+            for (var key in this.matchMoveDownProcesses) {
+                var value = this.matchMoveDownProcesses[key];
+                Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", key.toString() + ": " + value.toString());
+                if (value === true) {
+                    result = true;
+                    break;
+                }
+            }
+            /*
+            for(let i:number = 0; i < count; i++)
+            {
+                Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", this.matchMoveDownProcesses[i].toString());
+                if(this.matchMoveDownProcesses[i] === true){
+                    result = true;
+                    break;
+                }
+            }
+            */
+            /*
+            this.matchMoveDownProcesses.forEach(process => {
+                Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits: process", process);
+                if(process === true){
                     result = true;
                     return;
                 }
             });
+            */
+            Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", result);
             if (result === false) // анимация завершена
              {
                 if (this.matchCheckCombinations() === true) // Возможные ходы определены

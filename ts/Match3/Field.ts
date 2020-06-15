@@ -815,21 +815,26 @@ module Match3 {
         {
             Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", unit.name);
             let result = false;
-            this.matchMoveDownProcesses[unit.name] = false;
-            this.matchMoveDownProcesses.forEach(process => {
-                if(process === true){
-                    result = true;
-                    return;
-                } 
-            });
+			this.matchMoveDownProcesses[unit.name] = false;
+			Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", this.matchMoveDownProcesses);
+			for(let key in this.matchMoveDownProcesses)
+			{
+				let value = this.matchMoveDownProcesses[key];
+				Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", key.toString() + ": " + value.toString());
+				if(value === true){
+					result = true;
+					break;
+				}
+			}
+			Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", result);
             if(result === false) // анимация завершена
 			{
-					if(this.matchCheckCombinations() === true) // Возможные ходы определены
-					{
-							this.matchCheckField(true);	// проверка групп 3-и в ряд
-					}else{	// нет возможности ходов
-							this.matchUpdateField(); // обновление игрового поля
-					}
+				if(this.matchCheckCombinations() === true) // Возможные ходы определены
+				{
+					this.matchCheckField(true);	// проверка групп 3-и в ряд
+				}else{	// нет возможности ходов
+					this.matchUpdateField(); // обновление игрового поля
+				}
 			}
         }
 
@@ -1084,7 +1089,7 @@ module Match3 {
                 {
                     if(this.matchLevelJSON.Level.cell[index].cellObject !== Field.MATCH_HIT_0)
                     {
-                        this.matchMatrixUnit["i"+i+":j"+j].flagRemove = false;
+						this.matchMatrixUnit["i"+i+":j"+j].flagRemove = false;
 						this.matchMatrixUnit["i"+i+":j"+j].position.x = this.matchMatrixBackPosition["i"+i+":j"+j].x;
 						this.matchMatrixUnit["i"+i+":j"+j].position.y = this.matchMatrixBackPosition["i"+i+":j"+j].y;
                         this.matchMoveDownProcesses["i"+i+":j"+j] = true;
