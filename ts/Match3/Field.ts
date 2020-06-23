@@ -90,7 +90,7 @@ module Match3 {
 		} 
 		
 		private onTimerComplete(event):void {
-			Utilits.Data.debugLog("timerAI", this.statusAction + " | " + this.matchFieldBlocked);
+			//Utilits.Data.debugLog("timerAI", this.statusAction + " | " + this.matchFieldBlocked);
 			if(this.tween1 !== undefined && this.tween2 !== undefined){
 				if(this.tween1.isRunning === false && this.tween2.isRunning === false){
 					this.timerAI.stop();
@@ -109,7 +109,7 @@ module Match3 {
         }
 
         private endTurn(): void {
-            Utilits.Data.debugLog("endTurn", this.statusAction);
+            //Utilits.Data.debugLog("endTurn", this.statusAction);
             if(this.statusAction === Field.ACTION_PLAYER){
                 this.timer.setMessage("Ход противника");
                 this.statusAction = Field.ACTION_AI;
@@ -146,15 +146,15 @@ module Match3 {
                     this.matchMatrixBackPosition["i"+i+":j"+j] = point;
                 }
             }
-            Utilits.Data.debugLog("matchMatrixFrontPosition:", this.matchMatrixFrontPosition);
-            Utilits.Data.debugLog("matchMatrixBackPosition:", this.matchMatrixBackPosition);
+            //Utilits.Data.debugLog("matchMatrixFrontPosition:", this.matchMatrixFrontPosition);
+            //Utilits.Data.debugLog("matchMatrixBackPosition:", this.matchMatrixBackPosition);
         }
 
         /* Создание игрового поля ====================================================================== */
         public createMatchField(valueJSON:any):void
         {
             this.matchLevelJSON = valueJSON;
-            Utilits.Data.debugLog('matchLevelJSON:', this.matchLevelJSON);
+            //Utilits.Data.debugLog('matchLevelJSON:', this.matchLevelJSON);
 
             this.initMatchMatrixPosition();
 
@@ -237,7 +237,7 @@ module Match3 {
         /* Событие: нажатие на юнит */
         public onMatchUnitClick(unit):void
         {
-            Utilits.Data.debugLog('onMatchUnitClick: CLICK', unit);
+            //Utilits.Data.debugLog('onMatchUnitClick: CLICK', unit);
             if(this.matchFieldBlocked === false){
                 
                 this.matchCellColorSelect(unit.unitType, unit.posColumnI, unit.posRowJ);
@@ -249,7 +249,7 @@ module Match3 {
                         this.matchSelectUnit1 = null;
                         this.matchSelectUnit2 = null;
                         if(this.statusAction === Field.ACTION_PLAYER) this.matchFieldBlocked = false;
-                        Utilits.Data.debugLog('onMatchUnitClick: RESET', [this.matchSelectUnit1, this.matchSelectUnit2]);
+                        //Utilits.Data.debugLog('onMatchUnitClick: RESET', [this.matchSelectUnit1, this.matchSelectUnit2]);
                     }else{
                         if(this.matchSelectUnit2 === null || this.matchSelectUnit2 === undefined){
                             this.matchSelectUnit2 = unit;
@@ -258,7 +258,7 @@ module Match3 {
                     }
                 }
             }
-            Utilits.Data.debugLog('onMatchUnitClick: TOTAL', [this.matchSelectUnit1, this.matchSelectUnit2]);
+            //Utilits.Data.debugLog('onMatchUnitClick: TOTAL', [this.matchSelectUnit1, this.matchSelectUnit2]);
         }
 
         /* Событие: свайп кристалов */
@@ -292,7 +292,7 @@ module Match3 {
             let iUnit2:number = this.matchSelectUnit2.posColumnI;
             let jUnit2:number = this.matchSelectUnit2.posRowJ;
 
-            Utilits.Data.debugLog("UNITS", [iUnit1, jUnit1, iUnit2, jUnit2]);
+            //Utilits.Data.debugLog("UNITS", [iUnit1, jUnit1, iUnit2, jUnit2]);
 
             if(iUnit2 > (iUnit1 - 2) && iUnit2 < (iUnit1 + 2) 
             && jUnit2 > (jUnit1 - 2) && jUnit2 < (jUnit1 + 2)
@@ -317,7 +317,7 @@ module Match3 {
                 this.tween1.start();
                 this.tween2.start();
 
-                Utilits.Data.debugLog("matchExchangeUnits", "Tween: START");
+                //Utilits.Data.debugLog("matchExchangeUnits", "Tween: START");
             }else{
                 this.matchCellColorBack();
                 this.matchSelectUnitsClear();
@@ -329,7 +329,7 @@ module Match3 {
             if(this.tween1.isRunning === false && this.tween2.isRunning === false){
                 this.matchCellColorBack();
                 this.matchCheckField(false);
-                Utilits.Data.debugLog("onCompleteMatchExchangeUnits", "Tween: STOP");
+                //Utilits.Data.debugLog("onCompleteMatchExchangeUnits", "Tween: STOP");
             }
         }
 
@@ -369,7 +369,7 @@ module Match3 {
                 this.matchSelectUnit1 = null;
                 this.matchSelectUnit2 = null;
 				if(this.statusAction === Field.ACTION_PLAYER) this.matchFieldBlocked = false;
-				Utilits.Data.debugLog("matchSelectUnitsClear", "Tween: STOP");
+				//Utilits.Data.debugLog("matchSelectUnitsClear", "Tween: STOP");
             }
 		}
 		
@@ -530,7 +530,7 @@ module Match3 {
         /* Удаление юнитов */
         private matchRemoveUnit(col:number, row:number, check:String, hitType:any, hitCount:number):void
         {
-            this.event.dispatch(hitType, hitCount); // возвращаем событие в Level
+            this.event.dispatch(hitType, hitCount, this.statusAction); // возвращаем событие в Level
 
             if(check === "row")
             {
@@ -816,17 +816,17 @@ module Match3 {
             Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", unit.name);
             let result = false;
 			this.matchMoveDownProcesses[unit.name] = false;
-			Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", this.matchMoveDownProcesses);
+			//Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", this.matchMoveDownProcesses);
 			for(let key in this.matchMoveDownProcesses)
 			{
 				let value = this.matchMoveDownProcesses[key];
-				Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", key.toString() + ": " + value.toString());
+				//Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", key.toString() + ": " + value.toString());
 				if(value === true){
 					result = true;
 					break;
 				}
 			}
-			Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", result);
+			//Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", result);
             if(result === false) // анимация завершена
 			{
 				if(this.matchCheckCombinations() === true) // Возможные ходы определены

@@ -160,9 +160,9 @@ var Match3;
             if (unitType === Constants.BLOCK)
                 this.beginFill(0xFF00FF, 0.50);
             if (unitType === Constants.TWIST)
-                this.beginFill(0x0080FF, 0.50);
-            if (unitType === Constants.UPPERCUT)
                 this.beginFill(0x00FF80, 0.50);
+            if (unitType === Constants.UPPERCUT)
+                this.beginFill(0x0080FF, 0.50);
             this.drawRoundedRect(0, 0, Match3.Field.MATCH_CELL_WIDTH, Match3.Field.MATCH_CELL_HEIGHT, 15);
             this.endFill();
         };
@@ -242,7 +242,7 @@ var Match3;
             this.timer.runTimer();
         };
         Field.prototype.onTimerComplete = function (event) {
-            Utilits.Data.debugLog("timerAI", this.statusAction + " | " + this.matchFieldBlocked);
+            //Utilits.Data.debugLog("timerAI", this.statusAction + " | " + this.matchFieldBlocked);
             if (this.tween1 !== undefined && this.tween2 !== undefined) {
                 if (this.tween1.isRunning === false && this.tween2.isRunning === false) {
                     this.timerAI.stop();
@@ -260,7 +260,7 @@ var Match3;
             }
         };
         Field.prototype.endTurn = function () {
-            Utilits.Data.debugLog("endTurn", this.statusAction);
+            //Utilits.Data.debugLog("endTurn", this.statusAction);
             if (this.statusAction === Field.ACTION_PLAYER) {
                 this.timer.setMessage("Ход противника");
                 this.statusAction = Field.ACTION_AI;
@@ -296,13 +296,13 @@ var Match3;
                     this.matchMatrixBackPosition["i" + i + ":j" + j] = point;
                 }
             }
-            Utilits.Data.debugLog("matchMatrixFrontPosition:", this.matchMatrixFrontPosition);
-            Utilits.Data.debugLog("matchMatrixBackPosition:", this.matchMatrixBackPosition);
+            //Utilits.Data.debugLog("matchMatrixFrontPosition:", this.matchMatrixFrontPosition);
+            //Utilits.Data.debugLog("matchMatrixBackPosition:", this.matchMatrixBackPosition);
         };
         /* Создание игрового поля ====================================================================== */
         Field.prototype.createMatchField = function (valueJSON) {
             this.matchLevelJSON = valueJSON;
-            Utilits.Data.debugLog('matchLevelJSON:', this.matchLevelJSON);
+            //Utilits.Data.debugLog('matchLevelJSON:', this.matchLevelJSON);
             this.initMatchMatrixPosition();
             this.matchMatrixCell = [];
             this.matchMatrixUnit = [];
@@ -375,7 +375,7 @@ var Match3;
         };
         /* Событие: нажатие на юнит */
         Field.prototype.onMatchUnitClick = function (unit) {
-            Utilits.Data.debugLog('onMatchUnitClick: CLICK', unit);
+            //Utilits.Data.debugLog('onMatchUnitClick: CLICK', unit);
             if (this.matchFieldBlocked === false) {
                 this.matchCellColorSelect(unit.unitType, unit.posColumnI, unit.posRowJ);
                 if (this.matchSelectUnit1 === null || this.matchSelectUnit1 === undefined) {
@@ -388,7 +388,7 @@ var Match3;
                         this.matchSelectUnit2 = null;
                         if (this.statusAction === Field.ACTION_PLAYER)
                             this.matchFieldBlocked = false;
-                        Utilits.Data.debugLog('onMatchUnitClick: RESET', [this.matchSelectUnit1, this.matchSelectUnit2]);
+                        //Utilits.Data.debugLog('onMatchUnitClick: RESET', [this.matchSelectUnit1, this.matchSelectUnit2]);
                     }
                     else {
                         if (this.matchSelectUnit2 === null || this.matchSelectUnit2 === undefined) {
@@ -398,7 +398,7 @@ var Match3;
                     }
                 }
             }
-            Utilits.Data.debugLog('onMatchUnitClick: TOTAL', [this.matchSelectUnit1, this.matchSelectUnit2]);
+            //Utilits.Data.debugLog('onMatchUnitClick: TOTAL', [this.matchSelectUnit1, this.matchSelectUnit2]);
         };
         /* Событие: свайп кристалов */
         Field.prototype.onMatchUnitEndClick = function (unit) {
@@ -422,7 +422,7 @@ var Match3;
             var jUnit1 = this.matchSelectUnit1.posRowJ;
             var iUnit2 = this.matchSelectUnit2.posColumnI;
             var jUnit2 = this.matchSelectUnit2.posRowJ;
-            Utilits.Data.debugLog("UNITS", [iUnit1, jUnit1, iUnit2, jUnit2]);
+            //Utilits.Data.debugLog("UNITS", [iUnit1, jUnit1, iUnit2, jUnit2]);
             if (iUnit2 > (iUnit1 - 2) && iUnit2 < (iUnit1 + 2)
                 && jUnit2 > (jUnit1 - 2) && jUnit2 < (jUnit1 + 2)
                 && ((iUnit2 === iUnit1 && jUnit2 !== jUnit1) || (jUnit2 === jUnit1 && iUnit2 !== iUnit1))) {
@@ -442,7 +442,7 @@ var Match3;
                 this.tween2.onComplete.add(this.onCompleteMatchExchangeUnits, this);
                 this.tween1.start();
                 this.tween2.start();
-                Utilits.Data.debugLog("matchExchangeUnits", "Tween: START");
+                //Utilits.Data.debugLog("matchExchangeUnits", "Tween: START");
             }
             else {
                 this.matchCellColorBack();
@@ -453,7 +453,7 @@ var Match3;
             if (this.tween1.isRunning === false && this.tween2.isRunning === false) {
                 this.matchCellColorBack();
                 this.matchCheckField(false);
-                Utilits.Data.debugLog("onCompleteMatchExchangeUnits", "Tween: STOP");
+                //Utilits.Data.debugLog("onCompleteMatchExchangeUnits", "Tween: STOP");
             }
         };
         Field.prototype.matchBackExchangeUnits = function () {
@@ -485,7 +485,7 @@ var Match3;
                 this.matchSelectUnit2 = null;
                 if (this.statusAction === Field.ACTION_PLAYER)
                     this.matchFieldBlocked = false;
-                Utilits.Data.debugLog("matchSelectUnitsClear", "Tween: STOP");
+                //Utilits.Data.debugLog("matchSelectUnitsClear", "Tween: STOP");
             }
         };
         /* Поиск групп ============================================================================== */
@@ -631,7 +631,7 @@ var Match3;
         };
         /* Удаление юнитов */
         Field.prototype.matchRemoveUnit = function (col, row, check, hitType, hitCount) {
-            this.event.dispatch(hitType, hitCount); // возвращаем событие в Level
+            this.event.dispatch(hitType, hitCount, this.statusAction); // возвращаем событие в Level
             if (check === "row") {
                 if (hitCount === 3) {
                     this.matchMatrixUnit["i" + col + ":j" + row].alpha = 0.0;
@@ -882,35 +882,16 @@ var Match3;
             Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", unit.name);
             var result = false;
             this.matchMoveDownProcesses[unit.name] = false;
-            Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", this.matchMoveDownProcesses);
+            //Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", this.matchMoveDownProcesses);
             for (var key in this.matchMoveDownProcesses) {
                 var value = this.matchMoveDownProcesses[key];
-                Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", key.toString() + ": " + value.toString());
+                //Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", key.toString() + ": " + value.toString());
                 if (value === true) {
                     result = true;
                     break;
                 }
             }
-            /*
-            for(let i:number = 0; i < count; i++)
-            {
-                Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", this.matchMoveDownProcesses[i].toString());
-                if(this.matchMoveDownProcesses[i] === true){
-                    result = true;
-                    break;
-                }
-            }
-            */
-            /*
-            this.matchMoveDownProcesses.forEach(process => {
-                Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits: process", process);
-                if(process === true){
-                    result = true;
-                    return;
-                }
-            });
-            */
-            Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", result);
+            //Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", result);
             if (result === false) // анимация завершена
              {
                 if (this.matchCheckCombinations() === true) // Возможные ходы определены
@@ -3805,8 +3786,34 @@ var MortalKombat;
             this.field.createMatchField(valueJSON);
         };
         /* Произошло событие match на поле */
-        Level.prototype.onMatch = function (hitType, hitCount) {
-            Utilits.Data.debugLog("LEVEL: match |", "type=" + hitType + " | count=" + hitCount);
+        Level.prototype.onMatch = function (hitType, hitCount, statusAction) {
+            Utilits.Data.debugLog("LEVEL: match |", "type=" + hitType + " | count=" + hitCount + " | status=" + statusAction);
+            if (statusAction === Field.ACTION_PLAYER) {
+                if (hitType === Constants.HAND)
+                    this.animUser.changeAnimation(Constants.ANIMATION_TYPE_HIT_HAND);
+                if (hitType === Constants.LEG)
+                    this.animUser.changeAnimation(Constants.ANIMATION_TYPE_HIT_LEG);
+                if (hitType === Constants.BLOCK)
+                    this.animUser.changeAnimation(Constants.ANIMATION_TYPE_BLOCK);
+                if (hitType === Constants.TWIST)
+                    this.animUser.changeAnimation(Constants.ANIMATION_TYPE_HIT_LEG_TWIST);
+                if (hitType === Constants.UPPERCUT)
+                    this.animUser.changeAnimation(Constants.ANIMATION_TYPE_HIT_HAND_UPPERCUT);
+                this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_DAMAGE);
+            }
+            else {
+                if (hitType === Constants.HAND)
+                    this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_HIT_HAND);
+                if (hitType === Constants.LEG)
+                    this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_HIT_LEG);
+                if (hitType === Constants.BLOCK)
+                    this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_BLOCK);
+                if (hitType === Constants.TWIST)
+                    this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_HIT_LEG_TWIST);
+                if (hitType === Constants.UPPERCUT)
+                    this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_HIT_HAND_UPPERCUT);
+                this.animUser.changeAnimation(Constants.ANIMATION_TYPE_DAMAGE);
+            }
         };
         Level.prototype.shutdown = function () {
             this.field.shutdown();
@@ -3829,7 +3836,6 @@ var MortalKombat;
                     }
                 case Constants.HELP:
                     {
-                        this.animUser.changeAnimation(Constants.ANIMATION_TYPE_HIT_LEG_TWIST);
                         break;
                     }
                 default:

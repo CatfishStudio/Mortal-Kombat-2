@@ -37,8 +37,8 @@ module Match3 {
             if(unitType === Constants.LEG) this.beginFill(0xFFFF80, 0.50);
             if(unitType === Constants.HAND) this.beginFill(0xFF0000, 0.50);
             if(unitType === Constants.BLOCK) this.beginFill(0xFF00FF, 0.50);
-            if(unitType === Constants.TWIST) this.beginFill(0x0080FF, 0.50);
-            if(unitType === Constants.UPPERCUT) this.beginFill(0x00FF80, 0.50);
+            if(unitType === Constants.TWIST) this.beginFill(0x00FF80, 0.50);
+            if(unitType === Constants.UPPERCUT) this.beginFill(0x0080FF, 0.50);
             this.drawRoundedRect(0, 0, Field.MATCH_CELL_WIDTH, Field.MATCH_CELL_HEIGHT, 15);
             this.endFill();
         }
