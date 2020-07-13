@@ -26,6 +26,18 @@ module MortalKombat {
             this.backgroundSprite = new Phaser.Sprite(this.game, 0, 0, GameData.Data.levels[GameData.Data.tournamentProgress][0]);
             this.groupContent.addChild(this.backgroundSprite);
 
+            this.borderSprite = new Phaser.Sprite(this.game, 0, 0, Images.BackgroundImage);
+            this.groupContent.addChild(this.borderSprite);
+
+            this.helpButton = new Phaser.Button(this.game, Constants.GAME_WIDTH - 230, 5, Sheet.ButtonHelpMini, this.onButtonClick, this, 1, 2, 2, 2);
+            this.helpButton.name = Constants.HELP;
+            this.groupContent.addChild(this.helpButton);
+
+            let valueJSON = this.game.cache.getJSON(GameData.Data.levels[GameData.Data.tournamentProgress][1]);
+            this.field = new Field(this.game, this.groupContent);
+            this.field.event.add(this.onMatch, this);
+            this.field.createMatchField(valueJSON);
+
             this.persUser = GameData.Data.user_personage;
             this.animUser = new AnimationFighter(this.game, this.persUser.id, this.persUser);
             this.animUser.x = 100 - (this.animUser.width / 2);
@@ -43,18 +55,6 @@ module MortalKombat {
             this.animEnemies.scale.y = 1.5;
             this.animEnemies.scale.x *= -1;
             this.groupContent.addChild(this.animEnemies);
-
-            this.borderSprite = new Phaser.Sprite(this.game, 0, 0, Images.BackgroundImage);
-            this.groupContent.addChild(this.borderSprite);
-
-            this.helpButton = new Phaser.Button(this.game, Constants.GAME_WIDTH - 230, 5, Sheet.ButtonHelpMini, this.onButtonClick, this, 1, 2, 2, 2);
-            this.helpButton.name = Constants.HELP;
-            this.groupContent.addChild(this.helpButton);
-
-            let valueJSON = this.game.cache.getJSON(GameData.Data.levels[GameData.Data.tournamentProgress][1]);
-            this.field = new Field(this.game, this.groupContent);
-            this.field.event.add(this.onMatch, this);
-            this.field.createMatchField(valueJSON);
         }
 
         /* Произошло событие match на поле */
