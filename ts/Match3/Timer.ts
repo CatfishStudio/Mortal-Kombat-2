@@ -28,10 +28,10 @@ module Match3 {
             this.timer = this.game.time.create(false);
             this.timer.loop(1000, this.onTimerComplete, this);
 
-            this.timerText = this.game.add.text(45, 12, "0:" + this.count.toString(), { font: "bold 24px arial", fill: "#FFFFFF", align: "left" })
+            this.timerText = this.game.add.text(65, 12, "0:" + this.count.toString(), { font: "bold 24px arial", fill: "#FFFFFF", align: "left" })
             this.addChild(this.timerText);
 
-            this.messageText = this.game.add.text(40, 40, "............................", { font: "bold 12px arial", fill: "#FFFFFF", align: "left" })
+            this.messageText = this.game.add.text(60, 40, "............................", { font: "bold 12px arial", fill: "#FFFFFF", align: "left" })
             this.addChild(this.messageText);
         }
 
@@ -78,8 +78,8 @@ module Match3 {
         public setMessage(value: string): void {
             if (this.messageText !== undefined && this.messageText !== null) {
                 this.messageText.text = value;
-                if (value.length < 10) this.messageText.x = 42;
-                else this.messageText.x = 20;
+                if (value.length < 10) this.messageText.x = 62;
+                else this.messageText.x = 40;
             }
         }
     }

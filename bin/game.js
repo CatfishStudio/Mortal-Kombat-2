@@ -66,9 +66,9 @@ var Match3;
             this.count = 10;
             this.timer = this.game.time.create(false);
             this.timer.loop(1000, this.onTimerComplete, this);
-            this.timerText = this.game.add.text(45, 12, "0:" + this.count.toString(), { font: "bold 24px arial", fill: "#FFFFFF", align: "left" });
+            this.timerText = this.game.add.text(65, 12, "0:" + this.count.toString(), { font: "bold 24px arial", fill: "#FFFFFF", align: "left" });
             this.addChild(this.timerText);
-            this.messageText = this.game.add.text(40, 40, "............................", { font: "bold 12px arial", fill: "#FFFFFF", align: "left" });
+            this.messageText = this.game.add.text(60, 40, "............................", { font: "bold 12px arial", fill: "#FFFFFF", align: "left" });
             this.addChild(this.messageText);
         };
         Timer.prototype.onTimerComplete = function () {
@@ -113,9 +113,9 @@ var Match3;
             if (this.messageText !== undefined && this.messageText !== null) {
                 this.messageText.text = value;
                 if (value.length < 10)
-                    this.messageText.x = 42;
+                    this.messageText.x = 62;
                 else
-                    this.messageText.x = 20;
+                    this.messageText.x = 40;
             }
         };
         Timer.TIMER_END = "timer_end";
@@ -235,7 +235,7 @@ var Match3;
         Field.prototype.createTimers = function () {
             this.timerAI = this.game.time.create(false);
             this.timerAI.loop(1000, this.onTimerComplete, this);
-            this.timer = new Timer(this.game, 340, 12, Images.Tablo);
+            this.timer = new Timer(this.game, 340, 0, Images.Tablo);
             this.timer.event.add(this.onTimerEnd, this);
             this.addChild(this.timer);
             this.timer.setMessage("Ваш ход");
@@ -3759,6 +3759,15 @@ var MortalKombat;
             this.groupContent = new Phaser.Group(this.game, this.stage);
             this.backgroundSprite = new Phaser.Sprite(this.game, 0, 0, GameData.Data.levels[GameData.Data.tournamentProgress][0]);
             this.groupContent.addChild(this.backgroundSprite);
+            this.borderSprite = new Phaser.Sprite(this.game, 0, 0, Images.BackgroundImage);
+            this.groupContent.addChild(this.borderSprite);
+            this.helpButton = new Phaser.Button(this.game, Constants.GAME_WIDTH - 230, 5, Sheet.ButtonHelpMini, this.onButtonClick, this, 1, 2, 2, 2);
+            this.helpButton.name = Constants.HELP;
+            this.groupContent.addChild(this.helpButton);
+            var valueJSON = this.game.cache.getJSON(GameData.Data.levels[GameData.Data.tournamentProgress][1]);
+            this.field = new Field(this.game, this.groupContent);
+            this.field.event.add(this.onMatch, this);
+            this.field.createMatchField(valueJSON);
             this.persUser = GameData.Data.user_personage;
             this.animUser = new AnimationFighter(this.game, this.persUser.id, this.persUser);
             this.animUser.x = 100 - (this.animUser.width / 2);
@@ -3775,15 +3784,6 @@ var MortalKombat;
             this.animEnemies.scale.y = 1.5;
             this.animEnemies.scale.x *= -1;
             this.groupContent.addChild(this.animEnemies);
-            this.borderSprite = new Phaser.Sprite(this.game, 0, 0, Images.BackgroundImage);
-            this.groupContent.addChild(this.borderSprite);
-            this.helpButton = new Phaser.Button(this.game, Constants.GAME_WIDTH - 230, 5, Sheet.ButtonHelpMini, this.onButtonClick, this, 1, 2, 2, 2);
-            this.helpButton.name = Constants.HELP;
-            this.groupContent.addChild(this.helpButton);
-            var valueJSON = this.game.cache.getJSON(GameData.Data.levels[GameData.Data.tournamentProgress][1]);
-            this.field = new Field(this.game, this.groupContent);
-            this.field.event.add(this.onMatch, this);
-            this.field.createMatchField(valueJSON);
         };
         /* Произошло событие match на поле */
         Level.prototype.onMatch = function (hitType, hitCount, statusAction) {
