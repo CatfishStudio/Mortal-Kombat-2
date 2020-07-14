@@ -126,7 +126,8 @@ module Match3 {
                 this.matchFieldBlocked = false;
                 this.matchSelectUnit1 = null;
                 this.matchSelectUnit2 = null;
-            }
+			}
+			this.event.dispatch(null, null, this.statusAction);
         }
 
         /* Инициализация матриц позиций ================================================================ */

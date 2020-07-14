@@ -281,6 +281,7 @@ var Match3;
                 this.matchSelectUnit1 = null;
                 this.matchSelectUnit2 = null;
             }
+            this.event.dispatch(null, null, this.statusAction);
         };
         /* Инициализация матриц позиций ================================================================ */
         Field.prototype.initMatchMatrixPosition = function () {
@@ -3790,31 +3791,43 @@ var MortalKombat;
         /* Произошло событие match на поле */
         Level.prototype.onMatch = function (hitType, hitCount, statusAction) {
             Utilits.Data.debugLog("LEVEL: match |", "type=" + hitType + " | count=" + hitCount + " | status=" + statusAction);
-            if (statusAction === Field.ACTION_PLAYER) {
-                if (hitType === Constants.HAND)
-                    this.animUser.changeAnimation(Constants.ANIMATION_TYPE_HIT_HAND);
-                if (hitType === Constants.LEG)
-                    this.animUser.changeAnimation(Constants.ANIMATION_TYPE_HIT_LEG);
-                if (hitType === Constants.BLOCK)
-                    this.animUser.changeAnimation(Constants.ANIMATION_TYPE_BLOCK);
-                if (hitType === Constants.TWIST)
-                    this.animUser.changeAnimation(Constants.ANIMATION_TYPE_HIT_LEG_TWIST);
-                if (hitType === Constants.UPPERCUT)
-                    this.animUser.changeAnimation(Constants.ANIMATION_TYPE_HIT_HAND_UPPERCUT);
-                this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_DAMAGE);
+            if (hitType === null && hitCount === null) {
+                if (statusAction === Field.ACTION_PLAYER) {
+                    // сбросить блок игрока
+                    Utilits.Data.debugLog("BLOCK:", "сбросить блок игрока");
+                }
+                else {
+                    // сбросить блок оппонента
+                    Utilits.Data.debugLog("BLOCK:", "сбросить блок оппонента");
+                }
             }
             else {
-                if (hitType === Constants.HAND)
-                    this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_HIT_HAND);
-                if (hitType === Constants.LEG)
-                    this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_HIT_LEG);
-                if (hitType === Constants.BLOCK)
-                    this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_BLOCK);
-                if (hitType === Constants.TWIST)
-                    this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_HIT_LEG_TWIST);
-                if (hitType === Constants.UPPERCUT)
-                    this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_HIT_HAND_UPPERCUT);
-                this.animUser.changeAnimation(Constants.ANIMATION_TYPE_DAMAGE);
+                if (statusAction === Field.ACTION_PLAYER) {
+                    if (hitType === Constants.HAND)
+                        this.animUser.changeAnimation(Constants.ANIMATION_TYPE_HIT_HAND);
+                    if (hitType === Constants.LEG)
+                        this.animUser.changeAnimation(Constants.ANIMATION_TYPE_HIT_LEG);
+                    if (hitType === Constants.BLOCK)
+                        this.animUser.changeAnimation(Constants.ANIMATION_TYPE_BLOCK);
+                    if (hitType === Constants.TWIST)
+                        this.animUser.changeAnimation(Constants.ANIMATION_TYPE_HIT_LEG_TWIST);
+                    if (hitType === Constants.UPPERCUT)
+                        this.animUser.changeAnimation(Constants.ANIMATION_TYPE_HIT_HAND_UPPERCUT);
+                    this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_DAMAGE);
+                }
+                else {
+                    if (hitType === Constants.HAND)
+                        this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_HIT_HAND);
+                    if (hitType === Constants.LEG)
+                        this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_HIT_LEG);
+                    if (hitType === Constants.BLOCK)
+                        this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_BLOCK);
+                    if (hitType === Constants.TWIST)
+                        this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_HIT_LEG_TWIST);
+                    if (hitType === Constants.UPPERCUT)
+                        this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_HIT_HAND_UPPERCUT);
+                    this.animUser.changeAnimation(Constants.ANIMATION_TYPE_DAMAGE);
+                }
             }
         };
         Level.prototype.shutdown = function () {
