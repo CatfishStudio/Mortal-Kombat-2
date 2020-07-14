@@ -813,7 +813,7 @@ module Match3 {
 
         private onCompleteMatchMoveDownNewUnits(unit:Unit):void
         {
-            Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", unit.name);
+            //Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", unit.name);
             let result = false;
 			this.matchMoveDownProcesses[unit.name] = false;
 			//Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", this.matchMoveDownProcesses);
