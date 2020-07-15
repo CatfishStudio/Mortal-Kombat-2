@@ -3,6 +3,7 @@ module Fabrique {
         private animation: Phaser.Animation;
         private personageAnimation: GameData.IPersonage;
         private animationType: string;
+        public block: boolean;
 
 
         constructor(game: Phaser.Game, personageiD: string, personage: GameData.IPersonage) {
@@ -12,6 +13,7 @@ module Fabrique {
         }
 
         private init(): void {
+            this.block = false;
             this.stanceAnimation();
         }
 
@@ -35,6 +37,14 @@ module Fabrique {
             this.animation.play(10, true, false);
         }
 
+        public blockAnimation()
+        {
+            this.animationType = Constants.ANIMATION_TYPE_BLOCK;
+            this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animBlock);
+            this.animation.onComplete.add(this.onComplete, this);
+            this.frameName = this.personageAnimation.animBlock[this.personageAnimation.animBlock.length-1];
+        }
+
         public changeAnimation(type)
         {
             this.animation.stop();
@@ -43,7 +53,8 @@ module Fabrique {
             this.animationType = type;
             if(this.animationType === Constants.ANIMATION_TYPE_STANCE) this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animStance);
             if(this.animationType === Constants.ANIMATION_TYPE_BLOCK) this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animBlock);
-            if(this.animationType === Constants.ANIMATION_TYPE_DAMAGE) this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animDamage);
+            if(this.animationType === Constants.ANIMATION_TYPE_DAMAGE && this.block === false) this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animDamage);
+            if(this.animationType === Constants.ANIMATION_TYPE_DAMAGE && this.block === true) this.blockAnimation(); //this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animBlock);
             if(this.animationType === Constants.ANIMATION_TYPE_HIT_HAND) this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animHitHand);
             if(this.animationType === Constants.ANIMATION_TYPE_HIT_HAND_UPPERCUT) this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animHitHandUppercut);
             if(this.animationType === Constants.ANIMATION_TYPE_HIT_LEG) this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animHitLeg);
@@ -56,8 +67,12 @@ module Fabrique {
 
         private onComplete(sprite, animation): void {
             //console.log( (sprite as AnimationFighter).animation);
+            if(this.animationType === Constants.ANIMATION_TYPE_BLOCK) this.block = true;
             if(this.animationType === Constants.ANIMATION_TYPE_STANCE) return;
-            else this.stanceAnimation();
+            else {
+                if(this.block === false) this.stanceAnimation();
+                else this.blockAnimation();
+            }
         }
     }
 }

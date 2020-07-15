@@ -63,11 +63,11 @@ module MortalKombat {
             Utilits.Data.debugLog("LEVEL: match |", "type=" + hitType + " | count=" + hitCount + " | status=" + statusAction);
             if(hitType === null && hitCount=== null){
                 if(statusAction === Field.ACTION_PLAYER){
-                    // сбросить блок игрока
-                    Utilits.Data.debugLog("BLOCK:", "сбросить блок игрока");
+                    this.animUser.block = false; // сбросить блок игрока
+                    this.animUser.stanceAnimation();
                 }else{
-                    // сбросить блок оппонента
-                    Utilits.Data.debugLog("BLOCK:", "сбросить блок оппонента");
+                    this.animEnemies.block = false; // сбросить блок оппонента
+                    this.animEnemies.stanceAnimation();
                 }
             }else{
                 if(statusAction === Field.ACTION_PLAYER){

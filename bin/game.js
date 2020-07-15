@@ -2702,6 +2702,7 @@ var Fabrique;
             return _this;
         }
         AnimationFighter.prototype.init = function () {
+            this.block = false;
             this.stanceAnimation();
         };
         /*
@@ -2721,6 +2722,13 @@ var Fabrique;
             this.animation.onComplete.add(this.onComplete, this);
             this.animation.play(10, true, false);
         };
+        AnimationFighter.prototype.blockAnimation = function () {
+            this.animationType = Constants.ANIMATION_TYPE_BLOCK;
+            this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animBlock);
+            this.animation.onComplete.add(this.onComplete, this);
+            //this.animation.play(10, false, false);
+            this.frameName = this.personageAnimation.animBlock[this.personageAnimation.animBlock.length - 1];
+        };
         AnimationFighter.prototype.changeAnimation = function (type) {
             this.animation.stop();
             this.animation.onComplete.removeAll();
@@ -2730,8 +2738,10 @@ var Fabrique;
                 this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animStance);
             if (this.animationType === Constants.ANIMATION_TYPE_BLOCK)
                 this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animBlock);
-            if (this.animationType === Constants.ANIMATION_TYPE_DAMAGE)
+            if (this.animationType === Constants.ANIMATION_TYPE_DAMAGE && this.block === false)
                 this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animDamage);
+            if (this.animationType === Constants.ANIMATION_TYPE_DAMAGE && this.block === true)
+                this.blockAnimation(); //this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animBlock);
             if (this.animationType === Constants.ANIMATION_TYPE_HIT_HAND)
                 this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animHitHand);
             if (this.animationType === Constants.ANIMATION_TYPE_HIT_HAND_UPPERCUT)
@@ -2749,10 +2759,16 @@ var Fabrique;
         };
         AnimationFighter.prototype.onComplete = function (sprite, animation) {
             //console.log( (sprite as AnimationFighter).animation);
+            if (this.animationType === Constants.ANIMATION_TYPE_BLOCK)
+                this.block = true;
             if (this.animationType === Constants.ANIMATION_TYPE_STANCE)
                 return;
-            else
-                this.stanceAnimation();
+            else {
+                if (this.block === false)
+                    this.stanceAnimation();
+                else
+                    this.blockAnimation();
+            }
         };
         return AnimationFighter;
     }(Phaser.Sprite));
@@ -3793,12 +3809,12 @@ var MortalKombat;
             Utilits.Data.debugLog("LEVEL: match |", "type=" + hitType + " | count=" + hitCount + " | status=" + statusAction);
             if (hitType === null && hitCount === null) {
                 if (statusAction === Field.ACTION_PLAYER) {
-                    // сбросить блок игрока
-                    Utilits.Data.debugLog("BLOCK:", "сбросить блок игрока");
+                    this.animUser.block = false; // сбросить блок игрока
+                    this.animUser.stanceAnimation();
                 }
                 else {
-                    // сбросить блок оппонента
-                    Utilits.Data.debugLog("BLOCK:", "сбросить блок оппонента");
+                    this.animEnemies.block = false; // сбросить блок оппонента
+                    this.animEnemies.stanceAnimation();
                 }
             }
             else {
