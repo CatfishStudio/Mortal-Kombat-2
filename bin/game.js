@@ -93,6 +93,7 @@ var Match3;
         Timer.prototype.runTimer = function () {
             this.resetTimer();
             this.run();
+            this.status = Timer.STATUS_RUN;
         };
         Timer.prototype.pauseTimer = function (value) {
             if (value === void 0) { value = true; }
@@ -101,12 +102,14 @@ var Match3;
             else
                 this.timer.start(this.count);
             Utilits.Data.debugLog("TIMER PAUSE:", value);
+            this.status = Timer.STATUS_PAUSE;
         };
         Timer.prototype.stopTimer = function () {
             this.timer.stop(false);
             this.count = 10;
             this.setMessage("............................");
             Utilits.Data.debugLog("TIMER:", "STOP");
+            this.status = Timer.STATUS_STOP;
         };
         Timer.prototype.resetTimer = function () {
             this.count = 10;
@@ -120,7 +123,13 @@ var Match3;
                     this.messageText.x = 52;
             }
         };
+        Timer.prototype.getStatusTimer = function () {
+            return this.status;
+        };
         Timer.TIMER_END = "timer_end";
+        Timer.STATUS_RUN = "status_run";
+        Timer.STATUS_PAUSE = "status_pause";
+        Timer.STATUS_STOP = "status_stop";
         return Timer;
     }(Phaser.Sprite));
     Match3.Timer = Timer;
@@ -883,26 +892,28 @@ var Match3;
         };
         Field.prototype.onCompleteMatchMoveDownNewUnits = function (unit) {
             //Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", unit.name);
-            var result = false;
-            this.matchMoveDownProcesses[unit.name] = false;
-            //Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", this.matchMoveDownProcesses);
-            for (var key in this.matchMoveDownProcesses) {
-                var value = this.matchMoveDownProcesses[key];
-                //Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", key.toString() + ": " + value.toString());
-                if (value === true) {
-                    result = true;
-                    break;
+            if (this.matchMoveDownProcesses !== undefined) {
+                var result = false;
+                this.matchMoveDownProcesses[unit.name] = false;
+                //Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", this.matchMoveDownProcesses);
+                for (var key in this.matchMoveDownProcesses) {
+                    var value = this.matchMoveDownProcesses[key];
+                    //Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", key.toString() + ": " + value.toString());
+                    if (value === true) {
+                        result = true;
+                        break;
+                    }
                 }
-            }
-            //Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", result);
-            if (result === false) // анимация завершена
-             {
-                if (this.matchCheckCombinations() === true) // Возможные ходы определены
+                //Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", result);
+                if (result === false) // анимация завершена
                  {
-                    this.matchCheckField(true); // проверка групп 3-и в ряд
-                }
-                else { // нет возможности ходов
-                    this.matchUpdateField(); // обновление игрового поля
+                    if (this.matchCheckCombinations() === true) // Возможные ходы определены
+                     {
+                        this.matchCheckField(true); // проверка групп 3-и в ряд
+                    }
+                    else { // нет возможности ходов
+                        this.matchUpdateField(); // обновление игрового поля
+                    }
                 }
             }
         };
@@ -1233,6 +1244,10 @@ var Match3;
                     }
                     index++;
                 }
+            }
+            if (this.timer.getStatusTimer() === Timer.STATUS_STOP) {
+                this.endTurn();
+                this.timer.runTimer();
             }
         };
         /* Ход искусственного интеллекта ============================================================== */
@@ -2726,7 +2741,6 @@ var Fabrique;
             this.animationType = Constants.ANIMATION_TYPE_BLOCK;
             this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animBlock);
             this.animation.onComplete.add(this.onComplete, this);
-            //this.animation.play(10, false, false);
             this.frameName = this.personageAnimation.animBlock[this.personageAnimation.animBlock.length - 1];
         };
         AnimationFighter.prototype.changeAnimation = function (type) {

@@ -2,13 +2,17 @@ module Match3 {
     export class Timer extends Phaser.Sprite {
 
         public static TIMER_END = "timer_end";
+        public static STATUS_RUN = "status_run";
+        public static STATUS_PAUSE = "status_pause";
+        public static STATUS_STOP = "status_stop";
 
         public event: Phaser.Signal;
         private count: number;
         private timerText: Phaser.Text;
         private messageText: Phaser.Text;
-
+        
         private timer: Phaser.Timer;
+        private status: string;
 
         constructor(game: Phaser.Game, x: number, y: number, imageTablo:string) {
             super(game, x, y, imageTablo);
@@ -58,12 +62,14 @@ module Match3 {
         public runTimer(): void {
             this.resetTimer();
             this.run();
+            this.status = Timer.STATUS_RUN;
         }
 
         public pauseTimer(value: boolean = true): void {
             if (value === true) this.timer.stop(false);
             else this.timer.start(this.count);
             Utilits.Data.debugLog("TIMER PAUSE:", value);
+            this.status = Timer.STATUS_PAUSE;
         }
 
         public stopTimer(): void {
@@ -71,6 +77,7 @@ module Match3 {
             this.count = 10;
             this.setMessage("............................");
             Utilits.Data.debugLog("TIMER:", "STOP");
+            this.status = Timer.STATUS_STOP;
         }
 
         public resetTimer(): void {
@@ -83,6 +90,10 @@ module Match3 {
                 if (value.length < 10) this.messageText.x = 72;
                 else this.messageText.x = 52;
             }
+        }
+
+        public getStatusTimer():string {
+            return this.status;
         }
     }
 }

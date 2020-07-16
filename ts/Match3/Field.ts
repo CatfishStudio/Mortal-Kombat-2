@@ -814,27 +814,30 @@ module Match3 {
 
         private onCompleteMatchMoveDownNewUnits(unit:Unit):void
         {
-            //Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", unit.name);
-            let result = false;
-			this.matchMoveDownProcesses[unit.name] = false;
-			//Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", this.matchMoveDownProcesses);
-			for(let key in this.matchMoveDownProcesses)
+			//Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", unit.name);
+			if(this.matchMoveDownProcesses !== undefined)
 			{
-				let value = this.matchMoveDownProcesses[key];
-				//Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", key.toString() + ": " + value.toString());
-				if(value === true){
-					result = true;
-					break;
-				}
-			}
-			//Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", result);
-            if(result === false) // анимация завершена
-			{
-				if(this.matchCheckCombinations() === true) // Возможные ходы определены
+				let result = false;
+				this.matchMoveDownProcesses[unit.name] = false;
+				//Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", this.matchMoveDownProcesses);
+				for(let key in this.matchMoveDownProcesses)
 				{
-					this.matchCheckField(true);	// проверка групп 3-и в ряд
-				}else{	// нет возможности ходов
-					this.matchUpdateField(); // обновление игрового поля
+					let value = this.matchMoveDownProcesses[key];
+					//Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", key.toString() + ": " + value.toString());
+					if(value === true){
+						result = true;
+						break;
+					}
+				}
+				//Utilits.Data.debugLog("onCompleteMatchMoveDownNewUnits", result);
+				if(result === false) // анимация завершена
+				{
+					if(this.matchCheckCombinations() === true) // Возможные ходы определены
+					{
+						this.matchCheckField(true);	// проверка групп 3-и в ряд
+					}else{	// нет возможности ходов
+						this.matchUpdateField(); // обновление игрового поля
+					}
 				}
 			}
         }
@@ -1134,7 +1137,12 @@ module Match3 {
                     }
                     index++;
                 }
-            }
+			}
+			
+			if(this.timer.getStatusTimer() === Timer.STATUS_STOP){
+				this.endTurn();
+				this.timer.runTimer();
+			}
         }
 
         /* Ход искусственного интеллекта ============================================================== */
