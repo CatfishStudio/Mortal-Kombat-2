@@ -492,12 +492,20 @@ var Match3;
             Utilits.Data.debugLog("matchBackExchangeUnits", "Tween: START");
         };
         Field.prototype.matchSelectUnitsClear = function () {
-            if (this.tween1.isRunning === false && this.tween2.isRunning === false) {
+            if (this.tween1 === undefined || this.tween2 === undefined) {
                 this.matchSelectUnit1 = null;
                 this.matchSelectUnit2 = null;
                 if (this.statusAction === Field.ACTION_PLAYER)
                     this.matchFieldBlocked = false;
-                //Utilits.Data.debugLog("matchSelectUnitsClear", "Tween: STOP");
+            }
+            else {
+                if (this.tween1.isRunning === false && this.tween2.isRunning === false) {
+                    this.matchSelectUnit1 = null;
+                    this.matchSelectUnit2 = null;
+                    if (this.statusAction === Field.ACTION_PLAYER)
+                        this.matchFieldBlocked = false;
+                    //Utilits.Data.debugLog("matchSelectUnitsClear", "Tween: STOP");
+                }
             }
         };
         /* Поиск групп ============================================================================== */
