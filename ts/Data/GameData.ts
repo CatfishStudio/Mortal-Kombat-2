@@ -252,5 +252,32 @@ module GameData {
 
             Utilits.Data.debugLog('LEVELS:', this.levels);
         }
+
+        /* Расчитать урон */
+        public static calcDamage(pers:GameData.IPersonage, block:boolean, hitType:any, hitCount:number):number
+        {
+            let damage:number = 0;
+            
+            if(hitType === Constants.BLOCK) return damage;
+
+            if(hitType === Constants.HAND && hitCount === 3) damage = pers.hand * Constants.DAMAGE_HAND;
+            if(hitType === Constants.HAND && hitCount === 4) damage = (pers.hand + 1) * Constants.DAMAGE_HAND;
+            if(hitType === Constants.HAND && hitCount >= 5) damage = (pers.hand + 2) * Constants.DAMAGE_HAND;
+            if(hitType === Constants.LEG && hitCount === 3) damage = pers.leg * Constants.DAMAGE_LEG;
+            if(hitType === Constants.LEG && hitCount === 4) damage = (pers.leg + 1) * Constants.DAMAGE_LEG;
+            if(hitType === Constants.LEG && hitCount >= 5) damage = (pers.leg + 2) * Constants.DAMAGE_LEG;
+            if(hitType === Constants.TWIST && hitCount === 3) damage = pers.twist * Constants.DAMAGE_TWIST;
+            if(hitType === Constants.TWIST && hitCount === 4) damage = (pers.twist + 1) * Constants.DAMAGE_TWIST;
+            if(hitType === Constants.TWIST && hitCount >= 5) damage = (pers.twist + 2) * Constants.DAMAGE_TWIST;
+            if(hitType === Constants.UPPERCUT && hitCount === 3) damage = pers.uppercut * Constants.DAMAGE_UPPERCUT;
+            if(hitType === Constants.UPPERCUT && hitCount === 4) damage = (pers.uppercut + 1) * Constants.DAMAGE_UPPERCUT;
+            if(hitType === Constants.UPPERCUT && hitCount >= 5) damage = (pers.uppercut + 2) * Constants.DAMAGE_UPPERCUT;
+
+            if(block === true){
+                damage = damage - (pers.block * Constants.DAMAGE_BLOCK);
+            }
+            Utilits.Data.debugLog(pers.name, pers.life + " | " + damage);
+            return damage;
+        }
     }
 }

@@ -2331,6 +2331,41 @@ var GameData;
             }
             Utilits.Data.debugLog('LEVELS:', this.levels);
         };
+        /* Расчитать урон */
+        Data.calcDamage = function (pers, block, hitType, hitCount) {
+            var damage = 0;
+            if (hitType === Constants.BLOCK)
+                return damage;
+            if (hitType === Constants.HAND && hitCount === 3)
+                damage = pers.hand * Constants.DAMAGE_HAND;
+            if (hitType === Constants.HAND && hitCount === 4)
+                damage = (pers.hand + 1) * Constants.DAMAGE_HAND;
+            if (hitType === Constants.HAND && hitCount >= 5)
+                damage = (pers.hand + 2) * Constants.DAMAGE_HAND;
+            if (hitType === Constants.LEG && hitCount === 3)
+                damage = pers.leg * Constants.DAMAGE_LEG;
+            if (hitType === Constants.LEG && hitCount === 4)
+                damage = (pers.leg + 1) * Constants.DAMAGE_LEG;
+            if (hitType === Constants.LEG && hitCount >= 5)
+                damage = (pers.leg + 2) * Constants.DAMAGE_LEG;
+            if (hitType === Constants.TWIST && hitCount === 3)
+                damage = pers.twist * Constants.DAMAGE_TWIST;
+            if (hitType === Constants.TWIST && hitCount === 4)
+                damage = (pers.twist + 1) * Constants.DAMAGE_TWIST;
+            if (hitType === Constants.TWIST && hitCount >= 5)
+                damage = (pers.twist + 2) * Constants.DAMAGE_TWIST;
+            if (hitType === Constants.UPPERCUT && hitCount === 3)
+                damage = pers.uppercut * Constants.DAMAGE_UPPERCUT;
+            if (hitType === Constants.UPPERCUT && hitCount === 4)
+                damage = (pers.uppercut + 1) * Constants.DAMAGE_UPPERCUT;
+            if (hitType === Constants.UPPERCUT && hitCount >= 5)
+                damage = (pers.uppercut + 2) * Constants.DAMAGE_UPPERCUT;
+            if (block === true) {
+                damage = damage - (pers.block * Constants.DAMAGE_BLOCK);
+            }
+            Utilits.Data.debugLog(pers.name, pers.life + " | " + damage);
+            return damage;
+        };
         Data.tutorList = [
             'Нажмите на кнопку\n"начать игру"\nчтобы начать\nтурнир.',
             'Нажмите на иконку\nбойца и на кнопку\n"Выбрать бойца',
@@ -3260,10 +3295,11 @@ var Fabrique;
 (function (Fabrique) {
     var LifeBar = /** @class */ (function (_super) {
         __extends(LifeBar, _super);
-        function LifeBar(game, x, y, name) {
+        function LifeBar(game, x, y, name, life) {
             var _this = _super.call(this, game) || this;
             _this.x = x;
             _this.y = y;
+            _this.oneLife = (200 / life);
             _this.name = name;
             _this.updateTransform();
             _this.init();
@@ -3272,11 +3308,24 @@ var Fabrique;
         LifeBar.prototype.init = function () {
             this.lifebarImage = new Phaser.Sprite(this.game, this.x, this.y + 20, Images.Lifebar);
             this.addChild(this.lifebarImage);
+            this.lineGraphics = this.game.add.graphics(this.x + 3, this.y + 23); // 200x10
+            this.lineGraphics.beginFill(0x0000CD, 1);
+            this.lineGraphics.lineStyle(0, 0x0000CD, 0);
+            this.lineGraphics.drawRect(0, 0, 200, 10);
+            this.lineGraphics.endFill();
+            this.addChild(this.lineGraphics);
             var textLength = this.name.length * 8;
             var center = this.x + (this.width / 2);
             var posX = center - (textLength / 2);
             this.lifebarText = new Phaser.Text(this.game, posX, this.y, this.name, { font: "18px Georgia", fill: "#DDDDDD", align: "left" });
             this.addChild(this.lifebarText);
+        };
+        LifeBar.prototype.lifeUpdate = function (life) {
+            this.lineGraphics.clear();
+            this.lineGraphics.beginFill(0x0000CD, 1);
+            this.lineGraphics.lineStyle(0, 0x0000CD, 0);
+            this.lineGraphics.drawRect(0, 0, (life * this.oneLife), 10);
+            this.lineGraphics.endFill();
         };
         return LifeBar;
     }(Phaser.Group));
@@ -3854,9 +3903,9 @@ var MortalKombat;
             this.animEnemies.scale.y = 1.5;
             this.animEnemies.scale.x *= -1;
             this.groupContent.addChild(this.animEnemies);
-            this.userLifebar = new LifeBar(this.game, 45, 35, this.persUser.name);
+            this.userLifebar = new LifeBar(this.game, 45, 35, this.persUser.name, this.persUser.life);
             this.groupContent.addChild(this.userLifebar);
-            this.enemiesLifebar = new LifeBar(this.game, 282, 35, this.persEnemies.name);
+            this.enemiesLifebar = new LifeBar(this.game, 282, 35, this.persEnemies.name, this.persEnemies.life);
             this.groupContent.addChild(this.enemiesLifebar);
         };
         /* Произошло событие match на поле */
@@ -3885,6 +3934,8 @@ var MortalKombat;
                     if (hitType === Constants.UPPERCUT)
                         this.animUser.changeAnimation(Constants.ANIMATION_TYPE_HIT_HAND_UPPERCUT);
                     this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_DAMAGE);
+                    this.persEnemies.life = this.persEnemies.life - GameData.Data.calcDamage(this.persEnemies, this.animEnemies.block, hitType, hitCount);
+                    this.enemiesLifebar.lifeUpdate(this.persEnemies.life);
                 }
                 else {
                     if (hitType === Constants.HAND)
@@ -3898,6 +3949,8 @@ var MortalKombat;
                     if (hitType === Constants.UPPERCUT)
                         this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_HIT_HAND_UPPERCUT);
                     this.animUser.changeAnimation(Constants.ANIMATION_TYPE_DAMAGE);
+                    this.persUser.life = this.persUser.life - GameData.Data.calcDamage(this.persUser, this.animUser.block, hitType, hitCount);
+                    this.userLifebar.lifeUpdate(this.persUser.life);
                 }
             }
         };

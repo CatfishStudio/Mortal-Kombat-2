@@ -59,10 +59,10 @@ module MortalKombat {
             this.animEnemies.scale.x *= -1;
             this.groupContent.addChild(this.animEnemies);
 
-            this.userLifebar = new LifeBar(this.game, 45, 35, this.persUser.name);
+            this.userLifebar = new LifeBar(this.game, 45, 35, this.persUser.name, this.persUser.life);
             this.groupContent.addChild(this.userLifebar);
 
-            this.enemiesLifebar = new LifeBar(this.game, 282, 35, this.persEnemies.name);
+            this.enemiesLifebar = new LifeBar(this.game, 282, 35, this.persEnemies.name, this.persEnemies.life);
             this.groupContent.addChild(this.enemiesLifebar);
         }
 
@@ -86,6 +86,8 @@ module MortalKombat {
                     if(hitType === Constants.TWIST)this.animUser.changeAnimation(Constants.ANIMATION_TYPE_HIT_LEG_TWIST);
                     if(hitType === Constants.UPPERCUT)this.animUser.changeAnimation(Constants.ANIMATION_TYPE_HIT_HAND_UPPERCUT);
                     this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_DAMAGE);
+                    this.persEnemies.life = this.persEnemies.life - GameData.Data.calcDamage(this.persEnemies, this.animEnemies.block, hitType, hitCount);
+                    this.enemiesLifebar.lifeUpdate(this.persEnemies.life);
                 }else{
                     if(hitType === Constants.HAND)this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_HIT_HAND);
                     if(hitType === Constants.LEG)this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_HIT_LEG);
@@ -93,6 +95,8 @@ module MortalKombat {
                     if(hitType === Constants.TWIST)this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_HIT_LEG_TWIST);
                     if(hitType === Constants.UPPERCUT)this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_HIT_HAND_UPPERCUT);
                     this.animUser.changeAnimation(Constants.ANIMATION_TYPE_DAMAGE);
+                    this.persUser.life = this.persUser.life - GameData.Data.calcDamage(this.persUser, this.animUser.block, hitType, hitCount);
+                    this.userLifebar.lifeUpdate(this.persUser.life);
                 }
             }
         }
