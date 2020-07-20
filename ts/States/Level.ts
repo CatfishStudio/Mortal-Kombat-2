@@ -15,7 +15,8 @@ module MortalKombat {
         private animUser:AnimationFighter;
         private persEnemies:GameData.IPersonage;
         private animEnemies:AnimationFighter;
-        private lifebar:LifeBar;
+        private userLifebar:LifeBar;
+        private enemiesLifebar:LifeBar;
         private field:Field;
 
         constructor() {
@@ -58,8 +59,11 @@ module MortalKombat {
             this.animEnemies.scale.x *= -1;
             this.groupContent.addChild(this.animEnemies);
 
-            this.lifebar = new LifeBar(this.game, 45, 35, this.persUser.name);
-            this.groupContent.addChild(this.lifebar);
+            this.userLifebar = new LifeBar(this.game, 45, 35, this.persUser.name);
+            this.groupContent.addChild(this.userLifebar);
+
+            this.enemiesLifebar = new LifeBar(this.game, 282, 35, this.persEnemies.name);
+            this.groupContent.addChild(this.enemiesLifebar);
         }
 
         /* Произошло событие match на поле */

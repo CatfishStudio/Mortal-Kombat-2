@@ -17,7 +17,10 @@ module Fabrique {
             this.lifebarImage = new Phaser.Sprite(this.game, this.x, this.y + 20, Images.Lifebar);
             this.addChild(this.lifebarImage);
 
-            this.lifebarText = new Phaser.Text(this.game, this.x + ( (this.width / 2) - (this.name.length / 2 * 14) ), this.y, this.name, { font: "14px Georgia", fill: "#FFFFFF", align: "left" });
+            let textLength = this.name.length * 8;
+            let center = this.x + (this.width / 2);
+            let posX = center - (textLength / 2);
+            this.lifebarText = new Phaser.Text(this.game, posX, this.y, this.name, { font: "18px Georgia", fill: "#DDDDDD", align: "left" });
             this.addChild(this.lifebarText);
         }
     }

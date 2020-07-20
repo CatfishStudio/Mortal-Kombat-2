@@ -82,7 +82,7 @@ module Match3 {
 			this.timerAI = this.game.time.create(false);
 			this.timerAI.loop(1000, this.onTimerComplete, this);
 
-            this.timer = new Timer(this.game, 340, 0, Images.Tablo);
+            this.timer = new Timer(this.game, 335, 0, Images.Tablo);
             this.timer.event.add(this.onTimerEnd, this);
             this.addChild(this.timer);
             this.timer.setMessage("Ваш ход");

@@ -246,7 +246,7 @@ var Match3;
         Field.prototype.createTimers = function () {
             this.timerAI = this.game.time.create(false);
             this.timerAI.loop(1000, this.onTimerComplete, this);
-            this.timer = new Timer(this.game, 340, 0, Images.Tablo);
+            this.timer = new Timer(this.game, 335, 0, Images.Tablo);
             this.timer.event.add(this.onTimerEnd, this);
             this.addChild(this.timer);
             this.timer.setMessage("Ваш ход");
@@ -3272,7 +3272,10 @@ var Fabrique;
         LifeBar.prototype.init = function () {
             this.lifebarImage = new Phaser.Sprite(this.game, this.x, this.y + 20, Images.Lifebar);
             this.addChild(this.lifebarImage);
-            this.lifebarText = new Phaser.Text(this.game, this.x + ((this.width / 2) - (this.name.length / 2 * 14)), this.y, this.name, { font: "14px Georgia", fill: "#FFFFFF", align: "left" });
+            var textLength = this.name.length * 8;
+            var center = this.x + (this.width / 2);
+            var posX = center - (textLength / 2);
+            this.lifebarText = new Phaser.Text(this.game, posX, this.y, this.name, { font: "18px Georgia", fill: "#DDDDDD", align: "left" });
             this.addChild(this.lifebarText);
         };
         return LifeBar;
@@ -3851,8 +3854,10 @@ var MortalKombat;
             this.animEnemies.scale.y = 1.5;
             this.animEnemies.scale.x *= -1;
             this.groupContent.addChild(this.animEnemies);
-            this.lifebar = new LifeBar(this.game, 45, 35, this.persUser.name);
-            this.groupContent.addChild(this.lifebar);
+            this.userLifebar = new LifeBar(this.game, 45, 35, this.persUser.name);
+            this.groupContent.addChild(this.userLifebar);
+            this.enemiesLifebar = new LifeBar(this.game, 282, 35, this.persEnemies.name);
+            this.groupContent.addChild(this.enemiesLifebar);
         };
         /* Произошло событие match на поле */
         Level.prototype.onMatch = function (hitType, hitCount, statusAction) {
