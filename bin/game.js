@@ -3260,17 +3260,20 @@ var Fabrique;
 (function (Fabrique) {
     var LifeBar = /** @class */ (function (_super) {
         __extends(LifeBar, _super);
-        function LifeBar(game, parent) {
-            var _this = _super.call(this, game, parent) || this;
+        function LifeBar(game, x, y, name) {
+            var _this = _super.call(this, game) || this;
+            _this.x = x;
+            _this.y = y;
+            _this.name = name;
             _this.updateTransform();
             _this.init();
             return _this;
         }
         LifeBar.prototype.init = function () {
-            this.lifebarText = new Phaser.Text(this.game, 0, 0, "UserName", { font: "12px Georgia", fill: "#FFFFFF", align: "left" });
-            this.addChild(this.lifebarText);
-            this.lifebarImage = new Phaser.Sprite(this.game, 0, 0, Images.Lifebar);
+            this.lifebarImage = new Phaser.Sprite(this.game, this.x, this.y + 20, Images.Lifebar);
             this.addChild(this.lifebarImage);
+            this.lifebarText = new Phaser.Text(this.game, this.x + ((this.width / 2) - (this.name.length / 2 * 14)), this.y, this.name, { font: "14px Georgia", fill: "#FFFFFF", align: "left" });
+            this.addChild(this.lifebarText);
         };
         return LifeBar;
     }(Phaser.Group));
@@ -3828,7 +3831,6 @@ var MortalKombat;
             this.helpButton = new Phaser.Button(this.game, Constants.GAME_WIDTH - 230, 5, Sheet.ButtonHelpMini, this.onButtonClick, this, 1, 2, 2, 2);
             this.helpButton.name = Constants.HELP;
             this.groupContent.addChild(this.helpButton);
-            this.lifebar = new LifeBar(this.game, this.groupContent);
             var valueJSON = this.game.cache.getJSON(GameData.Data.levels[GameData.Data.tournamentProgress][1]);
             this.field = new Field(this.game, this.groupContent);
             this.field.event.add(this.onMatch, this);
@@ -3849,6 +3851,8 @@ var MortalKombat;
             this.animEnemies.scale.y = 1.5;
             this.animEnemies.scale.x *= -1;
             this.groupContent.addChild(this.animEnemies);
+            this.lifebar = new LifeBar(this.game, 45, 35, this.persUser.name);
+            this.groupContent.addChild(this.lifebar);
         };
         /* Произошло событие match на поле */
         Level.prototype.onMatch = function (hitType, hitCount, statusAction) {

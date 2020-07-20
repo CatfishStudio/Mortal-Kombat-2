@@ -35,9 +35,6 @@ module MortalKombat {
             this.helpButton.name = Constants.HELP;
             this.groupContent.addChild(this.helpButton);
 
-            this.lifebar = new LifeBar(this.game, this.groupContent);
-            
-
             let valueJSON = this.game.cache.getJSON(GameData.Data.levels[GameData.Data.tournamentProgress][1]);
             this.field = new Field(this.game, this.groupContent);
             this.field.event.add(this.onMatch, this);
@@ -60,6 +57,9 @@ module MortalKombat {
             this.animEnemies.scale.y = 1.5;
             this.animEnemies.scale.x *= -1;
             this.groupContent.addChild(this.animEnemies);
+
+            this.lifebar = new LifeBar(this.game, 45, 35, this.persUser.name);
+            this.groupContent.addChild(this.lifebar);
         }
 
         /* Произошло событие match на поле */
