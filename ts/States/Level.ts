@@ -1,5 +1,6 @@
 module MortalKombat {
     import AnimationFighter = Fabrique.AnimationFighter;
+    import LifeBar = Fabrique.LifeBar;
     import Field = Match3.Field;
 
     export class Level extends Phaser.State{
@@ -14,6 +15,7 @@ module MortalKombat {
         private animUser:AnimationFighter;
         private persEnemies:GameData.IPersonage;
         private animEnemies:AnimationFighter;
+        private lifebar:LifeBar;
         private field:Field;
 
         constructor() {
@@ -32,6 +34,9 @@ module MortalKombat {
             this.helpButton = new Phaser.Button(this.game, Constants.GAME_WIDTH - 230, 5, Sheet.ButtonHelpMini, this.onButtonClick, this, 1, 2, 2, 2);
             this.helpButton.name = Constants.HELP;
             this.groupContent.addChild(this.helpButton);
+
+            this.lifebar = new LifeBar(this.game, this.groupContent);
+            
 
             let valueJSON = this.game.cache.getJSON(GameData.Data.levels[GameData.Data.tournamentProgress][1]);
             this.field = new Field(this.game, this.groupContent);

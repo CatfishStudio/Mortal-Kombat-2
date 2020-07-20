@@ -1850,6 +1850,7 @@ var Images = /** @class */ (function () {
     Images.towerFooter = 'tower_footer.png';
     Images.ButtonPlus = 'button_plus.png';
     Images.Tablo = 'tablo.png';
+    Images.Lifebar = 'life_bar.png';
     Images.BarakaIcon = 'baraka.png';
     Images.GoroIcon = 'goro.png';
     Images.JaxIcon = 'jax.png';
@@ -1903,6 +1904,7 @@ var Images = /** @class */ (function () {
         Images.towerFooter,
         Images.ButtonPlus,
         Images.Tablo,
+        Images.Lifebar,
         Images.BarakaIcon,
         Images.GoroIcon,
         Images.JaxIcon,
@@ -3254,6 +3256,26 @@ var Fabrique;
     }(Phaser.Group));
     Fabrique.PanelIcons = PanelIcons;
 })(Fabrique || (Fabrique = {}));
+var Fabrique;
+(function (Fabrique) {
+    var LifeBar = /** @class */ (function (_super) {
+        __extends(LifeBar, _super);
+        function LifeBar(game, parent) {
+            var _this = _super.call(this, game, parent) || this;
+            _this.updateTransform();
+            _this.init();
+            return _this;
+        }
+        LifeBar.prototype.init = function () {
+            this.lifebarText = new Phaser.Text(this.game, 0, 0, "UserName", { font: "12px Georgia", fill: "#FFFFFF", align: "left" });
+            this.addChild(this.lifebarText);
+            this.lifebarImage = new Phaser.Sprite(this.game, 0, 0, Images.Lifebar);
+            this.addChild(this.lifebarImage);
+        };
+        return LifeBar;
+    }(Phaser.Group));
+    Fabrique.LifeBar = LifeBar;
+})(Fabrique || (Fabrique = {}));
 var MortalKombat;
 (function (MortalKombat) {
     var Boot = /** @class */ (function (_super) {
@@ -3788,6 +3810,7 @@ var MortalKombat;
 var MortalKombat;
 (function (MortalKombat) {
     var AnimationFighter = Fabrique.AnimationFighter;
+    var LifeBar = Fabrique.LifeBar;
     var Field = Match3.Field;
     var Level = /** @class */ (function (_super) {
         __extends(Level, _super);
@@ -3805,6 +3828,7 @@ var MortalKombat;
             this.helpButton = new Phaser.Button(this.game, Constants.GAME_WIDTH - 230, 5, Sheet.ButtonHelpMini, this.onButtonClick, this, 1, 2, 2, 2);
             this.helpButton.name = Constants.HELP;
             this.groupContent.addChild(this.helpButton);
+            this.lifebar = new LifeBar(this.game, this.groupContent);
             var valueJSON = this.game.cache.getJSON(GameData.Data.levels[GameData.Data.tournamentProgress][1]);
             this.field = new Field(this.game, this.groupContent);
             this.field.event.add(this.onMatch, this);
@@ -3926,6 +3950,7 @@ var MortalKombat;
 /// <reference path="Fabrique\Objects\WindowCharacteristics.ts" />
 /// <reference path="Fabrique\Objects\UpgradeCharacteristics.ts" />
 /// <reference path="Fabrique\Objects\PanelIcons.ts" />
+/// <reference path="Fabrique\Objects\LifeBar.ts" />
 /// <reference path="States\Boot.ts" />
 /// <reference path="States\Preloader.ts" />
 /// <reference path="States\Menu.ts" />
