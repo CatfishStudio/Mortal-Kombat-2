@@ -3321,6 +3321,8 @@ var Fabrique;
             this.addChild(this.lifebarText);
         };
         LifeBar.prototype.lifeUpdate = function (life) {
+            if (life <= 0)
+                life = 0;
             this.lineGraphics.clear();
             this.lineGraphics.beginFill(0x0000CD, 1);
             this.lineGraphics.lineStyle(0, 0x0000CD, 0);
@@ -3933,7 +3935,8 @@ var MortalKombat;
                         this.animUser.changeAnimation(Constants.ANIMATION_TYPE_HIT_LEG_TWIST);
                     if (hitType === Constants.UPPERCUT)
                         this.animUser.changeAnimation(Constants.ANIMATION_TYPE_HIT_HAND_UPPERCUT);
-                    this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_DAMAGE);
+                    if (hitType !== Constants.BLOCK)
+                        this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_DAMAGE);
                     this.persEnemies.life = this.persEnemies.life - GameData.Data.calcDamage(this.persEnemies, this.animEnemies.block, hitType, hitCount);
                     this.enemiesLifebar.lifeUpdate(this.persEnemies.life);
                 }
@@ -3948,7 +3951,8 @@ var MortalKombat;
                         this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_HIT_LEG_TWIST);
                     if (hitType === Constants.UPPERCUT)
                         this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_HIT_HAND_UPPERCUT);
-                    this.animUser.changeAnimation(Constants.ANIMATION_TYPE_DAMAGE);
+                    if (hitType !== Constants.BLOCK)
+                        this.animUser.changeAnimation(Constants.ANIMATION_TYPE_DAMAGE);
                     this.persUser.life = this.persUser.life - GameData.Data.calcDamage(this.persUser, this.animUser.block, hitType, hitCount);
                     this.userLifebar.lifeUpdate(this.persUser.life);
                 }

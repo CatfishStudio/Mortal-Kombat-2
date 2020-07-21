@@ -85,7 +85,7 @@ module MortalKombat {
                     if(hitType === Constants.BLOCK)this.animUser.changeAnimation(Constants.ANIMATION_TYPE_BLOCK);
                     if(hitType === Constants.TWIST)this.animUser.changeAnimation(Constants.ANIMATION_TYPE_HIT_LEG_TWIST);
                     if(hitType === Constants.UPPERCUT)this.animUser.changeAnimation(Constants.ANIMATION_TYPE_HIT_HAND_UPPERCUT);
-                    this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_DAMAGE);
+                    if(hitType !== Constants.BLOCK) this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_DAMAGE);
                     this.persEnemies.life = this.persEnemies.life - GameData.Data.calcDamage(this.persEnemies, this.animEnemies.block, hitType, hitCount);
                     this.enemiesLifebar.lifeUpdate(this.persEnemies.life);
                 }else{
@@ -94,7 +94,7 @@ module MortalKombat {
                     if(hitType === Constants.BLOCK)this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_BLOCK);
                     if(hitType === Constants.TWIST)this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_HIT_LEG_TWIST);
                     if(hitType === Constants.UPPERCUT)this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_HIT_HAND_UPPERCUT);
-                    this.animUser.changeAnimation(Constants.ANIMATION_TYPE_DAMAGE);
+                    if(hitType !== Constants.BLOCK) this.animUser.changeAnimation(Constants.ANIMATION_TYPE_DAMAGE);
                     this.persUser.life = this.persUser.life - GameData.Data.calcDamage(this.persUser, this.animUser.block, hitType, hitCount);
                     this.userLifebar.lifeUpdate(this.persUser.life);
                 }

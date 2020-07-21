@@ -35,6 +35,7 @@ module Fabrique {
         }
 
         public lifeUpdate(life:number):void {
+            if(life <= 0) life = 0;
             this.lineGraphics.clear();
             this.lineGraphics.beginFill(0x0000CD, 1);
             this.lineGraphics.lineStyle(0, 0x0000CD, 0);
