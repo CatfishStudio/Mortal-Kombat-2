@@ -79,22 +79,28 @@ module MortalKombat {
                     this.animEnemies.stanceAnimation();
                 }
             }else{
-                if(statusAction === Field.ACTION_PLAYER){
+                if(statusAction === Field.ACTION_PLAYER){ // Противник получает урон
                     if(hitType === Constants.HAND)this.animUser.changeAnimation(Constants.ANIMATION_TYPE_HIT_HAND);
                     if(hitType === Constants.LEG)this.animUser.changeAnimation(Constants.ANIMATION_TYPE_HIT_LEG);
                     if(hitType === Constants.BLOCK)this.animUser.changeAnimation(Constants.ANIMATION_TYPE_BLOCK);
                     if(hitType === Constants.TWIST)this.animUser.changeAnimation(Constants.ANIMATION_TYPE_HIT_LEG_TWIST);
                     if(hitType === Constants.UPPERCUT)this.animUser.changeAnimation(Constants.ANIMATION_TYPE_HIT_HAND_UPPERCUT);
-                    if(hitType !== Constants.BLOCK) this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_DAMAGE);
+                    if(hitType !== Constants.BLOCK) {
+                        this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_DAMAGE);
+                        this.animEnemies.showBlood();
+                    }
                     this.persEnemies.life = this.persEnemies.life - GameData.Data.calcDamage(this.persEnemies, this.animEnemies.block, hitType, hitCount);
                     this.enemiesLifebar.lifeUpdate(this.persEnemies.life);
-                }else{
+                }else{ // Игрок получает урон
                     if(hitType === Constants.HAND)this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_HIT_HAND);
                     if(hitType === Constants.LEG)this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_HIT_LEG);
                     if(hitType === Constants.BLOCK)this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_BLOCK);
                     if(hitType === Constants.TWIST)this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_HIT_LEG_TWIST);
                     if(hitType === Constants.UPPERCUT)this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_HIT_HAND_UPPERCUT);
-                    if(hitType !== Constants.BLOCK) this.animUser.changeAnimation(Constants.ANIMATION_TYPE_DAMAGE);
+                    if(hitType !== Constants.BLOCK) {
+                        this.animUser.changeAnimation(Constants.ANIMATION_TYPE_DAMAGE);
+                        this.animUser.showBlood();
+                    }
                     this.persUser.life = this.persUser.life - GameData.Data.calcDamage(this.persUser, this.animUser.block, hitType, hitCount);
                     this.userLifebar.lifeUpdate(this.persUser.life);
                 }

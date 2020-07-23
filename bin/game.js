@@ -2478,45 +2478,268 @@ var SocialVK = /** @class */ (function () {
 }());
 var Fabrique;
 (function (Fabrique) {
-    var Tutorial = /** @class */ (function (_super) {
-        __extends(Tutorial, _super);
-        function Tutorial(game, text) {
-            var _this = _super.call(this, game, 0, 0, Atlases.VideoHelp, 0) || this;
-            _this.text = text;
+    var Blood = /** @class */ (function (_super) {
+        __extends(Blood, _super);
+        function Blood(game) {
+            var _this = _super.call(this, game, 0, 0, Atlases.Blood, 0) || this;
             _this.init();
             return _this;
         }
-        Tutorial.prototype.init = function () {
-            var graphics = this.game.add.graphics(0, 0);
-            graphics.beginFill(0x000000, 0);
-            graphics.lineStyle(10, 0x000000, 1);
-            graphics.drawRect(0, 0, 400, 116);
-            graphics.endFill();
-            graphics.beginFill(0x000000, 0.6);
-            graphics.lineStyle(1, 0x000000, 1);
-            graphics.drawRect(150, 0, 250, 116);
-            graphics.endFill();
-            graphics.beginFill(0x000000, 0.5);
-            graphics.lineStyle(2, 0x999999, 0.5);
-            graphics.drawRect(0, 0, 400, 116);
-            graphics.endFill();
-            this.addChild(graphics);
-            var messageText = this.game.add.text(175, 10, this.text, { font: "18px Georgia", fill: "#AAAAAA", align: "left" });
-            this.addChild(messageText);
-            var anim = this.animations.add(Atlases.VideoHelp);
-            anim.onComplete.add(this.onCompleteVideo, this);
-            anim.play(10, true, false);
+        Blood.prototype.init = function () {
+            this.animation = this.animations.add(Atlases.Blood);
+            this.animation.onComplete.add(this.onCompleteVideo, this);
+            this.alpha = 0;
         };
-        Tutorial.prototype.onCompleteVideo = function () {
+        Blood.prototype.onCompleteVideo = function () {
+            this.alpha = 0;
         };
-        Tutorial.prototype.show = function (x, y) {
+        Blood.prototype.show = function () {
+            this.alpha = 1;
+            this.animation.play(10, false, false);
+        };
+        return Blood;
+    }(Phaser.Sprite));
+    Fabrique.Blood = Blood;
+})(Fabrique || (Fabrique = {}));
+var Fabrique;
+(function (Fabrique) {
+    var Blood = Fabrique.Blood;
+    var AnimationFighter = /** @class */ (function (_super) {
+        __extends(AnimationFighter, _super);
+        function AnimationFighter(game, personageiD, personage) {
+            var _this = _super.call(this, game, 0, 0, personageiD, 1) || this;
+            _this.personageAnimation = personage;
+            _this.init();
+            return _this;
+        }
+        AnimationFighter.prototype.init = function () {
+            this.block = false;
+            this.stanceAnimation();
+            this.blood = new Blood(this.game);
+            this.blood.x = -100;
+            this.blood.y = this.y - 50;
+            this.addChild(this.blood);
+        };
+        /*
+        public winAnimation():void{
+            this.animation.stop();
+            this.animation.onComplete.removeAll();
+            this.animation.destroy();
+            this.animationType = Constants.ANIMATION_TYPE_STANCE;
+            this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animWin);
+            this.animation.onComplete.add(this.onComplete, this);
+            this.animation.play(10, true, false);
+        }
+        */
+        AnimationFighter.prototype.stanceAnimation = function () {
+            this.animationType = Constants.ANIMATION_TYPE_STANCE;
+            this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animStance);
+            this.animation.onComplete.add(this.onComplete, this);
+            this.animation.play(10, true, false);
+        };
+        AnimationFighter.prototype.blockAnimation = function () {
+            this.animationType = Constants.ANIMATION_TYPE_BLOCK;
+            this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animBlock);
+            this.animation.onComplete.add(this.onComplete, this);
+            this.frameName = this.personageAnimation.animBlock[this.personageAnimation.animBlock.length - 1];
+        };
+        AnimationFighter.prototype.changeAnimation = function (type) {
+            this.animation.stop();
+            this.animation.onComplete.removeAll();
+            this.animation.destroy();
+            this.animationType = type;
+            if (this.animationType === Constants.ANIMATION_TYPE_STANCE)
+                this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animStance);
+            if (this.animationType === Constants.ANIMATION_TYPE_BLOCK)
+                this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animBlock);
+            if (this.animationType === Constants.ANIMATION_TYPE_DAMAGE && this.block === false)
+                this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animDamage);
+            if (this.animationType === Constants.ANIMATION_TYPE_DAMAGE && this.block === true)
+                this.blockAnimation(); //this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animBlock);
+            if (this.animationType === Constants.ANIMATION_TYPE_HIT_HAND)
+                this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animHitHand);
+            if (this.animationType === Constants.ANIMATION_TYPE_HIT_HAND_UPPERCUT)
+                this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animHitHandUppercut);
+            if (this.animationType === Constants.ANIMATION_TYPE_HIT_LEG)
+                this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animHitLeg);
+            if (this.animationType === Constants.ANIMATION_TYPE_HIT_LEG_TWIST)
+                this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animHitLegTwist);
+            if (this.animationType === Constants.ANIMATION_TYPE_LOSE)
+                this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animLose);
+            if (this.animationType === Constants.ANIMATION_TYPE_WIN)
+                this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animWin);
+            this.animation.onComplete.add(this.onComplete, this);
+            this.animation.play(10, false, false);
+        };
+        AnimationFighter.prototype.onComplete = function (sprite, animation) {
+            //console.log( (sprite as AnimationFighter).animation);
+            if (this.animationType === Constants.ANIMATION_TYPE_BLOCK)
+                this.block = true;
+            if (this.animationType === Constants.ANIMATION_TYPE_STANCE)
+                return;
+            else {
+                if (this.block === false)
+                    this.stanceAnimation();
+                else
+                    this.blockAnimation();
+            }
+        };
+        AnimationFighter.prototype.showBlood = function () {
+            if (this.block === false)
+                this.blood.show();
+        };
+        return AnimationFighter;
+    }(Phaser.Sprite));
+    Fabrique.AnimationFighter = AnimationFighter;
+})(Fabrique || (Fabrique = {}));
+var Fabrique;
+(function (Fabrique) {
+    var Icon = /** @class */ (function (_super) {
+        __extends(Icon, _super);
+        function Icon(game, x, y, image, id) {
+            var _this = _super.call(this, game, x, y, image, function () {
+                _this.event.dispatch(Constants.SELECT_FIGHTER, _this.id);
+            }) || this;
+            _this.id = id;
+            _this.init();
+            return _this;
+        }
+        Icon.prototype.init = function () {
+            this.event = new Phaser.Signal();
+            this.graphics = this.game.add.graphics(0, 0);
+            this.graphics.beginFill(0x000000, 0);
+            this.graphics.lineStyle(2, 0x000000, 1);
+            this.graphics.drawRect(0, 0, 90, 120);
+            this.graphics.endFill();
+            this.addChild(this.graphics);
+        };
+        Icon.prototype.select = function () {
+            this.graphics.lineStyle(2, 0xFFFFFF, 1);
+            this.graphics.drawRect(0, 0, 90, 120);
+            this.graphics.lineStyle(1, 0x000000, 1);
+            this.graphics.drawRect(0, 0, 90, 120);
+        };
+        Icon.prototype.unselect = function () {
+            this.graphics.lineStyle(2, 0x000000, 1);
+            this.graphics.drawRect(0, 0, 90, 120);
+        };
+        return Icon;
+    }(Phaser.Button));
+    Fabrique.Icon = Icon;
+})(Fabrique || (Fabrique = {}));
+var Fabrique;
+(function (Fabrique) {
+    var LifeBar = /** @class */ (function (_super) {
+        __extends(LifeBar, _super);
+        function LifeBar(game, x, y, name, life) {
+            var _this = _super.call(this, game) || this;
+            _this.x = x;
+            _this.y = y;
+            _this.oneLife = (200 / life);
+            _this.name = name;
+            _this.updateTransform();
+            _this.init();
+            return _this;
+        }
+        LifeBar.prototype.init = function () {
+            this.lifebarImage = new Phaser.Sprite(this.game, this.x, this.y + 20, Images.Lifebar);
+            this.addChild(this.lifebarImage);
+            this.lineGraphics = this.game.add.graphics(this.x + 3, this.y + 23); // 200x10
+            this.lineGraphics.beginFill(0x0000CD, 1);
+            this.lineGraphics.lineStyle(0, 0x0000CD, 0);
+            this.lineGraphics.drawRect(0, 0, 200, 10);
+            this.lineGraphics.endFill();
+            this.addChild(this.lineGraphics);
+            var textLength = this.name.length * 8;
+            var center = this.x + (this.width / 2);
+            var posX = center - (textLength / 2);
+            this.lifebarText = new Phaser.Text(this.game, posX, this.y, this.name, { font: "18px Georgia", fill: "#DDDDDD", align: "left" });
+            this.addChild(this.lifebarText);
+        };
+        LifeBar.prototype.lifeUpdate = function (life) {
+            if (life <= 0)
+                life = 0;
+            this.lineGraphics.clear();
+            this.lineGraphics.beginFill(0x0000CD, 1);
+            this.lineGraphics.lineStyle(0, 0x0000CD, 0);
+            this.lineGraphics.drawRect(0, 0, (life * this.oneLife), 10);
+            this.lineGraphics.endFill();
+        };
+        return LifeBar;
+    }(Phaser.Group));
+    Fabrique.LifeBar = LifeBar;
+})(Fabrique || (Fabrique = {}));
+var Fabrique;
+(function (Fabrique) {
+    var PanelIcons = /** @class */ (function (_super) {
+        __extends(PanelIcons, _super);
+        function PanelIcons(game, parent) {
+            var _this = _super.call(this, game, parent) || this;
+            _this.defaultFighterID = Constants.ID_LIUKANG;
+            _this.updateTransform();
+            _this.init();
+            return _this;
+        }
+        PanelIcons.prototype.init = function () {
+            var _this = this;
+            this.icons = [
+                [
+                    new Fabrique.Icon(this.game, 0, 0, Images.LiuKangIcon, Constants.ID_LIUKANG),
+                    new Fabrique.Icon(this.game, 95, 0, Images.KungLaoIcon, Constants.ID_KUNGLAO),
+                    new Fabrique.Icon(this.game, 190, 0, Images.JohnnyCageIcon, Constants.ID_JOHNYCAGE),
+                    new Fabrique.Icon(this.game, 285, 0, Images.ReptileIcon, Constants.ID_REPTILE)
+                ],
+                [
+                    new Fabrique.Icon(this.game, 0, 125, Images.SubZeroIcon, Constants.ID_SUBZERO),
+                    new Fabrique.Icon(this.game, 95, 125, Images.ShangTsungIcon, Constants.ID_SHANGTSUNG),
+                    new Fabrique.Icon(this.game, 190, 125, Images.KitanaIcon, Constants.ID_KITANA),
+                    new Fabrique.Icon(this.game, 285, 125, Images.JaxIcon, Constants.ID_JAX)
+                ],
+                [
+                    new Fabrique.Icon(this.game, 0, 250, Images.MileenaIcon, Constants.ID_MILEENA),
+                    new Fabrique.Icon(this.game, 95, 250, Images.BarakaIcon, Constants.ID_BARAKA),
+                    new Fabrique.Icon(this.game, 190, 250, Images.ScorpionIcon, Constants.ID_SCORPION),
+                    new Fabrique.Icon(this.game, 285, 250, Images.RaidenIcon, Constants.ID_RAIDEN)
+                ]
+            ];
+            this.x = -400;
+            this.y = 150;
+            this.icons.forEach(function (iconsLine) {
+                iconsLine.forEach(function (icon) {
+                    icon.event.add(_this.onChange, _this);
+                    _this.addChild(icon);
+                });
+            });
+            this.icons[0][0].select();
+            this.windowPersonage = new Fabrique.WindowPersonage(this.game, -225, 122);
+            this.windowPersonage.showPersonage(this.defaultFighterID);
+            this.addChild(this.windowPersonage);
+            this.windowCharacteristics = new Fabrique.WindowCharacteristics(this.game, -225, 375);
+            this.windowCharacteristics.showCharacteristics(this.defaultFighterID);
+            this.addChild(this.windowCharacteristics);
+            GameData.Data.user_personage = GameData.Data.getPersonage(this.defaultFighterID);
+        };
+        PanelIcons.prototype.onChange = function (target, id) {
+            //Utilits.Data.debugLog('Change [target/type]:', [target, id]);
+            this.icons.forEach(function (iconsLine) {
+                iconsLine.forEach(function (icon) {
+                    icon.unselect();
+                    if (icon.id === id)
+                        icon.select();
+                });
+            });
+            this.windowPersonage.changePersonage(id);
+            this.windowCharacteristics.showCharacteristics(id);
+            GameData.Data.user_personage = GameData.Data.getPersonage(id);
+        };
+        PanelIcons.prototype.show = function () {
             var tween = this.game.add.tween(this);
-            tween.to({ x: x, y: y }, 500, 'Linear');
+            tween.to({ x: 245, y: 150 }, 500, 'Linear');
             tween.start();
         };
-        return Tutorial;
-    }(Phaser.Sprite));
-    Fabrique.Tutorial = Tutorial;
+        return PanelIcons;
+    }(Phaser.Group));
+    Fabrique.PanelIcons = PanelIcons;
 })(Fabrique || (Fabrique = {}));
 var Fabrique;
 (function (Fabrique) {
@@ -2753,242 +2976,45 @@ var Fabrique;
 })(Fabrique || (Fabrique = {}));
 var Fabrique;
 (function (Fabrique) {
-    var AnimationFighter = /** @class */ (function (_super) {
-        __extends(AnimationFighter, _super);
-        function AnimationFighter(game, personageiD, personage) {
-            var _this = _super.call(this, game, 0, 0, personageiD, 1) || this;
-            _this.personageAnimation = personage;
+    var Tutorial = /** @class */ (function (_super) {
+        __extends(Tutorial, _super);
+        function Tutorial(game, text) {
+            var _this = _super.call(this, game, 0, 0, Atlases.VideoHelp, 0) || this;
+            _this.text = text;
             _this.init();
             return _this;
         }
-        AnimationFighter.prototype.init = function () {
-            this.block = false;
-            this.stanceAnimation();
+        Tutorial.prototype.init = function () {
+            var graphics = this.game.add.graphics(0, 0);
+            graphics.beginFill(0x000000, 0);
+            graphics.lineStyle(10, 0x000000, 1);
+            graphics.drawRect(0, 0, 400, 116);
+            graphics.endFill();
+            graphics.beginFill(0x000000, 0.6);
+            graphics.lineStyle(1, 0x000000, 1);
+            graphics.drawRect(150, 0, 250, 116);
+            graphics.endFill();
+            graphics.beginFill(0x000000, 0.5);
+            graphics.lineStyle(2, 0x999999, 0.5);
+            graphics.drawRect(0, 0, 400, 116);
+            graphics.endFill();
+            this.addChild(graphics);
+            var messageText = this.game.add.text(175, 10, this.text, { font: "18px Georgia", fill: "#AAAAAA", align: "left" });
+            this.addChild(messageText);
+            var anim = this.animations.add(Atlases.VideoHelp);
+            anim.onComplete.add(this.onCompleteVideo, this);
+            anim.play(10, true, false);
         };
-        /*
-        public winAnimation():void{
-            this.animation.stop();
-            this.animation.onComplete.removeAll();
-            this.animation.destroy();
-            this.animationType = Constants.ANIMATION_TYPE_STANCE;
-            this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animWin);
-            this.animation.onComplete.add(this.onComplete, this);
-            this.animation.play(10, true, false);
-        }
-        */
-        AnimationFighter.prototype.stanceAnimation = function () {
-            this.animationType = Constants.ANIMATION_TYPE_STANCE;
-            this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animStance);
-            this.animation.onComplete.add(this.onComplete, this);
-            this.animation.play(10, true, false);
+        Tutorial.prototype.onCompleteVideo = function () {
         };
-        AnimationFighter.prototype.blockAnimation = function () {
-            this.animationType = Constants.ANIMATION_TYPE_BLOCK;
-            this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animBlock);
-            this.animation.onComplete.add(this.onComplete, this);
-            this.frameName = this.personageAnimation.animBlock[this.personageAnimation.animBlock.length - 1];
+        Tutorial.prototype.show = function (x, y) {
+            var tween = this.game.add.tween(this);
+            tween.to({ x: x, y: y }, 500, 'Linear');
+            tween.start();
         };
-        AnimationFighter.prototype.changeAnimation = function (type) {
-            this.animation.stop();
-            this.animation.onComplete.removeAll();
-            this.animation.destroy();
-            this.animationType = type;
-            if (this.animationType === Constants.ANIMATION_TYPE_STANCE)
-                this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animStance);
-            if (this.animationType === Constants.ANIMATION_TYPE_BLOCK)
-                this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animBlock);
-            if (this.animationType === Constants.ANIMATION_TYPE_DAMAGE && this.block === false)
-                this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animDamage);
-            if (this.animationType === Constants.ANIMATION_TYPE_DAMAGE && this.block === true)
-                this.blockAnimation(); //this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animBlock);
-            if (this.animationType === Constants.ANIMATION_TYPE_HIT_HAND)
-                this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animHitHand);
-            if (this.animationType === Constants.ANIMATION_TYPE_HIT_HAND_UPPERCUT)
-                this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animHitHandUppercut);
-            if (this.animationType === Constants.ANIMATION_TYPE_HIT_LEG)
-                this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animHitLeg);
-            if (this.animationType === Constants.ANIMATION_TYPE_HIT_LEG_TWIST)
-                this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animHitLegTwist);
-            if (this.animationType === Constants.ANIMATION_TYPE_LOSE)
-                this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animLose);
-            if (this.animationType === Constants.ANIMATION_TYPE_WIN)
-                this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animWin);
-            this.animation.onComplete.add(this.onComplete, this);
-            this.animation.play(10, false, false);
-        };
-        AnimationFighter.prototype.onComplete = function (sprite, animation) {
-            //console.log( (sprite as AnimationFighter).animation);
-            if (this.animationType === Constants.ANIMATION_TYPE_BLOCK)
-                this.block = true;
-            if (this.animationType === Constants.ANIMATION_TYPE_STANCE)
-                return;
-            else {
-                if (this.block === false)
-                    this.stanceAnimation();
-                else
-                    this.blockAnimation();
-            }
-        };
-        return AnimationFighter;
+        return Tutorial;
     }(Phaser.Sprite));
-    Fabrique.AnimationFighter = AnimationFighter;
-})(Fabrique || (Fabrique = {}));
-var Fabrique;
-(function (Fabrique) {
-    var Icon = /** @class */ (function (_super) {
-        __extends(Icon, _super);
-        function Icon(game, x, y, image, id) {
-            var _this = _super.call(this, game, x, y, image, function () {
-                _this.event.dispatch(Constants.SELECT_FIGHTER, _this.id);
-            }) || this;
-            _this.id = id;
-            _this.init();
-            return _this;
-        }
-        Icon.prototype.init = function () {
-            this.event = new Phaser.Signal();
-            this.graphics = this.game.add.graphics(0, 0);
-            this.graphics.beginFill(0x000000, 0);
-            this.graphics.lineStyle(2, 0x000000, 1);
-            this.graphics.drawRect(0, 0, 90, 120);
-            this.graphics.endFill();
-            this.addChild(this.graphics);
-        };
-        Icon.prototype.select = function () {
-            this.graphics.lineStyle(2, 0xFFFFFF, 1);
-            this.graphics.drawRect(0, 0, 90, 120);
-            this.graphics.lineStyle(1, 0x000000, 1);
-            this.graphics.drawRect(0, 0, 90, 120);
-        };
-        Icon.prototype.unselect = function () {
-            this.graphics.lineStyle(2, 0x000000, 1);
-            this.graphics.drawRect(0, 0, 90, 120);
-        };
-        return Icon;
-    }(Phaser.Button));
-    Fabrique.Icon = Icon;
-})(Fabrique || (Fabrique = {}));
-var Fabrique;
-(function (Fabrique) {
-    var WindowPersonage = /** @class */ (function (_super) {
-        __extends(WindowPersonage, _super);
-        function WindowPersonage(game, x, y) {
-            var _this = _super.call(this, game, x, y, Images.WindowBackground) || this;
-            _this.init();
-            return _this;
-        }
-        WindowPersonage.prototype.init = function () {
-            this.border = new Phaser.Sprite(this.game, 0, 0, Images.WindowBorder);
-            this.fighter = new Phaser.Group(this.game, this);
-        };
-        WindowPersonage.prototype.showPersonage = function (personageID) {
-            var personage;
-            personage = GameData.Data.getPersonage(personageID);
-            this.animPersonage = new Fabrique.AnimationFighter(this.game, personage.id, personage);
-            this.animPersonage.x = (this.width - this.animPersonage.width) / 3;
-            this.animPersonage.y = (this.height - this.animPersonage.height) / 4;
-            this.animPersonage.scale.x = 1.5;
-            this.animPersonage.scale.y = 1.5;
-            this.fighter.addChild(this.animPersonage);
-            this.addChild(this.border);
-        };
-        WindowPersonage.prototype.changePersonage = function (personageID) {
-            var personage;
-            personage = GameData.Data.getPersonage(personageID);
-            this.animPersonage.destroy();
-            this.fighter.removeAll();
-            this.animPersonage = new Fabrique.AnimationFighter(this.game, personage.id, personage);
-            this.animPersonage.x = (this.width - this.animPersonage.width) / 3;
-            this.animPersonage.y = (this.height - this.animPersonage.height) / 4;
-            this.animPersonage.scale.x = 1.5;
-            this.animPersonage.scale.y = 1.5;
-            this.fighter.addChild(this.animPersonage);
-            Utilits.Data.debugLog("change personage", personage);
-        };
-        return WindowPersonage;
-    }(Phaser.Sprite));
-    Fabrique.WindowPersonage = WindowPersonage;
-})(Fabrique || (Fabrique = {}));
-var Fabrique;
-(function (Fabrique) {
-    var WindowCharacteristics = /** @class */ (function (_super) {
-        __extends(WindowCharacteristics, _super);
-        function WindowCharacteristics(game, x, y) {
-            var _this = _super.call(this, game, x, y, Images.WindowBackground2) || this;
-            _this.init();
-            return _this;
-        }
-        WindowCharacteristics.prototype.init = function () {
-            this.border = new Phaser.Sprite(this.game, 0, 0, Images.WindowBorder2);
-            this.cap1 = new Phaser.Sprite(this.game, 15, 45, Images.capShangTsung);
-            this.cap1.scale.x = 0.8;
-            this.cap1.scale.y = 0.8;
-            this.cap2 = new Phaser.Sprite(this.game, 90, 45, Images.capJax);
-            this.cap2.scale.x = 0.8;
-            this.cap2.scale.y = 0.8;
-            this.cap3 = new Phaser.Sprite(this.game, 165, 45, Images.capMileena);
-            this.cap3.scale.x = 0.8;
-            this.cap3.scale.y = 0.8;
-            this.cap4 = new Phaser.Sprite(this.game, 240, 45, Images.capRaiden);
-            this.cap4.scale.x = 0.8;
-            this.cap4.scale.y = 0.8;
-            this.cap5 = new Phaser.Sprite(this.game, 315, 45, Images.capReptile);
-            this.cap5.scale.x = 0.8;
-            this.cap5.scale.y = 0.8;
-            this.textCap1 = new Phaser.Text(this.game, 15, 110, "Удар ногой\n", { font: "12px Arial", fill: "#C4C4C4", align: "left" });
-            this.textValueCap1 = new Phaser.Text(this.game, 40, 125, Constants.LEG + " x", { font: "12px Arial", fill: "#C4C4C4", align: "left" });
-            this.textCap2 = new Phaser.Text(this.game, 90, 110, "Удар рукой\n", { font: "12px Arial", fill: "#C4C4C4", align: "left" });
-            this.textValueCap2 = new Phaser.Text(this.game, 115, 125, Constants.HAND + " x", { font: "12px Arial", fill: "#C4C4C4", align: "left" });
-            this.textCap3 = new Phaser.Text(this.game, 185, 110, "Блок\n", { font: "12px Arial", fill: "#C4C4C4", align: "left" });
-            this.textValueCap3 = new Phaser.Text(this.game, 195, 125, Constants.BLOCK + " x", { font: "12px Arial", fill: "#C4C4C4", align: "left" });
-            this.textCap4 = new Phaser.Text(this.game, 245, 110, "Апперкот\n", { font: "12px Arial", fill: "#C4C4C4", align: "left" });
-            this.textValueCap4 = new Phaser.Text(this.game, 265, 125, Constants.UPPERCUT + " x", { font: "12px Arial", fill: "#C4C4C4", align: "left" });
-            this.textCap5 = new Phaser.Text(this.game, 315, 110, "С разворота\n", { font: "12px Arial", fill: "#C4C4C4", align: "left" });
-            this.textValueCap5 = new Phaser.Text(this.game, 345, 125, Constants.TWIST + " x", { font: "12px Arial", fill: "#C4C4C4", align: "left" });
-            this.namePersonage = new Phaser.Text(this.game, 50, 15, "", { font: "22px Georgia", fill: "#B7B7B7", align: "left" });
-            this.addChild(this.namePersonage);
-            this.addChild(this.cap1);
-            this.addChild(this.textCap1);
-            this.addChild(this.textValueCap1);
-            this.addChild(this.cap2);
-            this.addChild(this.textCap2);
-            this.addChild(this.textValueCap2);
-            this.addChild(this.cap3);
-            this.addChild(this.textCap3);
-            this.addChild(this.textValueCap3);
-            this.addChild(this.cap4);
-            this.addChild(this.textCap4);
-            this.addChild(this.textValueCap4);
-            this.addChild(this.cap5);
-            this.addChild(this.textCap5);
-            this.addChild(this.textValueCap5);
-            this.addChild(this.border);
-        };
-        WindowCharacteristics.prototype.showCharacteristics = function (personageID) {
-            var _this = this;
-            GameData.Data.personages.forEach(function (personage) {
-                if (personage.id === personageID) {
-                    /*
-                    this.textValueCap1.text = (Constants.LEG*personage.leg)+" ["+Constants.LEG+" x "+personage.leg+"]";
-                    this.textValueCap2.text = (Constants.HAND*personage.hand)+" ["+Constants.HAND+" x "+personage.hand+"]";
-                    this.textValueCap3.text = (Constants.BLOCK*personage.block)+"["+Constants.BLOCK+" x "+personage.block+"]";
-                    this.textValueCap4.text = (Constants.UPPERCUT*personage.uppercut)+"["+Constants.UPPERCUT+" x "+personage.uppercut+"]";
-                    this.textValueCap5.text = (Constants.TWIST*personage.twist)+"["+Constants.TWIST+" x "+personage.twist+"]";
-                    */
-                    _this.namePersonage.text = personage.name;
-                    _this.namePersonage.x = (400 / 2) - (_this.namePersonage.text.length * 5);
-                    _this.textValueCap1.text = (Constants.DAMAGE_LEG * personage.leg).toString();
-                    _this.textValueCap2.text = (Constants.DAMAGE_HAND * personage.hand).toString();
-                    _this.textValueCap3.text = (Constants.DAMAGE_BLOCK * personage.block).toString();
-                    _this.textValueCap4.text = (Constants.DAMAGE_UPPERCUT * personage.uppercut).toString();
-                    _this.textValueCap5.text = (Constants.DAMAGE_TWIST * personage.twist).toString();
-                    return;
-                }
-            });
-        };
-        return WindowCharacteristics;
-    }(Phaser.Sprite));
-    Fabrique.WindowCharacteristics = WindowCharacteristics;
+    Fabrique.Tutorial = Tutorial;
 })(Fabrique || (Fabrique = {}));
 var Fabrique;
 (function (Fabrique) {
@@ -3221,117 +3247,125 @@ var Fabrique;
 })(Fabrique || (Fabrique = {}));
 var Fabrique;
 (function (Fabrique) {
-    var PanelIcons = /** @class */ (function (_super) {
-        __extends(PanelIcons, _super);
-        function PanelIcons(game, parent) {
-            var _this = _super.call(this, game, parent) || this;
-            _this.defaultFighterID = Constants.ID_LIUKANG;
-            _this.updateTransform();
+    var WindowPersonage = /** @class */ (function (_super) {
+        __extends(WindowPersonage, _super);
+        function WindowPersonage(game, x, y) {
+            var _this = _super.call(this, game, x, y, Images.WindowBackground) || this;
             _this.init();
             return _this;
         }
-        PanelIcons.prototype.init = function () {
-            var _this = this;
-            this.icons = [
-                [
-                    new Fabrique.Icon(this.game, 0, 0, Images.LiuKangIcon, Constants.ID_LIUKANG),
-                    new Fabrique.Icon(this.game, 95, 0, Images.KungLaoIcon, Constants.ID_KUNGLAO),
-                    new Fabrique.Icon(this.game, 190, 0, Images.JohnnyCageIcon, Constants.ID_JOHNYCAGE),
-                    new Fabrique.Icon(this.game, 285, 0, Images.ReptileIcon, Constants.ID_REPTILE)
-                ],
-                [
-                    new Fabrique.Icon(this.game, 0, 125, Images.SubZeroIcon, Constants.ID_SUBZERO),
-                    new Fabrique.Icon(this.game, 95, 125, Images.ShangTsungIcon, Constants.ID_SHANGTSUNG),
-                    new Fabrique.Icon(this.game, 190, 125, Images.KitanaIcon, Constants.ID_KITANA),
-                    new Fabrique.Icon(this.game, 285, 125, Images.JaxIcon, Constants.ID_JAX)
-                ],
-                [
-                    new Fabrique.Icon(this.game, 0, 250, Images.MileenaIcon, Constants.ID_MILEENA),
-                    new Fabrique.Icon(this.game, 95, 250, Images.BarakaIcon, Constants.ID_BARAKA),
-                    new Fabrique.Icon(this.game, 190, 250, Images.ScorpionIcon, Constants.ID_SCORPION),
-                    new Fabrique.Icon(this.game, 285, 250, Images.RaidenIcon, Constants.ID_RAIDEN)
-                ]
-            ];
-            this.x = -400;
-            this.y = 150;
-            this.icons.forEach(function (iconsLine) {
-                iconsLine.forEach(function (icon) {
-                    icon.event.add(_this.onChange, _this);
-                    _this.addChild(icon);
-                });
-            });
-            this.icons[0][0].select();
-            this.windowPersonage = new Fabrique.WindowPersonage(this.game, -225, 122);
-            this.windowPersonage.showPersonage(this.defaultFighterID);
-            this.addChild(this.windowPersonage);
-            this.windowCharacteristics = new Fabrique.WindowCharacteristics(this.game, -225, 375);
-            this.windowCharacteristics.showCharacteristics(this.defaultFighterID);
-            this.addChild(this.windowCharacteristics);
-            GameData.Data.user_personage = GameData.Data.getPersonage(this.defaultFighterID);
+        WindowPersonage.prototype.init = function () {
+            this.border = new Phaser.Sprite(this.game, 0, 0, Images.WindowBorder);
+            this.fighter = new Phaser.Group(this.game, this);
         };
-        PanelIcons.prototype.onChange = function (target, id) {
-            //Utilits.Data.debugLog('Change [target/type]:', [target, id]);
-            this.icons.forEach(function (iconsLine) {
-                iconsLine.forEach(function (icon) {
-                    icon.unselect();
-                    if (icon.id === id)
-                        icon.select();
-                });
-            });
-            this.windowPersonage.changePersonage(id);
-            this.windowCharacteristics.showCharacteristics(id);
-            GameData.Data.user_personage = GameData.Data.getPersonage(id);
+        WindowPersonage.prototype.showPersonage = function (personageID) {
+            var personage;
+            personage = GameData.Data.getPersonage(personageID);
+            this.animPersonage = new Fabrique.AnimationFighter(this.game, personage.id, personage);
+            this.animPersonage.x = (this.width - this.animPersonage.width) / 3;
+            this.animPersonage.y = (this.height - this.animPersonage.height) / 4;
+            this.animPersonage.scale.x = 1.5;
+            this.animPersonage.scale.y = 1.5;
+            this.fighter.addChild(this.animPersonage);
+            this.addChild(this.border);
         };
-        PanelIcons.prototype.show = function () {
-            var tween = this.game.add.tween(this);
-            tween.to({ x: 245, y: 150 }, 500, 'Linear');
-            tween.start();
+        WindowPersonage.prototype.changePersonage = function (personageID) {
+            var personage;
+            personage = GameData.Data.getPersonage(personageID);
+            this.animPersonage.destroy();
+            this.fighter.removeAll();
+            this.animPersonage = new Fabrique.AnimationFighter(this.game, personage.id, personage);
+            this.animPersonage.x = (this.width - this.animPersonage.width) / 3;
+            this.animPersonage.y = (this.height - this.animPersonage.height) / 4;
+            this.animPersonage.scale.x = 1.5;
+            this.animPersonage.scale.y = 1.5;
+            this.fighter.addChild(this.animPersonage);
+            Utilits.Data.debugLog("change personage", personage);
         };
-        return PanelIcons;
-    }(Phaser.Group));
-    Fabrique.PanelIcons = PanelIcons;
+        return WindowPersonage;
+    }(Phaser.Sprite));
+    Fabrique.WindowPersonage = WindowPersonage;
 })(Fabrique || (Fabrique = {}));
 var Fabrique;
 (function (Fabrique) {
-    var LifeBar = /** @class */ (function (_super) {
-        __extends(LifeBar, _super);
-        function LifeBar(game, x, y, name, life) {
-            var _this = _super.call(this, game) || this;
-            _this.x = x;
-            _this.y = y;
-            _this.oneLife = (200 / life);
-            _this.name = name;
-            _this.updateTransform();
+    var WindowCharacteristics = /** @class */ (function (_super) {
+        __extends(WindowCharacteristics, _super);
+        function WindowCharacteristics(game, x, y) {
+            var _this = _super.call(this, game, x, y, Images.WindowBackground2) || this;
             _this.init();
             return _this;
         }
-        LifeBar.prototype.init = function () {
-            this.lifebarImage = new Phaser.Sprite(this.game, this.x, this.y + 20, Images.Lifebar);
-            this.addChild(this.lifebarImage);
-            this.lineGraphics = this.game.add.graphics(this.x + 3, this.y + 23); // 200x10
-            this.lineGraphics.beginFill(0x0000CD, 1);
-            this.lineGraphics.lineStyle(0, 0x0000CD, 0);
-            this.lineGraphics.drawRect(0, 0, 200, 10);
-            this.lineGraphics.endFill();
-            this.addChild(this.lineGraphics);
-            var textLength = this.name.length * 8;
-            var center = this.x + (this.width / 2);
-            var posX = center - (textLength / 2);
-            this.lifebarText = new Phaser.Text(this.game, posX, this.y, this.name, { font: "18px Georgia", fill: "#DDDDDD", align: "left" });
-            this.addChild(this.lifebarText);
+        WindowCharacteristics.prototype.init = function () {
+            this.border = new Phaser.Sprite(this.game, 0, 0, Images.WindowBorder2);
+            this.cap1 = new Phaser.Sprite(this.game, 15, 45, Images.capShangTsung);
+            this.cap1.scale.x = 0.8;
+            this.cap1.scale.y = 0.8;
+            this.cap2 = new Phaser.Sprite(this.game, 90, 45, Images.capJax);
+            this.cap2.scale.x = 0.8;
+            this.cap2.scale.y = 0.8;
+            this.cap3 = new Phaser.Sprite(this.game, 165, 45, Images.capMileena);
+            this.cap3.scale.x = 0.8;
+            this.cap3.scale.y = 0.8;
+            this.cap4 = new Phaser.Sprite(this.game, 240, 45, Images.capRaiden);
+            this.cap4.scale.x = 0.8;
+            this.cap4.scale.y = 0.8;
+            this.cap5 = new Phaser.Sprite(this.game, 315, 45, Images.capReptile);
+            this.cap5.scale.x = 0.8;
+            this.cap5.scale.y = 0.8;
+            this.textCap1 = new Phaser.Text(this.game, 15, 110, "Удар ногой\n", { font: "12px Arial", fill: "#C4C4C4", align: "left" });
+            this.textValueCap1 = new Phaser.Text(this.game, 40, 125, Constants.LEG + " x", { font: "12px Arial", fill: "#C4C4C4", align: "left" });
+            this.textCap2 = new Phaser.Text(this.game, 90, 110, "Удар рукой\n", { font: "12px Arial", fill: "#C4C4C4", align: "left" });
+            this.textValueCap2 = new Phaser.Text(this.game, 115, 125, Constants.HAND + " x", { font: "12px Arial", fill: "#C4C4C4", align: "left" });
+            this.textCap3 = new Phaser.Text(this.game, 185, 110, "Блок\n", { font: "12px Arial", fill: "#C4C4C4", align: "left" });
+            this.textValueCap3 = new Phaser.Text(this.game, 195, 125, Constants.BLOCK + " x", { font: "12px Arial", fill: "#C4C4C4", align: "left" });
+            this.textCap4 = new Phaser.Text(this.game, 245, 110, "Апперкот\n", { font: "12px Arial", fill: "#C4C4C4", align: "left" });
+            this.textValueCap4 = new Phaser.Text(this.game, 265, 125, Constants.UPPERCUT + " x", { font: "12px Arial", fill: "#C4C4C4", align: "left" });
+            this.textCap5 = new Phaser.Text(this.game, 315, 110, "С разворота\n", { font: "12px Arial", fill: "#C4C4C4", align: "left" });
+            this.textValueCap5 = new Phaser.Text(this.game, 345, 125, Constants.TWIST + " x", { font: "12px Arial", fill: "#C4C4C4", align: "left" });
+            this.namePersonage = new Phaser.Text(this.game, 50, 15, "", { font: "22px Georgia", fill: "#B7B7B7", align: "left" });
+            this.addChild(this.namePersonage);
+            this.addChild(this.cap1);
+            this.addChild(this.textCap1);
+            this.addChild(this.textValueCap1);
+            this.addChild(this.cap2);
+            this.addChild(this.textCap2);
+            this.addChild(this.textValueCap2);
+            this.addChild(this.cap3);
+            this.addChild(this.textCap3);
+            this.addChild(this.textValueCap3);
+            this.addChild(this.cap4);
+            this.addChild(this.textCap4);
+            this.addChild(this.textValueCap4);
+            this.addChild(this.cap5);
+            this.addChild(this.textCap5);
+            this.addChild(this.textValueCap5);
+            this.addChild(this.border);
         };
-        LifeBar.prototype.lifeUpdate = function (life) {
-            if (life <= 0)
-                life = 0;
-            this.lineGraphics.clear();
-            this.lineGraphics.beginFill(0x0000CD, 1);
-            this.lineGraphics.lineStyle(0, 0x0000CD, 0);
-            this.lineGraphics.drawRect(0, 0, (life * this.oneLife), 10);
-            this.lineGraphics.endFill();
+        WindowCharacteristics.prototype.showCharacteristics = function (personageID) {
+            var _this = this;
+            GameData.Data.personages.forEach(function (personage) {
+                if (personage.id === personageID) {
+                    /*
+                    this.textValueCap1.text = (Constants.LEG*personage.leg)+" ["+Constants.LEG+" x "+personage.leg+"]";
+                    this.textValueCap2.text = (Constants.HAND*personage.hand)+" ["+Constants.HAND+" x "+personage.hand+"]";
+                    this.textValueCap3.text = (Constants.BLOCK*personage.block)+"["+Constants.BLOCK+" x "+personage.block+"]";
+                    this.textValueCap4.text = (Constants.UPPERCUT*personage.uppercut)+"["+Constants.UPPERCUT+" x "+personage.uppercut+"]";
+                    this.textValueCap5.text = (Constants.TWIST*personage.twist)+"["+Constants.TWIST+" x "+personage.twist+"]";
+                    */
+                    _this.namePersonage.text = personage.name;
+                    _this.namePersonage.x = (400 / 2) - (_this.namePersonage.text.length * 5);
+                    _this.textValueCap1.text = (Constants.DAMAGE_LEG * personage.leg).toString();
+                    _this.textValueCap2.text = (Constants.DAMAGE_HAND * personage.hand).toString();
+                    _this.textValueCap3.text = (Constants.DAMAGE_BLOCK * personage.block).toString();
+                    _this.textValueCap4.text = (Constants.DAMAGE_UPPERCUT * personage.uppercut).toString();
+                    _this.textValueCap5.text = (Constants.DAMAGE_TWIST * personage.twist).toString();
+                    return;
+                }
+            });
         };
-        return LifeBar;
-    }(Phaser.Group));
-    Fabrique.LifeBar = LifeBar;
+        return WindowCharacteristics;
+    }(Phaser.Sprite));
+    Fabrique.WindowCharacteristics = WindowCharacteristics;
 })(Fabrique || (Fabrique = {}));
 var MortalKombat;
 (function (MortalKombat) {
@@ -3924,7 +3958,7 @@ var MortalKombat;
                 }
             }
             else {
-                if (statusAction === Field.ACTION_PLAYER) {
+                if (statusAction === Field.ACTION_PLAYER) { // Противник получает урон
                     if (hitType === Constants.HAND)
                         this.animUser.changeAnimation(Constants.ANIMATION_TYPE_HIT_HAND);
                     if (hitType === Constants.LEG)
@@ -3935,12 +3969,14 @@ var MortalKombat;
                         this.animUser.changeAnimation(Constants.ANIMATION_TYPE_HIT_LEG_TWIST);
                     if (hitType === Constants.UPPERCUT)
                         this.animUser.changeAnimation(Constants.ANIMATION_TYPE_HIT_HAND_UPPERCUT);
-                    if (hitType !== Constants.BLOCK)
+                    if (hitType !== Constants.BLOCK) {
                         this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_DAMAGE);
+                        this.animEnemies.showBlood();
+                    }
                     this.persEnemies.life = this.persEnemies.life - GameData.Data.calcDamage(this.persEnemies, this.animEnemies.block, hitType, hitCount);
                     this.enemiesLifebar.lifeUpdate(this.persEnemies.life);
                 }
-                else {
+                else { // Игрок получает урон
                     if (hitType === Constants.HAND)
                         this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_HIT_HAND);
                     if (hitType === Constants.LEG)
@@ -3951,8 +3987,10 @@ var MortalKombat;
                         this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_HIT_LEG_TWIST);
                     if (hitType === Constants.UPPERCUT)
                         this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_HIT_HAND_UPPERCUT);
-                    if (hitType !== Constants.BLOCK)
+                    if (hitType !== Constants.BLOCK) {
                         this.animUser.changeAnimation(Constants.ANIMATION_TYPE_DAMAGE);
+                        this.animUser.showBlood();
+                    }
                     this.persUser.life = this.persUser.life - GameData.Data.calcDamage(this.persUser, this.animUser.block, hitType, hitCount);
                     this.userLifebar.lifeUpdate(this.persUser.life);
                 }
@@ -4006,17 +4044,18 @@ var MortalKombat;
 /// <reference path="Data\Animations.ts" />
 /// <reference path="Data\GameData.ts" />
 /// <reference path="Data\SocialVK.ts" />
-/// <reference path="Fabrique\Objects\Tutorial.ts" />
+/// <reference path="Fabrique\Objects\Blood.ts" />
+/// <reference path="Fabrique\Objects\AnimationFighter.ts" />
+/// <reference path="Fabrique\Objects\Icon.ts" />
+/// <reference path="Fabrique\Objects\LifeBar.ts" />
+/// <reference path="Fabrique\Objects\PanelIcons.ts" />
 /// <reference path="Fabrique\Objects\Settings.ts" />
 /// <reference path="Fabrique\Objects\Title.ts" />
 /// <reference path="Fabrique\Objects\Tower.ts" />
-/// <reference path="Fabrique\Objects\AnimationFighter.ts" />
-/// <reference path="Fabrique\Objects\Icon.ts" />
+/// <reference path="Fabrique\Objects\Tutorial.ts" />
+/// <reference path="Fabrique\Objects\UpgradeCharacteristics.ts" />
 /// <reference path="Fabrique\Objects\WindowPersonage.ts" />
 /// <reference path="Fabrique\Objects\WindowCharacteristics.ts" />
-/// <reference path="Fabrique\Objects\UpgradeCharacteristics.ts" />
-/// <reference path="Fabrique\Objects\PanelIcons.ts" />
-/// <reference path="Fabrique\Objects\LifeBar.ts" />
 /// <reference path="States\Boot.ts" />
 /// <reference path="States\Preloader.ts" />
 /// <reference path="States\Menu.ts" />

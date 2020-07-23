@@ -1,10 +1,13 @@
 module Fabrique {
+    import Blood = Fabrique.Blood;
+
     export class AnimationFighter extends Phaser.Sprite {
+        
         private animation: Phaser.Animation;
         private personageAnimation: GameData.IPersonage;
         private animationType: string;
-        public block: boolean;
-
+        private blood: Blood;
+        public block: boolean;        
 
         constructor(game: Phaser.Game, personageiD: string, personage: GameData.IPersonage) {
             super(game, 0, 0, personageiD, 1);
@@ -15,6 +18,10 @@ module Fabrique {
         private init(): void {
             this.block = false;
             this.stanceAnimation();
+            this.blood = new Blood(this.game);
+            this.blood.x = -100;
+            this.blood.y = this.y - 50;
+            this.addChild(this.blood);
         }
 
         /*
@@ -73,6 +80,11 @@ module Fabrique {
                 if(this.block === false) this.stanceAnimation();
                 else this.blockAnimation();
             }
+        }
+
+        public showBlood():void
+        {
+            if(this.block === false) this.blood.show();
         }
     }
 }
