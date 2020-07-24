@@ -275,6 +275,7 @@ module GameData {
 
             if(block === true){
                 damage = damage - (pers.block * Constants.DAMAGE_BLOCK);
+                if(damage < 0) damage = 0;
             }
             Utilits.Data.debugLog(pers.name, pers.life + " | " + damage);
             return damage;
