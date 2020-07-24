@@ -1,5 +1,6 @@
 module Fabrique {
     import Blood = Fabrique.Blood;
+    import DamageCounter = Fabrique.DamageCounter;
 
     export class AnimationFighter extends Phaser.Sprite {
         
@@ -7,6 +8,7 @@ module Fabrique {
         private personageAnimation: GameData.IPersonage;
         private animationType: string;
         private blood: Blood;
+        private damageCounter: DamageCounter;
         public block: boolean;        
 
         constructor(game: Phaser.Game, personageiD: string, personage: GameData.IPersonage) {
@@ -22,6 +24,10 @@ module Fabrique {
             this.blood.x = -100;
             this.blood.y = this.y - 50;
             this.addChild(this.blood);
+            this.damageCounter = new DamageCounter(this.game);
+            this.damageCounter.x = this.x + (this.width / 2) - 15;
+            this.damageCounter.y = this.y - 15;
+            this.addChild(this.damageCounter);
         }
 
         /*
@@ -85,6 +91,11 @@ module Fabrique {
         public showBlood():void
         {
             if(this.block === false) this.blood.show();
+        }
+
+        public showDamageCounter(value:string):void
+        {
+            this.damageCounter.show(value);
         }
     }
 }
