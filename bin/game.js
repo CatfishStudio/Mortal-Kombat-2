@@ -2512,6 +2512,7 @@ var Fabrique;
             _this.updateTransform();
             _this.startPosX = x;
             _this.startPosY = y;
+            _this.values = [];
             _this.init();
             return _this;
         }
@@ -2519,10 +2520,11 @@ var Fabrique;
             this.alpha = 0;
             this.tween = this.game.add.tween(this);
             this.tween.to({ x: this.startPosX, y: this.startPosY - 250 }, 500, 'Linear');
-            Utilits.Data.debugLog("INIT POINTS:", "X=" + this.startPosX + " | Y=" + this.startPosY);
         };
         DamageCounter.prototype.show = function (value, block) {
-            Utilits.Data.debugLog("SHOW POINTS:", "X=" + this.x + " | Y=" + this.y);
+            this.values.push(value); // добавляет элемент в конец массива
+            if (this.values.length > 0)
+                value = this.values[0];
             if (value !== "0")
                 this.text = "-" + value;
             else
@@ -2536,11 +2538,22 @@ var Fabrique;
             this.tween.start();
         };
         DamageCounter.prototype.onCompleteVideo = function () {
+            this.values.shift(); // удаляет первый элемент в массиве
             this.x = this.startPosX;
             this.y = this.startPosY;
             this.alpha = 0;
             this.text = "";
-            Utilits.Data.debugLog("END POINTS:", "X=" + this.x + " | Y=" + this.y);
+            Utilits.Data.debugLog("VALUES:", this.values);
+            if (this.values.length > 0) {
+                var value = this.values[0];
+                if (value !== "0")
+                    this.text = "-" + value;
+                else
+                    this.text = value;
+                this.alpha = 1;
+                this.tween.onComplete.add(this.onCompleteVideo, this);
+                this.tween.start();
+            }
         };
         return DamageCounter;
     }(Phaser.Text));
