@@ -1,14 +1,12 @@
 module Fabrique {
     import Blood = Fabrique.Blood;
-    import DamageCounter = Fabrique.DamageCounter;
-
+    
     export class AnimationFighter extends Phaser.Sprite {
         
         private animation: Phaser.Animation;
         private personageAnimation: GameData.IPersonage;
         private animationType: string;
         private blood: Blood;
-        private damageCounter: DamageCounter;
         public block: boolean;        
 
         constructor(game: Phaser.Game, personageiD: string, personage: GameData.IPersonage) {
@@ -24,10 +22,6 @@ module Fabrique {
             this.blood.x = -100;
             this.blood.y = this.y - 50;
             this.addChild(this.blood);
-            this.damageCounter = new DamageCounter(this.game);
-            this.damageCounter.x = this.x + (this.width / 2) - 15;
-            this.damageCounter.y = this.y - 15;
-            this.addChild(this.damageCounter);
         }
 
         /*
@@ -67,7 +61,7 @@ module Fabrique {
             if(this.animationType === Constants.ANIMATION_TYPE_STANCE) this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animStance);
             if(this.animationType === Constants.ANIMATION_TYPE_BLOCK) this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animBlock);
             if(this.animationType === Constants.ANIMATION_TYPE_DAMAGE && this.block === false) this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animDamage);
-            if(this.animationType === Constants.ANIMATION_TYPE_DAMAGE && this.block === true) this.blockAnimation(); //this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animBlock);
+            if(this.animationType === Constants.ANIMATION_TYPE_DAMAGE && this.block === true) this.blockAnimation(); 
             if(this.animationType === Constants.ANIMATION_TYPE_HIT_HAND) this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animHitHand);
             if(this.animationType === Constants.ANIMATION_TYPE_HIT_HAND_UPPERCUT) this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animHitHandUppercut);
             if(this.animationType === Constants.ANIMATION_TYPE_HIT_LEG) this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animHitLeg);
@@ -93,9 +87,5 @@ module Fabrique {
             if(this.block === false) this.blood.show();
         }
 
-        public showDamageCounter(value:string):void
-        {
-            this.damageCounter.show(value);
-        }
     }
 }

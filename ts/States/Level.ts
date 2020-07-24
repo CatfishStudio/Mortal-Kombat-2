@@ -2,6 +2,7 @@ module MortalKombat {
     import AnimationFighter = Fabrique.AnimationFighter;
     import LifeBar = Fabrique.LifeBar;
     import Field = Match3.Field;
+    import DamageCounter = Fabrique.DamageCounter;
 
     export class Level extends Phaser.State{
         public static Name: string = "level";
@@ -13,8 +14,10 @@ module MortalKombat {
         private helpButton:Phaser.Button;
         private persUser:GameData.IPersonage;
         private animUser:AnimationFighter;
+        private damageCounterUser: DamageCounter;
         private persEnemies:GameData.IPersonage;
         private animEnemies:AnimationFighter;
+        private damageCounterEnemies: DamageCounter;
         private userLifebar:LifeBar;
         private enemiesLifebar:LifeBar;
         private field:Field;
@@ -49,6 +52,9 @@ module MortalKombat {
             this.animUser.scale.y = 1.5;
             this.groupContent.addChild(this.animUser);
 
+            this.damageCounterUser = new DamageCounter(this.game, this.animUser.x + (this.animUser.width / 2) - 15, this.animUser.y - 15);
+            this.groupContent.addChild(this.damageCounterUser);
+
             this.persEnemies = GameData.Data.getPersonage(GameData.Data.id_enemies[GameData.Data.tournamentProgress]);
             this.animEnemies = new AnimationFighter(this.game, this.persEnemies.id, this.persEnemies);
             this.animEnemies.x = Constants.GAME_WIDTH - 25 - (this.animEnemies.width / 2);
@@ -58,6 +64,9 @@ module MortalKombat {
             this.animEnemies.scale.y = 1.5;
             this.animEnemies.scale.x *= -1;
             this.groupContent.addChild(this.animEnemies);
+
+            this.damageCounterEnemies = new DamageCounter(this.game, this.animEnemies.x + (this.animEnemies.width / 2) - 15, this.animEnemies.y - 15);
+            this.groupContent.addChild(this.damageCounterEnemies);
 
             this.userLifebar = new LifeBar(this.game, 45, 35, this.persUser.name, this.persUser.life);
             this.groupContent.addChild(this.userLifebar);
@@ -89,7 +98,8 @@ module MortalKombat {
                     if(hitType !== Constants.BLOCK) {
                         this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_DAMAGE);
                         this.animEnemies.showBlood();
-                        this.animEnemies.showDamageCounter(damageValue.toString());
+                        //this.animEnemies.showDamageCounter(damageValue.toString());
+                        this.damageCounterEnemies.show(damageValue.toString(), this.animEnemies.block);
                     }
                     this.persEnemies.life = this.persEnemies.life - damageValue;
                     this.enemiesLifebar.lifeUpdate(this.persEnemies.life);
@@ -103,7 +113,8 @@ module MortalKombat {
                     if(hitType !== Constants.BLOCK) {
                         this.animUser.changeAnimation(Constants.ANIMATION_TYPE_DAMAGE);
                         this.animUser.showBlood();
-                        this.animUser.showDamageCounter(damageValue.toString());
+                        //this.animUser.showDamageCounter(damageValue.toString());
+                        this.damageCounterUser.show(damageValue.toString(), this.animUser.block);
                     }
                     this.persUser.life = this.persUser.life - damageValue;
                     this.userLifebar.lifeUpdate(this.persUser.life);

@@ -2507,32 +2507,40 @@ var Fabrique;
 (function (Fabrique) {
     var DamageCounter = /** @class */ (function (_super) {
         __extends(DamageCounter, _super);
-        function DamageCounter(game) {
-            var _this = _super.call(this, game, 0, 0, "0", { font: "18px Georgia", fill: "#FF0000", align: "left" }) || this;
+        function DamageCounter(game, x, y) {
+            var _this = _super.call(this, game, x, y, "", { font: "36px Georgia", fill: "#FF0000", align: "left" }) || this;
             _this.updateTransform();
+            _this.startPosX = x;
+            _this.startPosY = y;
             _this.init();
             return _this;
         }
         DamageCounter.prototype.init = function () {
-            this.startPosX = this.x;
-            this.startPosY = this.y;
             this.alpha = 0;
+            this.tween = this.game.add.tween(this);
+            this.tween.to({ x: this.startPosX, y: this.startPosY - 250 }, 500, 'Linear');
+            Utilits.Data.debugLog("INIT POINTS:", "X=" + this.startPosX + " | Y=" + this.startPosY);
         };
-        DamageCounter.prototype.show = function (value) {
-            this.x = this.startPosX;
-            this.y = this.startPosY;
-            this.text = value;
+        DamageCounter.prototype.show = function (value, block) {
+            Utilits.Data.debugLog("SHOW POINTS:", "X=" + this.x + " | Y=" + this.y);
+            if (value !== "0")
+                this.text = "-" + value;
+            else
+                this.text = value;
+            if (block === false)
+                this.setStyle({ font: "36px Georgia", fill: "#FF0000", align: "left" }, true);
+            else
+                this.setStyle({ font: "36px Georgia", fill: "#FFFF00", align: "left" }, true);
             this.alpha = 1;
-            var tween = this.game.add.tween(this);
-            tween.to({ x: this.startPosX, y: this.startPosY - 250 }, 1000, 'Linear');
-            tween.onComplete.add(this.onCompleteVideo, this);
-            tween.start();
+            this.tween.onComplete.add(this.onCompleteVideo, this);
+            this.tween.start();
         };
         DamageCounter.prototype.onCompleteVideo = function () {
             this.x = this.startPosX;
             this.y = this.startPosY;
             this.alpha = 0;
-            this.text = "0";
+            this.text = "";
+            Utilits.Data.debugLog("END POINTS:", "X=" + this.x + " | Y=" + this.y);
         };
         return DamageCounter;
     }(Phaser.Text));
@@ -2541,7 +2549,6 @@ var Fabrique;
 var Fabrique;
 (function (Fabrique) {
     var Blood = Fabrique.Blood;
-    var DamageCounter = Fabrique.DamageCounter;
     var AnimationFighter = /** @class */ (function (_super) {
         __extends(AnimationFighter, _super);
         function AnimationFighter(game, personageiD, personage) {
@@ -2557,10 +2564,6 @@ var Fabrique;
             this.blood.x = -100;
             this.blood.y = this.y - 50;
             this.addChild(this.blood);
-            this.damageCounter = new DamageCounter(this.game);
-            this.damageCounter.x = this.x + (this.width / 2) - 15;
-            this.damageCounter.y = this.y - 15;
-            this.addChild(this.damageCounter);
         };
         /*
         public winAnimation():void{
@@ -2597,7 +2600,7 @@ var Fabrique;
             if (this.animationType === Constants.ANIMATION_TYPE_DAMAGE && this.block === false)
                 this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animDamage);
             if (this.animationType === Constants.ANIMATION_TYPE_DAMAGE && this.block === true)
-                this.blockAnimation(); //this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animBlock);
+                this.blockAnimation();
             if (this.animationType === Constants.ANIMATION_TYPE_HIT_HAND)
                 this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animHitHand);
             if (this.animationType === Constants.ANIMATION_TYPE_HIT_HAND_UPPERCUT)
@@ -2629,9 +2632,6 @@ var Fabrique;
         AnimationFighter.prototype.showBlood = function () {
             if (this.block === false)
                 this.blood.show();
-        };
-        AnimationFighter.prototype.showDamageCounter = function (value) {
-            this.damageCounter.show(value);
         };
         return AnimationFighter;
     }(Phaser.Sprite));
@@ -3948,6 +3948,7 @@ var MortalKombat;
     var AnimationFighter = Fabrique.AnimationFighter;
     var LifeBar = Fabrique.LifeBar;
     var Field = Match3.Field;
+    var DamageCounter = Fabrique.DamageCounter;
     var Level = /** @class */ (function (_super) {
         __extends(Level, _super);
         function Level() {
@@ -3975,6 +3976,8 @@ var MortalKombat;
             this.animUser.scale.x = 1.5;
             this.animUser.scale.y = 1.5;
             this.groupContent.addChild(this.animUser);
+            this.damageCounterUser = new DamageCounter(this.game, this.animUser.x + (this.animUser.width / 2) - 15, this.animUser.y - 15);
+            this.groupContent.addChild(this.damageCounterUser);
             this.persEnemies = GameData.Data.getPersonage(GameData.Data.id_enemies[GameData.Data.tournamentProgress]);
             this.animEnemies = new AnimationFighter(this.game, this.persEnemies.id, this.persEnemies);
             this.animEnemies.x = Constants.GAME_WIDTH - 25 - (this.animEnemies.width / 2);
@@ -3984,6 +3987,8 @@ var MortalKombat;
             this.animEnemies.scale.y = 1.5;
             this.animEnemies.scale.x *= -1;
             this.groupContent.addChild(this.animEnemies);
+            this.damageCounterEnemies = new DamageCounter(this.game, this.animEnemies.x + (this.animEnemies.width / 2) - 15, this.animEnemies.y - 15);
+            this.groupContent.addChild(this.damageCounterEnemies);
             this.userLifebar = new LifeBar(this.game, 45, 35, this.persUser.name, this.persUser.life);
             this.groupContent.addChild(this.userLifebar);
             this.enemiesLifebar = new LifeBar(this.game, 282, 35, this.persEnemies.name, this.persEnemies.life);
@@ -4018,7 +4023,8 @@ var MortalKombat;
                     if (hitType !== Constants.BLOCK) {
                         this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_DAMAGE);
                         this.animEnemies.showBlood();
-                        this.animEnemies.showDamageCounter(damageValue.toString());
+                        //this.animEnemies.showDamageCounter(damageValue.toString());
+                        this.damageCounterEnemies.show(damageValue.toString(), this.animEnemies.block);
                     }
                     this.persEnemies.life = this.persEnemies.life - damageValue;
                     this.enemiesLifebar.lifeUpdate(this.persEnemies.life);
@@ -4038,7 +4044,8 @@ var MortalKombat;
                     if (hitType !== Constants.BLOCK) {
                         this.animUser.changeAnimation(Constants.ANIMATION_TYPE_DAMAGE);
                         this.animUser.showBlood();
-                        this.animUser.showDamageCounter(damageValue.toString());
+                        //this.animUser.showDamageCounter(damageValue.toString());
+                        this.damageCounterUser.show(damageValue.toString(), this.animUser.block);
                     }
                     this.persUser.life = this.persUser.life - damageValue;
                     this.userLifebar.lifeUpdate(this.persUser.life);
