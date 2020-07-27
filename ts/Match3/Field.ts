@@ -1655,8 +1655,9 @@ module Match3 {
 		public isGameOver():void{
 			this.gameOver = true;
 			this.matchFieldBlocked = true;
-			this.timerAI.stop();
-			this.timer.pauseTimer();
+			this.timerAI.stop(true);
+			this.timerAI.destroy();
+			this.timer.destroyTimer();
 			this.timer.event.remove(this.onTimerEnd);
 			this.removeChild(this.timer);
 			Utilits.Data.debugLog("GAME:", "OVER");

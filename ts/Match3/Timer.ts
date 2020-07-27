@@ -84,6 +84,15 @@ module Match3 {
             this.count = 10;
         }
 
+        public destroyTimer(): void {
+            this.timer.stop(true);
+            this.timer.destroy();
+            this.count = 0;
+            this.setMessage("............................");
+            Utilits.Data.debugLog("TIMER:", "STOP");
+            this.status = Timer.STATUS_STOP;
+        }
+
         public setMessage(value: string): void {
             if (this.messageText !== undefined && this.messageText !== null) {
                 this.messageText.text = value;

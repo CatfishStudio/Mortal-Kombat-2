@@ -114,6 +114,14 @@ var Match3;
         Timer.prototype.resetTimer = function () {
             this.count = 10;
         };
+        Timer.prototype.destroyTimer = function () {
+            this.timer.stop(true);
+            this.timer.destroy();
+            this.count = 0;
+            this.setMessage("............................");
+            Utilits.Data.debugLog("TIMER:", "STOP");
+            this.status = Timer.STATUS_STOP;
+        };
         Timer.prototype.setMessage = function (value) {
             if (this.messageText !== undefined && this.messageText !== null) {
                 this.messageText.text = value;
@@ -1709,8 +1717,10 @@ var Match3;
         Field.prototype.isGameOver = function () {
             this.gameOver = true;
             this.matchFieldBlocked = true;
-            this.timerAI.stop();
-            this.timer.pauseTimer();
+            this.timerAI.stop(true);
+            this.timerAI.destroy();
+            //this.timer.pauseTimer();
+            this.timer.destroyTimer();
             this.timer.event.remove(this.onTimerEnd);
             this.removeChild(this.timer);
             Utilits.Data.debugLog("GAME:", "OVER");
