@@ -1719,7 +1719,6 @@ var Match3;
             this.matchFieldBlocked = true;
             this.timerAI.stop(true);
             this.timerAI.destroy();
-            //this.timer.pauseTimer();
             this.timer.destroyTimer();
             this.timer.event.remove(this.onTimerEnd);
             this.removeChild(this.timer);
@@ -2359,6 +2358,7 @@ var GameData;
         };
         /* Расчитать урон */
         Data.calcDamage = function (pers, block, hitType, hitCount) {
+            Utilits.Data.debugLog("CALC DAMAGE:", pers);
             var damage = 0;
             if (hitType === Constants.BLOCK)
                 return damage;
@@ -4059,7 +4059,7 @@ var MortalKombat;
             }
             else {
                 if (statusAction === Field.ACTION_PLAYER) { // Противник получает урон
-                    var damageValue = GameData.Data.calcDamage(this.persEnemies, this.animEnemies.block, hitType, hitCount);
+                    var damageValue = GameData.Data.calcDamage(this.persUser, this.animEnemies.block, hitType, hitCount);
                     if (hitType === Constants.HAND)
                         this.animUser.changeAnimation(Constants.ANIMATION_TYPE_HIT_HAND);
                     if (hitType === Constants.LEG)
@@ -4079,7 +4079,7 @@ var MortalKombat;
                     this.enemiesLifebar.lifeUpdate(this.persEnemies.life);
                 }
                 else { // Игрок получает урон
-                    var damageValue = GameData.Data.calcDamage(this.persUser, this.animUser.block, hitType, hitCount);
+                    var damageValue = GameData.Data.calcDamage(this.persEnemies, this.animUser.block, hitType, hitCount);
                     if (hitType === Constants.HAND)
                         this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_HIT_HAND);
                     if (hitType === Constants.LEG)

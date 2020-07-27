@@ -90,7 +90,7 @@ module MortalKombat {
                 this.checkGameOver(); // проверка завершения битвы
             }else{
                 if(statusAction === Field.ACTION_PLAYER){ // Противник получает урон
-                    let damageValue = GameData.Data.calcDamage(this.persEnemies, this.animEnemies.block, hitType, hitCount);
+                    let damageValue = GameData.Data.calcDamage(this.persUser, this.animEnemies.block, hitType, hitCount);
                     if(hitType === Constants.HAND)this.animUser.changeAnimation(Constants.ANIMATION_TYPE_HIT_HAND);
                     if(hitType === Constants.LEG)this.animUser.changeAnimation(Constants.ANIMATION_TYPE_HIT_LEG);
                     if(hitType === Constants.BLOCK)this.animUser.changeAnimation(Constants.ANIMATION_TYPE_BLOCK);
@@ -104,7 +104,7 @@ module MortalKombat {
                     this.persEnemies.life = this.persEnemies.life - damageValue;
                     this.enemiesLifebar.lifeUpdate(this.persEnemies.life);
                 }else{ // Игрок получает урон
-                    let damageValue = GameData.Data.calcDamage(this.persUser, this.animUser.block, hitType, hitCount);
+                    let damageValue = GameData.Data.calcDamage(this.persEnemies, this.animUser.block, hitType, hitCount);
                     if(hitType === Constants.HAND)this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_HIT_HAND);
                     if(hitType === Constants.LEG)this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_HIT_LEG);
                     if(hitType === Constants.BLOCK)this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_BLOCK);
