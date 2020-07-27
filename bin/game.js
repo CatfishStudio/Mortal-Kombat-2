@@ -2513,6 +2513,7 @@ var Fabrique;
             _this.startPosX = x;
             _this.startPosY = y;
             _this.values = [];
+            _this.status = "stop";
             _this.init();
             return _this;
         }
@@ -2522,28 +2523,34 @@ var Fabrique;
             this.tween.to({ x: this.startPosX, y: this.startPosY - 250 }, 500, 'Linear');
         };
         DamageCounter.prototype.show = function (value, block) {
-            this.values.push(value); // добавляет элемент в конец массива
-            if (this.values.length > 0)
-                value = this.values[0];
-            if (value !== "0")
-                this.text = "-" + value;
-            else
-                this.text = value;
-            if (block === false)
-                this.setStyle({ font: "36px Georgia", fill: "#FF0000", align: "left" }, true);
-            else
-                this.setStyle({ font: "36px Georgia", fill: "#FFFF00", align: "left" }, true);
-            this.alpha = 1;
-            this.tween.onComplete.add(this.onCompleteVideo, this);
-            this.tween.start();
+            if (this.status === "stop") {
+                this.status = "start";
+                this.values.push(value); // добавляет элемент в конец массива
+                if (this.values.length > 0)
+                    value = this.values[0];
+                if (value !== "0")
+                    this.text = "-" + value;
+                else
+                    this.text = value;
+                if (block === false)
+                    this.setStyle({ font: "36px Georgia", fill: "#FF0000", align: "left" }, true);
+                else
+                    this.setStyle({ font: "36px Georgia", fill: "#FFFF00", align: "left" }, true);
+                this.alpha = 1;
+                this.tween.onComplete.add(this.onCompleteVideo, this);
+                this.tween.start();
+            }
+            else {
+                this.values.push(value); // добавляет элемент в конец массива
+            }
         };
         DamageCounter.prototype.onCompleteVideo = function () {
+            this.status = "stop";
             this.values.shift(); // удаляет первый элемент в массиве
             this.x = this.startPosX;
             this.y = this.startPosY;
             this.alpha = 0;
             this.text = "";
-            Utilits.Data.debugLog("VALUES:", this.values);
             if (this.values.length > 0) {
                 var value = this.values[0];
                 if (value !== "0")

@@ -98,7 +98,6 @@ module MortalKombat {
                     if(hitType !== Constants.BLOCK) {
                         this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_DAMAGE);
                         this.animEnemies.showBlood();
-                        //this.animEnemies.showDamageCounter(damageValue.toString());
                         this.damageCounterEnemies.show(damageValue.toString(), this.animEnemies.block);
                     }
                     this.persEnemies.life = this.persEnemies.life - damageValue;
@@ -113,7 +112,6 @@ module MortalKombat {
                     if(hitType !== Constants.BLOCK) {
                         this.animUser.changeAnimation(Constants.ANIMATION_TYPE_DAMAGE);
                         this.animUser.showBlood();
-                        //this.animUser.showDamageCounter(damageValue.toString());
                         this.damageCounterUser.show(damageValue.toString(), this.animUser.block);
                     }
                     this.persUser.life = this.persUser.life - damageValue;
