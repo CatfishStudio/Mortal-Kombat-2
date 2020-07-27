@@ -226,6 +226,7 @@ var Match3;
             return _this;
         }
         Field.prototype.init = function () {
+            this.gameOver = false;
             this.matchSelectUnit1 = null;
             this.matchSelectUnit2 = null;
             this.matchFieldBlocked = false;
@@ -254,6 +255,8 @@ var Match3;
         };
         Field.prototype.onTimerComplete = function (event) {
             //Utilits.Data.debugLog("timerAI", this.statusAction + " | " + this.matchFieldBlocked);
+            if (this.gameOver === true)
+                return;
             if (this.tween1 !== undefined && this.tween2 !== undefined) {
                 if (this.tween1.isRunning === false && this.tween2.isRunning === false) {
                     this.timerAI.stop();
@@ -266,12 +269,16 @@ var Match3;
             }
         };
         Field.prototype.onTimerEnd = function (event) {
+            if (this.gameOver === true)
+                return;
             if (event === Timer.TIMER_END) {
                 this.endTurn();
             }
         };
         Field.prototype.endTurn = function () {
             //Utilits.Data.debugLog("endTurn", this.statusAction);
+            if (this.gameOver === true)
+                return;
             if (this.statusAction === Field.ACTION_PLAYER) {
                 this.timer.setMessage("Ход противника");
                 this.statusAction = Field.ACTION_AI;
@@ -1699,6 +1706,15 @@ var Match3;
                 this.matchActionAI();
             }
         };
+        Field.prototype.isGameOver = function () {
+            this.gameOver = true;
+            this.matchFieldBlocked = true;
+            this.timerAI.stop();
+            this.timer.pauseTimer();
+            this.timer.event.remove(this.onTimerEnd);
+            this.removeChild(this.timer);
+            Utilits.Data.debugLog("GAME:", "OVER");
+        };
         Field.MATCH_COLUMNS = 6;
         Field.MATCH_ROWS = 6;
         Field.MATCH_CELL_WIDTH = 82;
@@ -2143,7 +2159,7 @@ var GameData;
         /* инициализация новой игры */
         Data.initNewGame = function () {
             this.user_continue = 9;
-            this.user_upgrade_points = 0;
+            this.user_upgrade_points = 100; ////////////////////////////////////////0;
             this.tournamentProgress = 0;
             this.id_enemies = [];
             this.saveData = "";
@@ -2634,13 +2650,16 @@ var Fabrique;
             if (this.animationType === Constants.ANIMATION_TYPE_WIN)
                 this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animWin);
             this.animation.onComplete.add(this.onComplete, this);
-            this.animation.play(10, false, false);
+            if (this.animationType === Constants.ANIMATION_TYPE_LOSE)
+                this.animation.play(10, true, true);
+            else
+                this.animation.play(10, false, false);
         };
         AnimationFighter.prototype.onComplete = function (sprite, animation) {
             //console.log( (sprite as AnimationFighter).animation);
             if (this.animationType === Constants.ANIMATION_TYPE_BLOCK)
                 this.block = true;
-            if (this.animationType === Constants.ANIMATION_TYPE_STANCE)
+            if (this.animationType === Constants.ANIMATION_TYPE_STANCE || this.animationType === Constants.ANIMATION_TYPE_WIN || this.animationType === Constants.ANIMATION_TYPE_LOSE)
                 return;
             else {
                 if (this.block === false)
@@ -4026,6 +4045,7 @@ var MortalKombat;
                     this.animEnemies.block = false; // сбросить блок оппонента
                     this.animEnemies.stanceAnimation();
                 }
+                this.checkGameOver(); // проверка завершения битвы
             }
             else {
                 if (statusAction === Field.ACTION_PLAYER) { // Противник получает урон
@@ -4043,7 +4063,6 @@ var MortalKombat;
                     if (hitType !== Constants.BLOCK) {
                         this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_DAMAGE);
                         this.animEnemies.showBlood();
-                        //this.animEnemies.showDamageCounter(damageValue.toString());
                         this.damageCounterEnemies.show(damageValue.toString(), this.animEnemies.block);
                     }
                     this.persEnemies.life = this.persEnemies.life - damageValue;
@@ -4064,7 +4083,6 @@ var MortalKombat;
                     if (hitType !== Constants.BLOCK) {
                         this.animUser.changeAnimation(Constants.ANIMATION_TYPE_DAMAGE);
                         this.animUser.showBlood();
-                        //this.animUser.showDamageCounter(damageValue.toString());
                         this.damageCounterUser.show(damageValue.toString(), this.animUser.block);
                     }
                     this.persUser.life = this.persUser.life - damageValue;
@@ -4097,6 +4115,26 @@ var MortalKombat;
                     }
                 default:
                     break;
+            }
+        };
+        Level.prototype.checkGameOver = function () {
+            Utilits.Data.debugLog("LIFE:", this.persUser.life + " | " + this.persEnemies.life);
+            if (this.persUser.life > 0 && this.persEnemies.life <= 0) { // Пользователь - победил
+                this.field.isGameOver();
+                this.animUser.changeAnimation(Constants.ANIMATION_TYPE_WIN);
+                this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_LOSE);
+            }
+            else if (this.persUser.life <= 0 && this.persEnemies.life > 0) { // Оппонент - победил
+                this.field.isGameOver();
+                this.animUser.changeAnimation(Constants.ANIMATION_TYPE_LOSE);
+                this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_WIN);
+            }
+            else if (this.persUser.life <= 0 && this.persEnemies.life <= 0) { // Ничья
+                this.field.isGameOver();
+                this.animUser.changeAnimation(Constants.ANIMATION_TYPE_WIN);
+                this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_LOSE);
+            }
+            else { // бой продолжается
             }
         };
         Level.Name = "level";

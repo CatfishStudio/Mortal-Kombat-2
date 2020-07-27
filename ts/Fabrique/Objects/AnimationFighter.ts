@@ -69,13 +69,14 @@ module Fabrique {
             if(this.animationType === Constants.ANIMATION_TYPE_LOSE) this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animLose);
             if(this.animationType === Constants.ANIMATION_TYPE_WIN) this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animWin);
             this.animation.onComplete.add(this.onComplete, this);
-            this.animation.play(10, false, false);
+            if(this.animationType === Constants.ANIMATION_TYPE_LOSE) this.animation.play(10, true, true);
+            else this.animation.play(10, false, false);
         }
 
         private onComplete(sprite, animation): void {
             //console.log( (sprite as AnimationFighter).animation);
             if(this.animationType === Constants.ANIMATION_TYPE_BLOCK) this.block = true;
-            if(this.animationType === Constants.ANIMATION_TYPE_STANCE) return;
+            if(this.animationType === Constants.ANIMATION_TYPE_STANCE || this.animationType === Constants.ANIMATION_TYPE_WIN || this.animationType === Constants.ANIMATION_TYPE_LOSE) return;
             else {
                 if(this.block === false) this.stanceAnimation();
                 else this.blockAnimation();

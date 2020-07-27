@@ -87,6 +87,7 @@ module MortalKombat {
                     this.animEnemies.block = false; // сбросить блок оппонента
                     this.animEnemies.stanceAnimation();
                 }
+                this.checkGameOver(); // проверка завершения битвы
             }else{
                 if(statusAction === Field.ACTION_PLAYER){ // Противник получает урон
                     let damageValue = GameData.Data.calcDamage(this.persEnemies, this.animEnemies.block, hitType, hitCount);
@@ -150,5 +151,23 @@ module MortalKombat {
             }
         }
 
+        private checkGameOver():void {
+            Utilits.Data.debugLog("LIFE:", this.persUser.life + " | " + this.persEnemies.life);
+            if(this.persUser.life > 0 && this.persEnemies.life <= 0){ // Пользователь - победил
+                this.field.isGameOver();
+                this.animUser.changeAnimation(Constants.ANIMATION_TYPE_WIN);
+                this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_LOSE);
+            }else if(this.persUser.life <= 0 && this.persEnemies.life > 0){ // Оппонент - победил
+                this.field.isGameOver();
+                this.animUser.changeAnimation(Constants.ANIMATION_TYPE_LOSE);
+                this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_WIN);
+            }else if(this.persUser.life <= 0 && this.persEnemies.life <= 0){ // Ничья
+                this.field.isGameOver();
+                this.animUser.changeAnimation(Constants.ANIMATION_TYPE_WIN);
+                this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_LOSE);
+            }else{ // бой продолжается
+
+            }
+        }
     }
 }

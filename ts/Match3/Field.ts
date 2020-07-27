@@ -49,7 +49,8 @@ module Match3 {
         private matchFieldBlocked:boolean;  // блокирование игрового поля
         private modeAI:boolean;             // режим искуственного интелекта (по умолчанию отключен в начале)
         private matchLevelJSON:any;      // json игрового поля
-        private statusAction:String;    // статус активного игрока
+		private statusAction:String;    // статус активного игрока
+		private gameOver:boolean;		// флаг завершения боя
 
         constructor(game:Phaser.Game, parent:any){
             super(game, parent);
@@ -59,6 +60,7 @@ module Match3 {
         }
 
         private init():void{
+			this.gameOver = false;
             this.matchSelectUnit1 = null;
             this.matchSelectUnit2 = null;
             this.matchFieldBlocked = false;
@@ -91,6 +93,7 @@ module Match3 {
 		
 		private onTimerComplete(event):void {
 			//Utilits.Data.debugLog("timerAI", this.statusAction + " | " + this.matchFieldBlocked);
+			if(this.gameOver === true) return;
 			if(this.tween1 !== undefined && this.tween2 !== undefined){
 				if(this.tween1.isRunning === false && this.tween2.isRunning === false){
 					this.timerAI.stop();
@@ -103,13 +106,15 @@ module Match3 {
 		}
 
         private onTimerEnd(event): void {
-            if (event === Timer.TIMER_END) {
+			if(this.gameOver === true) return;
+			if (event === Timer.TIMER_END) {
                 this.endTurn();
             }
         }
 
         private endTurn(): void {
-            //Utilits.Data.debugLog("endTurn", this.statusAction);
+			//Utilits.Data.debugLog("endTurn", this.statusAction);
+			if(this.gameOver === true) return;
             if(this.statusAction === Field.ACTION_PLAYER){
                 this.timer.setMessage("Ход противника");
                 this.statusAction = Field.ACTION_AI;
@@ -1647,6 +1652,14 @@ module Match3 {
         }
 
         
-
+		public isGameOver():void{
+			this.gameOver = true;
+			this.matchFieldBlocked = true;
+			this.timerAI.stop();
+			this.timer.pauseTimer();
+			this.timer.event.remove(this.onTimerEnd);
+			this.removeChild(this.timer);
+			Utilits.Data.debugLog("GAME:", "OVER");
+		}
     }
 }
