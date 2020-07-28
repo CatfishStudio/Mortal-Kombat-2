@@ -1876,6 +1876,9 @@ var Images = /** @class */ (function () {
     Images.ButtonPlus = 'button_plus.png';
     Images.Tablo = 'tablo.png';
     Images.Lifebar = 'life_bar.png';
+    Images.fight = 'fight.png';
+    Images.wins = 'wins.png';
+    Images.died = 'you_died.png';
     Images.BarakaIcon = 'baraka.png';
     Images.GoroIcon = 'goro.png';
     Images.JaxIcon = 'jax.png';
@@ -1930,6 +1933,9 @@ var Images = /** @class */ (function () {
         Images.ButtonPlus,
         Images.Tablo,
         Images.Lifebar,
+        Images.fight,
+        Images.wins,
+        Images.died,
         Images.BarakaIcon,
         Images.GoroIcon,
         Images.JaxIcon,
@@ -2358,7 +2364,6 @@ var GameData;
         };
         /* Расчитать урон */
         Data.calcDamage = function (pers, block, hitType, hitCount) {
-            Utilits.Data.debugLog("CALC DAMAGE:", pers);
             var damage = 0;
             if (hitType === Constants.BLOCK)
                 return damage;
@@ -2391,7 +2396,6 @@ var GameData;
                 if (damage < 0)
                     damage = 0;
             }
-            Utilits.Data.debugLog(pers.name, pers.life + " | " + damage);
             return damage;
         };
         Data.tutorList = [
@@ -2591,6 +2595,83 @@ var Fabrique;
         return DamageCounter;
     }(Phaser.Text));
     Fabrique.DamageCounter = DamageCounter;
+})(Fabrique || (Fabrique = {}));
+var Fabrique;
+(function (Fabrique) {
+    var DialodFightWinsDied = /** @class */ (function (_super) {
+        __extends(DialodFightWinsDied, _super);
+        function DialodFightWinsDied(game) {
+            var _this = _super.call(this, game) || this;
+            _this.init();
+            return _this;
+        }
+        DialodFightWinsDied.prototype.init = function () {
+            this.event = new Phaser.Signal();
+            this.cX = this.game.width / 2;
+            this.cY = this.game.height / 2;
+            this.graphicOverlay = new Phaser.Graphics(this.game, 0, 0);
+            this.graphicOverlay.beginFill(0x000000, 0.1);
+            this.graphicOverlay.drawRect(0, 0, this.game.width, this.game.height);
+            this.graphicOverlay.endFill();
+            this.graphicOverlay.inputEnabled = true;
+            this.updateTransform();
+        };
+        DialodFightWinsDied.prototype.showFight = function () {
+            this.addChild(this.graphicOverlay);
+            this.sprite = new Phaser.Sprite(this.game, this.cX, this.cY, Images.fight);
+            this.sprite.width = 0;
+            this.sprite.height = 0;
+            this.addChild(this.sprite);
+            this.tween = this.game.add.tween(this.sprite);
+            this.tween.to({ width: 490, height: 170, x: (this.cX - 245), y: (this.cY - 85) }, 1000, 'Linear');
+            this.tween.to({ width: 0, height: 0, x: this.cX, y: this.cY }, 1000, 'Linear');
+            this.tween.onComplete.add(this.onTweenComplete, this);
+            this.tween.start();
+        };
+        DialodFightWinsDied.prototype.onTweenComplete = function (event) {
+            this.removeChild(this.sprite);
+            this.sprite.destroy();
+            this.removeChild(this.graphicOverlay);
+        };
+        DialodFightWinsDied.prototype.showWins = function () {
+            this.addChild(this.graphicOverlay);
+            this.sprite = new Phaser.Sprite(this.game, this.cX, this.cY, Images.wins);
+            this.sprite.width = 0;
+            this.sprite.height = 0;
+            this.addChild(this.sprite);
+            this.tween = this.game.add.tween(this.sprite);
+            this.tween.to({ width: 490, height: 170, x: (this.cX - 245), y: (this.cY - 85) }, 1000, 'Linear');
+            this.tween.to({ width: 0, height: 0, x: this.cX, y: this.cY }, 1000, 'Linear');
+            this.tween.onComplete.add(this.onWins, this);
+            this.tween.start();
+        };
+        DialodFightWinsDied.prototype.onWins = function (event) {
+            this.removeChild(this.sprite);
+            this.sprite.destroy();
+            this.event.dispatch(DialodFightWinsDied.WINS);
+        };
+        DialodFightWinsDied.prototype.showDied = function () {
+            this.addChild(this.graphicOverlay);
+            this.sprite = new Phaser.Sprite(this.game, this.cX, this.cY, Images.died);
+            this.sprite.width = 0;
+            this.sprite.height = 0;
+            this.addChild(this.sprite);
+            this.tween = this.game.add.tween(this.sprite);
+            this.tween.to({ width: 720, height: 175, x: (this.cX - 360), y: (this.cY - 87) }, 1000, 'Linear');
+            this.tween.to({ width: 0, height: 0, x: this.cX, y: this.cY }, 1000, 'Linear');
+            this.tween.onComplete.add(this.onDied, this);
+            this.tween.start();
+        };
+        DialodFightWinsDied.prototype.onDied = function (event) {
+            this.removeChild(this.sprite);
+            this.sprite.destroy();
+            this.event.dispatch(DialodFightWinsDied.DIED);
+        };
+        DialodFightWinsDied.WINS = "wins";
+        DialodFightWinsDied.DIED = "died";
+        return DialodFightWinsDied;
+    }(Phaser.Group));
+    Fabrique.DialodFightWinsDied = DialodFightWinsDied;
 })(Fabrique || (Fabrique = {}));
 var Fabrique;
 (function (Fabrique) {
@@ -3998,6 +4079,7 @@ var MortalKombat;
     var LifeBar = Fabrique.LifeBar;
     var Field = Match3.Field;
     var DamageCounter = Fabrique.DamageCounter;
+    var DialodFightWinsDied = Fabrique.DialodFightWinsDied;
     var Level = /** @class */ (function (_super) {
         __extends(Level, _super);
         function Level() {
@@ -4042,6 +4124,9 @@ var MortalKombat;
             this.groupContent.addChild(this.userLifebar);
             this.enemiesLifebar = new LifeBar(this.game, 282, 35, this.persEnemies.name, this.persEnemies.life);
             this.groupContent.addChild(this.enemiesLifebar);
+            this.dialog = new DialodFightWinsDied(this.game);
+            this.groupContent.addChild(this.dialog);
+            this.dialog.showFight();
         };
         /* Произошло событие match на поле */
         Level.prototype.onMatch = function (hitType, hitCount, statusAction) {
@@ -4170,6 +4255,7 @@ var MortalKombat;
 /// <reference path="Data\SocialVK.ts" />
 /// <reference path="Fabrique\Objects\Blood.ts" />
 /// <reference path="Fabrique\Objects\DamageCounter.ts" />
+/// <reference path="Fabrique\Objects\DialogFightWinsDied.ts" />
 /// <reference path="Fabrique\Objects\AnimationFighter.ts" />
 /// <reference path="Fabrique\Objects\Icon.ts" />
 /// <reference path="Fabrique\Objects\LifeBar.ts" />

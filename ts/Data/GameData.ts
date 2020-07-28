@@ -256,7 +256,6 @@ module GameData {
         /* Расчитать урон */
         public static calcDamage(pers:GameData.IPersonage, block:boolean, hitType:any, hitCount:number):number
         {
-            Utilits.Data.debugLog("CALC DAMAGE:", pers);
             let damage:number = 0;
             
             if(hitType === Constants.BLOCK) return damage;
@@ -278,7 +277,6 @@ module GameData {
                 damage = damage - (pers.block * Constants.DAMAGE_BLOCK);
                 if(damage < 0) damage = 0;
             }
-            Utilits.Data.debugLog(pers.name, pers.life + " | " + damage);
             return damage;
         }
     }

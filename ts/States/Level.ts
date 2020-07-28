@@ -3,6 +3,7 @@ module MortalKombat {
     import LifeBar = Fabrique.LifeBar;
     import Field = Match3.Field;
     import DamageCounter = Fabrique.DamageCounter;
+    import DialodFightWinsDied = Fabrique.DialodFightWinsDied;
 
     export class Level extends Phaser.State{
         public static Name: string = "level";
@@ -21,6 +22,7 @@ module MortalKombat {
         private userLifebar:LifeBar;
         private enemiesLifebar:LifeBar;
         private field:Field;
+        private dialog: DialodFightWinsDied;
 
         constructor() {
             super();
@@ -73,6 +75,10 @@ module MortalKombat {
 
             this.enemiesLifebar = new LifeBar(this.game, 282, 35, this.persEnemies.name, this.persEnemies.life);
             this.groupContent.addChild(this.enemiesLifebar);
+
+            this.dialog = new DialodFightWinsDied(this.game);
+            this.groupContent.addChild(this.dialog);
+            this.dialog.showFight();
         }
 
         /* Произошло событие match на поле */

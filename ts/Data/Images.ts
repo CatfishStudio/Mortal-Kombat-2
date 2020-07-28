@@ -27,6 +27,9 @@ class Images {
     public static ButtonPlus: string = 'button_plus.png';
     public static Tablo: string = 'tablo.png';
     public static Lifebar: string = 'life_bar.png';
+    public static fight: string = 'fight.png';
+    public static wins: string = 'wins.png';
+    public static died: string = 'you_died.png';
     
     public static BarakaIcon:string = 'baraka.png';
     public static GoroIcon:string = 'goro.png';
@@ -84,6 +87,9 @@ class Images {
         Images.ButtonPlus,
         Images.Tablo,
         Images.Lifebar,
+        Images.fight,
+        Images.wins,
+        Images.died,
 
         Images.BarakaIcon,
         Images.GoroIcon,

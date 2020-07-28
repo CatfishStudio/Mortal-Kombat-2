@@ -17,6 +17,7 @@
 /// <reference path="Data\SocialVK.ts" />
 /// <reference path="Fabrique\Objects\Blood.ts" />
 /// <reference path="Fabrique\Objects\DamageCounter.ts" />
+/// <reference path="Fabrique\Objects\DialogFightWinsDied.ts" />
 /// <reference path="Fabrique\Objects\AnimationFighter.ts" />
 /// <reference path="Fabrique\Objects\Icon.ts" />
 /// <reference path="Fabrique\Objects\LifeBar.ts" />
