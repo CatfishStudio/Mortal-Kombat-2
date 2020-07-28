@@ -61,8 +61,8 @@ module Fabrique {
             this.addChild(this.sprite);
 
             this.tween = this.game.add.tween(this.sprite);
-            this.tween.to({ width: 490, height: 170, x: (this.cX - 245), y: (this.cY - 85)}, 1000, 'Linear');
-            this.tween.to({ width: 0, height: 0, x: this.cX, y:this.cY}, 1000, 'Linear');
+            this.tween.to({ width: 490, height: 170, x: (this.cX - 245), y: (this.cY - 85)}, 2500, 'Linear');
+            this.tween.to({ width: 0, height: 0, x: this.cX, y:this.cY}, 2500, 'Linear');
             this.tween.onComplete.add(this.onWins, this);
             this.tween.start();
         }
@@ -82,8 +82,8 @@ module Fabrique {
             this.addChild(this.sprite);
 
             this.tween = this.game.add.tween(this.sprite);
-            this.tween.to({ width: 720, height: 175, x: (this.cX - 360), y: (this.cY - 87)}, 1000, 'Linear');
-            this.tween.to({ width: 0, height: 0, x: this.cX, y:this.cY}, 1000, 'Linear');
+            this.tween.to({ width: 720, height: 175, x: (this.cX - 360), y: (this.cY - 87)}, 2500, 'Linear');
+            this.tween.to({ width: 0, height: 0, x: this.cX, y:this.cY}, 2500, 'Linear');
             this.tween.onComplete.add(this.onDied, this);
             this.tween.start();
         }        

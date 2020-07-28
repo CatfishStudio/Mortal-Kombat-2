@@ -4125,6 +4125,7 @@ var MortalKombat;
             this.enemiesLifebar = new LifeBar(this.game, 282, 35, this.persEnemies.name, this.persEnemies.life);
             this.groupContent.addChild(this.enemiesLifebar);
             this.dialog = new DialodFightWinsDied(this.game);
+            this.dialog.event.add(this.onDialog, this);
             this.groupContent.addChild(this.dialog);
             this.dialog.showFight();
         };
@@ -4218,19 +4219,25 @@ var MortalKombat;
                 this.field.isGameOver();
                 this.animUser.changeAnimation(Constants.ANIMATION_TYPE_WIN);
                 this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_LOSE);
+                this.dialog.showWins();
             }
             else if (this.persUser.life <= 0 && this.persEnemies.life > 0) { // Оппонент - победил
                 this.field.isGameOver();
                 this.animUser.changeAnimation(Constants.ANIMATION_TYPE_LOSE);
                 this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_WIN);
+                this.dialog.showDied();
             }
             else if (this.persUser.life <= 0 && this.persEnemies.life <= 0) { // Ничья
                 this.field.isGameOver();
                 this.animUser.changeAnimation(Constants.ANIMATION_TYPE_WIN);
                 this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_LOSE);
+                this.dialog.showWins();
             }
             else { // бой продолжается
             }
+        };
+        Level.prototype.onDialog = function (event) {
+            Utilits.Data.debugLog("DIALOg EVENT:", event);
         };
         Level.Name = "level";
         return Level;
