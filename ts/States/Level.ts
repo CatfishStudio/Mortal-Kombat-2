@@ -130,7 +130,9 @@ module MortalKombat {
 
         public shutdown(){
             this.field.shutdown();
+            this.groupContent.removeChildren();
             this.groupContent.removeAll();
+            this.groupContent.destroy();
             this.game.stage.removeChildren();
         }
 
@@ -182,6 +184,14 @@ module MortalKombat {
 
         private onDialog(event:any):void {
             Utilits.Data.debugLog("DIALOG EVENT:", event);
+            if(event === DialodFightWinsDied.WINS){
+                GameData.Data.user_upgrade_points++;
+                GameData.Data.tournamentProgress++;
+            }else{
+                GameData.Data.user_continue--;
+            }
+            GameData.Data.saveData = SocialVK.vkSaveData();
+            this.game.state.start(Tournament.Name, true, false);
         }
     }
 }

@@ -865,8 +865,8 @@ var Match3;
                     if (this.matchMoveDownProcesses["i" + i + ":j" + j] === true && this.matchMatrixUnit["i" + i + ":j" + j].flagRemove === false && this.matchMatrixUnit["i" + i + ":j" + j].unitType !== Field.MATCH_HIT_0) {
                         this.matchMatrixUnit["i" + i + ":j" + j].flagRemove = false;
                         this.tweenDown = this.game.add.tween(this.matchMatrixUnit["i" + i + ":j" + j]);
-                        this.tweenDown.to({ alpha: 1.0 }, 500);
-                        this.tweenDown.to({ x: this.matchMatrixFrontPosition["i" + i + ":j" + j].x, y: this.matchMatrixFrontPosition["i" + i + ":j" + j].y }, 500);
+                        //this.tweenDown.to({alpha: 1.0}, 500);
+                        this.tweenDown.to({ x: this.matchMatrixFrontPosition["i" + i + ":j" + j].x, y: this.matchMatrixFrontPosition["i" + i + ":j" + j].y, alpha: 1.0 }, 500);
                         this.tweenDown.to({ x: this.matchMatrixFrontPosition["i" + i + ":j" + j].x, y: this.matchMatrixFrontPosition["i" + i + ":j" + j].y - 5 }, 100);
                         this.tweenDown.to({ x: this.matchMatrixFrontPosition["i" + i + ":j" + j].x, y: this.matchMatrixFrontPosition["i" + i + ":j" + j].y }, 50);
                         this.tweenDown.onComplete.add(this.onCompleteMatchMoveDownNewUnits, this);
@@ -902,8 +902,8 @@ var Match3;
                                 this.matchMatrixUnit["i" + i + ":j" + j].flagRemove = false;
                             }
                             this.tweenDown = this.game.add.tween(this.matchMatrixUnit["i" + i + ":j" + j]);
-                            this.tweenDown.to({ alpha: 1.0 }, 500);
-                            this.tweenDown.to({ x: this.matchMatrixFrontPosition["i" + i + ":j" + j].x, y: this.matchMatrixFrontPosition["i" + i + ":j" + j].y }, 500);
+                            //this.tweenDown.to({alpha: 1.0}, 500);
+                            this.tweenDown.to({ x: this.matchMatrixFrontPosition["i" + i + ":j" + j].x, y: this.matchMatrixFrontPosition["i" + i + ":j" + j].y, alpha: 1.0 }, 500);
                             this.tweenDown.to({ x: this.matchMatrixFrontPosition["i" + i + ":j" + j].x, y: this.matchMatrixFrontPosition["i" + i + ":j" + j].y - 5 }, 100);
                             this.tweenDown.to({ x: this.matchMatrixFrontPosition["i" + i + ":j" + j].x, y: this.matchMatrixFrontPosition["i" + i + ":j" + j].y }, 50);
                             this.tweenDown.onComplete.add(this.onCompleteMatchMoveDownNewUnits, this);
@@ -1258,8 +1258,8 @@ var Match3;
                         }
                         /* Спускаем удалённые юниты */
                         this.tweenDown = this.game.add.tween(this.matchMatrixUnit["i" + i + ":j" + j]);
-                        this.tweenDown.to({ alpha: 1.0 }, 500);
-                        this.tweenDown.to({ x: this.matchMatrixFrontPosition["i" + i + ":j" + j].x, y: this.matchMatrixFrontPosition["i" + i + ":j" + j].y }, 500);
+                        //this.tweenDown.to({alpha: 1.0}, 500);
+                        this.tweenDown.to({ x: this.matchMatrixFrontPosition["i" + i + ":j" + j].x, y: this.matchMatrixFrontPosition["i" + i + ":j" + j].y, alpha: 1.0 }, 500);
                         this.tweenDown.onComplete.add(this.onCompleteMatchMoveDownNewUnits, this.matchMatrixUnit["i" + i + ":j" + j]);
                         this.tweenDown.start();
                         /* Возвращаем цвет ячейки по умолчанию */
@@ -2174,7 +2174,7 @@ var GameData;
         /* инициализация новой игры */
         Data.initNewGame = function () {
             this.user_continue = 9;
-            this.user_upgrade_points = 100; ////////////////////////////////////////0;
+            this.user_upgrade_points = 0;
             this.tournamentProgress = 0;
             this.id_enemies = [];
             this.saveData = "";
@@ -2610,7 +2610,8 @@ var Fabrique;
             this.cX = this.game.width / 2;
             this.cY = this.game.height / 2;
             this.graphicOverlay = new Phaser.Graphics(this.game, 0, 0);
-            this.graphicOverlay.beginFill(0x000000, 0.1);
+            ////////////this.graphicOverlay.beginFill(0x000000, 0.1);
+            this.graphicOverlay.beginFill(0x550000, 0.1);
             this.graphicOverlay.drawRect(0, 0, this.game.width, this.game.height);
             this.graphicOverlay.endFill();
             this.graphicOverlay.inputEnabled = true;
@@ -2632,6 +2633,7 @@ var Fabrique;
             this.removeChild(this.sprite);
             this.sprite.destroy();
             this.removeChild(this.graphicOverlay);
+            this.graphicOverlay.destroy();
         };
         DialodFightWinsDied.prototype.showWins = function () {
             this.addChild(this.graphicOverlay);
@@ -2640,8 +2642,8 @@ var Fabrique;
             this.sprite.height = 0;
             this.addChild(this.sprite);
             this.tween = this.game.add.tween(this.sprite);
-            this.tween.to({ width: 490, height: 170, x: (this.cX - 245), y: (this.cY - 85) }, 1000, 'Linear');
-            this.tween.to({ width: 0, height: 0, x: this.cX, y: this.cY }, 1000, 'Linear');
+            this.tween.to({ width: 490, height: 170, x: (this.cX - 245), y: (this.cY - 85) }, 2500, 'Linear');
+            this.tween.to({ width: 0, height: 0, x: this.cX, y: this.cY }, 2500, 'Linear');
             this.tween.onComplete.add(this.onWins, this);
             this.tween.start();
         };
@@ -2657,8 +2659,8 @@ var Fabrique;
             this.sprite.height = 0;
             this.addChild(this.sprite);
             this.tween = this.game.add.tween(this.sprite);
-            this.tween.to({ width: 720, height: 175, x: (this.cX - 360), y: (this.cY - 87) }, 1000, 'Linear');
-            this.tween.to({ width: 0, height: 0, x: this.cX, y: this.cY }, 1000, 'Linear');
+            this.tween.to({ width: 720, height: 175, x: (this.cX - 360), y: (this.cY - 87) }, 2500, 'Linear');
+            this.tween.to({ width: 0, height: 0, x: this.cX, y: this.cY }, 2500, 'Linear');
             this.tween.onComplete.add(this.onDied, this);
             this.tween.start();
         };
@@ -4188,7 +4190,9 @@ var MortalKombat;
         };
         Level.prototype.shutdown = function () {
             this.field.shutdown();
+            this.groupContent.removeChildren();
             this.groupContent.removeAll();
+            this.groupContent.destroy();
             this.game.stage.removeChildren();
         };
         Level.prototype.onButtonClick = function (event) {
@@ -4237,7 +4241,16 @@ var MortalKombat;
             }
         };
         Level.prototype.onDialog = function (event) {
-            Utilits.Data.debugLog("DIALOg EVENT:", event);
+            Utilits.Data.debugLog("DIALOG EVENT:", event);
+            if (event === DialodFightWinsDied.WINS) {
+                GameData.Data.user_upgrade_points++;
+                GameData.Data.tournamentProgress++;
+            }
+            else {
+                GameData.Data.user_continue--;
+            }
+            GameData.Data.saveData = SocialVK.vkSaveData();
+            this.game.state.start(MortalKombat.Tournament.Name, true, false);
         };
         Level.Name = "level";
         return Level;

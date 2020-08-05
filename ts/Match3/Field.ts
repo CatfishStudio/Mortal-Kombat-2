@@ -768,8 +768,7 @@ module Match3 {
                     {
                         this.matchMatrixUnit["i"+i+":j"+j].flagRemove = false; 
                         this.tweenDown = this.game.add.tween(this.matchMatrixUnit["i"+i+":j"+j]);
-                        this.tweenDown.to({alpha: 1.0}, 500);
-                        this.tweenDown.to({x: this.matchMatrixFrontPosition["i"+i+":j"+j].x, y: this.matchMatrixFrontPosition["i"+i+":j"+j].y}, 500);
+                        this.tweenDown.to({x: this.matchMatrixFrontPosition["i"+i+":j"+j].x, y: this.matchMatrixFrontPosition["i"+i+":j"+j].y, alpha: 1.0}, 500);
                         this.tweenDown.to({x: this.matchMatrixFrontPosition["i"+i+":j"+j].x, y: this.matchMatrixFrontPosition["i"+i+":j"+j].y - 5}, 100);
                         this.tweenDown.to({x: this.matchMatrixFrontPosition["i"+i+":j"+j].x, y: this.matchMatrixFrontPosition["i"+i+":j"+j].y}, 50);
                         this.tweenDown.onComplete.add(this.onCompleteMatchMoveDownNewUnits, this);
@@ -811,8 +810,7 @@ module Match3 {
                             }
 
                             this.tweenDown = this.game.add.tween(this.matchMatrixUnit["i"+i+":j"+j]);
-                            this.tweenDown.to({alpha: 1.0}, 500);
-                            this.tweenDown.to({x: this.matchMatrixFrontPosition["i"+i+":j"+j].x, y: this.matchMatrixFrontPosition["i"+i+":j"+j].y}, 500);
+                            this.tweenDown.to({x: this.matchMatrixFrontPosition["i"+i+":j"+j].x, y: this.matchMatrixFrontPosition["i"+i+":j"+j].y, alpha: 1.0}, 500);
                             this.tweenDown.to({x: this.matchMatrixFrontPosition["i"+i+":j"+j].x, y: this.matchMatrixFrontPosition["i"+i+":j"+j].y - 5}, 100);
                             this.tweenDown.to({x: this.matchMatrixFrontPosition["i"+i+":j"+j].x, y: this.matchMatrixFrontPosition["i"+i+":j"+j].y}, 50);
                             this.tweenDown.onComplete.add(this.onCompleteMatchMoveDownNewUnits, this);
@@ -1138,8 +1136,7 @@ module Match3 {
                         /* Спускаем удалённые юниты */
 
                         this.tweenDown = this.game.add.tween(this.matchMatrixUnit["i"+i+":j"+j]);
-                        this.tweenDown.to({alpha: 1.0}, 500);
-                        this.tweenDown.to({x: this.matchMatrixFrontPosition["i"+i+":j"+j].x, y: this.matchMatrixFrontPosition["i"+i+":j"+j].y}, 500);
+                        this.tweenDown.to({x: this.matchMatrixFrontPosition["i"+i+":j"+j].x, y: this.matchMatrixFrontPosition["i"+i+":j"+j].y, alpha: 1.0}, 500);
                         this.tweenDown.onComplete.add(this.onCompleteMatchMoveDownNewUnits, this.matchMatrixUnit["i"+i+":j"+j]);
                         this.tweenDown.start();
 

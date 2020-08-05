@@ -50,6 +50,7 @@ module Fabrique {
             this.removeChild(this.sprite);
             this.sprite.destroy();
             this.removeChild(this.graphicOverlay);
+            this.graphicOverlay.destroy();
         }
 
         public showWins():void {

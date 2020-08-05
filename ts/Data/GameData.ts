@@ -68,7 +68,7 @@ module GameData {
         /* инициализация новой игры */
         public static initNewGame():void {
             this.user_continue = 9;
-            this.user_upgrade_points = 100; ////////////////////////////////////////0;
+            this.user_upgrade_points = 0;
             this.tournamentProgress = 0;
             this.id_enemies = [];
             this.saveData = "";
