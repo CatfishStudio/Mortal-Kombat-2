@@ -4,6 +4,8 @@ module MortalKombat {
     import Field = Match3.Field;
     import DamageCounter = Fabrique.DamageCounter;
     import DialodFightWinsDied = Fabrique.DialodFightWinsDied;
+    import Tutorial = Fabrique.Tutorial;
+    import Settings = Fabrique.Settings;
 
     export class Level extends Phaser.State{
         public static Name: string = "level";
@@ -12,7 +14,11 @@ module MortalKombat {
         private groupContent: Phaser.Group;
         private backgroundSprite:Phaser.Sprite;
         private borderSprite:Phaser.Sprite;
+        private backMenuButton:Phaser.Button;
+        private settingsButton:Phaser.Button;
         private helpButton:Phaser.Button;
+        private tutorial:Tutorial;
+        private settings:Settings;
         private persUser:GameData.IPersonage;
         private animUser:AnimationFighter;
         private damageCounterUser: DamageCounter;
@@ -37,9 +43,17 @@ module MortalKombat {
             this.borderSprite = new Phaser.Sprite(this.game, 0, 0, Images.BackgroundImage);
             this.groupContent.addChild(this.borderSprite);
 
+            this.backMenuButton = new Phaser.Button(this.game, -25, 5, Sheet.ButtonBackMenuMini, this.onButtonClick, this, 1, 2, 2, 2);
+            this.backMenuButton.name = Constants.BACK_MENU;
+            this.groupContent.addChild(this.backMenuButton);
+
             this.helpButton = new Phaser.Button(this.game, Constants.GAME_WIDTH - 230, 5, Sheet.ButtonHelpMini, this.onButtonClick, this, 1, 2, 2, 2);
             this.helpButton.name = Constants.HELP;
             this.groupContent.addChild(this.helpButton);
+
+            this.settingsButton = new Phaser.Button(this.game, (Constants.GAME_WIDTH / 2) - (255 / 2), (Constants.GAME_HEIGHT - 50), Sheet.ButtonSettings, this.onButtonClick, this, 1, 2, 2, 2);
+            this.settingsButton.name = Constants.SETTINGS;
+            this.groupContent.addChild(this.settingsButton);
 
             let valueJSON = this.game.cache.getJSON(GameData.Data.levels[GameData.Data.tournamentProgress][1]);
             this.field = new Field(this.game, this.groupContent);
@@ -75,6 +89,12 @@ module MortalKombat {
 
             this.enemiesLifebar = new LifeBar(this.game, 282, 35, this.persEnemies.name, this.persEnemies.life);
             this.groupContent.addChild(this.enemiesLifebar);
+
+            /* tutorial */
+            this.tutorial = new Tutorial(this.game, GameData.Data.tutorList[1]);
+            this.tutorial.x = Constants.GAME_WIDTH;
+            this.tutorial.y = (Constants.GAME_HEIGHT - 175);
+            this.groupContent.addChild(this.tutorial);
 
             this.dialog = new DialodFightWinsDied(this.game);
             this.dialog.event.add(this.onDialog, this);
@@ -140,14 +160,19 @@ module MortalKombat {
             switch (event.name) {
                 case Constants.BACK_MENU:
                     {
+                        this.game.state.start(Menu.Name, true, false);
                         break;
                     }
                 case Constants.SETTINGS:
                     {
+                        this.field.timerPause(true);
+                        this.settingsCreate();
                         break;
                     }
                 case Constants.SETTINGS_CLOSE:
                     {
+                        this.field.timerPause(false);
+                        this.settingsClose();
                         break;
                     }
                 case Constants.HELP:
@@ -157,6 +182,26 @@ module MortalKombat {
                     }  
                 default:
                     break;
+            }
+        }
+
+        private settingsCreate() {
+            this.tutorial.x = Constants.GAME_WIDTH;
+            this.tutorial.y = (Constants.GAME_HEIGHT - 175);
+            
+            this.settings = new Settings(this.game, this.groupContent);
+            this.settings.event.add(this.onButtonClick.bind(this));
+        }
+
+        private settingsClose() {
+            this.settings.removeChildren();
+            this.settings.removeAll();
+            this.groupContent.removeChild(this.settings);
+            
+            if(Config.settintTutorial === true){
+                let tweenTutorial: Phaser.Tween = this.game.add.tween(this.tutorial);
+                tweenTutorial.to({ x: (Constants.GAME_WIDTH / 2), y: (Constants.GAME_HEIGHT - 175)}, 500, 'Linear');
+                tweenTutorial.start();
             }
         }
 

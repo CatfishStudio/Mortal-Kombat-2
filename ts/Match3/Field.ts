@@ -1659,5 +1659,9 @@ module Match3 {
 			this.removeChild(this.timer);
 			Utilits.Data.debugLog("GAME:", "OVER");
 		}
+
+		public timerPause(status:boolean):void {
+			this.timer.pauseTimer(status);
+		}
     }
 }

@@ -1721,6 +1721,9 @@ var Match3;
             this.removeChild(this.timer);
             Utilits.Data.debugLog("GAME:", "OVER");
         };
+        Field.prototype.timerPause = function (status) {
+            this.timer.pauseTimer(status);
+        };
         Field.MATCH_COLUMNS = 6;
         Field.MATCH_ROWS = 6;
         Field.MATCH_CELL_WIDTH = 82;
@@ -3380,11 +3383,11 @@ var Fabrique;
                 this.removeChild(this.buttonBlockPlus);
                 this.removeChild(this.buttonUppercutPlus);
                 this.removeChild(this.buttonTwistPlus);
-                this.textValueCap1.text = (Constants.DAMAGE_LEG * GameData.Data.user_personage.leg).toString();
-                this.textValueCap2.text = (Constants.DAMAGE_HAND * GameData.Data.user_personage.hand).toString();
-                this.textValueCap3.text = (Constants.DAMAGE_BLOCK * GameData.Data.user_personage.block).toString();
-                this.textValueCap4.text = (Constants.DAMAGE_UPPERCUT * GameData.Data.user_personage.uppercut).toString();
-                this.textValueCap5.text = (Constants.DAMAGE_TWIST * GameData.Data.user_personage.twist).toString();
+                this.textValueCap1.text = (Constants.DAMAGE_LEG * GameData.Data.user_personage.leg).toString() + " x" + GameData.Data.user_personage.leg;
+                this.textValueCap2.text = (Constants.DAMAGE_HAND * GameData.Data.user_personage.hand).toString() + " x" + GameData.Data.user_personage.hand;
+                this.textValueCap3.text = (Constants.DAMAGE_BLOCK * GameData.Data.user_personage.block).toString() + " x" + GameData.Data.user_personage.block;
+                this.textValueCap4.text = (Constants.DAMAGE_UPPERCUT * GameData.Data.user_personage.uppercut).toString() + " x" + GameData.Data.user_personage.uppercut;
+                this.textValueCap5.text = (Constants.DAMAGE_TWIST * GameData.Data.user_personage.twist).toString() + " x" + GameData.Data.user_personage.twist;
                 this.textValueCap1.x = 150;
                 this.textValueCap2.x = 150;
                 this.textValueCap3.x = 150;
@@ -4078,6 +4081,8 @@ var MortalKombat;
     var Field = Match3.Field;
     var DamageCounter = Fabrique.DamageCounter;
     var DialodFightWinsDied = Fabrique.DialodFightWinsDied;
+    var Tutorial = Fabrique.Tutorial;
+    var Settings = Fabrique.Settings;
     var Level = /** @class */ (function (_super) {
         __extends(Level, _super);
         function Level() {
@@ -4091,9 +4096,15 @@ var MortalKombat;
             this.groupContent.addChild(this.backgroundSprite);
             this.borderSprite = new Phaser.Sprite(this.game, 0, 0, Images.BackgroundImage);
             this.groupContent.addChild(this.borderSprite);
+            this.backMenuButton = new Phaser.Button(this.game, -25, 5, Sheet.ButtonBackMenuMini, this.onButtonClick, this, 1, 2, 2, 2);
+            this.backMenuButton.name = Constants.BACK_MENU;
+            this.groupContent.addChild(this.backMenuButton);
             this.helpButton = new Phaser.Button(this.game, Constants.GAME_WIDTH - 230, 5, Sheet.ButtonHelpMini, this.onButtonClick, this, 1, 2, 2, 2);
             this.helpButton.name = Constants.HELP;
             this.groupContent.addChild(this.helpButton);
+            this.settingsButton = new Phaser.Button(this.game, (Constants.GAME_WIDTH / 2) - (255 / 2), (Constants.GAME_HEIGHT - 50), Sheet.ButtonSettings, this.onButtonClick, this, 1, 2, 2, 2);
+            this.settingsButton.name = Constants.SETTINGS;
+            this.groupContent.addChild(this.settingsButton);
             var valueJSON = this.game.cache.getJSON(GameData.Data.levels[GameData.Data.tournamentProgress][1]);
             this.field = new Field(this.game, this.groupContent);
             this.field.event.add(this.onMatch, this);
@@ -4122,6 +4133,11 @@ var MortalKombat;
             this.groupContent.addChild(this.userLifebar);
             this.enemiesLifebar = new LifeBar(this.game, 282, 35, this.persEnemies.name, this.persEnemies.life);
             this.groupContent.addChild(this.enemiesLifebar);
+            /* tutorial */
+            this.tutorial = new Tutorial(this.game, GameData.Data.tutorList[1]);
+            this.tutorial.x = Constants.GAME_WIDTH;
+            this.tutorial.y = (Constants.GAME_HEIGHT - 175);
+            this.groupContent.addChild(this.tutorial);
             this.dialog = new DialodFightWinsDied(this.game);
             this.dialog.event.add(this.onDialog, this);
             this.groupContent.addChild(this.dialog);
@@ -4195,14 +4211,19 @@ var MortalKombat;
             switch (event.name) {
                 case Constants.BACK_MENU:
                     {
+                        this.game.state.start(MortalKombat.Menu.Name, true, false);
                         break;
                     }
                 case Constants.SETTINGS:
                     {
+                        this.field.timerPause(true);
+                        this.settingsCreate();
                         break;
                     }
                 case Constants.SETTINGS_CLOSE:
                     {
+                        this.field.timerPause(false);
+                        this.settingsClose();
                         break;
                     }
                 case Constants.HELP:
@@ -4211,6 +4232,22 @@ var MortalKombat;
                     }
                 default:
                     break;
+            }
+        };
+        Level.prototype.settingsCreate = function () {
+            this.tutorial.x = Constants.GAME_WIDTH;
+            this.tutorial.y = (Constants.GAME_HEIGHT - 175);
+            this.settings = new Settings(this.game, this.groupContent);
+            this.settings.event.add(this.onButtonClick.bind(this));
+        };
+        Level.prototype.settingsClose = function () {
+            this.settings.removeChildren();
+            this.settings.removeAll();
+            this.groupContent.removeChild(this.settings);
+            if (Config.settintTutorial === true) {
+                var tweenTutorial = this.game.add.tween(this.tutorial);
+                tweenTutorial.to({ x: (Constants.GAME_WIDTH / 2), y: (Constants.GAME_HEIGHT - 175) }, 500, 'Linear');
+                tweenTutorial.start();
             }
         };
         Level.prototype.checkGameOver = function () {
