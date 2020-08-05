@@ -865,7 +865,6 @@ var Match3;
                     if (this.matchMoveDownProcesses["i" + i + ":j" + j] === true && this.matchMatrixUnit["i" + i + ":j" + j].flagRemove === false && this.matchMatrixUnit["i" + i + ":j" + j].unitType !== Field.MATCH_HIT_0) {
                         this.matchMatrixUnit["i" + i + ":j" + j].flagRemove = false;
                         this.tweenDown = this.game.add.tween(this.matchMatrixUnit["i" + i + ":j" + j]);
-                        //this.tweenDown.to({alpha: 1.0}, 500);
                         this.tweenDown.to({ x: this.matchMatrixFrontPosition["i" + i + ":j" + j].x, y: this.matchMatrixFrontPosition["i" + i + ":j" + j].y, alpha: 1.0 }, 500);
                         this.tweenDown.to({ x: this.matchMatrixFrontPosition["i" + i + ":j" + j].x, y: this.matchMatrixFrontPosition["i" + i + ":j" + j].y - 5 }, 100);
                         this.tweenDown.to({ x: this.matchMatrixFrontPosition["i" + i + ":j" + j].x, y: this.matchMatrixFrontPosition["i" + i + ":j" + j].y }, 50);
@@ -902,7 +901,6 @@ var Match3;
                                 this.matchMatrixUnit["i" + i + ":j" + j].flagRemove = false;
                             }
                             this.tweenDown = this.game.add.tween(this.matchMatrixUnit["i" + i + ":j" + j]);
-                            //this.tweenDown.to({alpha: 1.0}, 500);
                             this.tweenDown.to({ x: this.matchMatrixFrontPosition["i" + i + ":j" + j].x, y: this.matchMatrixFrontPosition["i" + i + ":j" + j].y, alpha: 1.0 }, 500);
                             this.tweenDown.to({ x: this.matchMatrixFrontPosition["i" + i + ":j" + j].x, y: this.matchMatrixFrontPosition["i" + i + ":j" + j].y - 5 }, 100);
                             this.tweenDown.to({ x: this.matchMatrixFrontPosition["i" + i + ":j" + j].x, y: this.matchMatrixFrontPosition["i" + i + ":j" + j].y }, 50);
@@ -1258,7 +1256,6 @@ var Match3;
                         }
                         /* Спускаем удалённые юниты */
                         this.tweenDown = this.game.add.tween(this.matchMatrixUnit["i" + i + ":j" + j]);
-                        //this.tweenDown.to({alpha: 1.0}, 500);
                         this.tweenDown.to({ x: this.matchMatrixFrontPosition["i" + i + ":j" + j].x, y: this.matchMatrixFrontPosition["i" + i + ":j" + j].y, alpha: 1.0 }, 500);
                         this.tweenDown.onComplete.add(this.onCompleteMatchMoveDownNewUnits, this.matchMatrixUnit["i" + i + ":j" + j]);
                         this.tweenDown.start();
@@ -2244,11 +2241,11 @@ var GameData;
                         block.push(key);
                     if ('damage' == key.substr(0, 6))
                         damage.push(key);
-                    if ('hit_hand' == key.substr(0, 8))
+                    if ('hit_hand' == key.substr(0, 8) && 'hit_hand_uppercut' != key.substr(0, 17))
                         hit_hand.push(key);
                     if ('hit_hand_uppercut' == key.substr(0, 17))
                         hit_hand_uppercut.push(key);
-                    if ('hit_leg' == key.substr(0, 7))
+                    if ('hit_leg' == key.substr(0, 7) && 'hit_leg_twist' != key.substr(0, 13))
                         hit_leg.push(key);
                     if ('hit_leg_twist' == key.substr(0, 13))
                         hit_leg_twist.push(key);
@@ -2610,8 +2607,7 @@ var Fabrique;
             this.cX = this.game.width / 2;
             this.cY = this.game.height / 2;
             this.graphicOverlay = new Phaser.Graphics(this.game, 0, 0);
-            ////////////this.graphicOverlay.beginFill(0x000000, 0.1);
-            this.graphicOverlay.beginFill(0x550000, 0.1);
+            this.graphicOverlay.beginFill(0x000000, 0.1);
             this.graphicOverlay.drawRect(0, 0, this.game.width, this.game.height);
             this.graphicOverlay.endFill();
             this.graphicOverlay.inputEnabled = true;

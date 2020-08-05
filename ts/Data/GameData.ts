@@ -141,9 +141,9 @@ module GameData {
                 for (let key in json.frames) {
                     if('block' == key.substr(0, 5)) block.push(key);
                     if('damage' == key.substr(0, 6)) damage.push(key);
-                    if('hit_hand' == key.substr(0, 8)) hit_hand.push(key);
+                    if('hit_hand' == key.substr(0, 8) && 'hit_hand_uppercut' != key.substr(0, 17)) hit_hand.push(key);
                     if('hit_hand_uppercut' == key.substr(0, 17)) hit_hand_uppercut.push(key);
-                    if('hit_leg' == key.substr(0, 7)) hit_leg.push(key);
+                    if('hit_leg' == key.substr(0, 7) && 'hit_leg_twist' != key.substr(0, 13)) hit_leg.push(key);
                     if('hit_leg_twist' == key.substr(0, 13)) hit_leg_twist.push(key);
                     if('lose' == key.substr(0, 4)) lose.push(key);
                     if('stance' == key.substr(0, 6)) stance.push(key);
