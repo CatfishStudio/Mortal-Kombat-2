@@ -14,7 +14,7 @@ module MortalKombat {
         private groupContent: Phaser.Group;
         private backgroundSprite:Phaser.Sprite;
         private borderSprite:Phaser.Sprite;
-        private backMenuButton:Phaser.Button;
+        private surrenderButton:Phaser.Button;
         private settingsButton:Phaser.Button;
         private helpButton:Phaser.Button;
         private tutorial:Tutorial;
@@ -43,9 +43,9 @@ module MortalKombat {
             this.borderSprite = new Phaser.Sprite(this.game, 0, 0, Images.BackgroundImage);
             this.groupContent.addChild(this.borderSprite);
 
-            this.backMenuButton = new Phaser.Button(this.game, -25, 5, Sheet.ButtonBackMenuMini, this.onButtonClick, this, 1, 2, 2, 2);
-            this.backMenuButton.name = Constants.BACK_MENU;
-            this.groupContent.addChild(this.backMenuButton);
+            this.surrenderButton = new Phaser.Button(this.game, -25, 5, Sheet.ButtonSurrender, this.onButtonClick, this, 1, 2, 2, 2);
+            this.surrenderButton.name = Constants.SURRENDER;
+            this.groupContent.addChild(this.surrenderButton);
 
             this.helpButton = new Phaser.Button(this.game, Constants.GAME_WIDTH - 230, 5, Sheet.ButtonHelpMini, this.onButtonClick, this, 1, 2, 2, 2);
             this.helpButton.name = Constants.HELP;
@@ -157,8 +157,8 @@ module MortalKombat {
             this.backgroundSprite.destroy();
             this.groupContent.removeChild(this.borderSprite);
             this.borderSprite.destroy();
-            this.groupContent.removeChild(this.backMenuButton);
-            this.backMenuButton.destroy();
+            this.groupContent.removeChild(this.surrenderButton);
+            this.surrenderButton.destroy();
             this.groupContent.removeChild(this.helpButton);
             this.helpButton.destroy();
             this.groupContent.removeChild(this.settingsButton);
@@ -187,9 +187,8 @@ module MortalKombat {
 
         private onButtonClick(event) {
             switch (event.name) {
-                case Constants.BACK_MENU:
+                case Constants.SURRENDER:
                     {
-                        //this.game.state.start(Menu.Name, true, false);
                         this.field.isGameOver();
                         this.animUser.changeAnimation(Constants.ANIMATION_TYPE_LOSE);
                         this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_WIN);

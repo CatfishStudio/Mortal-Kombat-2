@@ -13,6 +13,7 @@ class Constants {
     public static TUTORIAL              = 'tutorial';
     public static INVITE                = 'invite';
     public static CONTINUE              = 'continue';
+    public static SURRENDER             = 'surrender';
 
     public static ANIMATION_TYPE_STANCE             = "animation_type_stance";
     public static ANIMATION_TYPE_BLOCK              = "animation_type_block";

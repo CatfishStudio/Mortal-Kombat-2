@@ -1759,6 +1759,7 @@ var Constants = /** @class */ (function () {
     Constants.TUTORIAL = 'tutorial';
     Constants.INVITE = 'invite';
     Constants.CONTINUE = 'continue';
+    Constants.SURRENDER = 'surrender';
     Constants.ANIMATION_TYPE_STANCE = "animation_type_stance";
     Constants.ANIMATION_TYPE_BLOCK = "animation_type_block";
     Constants.ANIMATION_TYPE_HIT_HAND = "animation_type_hit_hand";
@@ -2031,6 +2032,7 @@ var Sheet = /** @class */ (function () {
     Sheet.ButtonBackMini = 'button_back_mini_sheet.png';
     Sheet.ButtonHelpMini = 'button_help_mini_sheet.png';
     Sheet.ButtonStartBattle = 'button_start_battle_sheet.png';
+    Sheet.ButtonSurrender = 'button_surrender_sheet.png';
     Sheet.preloadList = [
         Sheet.ButtonStartNewGame,
         Sheet.ButtonСontinueGame,
@@ -2041,7 +2043,8 @@ var Sheet = /** @class */ (function () {
         Sheet.ButtonBackMenuMini,
         Sheet.ButtonBackMini,
         Sheet.ButtonHelpMini,
-        Sheet.ButtonStartBattle
+        Sheet.ButtonStartBattle,
+        Sheet.ButtonSurrender
     ];
     return Sheet;
 }());
@@ -4102,9 +4105,9 @@ var MortalKombat;
             this.groupContent.addChild(this.backgroundSprite);
             this.borderSprite = new Phaser.Sprite(this.game, 0, 0, Images.BackgroundImage);
             this.groupContent.addChild(this.borderSprite);
-            this.backMenuButton = new Phaser.Button(this.game, -25, 5, Sheet.ButtonBackMenuMini, this.onButtonClick, this, 1, 2, 2, 2);
-            this.backMenuButton.name = Constants.BACK_MENU;
-            this.groupContent.addChild(this.backMenuButton);
+            this.surrenderButton = new Phaser.Button(this.game, -25, 5, Sheet.ButtonSurrender, this.onButtonClick, this, 1, 2, 2, 2);
+            this.surrenderButton.name = Constants.SURRENDER;
+            this.groupContent.addChild(this.surrenderButton);
             this.helpButton = new Phaser.Button(this.game, Constants.GAME_WIDTH - 230, 5, Sheet.ButtonHelpMini, this.onButtonClick, this, 1, 2, 2, 2);
             this.helpButton.name = Constants.HELP;
             this.groupContent.addChild(this.helpButton);
@@ -4216,8 +4219,8 @@ var MortalKombat;
             this.backgroundSprite.destroy();
             this.groupContent.removeChild(this.borderSprite);
             this.borderSprite.destroy();
-            this.groupContent.removeChild(this.backMenuButton);
-            this.backMenuButton.destroy();
+            this.groupContent.removeChild(this.surrenderButton);
+            this.surrenderButton.destroy();
             this.groupContent.removeChild(this.helpButton);
             this.helpButton.destroy();
             this.groupContent.removeChild(this.settingsButton);
@@ -4245,9 +4248,8 @@ var MortalKombat;
         };
         Level.prototype.onButtonClick = function (event) {
             switch (event.name) {
-                case Constants.BACK_MENU:
+                case Constants.SURRENDER:
                     {
-                        //this.game.state.start(Menu.Name, true, false);
                         this.field.isGameOver();
                         this.animUser.changeAnimation(Constants.ANIMATION_TYPE_LOSE);
                         this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_WIN);
