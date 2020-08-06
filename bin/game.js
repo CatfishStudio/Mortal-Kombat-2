@@ -32,6 +32,7 @@ var MortalKombat;
             _this.state.add(MortalKombat.Fighters.Name, MortalKombat.Fighters, false);
             _this.state.add(MortalKombat.Tournament.Name, MortalKombat.Tournament, false);
             _this.state.add(MortalKombat.Level.Name, MortalKombat.Level, false);
+            _this.state.add(MortalKombat.GameOver.Name, MortalKombat.GameOver, false);
             return _this;
         }
         Game.getInstance = function () {
@@ -244,9 +245,11 @@ var Match3;
         };
         Field.prototype.shutdown = function () {
             this.timer.shutdown();
-            this.tween1.stop();
+            if (this.tween1 != undefined)
+                this.tween1.stop();
             this.tween1 = null;
-            this.tween2.stop();
+            if (this.tween2 != undefined)
+                this.tween2.stop();
             this.tween2 = null;
             this.removeChildren();
             this.removeAll();
@@ -4325,12 +4328,45 @@ var MortalKombat;
                 GameData.Data.user_continue--;
             }
             GameData.Data.saveData = SocialVK.vkSaveData();
-            this.game.state.start(MortalKombat.Tournament.Name, true, false);
+            if (GameData.Data.user_continue <= 0)
+                this.game.state.start(MortalKombat.GameOver.Name, true, false);
+            else if (GameData.Data.tournamentProgress > 13)
+                this.game.state.start(MortalKombat.GameOver.Name, true, false);
+            else
+                this.game.state.start(MortalKombat.Tournament.Name, true, false);
         };
         Level.Name = "level";
         return Level;
     }(Phaser.State));
     MortalKombat.Level = Level;
+})(MortalKombat || (MortalKombat = {}));
+var MortalKombat;
+(function (MortalKombat) {
+    var GameOver = /** @class */ (function (_super) {
+        __extends(GameOver, _super);
+        function GameOver() {
+            var _this = _super.call(this) || this;
+            _this.name = GameOver.Name;
+            return _this;
+        }
+        GameOver.prototype.create = function () {
+            this.groupContent = new Phaser.Group(this.game, this.stage);
+            if (GameData.Data.tournamentProgress <= 0)
+                this.groupContent.addChild(new Phaser.Sprite(this.game, 0, 0, Images.game_lose));
+            else
+                this.groupContent.addChild(new Phaser.Sprite(this.game, 0, 0, Images.game_win));
+            this.groupContent.addChild(new Phaser.Sprite(this.game, 0, 0, Images.BackgroundImage));
+        };
+        GameOver.prototype.shutdown = function () {
+            this.groupContent.removeChildren();
+            this.groupContent.removeAll();
+            this.groupContent.destroy();
+            this.game.stage.removeChildren();
+        };
+        GameOver.Name = "gameover";
+        return GameOver;
+    }(Phaser.State));
+    MortalKombat.GameOver = GameOver;
 })(MortalKombat || (MortalKombat = {}));
 /// <reference path="..\node_modules\phaser-ce\typescript\phaser.d.ts" />
 /// <reference path="Match3\Timer.ts" />
@@ -4368,4 +4404,5 @@ var MortalKombat;
 /// <reference path="States\Fighters.ts" />
 /// <reference path="States\Tournament.ts" />
 /// <reference path="States\Level.ts" />
+/// <reference path="States\GameOver.ts" />
 /// <reference path="app.ts" />

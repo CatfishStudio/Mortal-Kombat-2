@@ -70,10 +70,10 @@ module Match3 {
         }
 
         public shutdown(){
-            this.timer.shutdown();
-            this.tween1.stop();
+			this.timer.shutdown();
+			if(this.tween1 != undefined) this.tween1.stop();
             this.tween1 = null;
-            this.tween2.stop();
+            if(this.tween2 != undefined) this.tween2.stop();
             this.tween2 = null;
             this.removeChildren();
             this.removeAll();

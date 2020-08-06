@@ -35,5 +35,6 @@
 /// <reference path="States\Fighters.ts" />
 /// <reference path="States\Tournament.ts" />
 /// <reference path="States\Level.ts" />
+/// <reference path="States\GameOver.ts" />
 
 /// <reference path="app.ts" />

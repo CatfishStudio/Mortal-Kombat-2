@@ -20,6 +20,7 @@ module MortalKombat {
             this.state.add(Fighters.Name, Fighters, false);
             this.state.add(Tournament.Name, Tournament, false);
             this.state.add(Level.Name, Level, false);
+            this.state.add(GameOver.Name, GameOver, false);
         }
 
         public static getInstance(): Game {
