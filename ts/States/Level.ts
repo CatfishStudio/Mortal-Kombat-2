@@ -91,10 +91,11 @@ module MortalKombat {
             this.groupContent.addChild(this.enemiesLifebar);
 
             /* tutorial */
-            this.tutorial = new Tutorial(this.game, GameData.Data.tutorList[1]);
+            this.tutorial = new Tutorial(this.game, 'Соберите 3-и фишки\nв ряд чтобы\nнанести удар');
             this.tutorial.x = Constants.GAME_WIDTH;
             this.tutorial.y = (Constants.GAME_HEIGHT - 175);
             this.groupContent.addChild(this.tutorial);
+            if(Config.settintTutorial === true && GameData.Data.tournamentProgress == 0) this.tutorial.show((Constants.GAME_WIDTH / 2), (Constants.GAME_HEIGHT - 175));
 
             this.dialog = new DialodFightWinsDied(this.game);
             this.dialog.event.add(this.onDialog, this);
@@ -106,6 +107,8 @@ module MortalKombat {
         public onMatch(hitType:any, hitCount:number, statusAction:String):void
         {
             Utilits.Data.debugLog("LEVEL: match |", "type=" + hitType + " | count=" + hitCount + " | status=" + statusAction);
+            if(GameData.Data.tournamentProgress == 0 && this.tutorial.x != Constants.GAME_WIDTH)this.tutorial.x = Constants.GAME_WIDTH;
+
             if(hitType === null && hitCount=== null){
                 if(statusAction === Field.ACTION_PLAYER){
                     this.animUser.block = false; // сбросить блок игрока
@@ -186,7 +189,11 @@ module MortalKombat {
             switch (event.name) {
                 case Constants.BACK_MENU:
                     {
-                        this.game.state.start(Menu.Name, true, false);
+                        //this.game.state.start(Menu.Name, true, false);
+                        this.field.isGameOver();
+                        this.animUser.changeAnimation(Constants.ANIMATION_TYPE_LOSE);
+                        this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_WIN);
+                        this.dialog.showDied();
                         break;
                     }
                 case Constants.SETTINGS:
@@ -224,7 +231,7 @@ module MortalKombat {
             this.settings.removeAll();
             this.groupContent.removeChild(this.settings);
             
-            if(Config.settintTutorial === true){
+            if(Config.settintTutorial === true && GameData.Data.tournamentProgress == 0){
                 let tweenTutorial: Phaser.Tween = this.game.add.tween(this.tutorial);
                 tweenTutorial.to({ x: (Constants.GAME_WIDTH / 2), y: (Constants.GAME_HEIGHT - 175)}, 500, 'Linear');
                 tweenTutorial.start();

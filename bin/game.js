@@ -2402,13 +2402,6 @@ var GameData;
             }
             return damage;
         };
-        Data.tutorList = [
-            'Нажмите на кнопку\n"начать игру"\nчтобы начать\nтурнир.',
-            'Нажмите на иконку\nбойца и на кнопку\n"Выбрать бойца',
-            '',
-            '',
-            ''
-        ];
         return Data;
     }());
     GameData.Data = Data;
@@ -3179,8 +3172,8 @@ var Fabrique;
             graphics.drawRect(0, 0, 400, 116);
             graphics.endFill();
             this.addChild(graphics);
-            var messageText = this.game.add.text(175, 10, this.text, { font: "18px Georgia", fill: "#AAAAAA", align: "left" });
-            this.addChild(messageText);
+            this.messageText = this.game.add.text(175, 10, this.text, { font: "18px Georgia", fill: "#AAAAAA", align: "left" });
+            this.addChild(this.messageText);
             var anim = this.animations.add(Atlases.VideoHelp);
             anim.onComplete.add(this.onCompleteVideo, this);
             anim.play(10, true, false);
@@ -3191,6 +3184,10 @@ var Fabrique;
             var tween = this.game.add.tween(this);
             tween.to({ x: x, y: y }, 500, 'Linear');
             tween.start();
+        };
+        Tutorial.prototype.setText = function (text) {
+            this.text = text;
+            this.messageText.text = this.text;
         };
         return Tutorial;
     }(Phaser.Sprite));
@@ -3706,11 +3703,11 @@ var MortalKombat;
             var buttonInvite = new Phaser.Button(this.game, 75, 550, Sheet.ButtonInvite, this.onButtonClick, this, 1, 2, 2, 2);
             buttonInvite.name = Constants.INVITE;
             this.groupButtons.addChild(buttonInvite);
-            this.continueGame();
-            this.tutorial = new Tutorial(this.game, GameData.Data.tutorList[0]);
+            this.tutorial = new Tutorial(this.game, 'Нажмите на кнопку\n"Начать игру"\nчтобы начать\nновый турнир.');
             this.tutorial.x = Constants.GAME_WIDTH;
             this.tutorial.y = (Constants.GAME_HEIGHT - 175);
             this.groupMenu.addChild(this.tutorial);
+            this.continueGame();
         };
         Menu.prototype.onCompleteVideo = function () {
             var _this = this;
@@ -3793,6 +3790,7 @@ var MortalKombat;
                 var buttonContinue = new Phaser.Button(this.game, 75, 400, Sheet.ButtonСontinueGame, this.onButtonClick, this, 1, 2);
                 buttonContinue.name = Constants.CONTINUE;
                 this.groupButtons.addChild(buttonContinue);
+                this.tutorial.setText('Нажмите на кнопку\n"Продолжить"\nчтобы продолжить\n турнир.');
             }
         };
         Menu.Name = "menu";
@@ -3871,7 +3869,7 @@ var MortalKombat;
             /* panel icons */
             this.panelIcons = new PanelIcons(this.game, this.groupFighters);
             /* tutorial */
-            this.tutorial = new Tutorial(this.game, GameData.Data.tutorList[1]);
+            this.tutorial = new Tutorial(this.game, 'Нажмите на иконку\nбойца и на кнопку\n"Выбрать бойца');
             this.tutorial.x = Constants.GAME_WIDTH;
             this.tutorial.y = (Constants.GAME_HEIGHT - 175);
             this.groupFighters.addChild(this.tutorial);
@@ -4009,10 +4007,14 @@ var MortalKombat;
             this.title = new Title(this.game, 0, -50, 'ТУРНИР');
             this.groupContent.addChild(this.title);
             /* tutorial */
-            this.tutorial = new Tutorial(this.game, GameData.Data.tutorList[1]);
+            this.tutorial = new Tutorial(this.game, '');
             this.tutorial.x = -500;
             this.tutorial.y = 150;
             this.groupContent.addChild(this.tutorial);
+            if (GameData.Data.user_upgrade_points > 0)
+                this.tutorial.setText('Вам доступно ' + GameData.Data.user_upgrade_points + 'очков\nне распределённых опыта');
+            else
+                this.tutorial.setText('У вас осталось ' + GameData.Data.user_continue + ' попыток.\nНажмите на кнопку\n"Начать битву"');
             /* Upgrade */
             this.userUpgradeCharacteristics = new UpgradeCharacteristics(this.game, true);
             this.userUpgradeCharacteristics.x = -500;
@@ -4138,10 +4140,12 @@ var MortalKombat;
             this.enemiesLifebar = new LifeBar(this.game, 282, 35, this.persEnemies.name, this.persEnemies.life);
             this.groupContent.addChild(this.enemiesLifebar);
             /* tutorial */
-            this.tutorial = new Tutorial(this.game, GameData.Data.tutorList[1]);
+            this.tutorial = new Tutorial(this.game, 'Соберите 3-и фишки\nв ряд чтобы\nнанести удар');
             this.tutorial.x = Constants.GAME_WIDTH;
             this.tutorial.y = (Constants.GAME_HEIGHT - 175);
             this.groupContent.addChild(this.tutorial);
+            if (Config.settintTutorial === true && GameData.Data.tournamentProgress == 0)
+                this.tutorial.show((Constants.GAME_WIDTH / 2), (Constants.GAME_HEIGHT - 175));
             this.dialog = new DialodFightWinsDied(this.game);
             this.dialog.event.add(this.onDialog, this);
             this.groupContent.addChild(this.dialog);
@@ -4150,6 +4154,8 @@ var MortalKombat;
         /* Произошло событие match на поле */
         Level.prototype.onMatch = function (hitType, hitCount, statusAction) {
             Utilits.Data.debugLog("LEVEL: match |", "type=" + hitType + " | count=" + hitCount + " | status=" + statusAction);
+            if (GameData.Data.tournamentProgress == 0 && this.tutorial.x != Constants.GAME_WIDTH)
+                this.tutorial.x = Constants.GAME_WIDTH;
             if (hitType === null && hitCount === null) {
                 if (statusAction === Field.ACTION_PLAYER) {
                     this.animUser.block = false; // сбросить блок игрока
@@ -4241,7 +4247,11 @@ var MortalKombat;
             switch (event.name) {
                 case Constants.BACK_MENU:
                     {
-                        this.game.state.start(MortalKombat.Menu.Name, true, false);
+                        //this.game.state.start(Menu.Name, true, false);
+                        this.field.isGameOver();
+                        this.animUser.changeAnimation(Constants.ANIMATION_TYPE_LOSE);
+                        this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_WIN);
+                        this.dialog.showDied();
                         break;
                     }
                 case Constants.SETTINGS:
@@ -4274,7 +4284,7 @@ var MortalKombat;
             this.settings.removeChildren();
             this.settings.removeAll();
             this.groupContent.removeChild(this.settings);
-            if (Config.settintTutorial === true) {
+            if (Config.settintTutorial === true && GameData.Data.tournamentProgress == 0) {
                 var tweenTutorial = this.game.add.tween(this.tutorial);
                 tweenTutorial.to({ x: (Constants.GAME_WIDTH / 2), y: (Constants.GAME_HEIGHT - 175) }, 500, 'Linear');
                 tweenTutorial.start();

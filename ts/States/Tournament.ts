@@ -112,10 +112,12 @@ module MortalKombat {
             this.groupContent.addChild(this.title);
                         
             /* tutorial */
-            this.tutorial = new Tutorial(this.game, GameData.Data.tutorList[1]);
+            this.tutorial = new Tutorial(this.game, '');
             this.tutorial.x = -500;
             this.tutorial.y = 150;
             this.groupContent.addChild(this.tutorial);
+            if(GameData.Data.user_upgrade_points > 0) this.tutorial.setText('Вам доступно ' + GameData.Data.user_upgrade_points + 'очков\nне распределённых опыта');
+            else this.tutorial.setText('У вас осталось ' + GameData.Data.user_continue + ' попыток.\nНажмите на кнопку\n"Начать битву"');
 
             /* Upgrade */
             this.userUpgradeCharacteristics = new UpgradeCharacteristics(this.game, true);

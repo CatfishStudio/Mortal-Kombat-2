@@ -78,12 +78,12 @@ module MortalKombat {
             buttonInvite.name = Constants.INVITE;
             this.groupButtons.addChild(buttonInvite);
 
-            this.continueGame();
-
-            this.tutorial = new Tutorial(this.game, GameData.Data.tutorList[0]);
+            this.tutorial = new Tutorial(this.game, 'Нажмите на кнопку\n"Начать игру"\nчтобы начать\nновый турнир.');
             this.tutorial.x = Constants.GAME_WIDTH;
             this.tutorial.y = (Constants.GAME_HEIGHT - 175);
             this.groupMenu.addChild(this.tutorial);
+
+            this.continueGame();
         }
 
         private onCompleteVideo():void {
@@ -180,6 +180,8 @@ module MortalKombat {
                 let buttonContinue = new Phaser.Button(this.game, 75, 400, Sheet.ButtonСontinueGame, this.onButtonClick, this, 1, 2);
                 buttonContinue.name = Constants.CONTINUE;
                 this.groupButtons.addChild(buttonContinue);
+
+                this.tutorial.setText('Нажмите на кнопку\n"Продолжить"\nчтобы продолжить\n турнир.')
             }
         }
     }

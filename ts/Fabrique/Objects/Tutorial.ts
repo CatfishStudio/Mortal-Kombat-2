@@ -3,6 +3,7 @@ module Fabrique {
     export class Tutorial extends Phaser.Sprite {
 
         private text:string;
+        private messageText: Phaser.Text;
         
         constructor(game:Phaser.Game, text:string){
             super(game, 0, 0, Atlases.VideoHelp, 0);
@@ -29,8 +30,8 @@ module Fabrique {
 
             this.addChild(graphics);
 
-            let messageText: Phaser.Text = this.game.add.text(175, 10, this.text, { font: "18px Georgia", fill: "#AAAAAA", align: "left" });
-            this.addChild(messageText);
+            this.messageText = this.game.add.text(175, 10, this.text, { font: "18px Georgia", fill: "#AAAAAA", align: "left" });
+            this.addChild(this.messageText);
 
             let anim: Phaser.Animation = this.animations.add(Atlases.VideoHelp);
             anim.onComplete.add(this.onCompleteVideo, this);
@@ -48,6 +49,10 @@ module Fabrique {
             tween.start();
         }
 
+        public setText(text:string):void {
+            this.text = text;
+            this.messageText.text = this.text;
+        }
     }
 
 }

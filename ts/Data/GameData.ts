@@ -23,14 +23,7 @@ module GameData {
     }
 
     export class Data {
-        public static tutorList:any[] = [
-            'Нажмите на кнопку\n"начать игру"\nчтобы начать\nтурнир.',
-            'Нажмите на иконку\nбойца и на кнопку\n"Выбрать бойца',
-            '',
-            '',
-            ''
-        ];
-
+        
         public static personages:IPersonage[]; // массив персонажей и их характеристик
         public static levels:string[][]; // массив уровней
         
