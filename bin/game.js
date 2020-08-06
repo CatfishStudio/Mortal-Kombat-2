@@ -1879,6 +1879,8 @@ var Images = /** @class */ (function () {
     Images.fight = 'fight.png';
     Images.wins = 'wins.png';
     Images.died = 'you_died.png';
+    Images.game_win = 'game_win.png';
+    Images.game_lose = 'game_lose.png';
     Images.BarakaIcon = 'baraka.png';
     Images.GoroIcon = 'goro.png';
     Images.JaxIcon = 'jax.png';
@@ -1936,6 +1938,8 @@ var Images = /** @class */ (function () {
         Images.fight,
         Images.wins,
         Images.died,
+        Images.game_win,
+        Images.game_lose,
         Images.BarakaIcon,
         Images.GoroIcon,
         Images.JaxIcon,
@@ -4202,6 +4206,32 @@ var MortalKombat;
         };
         Level.prototype.shutdown = function () {
             this.field.shutdown();
+            this.groupContent.removeChild(this.backgroundSprite);
+            this.backgroundSprite.destroy();
+            this.groupContent.removeChild(this.borderSprite);
+            this.borderSprite.destroy();
+            this.groupContent.removeChild(this.backMenuButton);
+            this.backMenuButton.destroy();
+            this.groupContent.removeChild(this.helpButton);
+            this.helpButton.destroy();
+            this.groupContent.removeChild(this.settingsButton);
+            this.settingsButton.destroy();
+            this.groupContent.removeChild(this.animUser);
+            this.animUser.destroy();
+            this.groupContent.removeChild(this.damageCounterUser);
+            this.damageCounterUser.destroy();
+            this.groupContent.removeChild(this.animEnemies);
+            this.animEnemies.destroy();
+            this.groupContent.removeChild(this.damageCounterEnemies);
+            this.damageCounterEnemies.destroy();
+            this.groupContent.removeChild(this.userLifebar);
+            this.userLifebar.destroy();
+            this.groupContent.removeChild(this.enemiesLifebar);
+            this.enemiesLifebar.destroy();
+            this.groupContent.removeChild(this.tutorial);
+            this.tutorial.destroy();
+            this.groupContent.removeChild(this.dialog);
+            this.dialog.destroy();
             this.groupContent.removeChildren();
             this.groupContent.removeAll();
             this.groupContent.destroy();

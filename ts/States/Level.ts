@@ -150,6 +150,32 @@ module MortalKombat {
 
         public shutdown(){
             this.field.shutdown();
+            this.groupContent.removeChild(this.backgroundSprite);
+            this.backgroundSprite.destroy();
+            this.groupContent.removeChild(this.borderSprite);
+            this.borderSprite.destroy();
+            this.groupContent.removeChild(this.backMenuButton);
+            this.backMenuButton.destroy();
+            this.groupContent.removeChild(this.helpButton);
+            this.helpButton.destroy();
+            this.groupContent.removeChild(this.settingsButton);
+            this.settingsButton.destroy();
+            this.groupContent.removeChild(this.animUser);
+            this.animUser.destroy();
+            this.groupContent.removeChild(this.damageCounterUser);
+            this.damageCounterUser.destroy();
+            this.groupContent.removeChild(this.animEnemies);
+            this.animEnemies.destroy();
+            this.groupContent.removeChild(this.damageCounterEnemies);
+            this.damageCounterEnemies.destroy();
+            this.groupContent.removeChild(this.userLifebar);
+            this.userLifebar.destroy();
+            this.groupContent.removeChild(this.enemiesLifebar);
+            this.enemiesLifebar.destroy();
+            this.groupContent.removeChild(this.tutorial);
+            this.tutorial.destroy();
+            this.groupContent.removeChild(this.dialog);
+            this.dialog.destroy();
             this.groupContent.removeChildren();
             this.groupContent.removeAll();
             this.groupContent.destroy();

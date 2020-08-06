@@ -30,6 +30,8 @@ class Images {
     public static fight: string = 'fight.png';
     public static wins: string = 'wins.png';
     public static died: string = 'you_died.png';
+    public static game_win: string = 'game_win.png';
+    public static game_lose: string = 'game_lose.png';
     
     public static BarakaIcon:string = 'baraka.png';
     public static GoroIcon:string = 'goro.png';
@@ -90,6 +92,8 @@ class Images {
         Images.fight,
         Images.wins,
         Images.died,
+        Images.game_win,
+        Images.game_lose,
 
         Images.BarakaIcon,
         Images.GoroIcon,
