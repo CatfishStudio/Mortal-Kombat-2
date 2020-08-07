@@ -5,6 +5,8 @@ module MortalKombat {
 
         private messageText: Phaser.Text;
         private groupContent: Phaser.Group;
+        private closeButton:Phaser.Button;
+        private inviteButton:Phaser.Button;
         
         constructor() {
             super();
@@ -21,13 +23,41 @@ module MortalKombat {
             }
             this.groupContent.addChild(new Phaser.Sprite(this.game, 0, 0, Images.BackgroundImage));
             this.groupContent.addChild(this.messageText);
+
+            this.closeButton = new Phaser.Button(this.game, (Constants.GAME_WIDTH / 2) - 255 - 50, (Constants.GAME_HEIGHT - 50), Sheet.ButtonClose, this.onButtonClick, this, 1, 2, 2, 2);
+            this.closeButton.name = Constants.CLOSE;
+            this.groupContent.addChild(this.closeButton);
+
+            this.inviteButton = new Phaser.Button(this.game, (Constants.GAME_WIDTH / 2) + 50, (Constants.GAME_HEIGHT - 50), Sheet.ButtonInvite, this.onButtonClick, this, 1, 2, 2, 2);
+            this.inviteButton.name = Constants.INVITE;
+            this.groupContent.addChild(this.inviteButton);
         }
 
         public shutdown(){
             this.groupContent.removeChildren();
             this.groupContent.removeAll();
             this.groupContent.destroy();
+            this.messageText.destroy();
+            this.closeButton.destroy();
+            this.inviteButton.destroy();
             this.game.stage.removeChildren();
+        }
+
+        private onButtonClick(event) {
+            switch (event.name) {
+                case Constants.CLOSE:
+                    {
+                        this.game.state.start(Menu.Name, true, false);
+                        break;
+                    }
+                case Constants.INVITE:
+                    {
+                        
+                        break;
+                    }
+                default:
+                    break;
+            }
         }
     }
 }

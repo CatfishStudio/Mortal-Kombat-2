@@ -1763,6 +1763,7 @@ var Constants = /** @class */ (function () {
     Constants.INVITE = 'invite';
     Constants.CONTINUE = 'continue';
     Constants.SURRENDER = 'surrender';
+    Constants.CLOSE = 'close';
     Constants.ANIMATION_TYPE_STANCE = "animation_type_stance";
     Constants.ANIMATION_TYPE_BLOCK = "animation_type_block";
     Constants.ANIMATION_TYPE_HIT_HAND = "animation_type_hit_hand";
@@ -2183,7 +2184,7 @@ var GameData;
         };
         /* инициализация новой игры */
         Data.initNewGame = function () {
-            this.user_continue = 1; ////9;
+            this.user_continue = 1; /////////////////////9;
             this.user_upgrade_points = 0;
             this.tournamentProgress = 0;
             this.id_enemies = [];
@@ -3743,7 +3744,12 @@ var MortalKombat;
                     }
                 case Constants.CONTINUE:
                     {
-                        this.game.state.start(MortalKombat.Tournament.Name, true, false);
+                        if (GameData.Data.user_continue <= 0)
+                            this.game.state.start(MortalKombat.GameOver.Name, true, false);
+                        else if (GameData.Data.tournamentProgress > 13)
+                            this.game.state.start(MortalKombat.GameOver.Name, true, false);
+                        else
+                            this.game.state.start(MortalKombat.Tournament.Name, true, false);
                         break;
                     }
                 case Constants.SETTINGS:
@@ -4353,7 +4359,7 @@ var MortalKombat;
             this.groupContent = new Phaser.Group(this.game, this.stage);
             if (GameData.Data.tournamentProgress <= 0) {
                 this.groupContent.addChild(new Phaser.Sprite(this.game, 0, 0, Images.game_lose));
-                this.messageText = this.game.add.text(400, 100, 'Вы проиграли!\nУ вас осталось 0 попыток.\nВы можете начать игру заново, \nили получить 1 дополнительную попытку\nза приглашение друга в игру.', { font: "18px Georgia", fill: "#AAAAAA", align: "left" });
+                this.messageText = this.game.add.text(400, 100, 'Вы проиграли!\nУ вас не осталось попыток.\nВы можете начать игру заново, \nили получить 1 дополнительную попытку\nза приглашение друга в игру.', { font: "18px Georgia", fill: "#AAAAAA", align: "left" });
             }
             else {
                 this.groupContent.addChild(new Phaser.Sprite(this.game, 0, 0, Images.game_win));
@@ -4361,12 +4367,36 @@ var MortalKombat;
             }
             this.groupContent.addChild(new Phaser.Sprite(this.game, 0, 0, Images.BackgroundImage));
             this.groupContent.addChild(this.messageText);
+            this.closeButton = new Phaser.Button(this.game, (Constants.GAME_WIDTH / 2) - 255 - 50, (Constants.GAME_HEIGHT - 50), Sheet.ButtonClose, this.onButtonClick, this, 1, 2, 2, 2);
+            this.closeButton.name = Constants.CLOSE;
+            this.groupContent.addChild(this.closeButton);
+            this.inviteButton = new Phaser.Button(this.game, (Constants.GAME_WIDTH / 2) + 50, (Constants.GAME_HEIGHT - 50), Sheet.ButtonInvite, this.onButtonClick, this, 1, 2, 2, 2);
+            this.inviteButton.name = Constants.INVITE;
+            this.groupContent.addChild(this.inviteButton);
         };
         GameOver.prototype.shutdown = function () {
             this.groupContent.removeChildren();
             this.groupContent.removeAll();
             this.groupContent.destroy();
+            this.messageText.destroy();
+            this.closeButton.destroy();
+            this.inviteButton.destroy();
             this.game.stage.removeChildren();
+        };
+        GameOver.prototype.onButtonClick = function (event) {
+            switch (event.name) {
+                case Constants.CLOSE:
+                    {
+                        this.game.state.start(MortalKombat.Menu.Name, true, false);
+                        break;
+                    }
+                case Constants.INVITE:
+                    {
+                        break;
+                    }
+                default:
+                    break;
+            }
         };
         GameOver.Name = "gameover";
         return GameOver;

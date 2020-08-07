@@ -117,7 +117,9 @@ module MortalKombat {
                     }
                 case Constants.CONTINUE:
                     {
-                        this.game.state.start(Tournament.Name, true, false);
+                        if(GameData.Data.user_continue <= 0) this.game.state.start(GameOver.Name, true, false); 
+                        else if(GameData.Data.tournamentProgress > 13) this.game.state.start(GameOver.Name, true, false); 
+                        else this.game.state.start(Tournament.Name, true, false);
                         break;
                     }
                 case Constants.SETTINGS:
