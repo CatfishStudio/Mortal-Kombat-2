@@ -6,6 +6,7 @@ module MortalKombat {
     import DialodFightWinsDied = Fabrique.DialodFightWinsDied;
     import Tutorial = Fabrique.Tutorial;
     import Settings = Fabrique.Settings;
+    import Help = Fabrique.Help;
 
     export class Level extends Phaser.State{
         public static Name: string = "level";
@@ -19,6 +20,7 @@ module MortalKombat {
         private helpButton:Phaser.Button;
         private tutorial:Tutorial;
         private settings:Settings;
+        private help:Help;
         private persUser:GameData.IPersonage;
         private animUser:AnimationFighter;
         private damageCounterUser: DamageCounter;
@@ -209,9 +211,14 @@ module MortalKombat {
                     }
                 case Constants.HELP:
                     {
-                        
+                        this.helpCreate();
                         break;
                     }  
+                case Constants.HELP_CLOSE:
+                    {
+                        this.helpClose();
+                        break;
+                    }   
                 default:
                     break;
             }
@@ -271,6 +278,17 @@ module MortalKombat {
             if(GameData.Data.user_continue <= 0) this.game.state.start(GameOver.Name, true, false); 
             else if(GameData.Data.tournamentProgress > 13) this.game.state.start(GameOver.Name, true, false); 
             else this.game.state.start(Tournament.Name, true, false);
+        }
+
+        private helpCreate() {
+            this.help = new Help(this.game, this.groupContent, "БИТВА.");
+            this.help.event.add(this.onButtonClick.bind(this));
+        }
+
+        private helpClose() {
+            this.help.removeChildren();
+            this.help.removeAll();
+            this.groupContent.removeChild(this.help);
         }
     }
 }

@@ -2,6 +2,7 @@ module MortalKombat {
 
     import Tutorial = Fabrique.Tutorial;
     import Settings = Fabrique.Settings;
+    import Help = Fabrique.Help;
     import Title = Fabrique.Title;
     import Tower = Fabrique.Tower;
     import UpgradeCharacteristics = Fabrique.UpgradeCharacteristics;
@@ -16,6 +17,7 @@ module MortalKombat {
         private tween:Phaser.Tween;
         private title:Title;
         private settings:Settings;
+        private help:Help;
         private tutorial:Tutorial;
         private backButton:Phaser.Button;
         private settingsButton:Phaser.Button;
@@ -162,9 +164,14 @@ module MortalKombat {
                     }
                 case Constants.HELP:
                     {
-                        
+                        this.helpCreate();
                         break;
                     }  
+                case Constants.HELP_CLOSE:
+                    {
+                        this.helpClose();
+                        break;
+                    }   
                 default:
                     break;
             }
@@ -188,6 +195,17 @@ module MortalKombat {
                 tweenTutorial.to({ x: 0, y: 150}, 500, 'Linear');
                 tweenTutorial.start();
             }
+        }
+
+        private helpCreate() {
+            this.help = new Help(this.game, this.groupContent, "БАШНЯ.");
+            this.help.event.add(this.onButtonClick.bind(this));
+        }
+
+        private helpClose() {
+            this.help.removeChildren();
+            this.help.removeAll();
+            this.groupContent.removeChild(this.help);
         }
     }
 

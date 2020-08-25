@@ -23,6 +23,7 @@
 /// <reference path="Fabrique\Objects\LifeBar.ts" />
 /// <reference path="Fabrique\Objects\PanelIcons.ts" />
 /// <reference path="Fabrique\Objects\Settings.ts" />
+/// <reference path="Fabrique\Objects\Help.ts" />
 /// <reference path="Fabrique\Objects\Title.ts" />
 /// <reference path="Fabrique\Objects\Tower.ts" />
 /// <reference path="Fabrique\Objects\Tutorial.ts" />

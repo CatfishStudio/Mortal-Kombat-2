@@ -7,6 +7,7 @@ class Constants {
     public static SETTINGS              = 'settings';
     public static SETTINGS_CLOSE        = 'settings_close';
     public static HELP                  = 'help';
+    public static HELP_CLOSE            = 'help_close';
     public static SELECT_FIGHTER        = 'select_fighter';
     public static SOUND                 = 'sound';
     public static MUSIC                 = 'music';

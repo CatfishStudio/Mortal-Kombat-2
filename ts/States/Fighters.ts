@@ -2,6 +2,7 @@ module MortalKombat {
 
     import Tutorial = Fabrique.Tutorial;
     import Settings = Fabrique.Settings;
+    import Help = Fabrique.Help;
     import Title = Fabrique.Title;
     import PanelIcons = Fabrique.PanelIcons;
 
@@ -17,6 +18,7 @@ module MortalKombat {
         private panelIcons:PanelIcons;
         private tutorial:Tutorial;
         private settings:Settings;
+        private help:Help;
         private backMenuButton:Phaser.Button;
         private settingsButton:Phaser.Button;
         private helpButton:Phaser.Button;
@@ -125,7 +127,12 @@ module MortalKombat {
                     }
                 case Constants.HELP:
                     {
-                        
+                        this.helpCreate();
+                        break;
+                    }  
+                case Constants.HELP_CLOSE:
+                    {
+                        this.helpClose();
                         break;
                     }  
                 case Constants.SELECT_FIGHTER:
@@ -158,6 +165,17 @@ module MortalKombat {
                 tweenTutorial.to({ x: (Constants.GAME_WIDTH / 2), y: (Constants.GAME_HEIGHT - 175)}, 500, 'Linear');
                 tweenTutorial.start();
             }
+        }
+
+        private helpCreate() {
+            this.help = new Help(this.game, this.groupFighters, "ВЫБОР БОЙЦА.");
+            this.help.event.add(this.onButtonClick.bind(this));
+        }
+
+        private helpClose() {
+            this.help.removeChildren();
+            this.help.removeAll();
+            this.groupFighters.removeChild(this.help);
         }
     }
 }

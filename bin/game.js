@@ -1756,6 +1756,7 @@ var Constants = /** @class */ (function () {
     Constants.SETTINGS = 'settings';
     Constants.SETTINGS_CLOSE = 'settings_close';
     Constants.HELP = 'help';
+    Constants.HELP_CLOSE = 'help_close';
     Constants.SELECT_FIGHTER = 'select_fighter';
     Constants.SOUND = 'sound';
     Constants.MUSIC = 'music';
@@ -3063,6 +3064,55 @@ var Fabrique;
 })(Fabrique || (Fabrique = {}));
 var Fabrique;
 (function (Fabrique) {
+    var Help = /** @class */ (function (_super) {
+        __extends(Help, _super);
+        function Help(game, parent, text) {
+            var _this = _super.call(this, game, parent) || this;
+            _this.init(text);
+            return _this;
+        }
+        Help.prototype.init = function (text) {
+            this.event = new Phaser.Signal();
+            var startX = (Constants.GAME_WIDTH / 2) - 310;
+            var startY = (Constants.GAME_HEIGHT / 2) - 250;
+            /* bacground and border */
+            var polygon = new Phaser.Polygon([
+                new Phaser.Point(startX, startY),
+                new Phaser.Point(startX + 10, startY - 10),
+                new Phaser.Point(startX + 600, startY - 10),
+                new Phaser.Point(startX + 610, startY),
+                new Phaser.Point(startX + 610, startY + 400),
+                new Phaser.Point(startX + 600, startY + 410),
+                new Phaser.Point(startX + 10, startY + 410),
+                new Phaser.Point(startX, startY + 400)
+            ]);
+            var graphicOverlay = new Phaser.Graphics(this.game, 0, 0);
+            graphicOverlay.beginFill(0x000000, 0.5);
+            graphicOverlay.drawRect(0, 0, this.game.width, this.game.height);
+            graphicOverlay.endFill();
+            graphicOverlay.beginFill(0x000000, 0.9);
+            graphicOverlay.lineStyle(2, 0x777777, 1);
+            graphicOverlay.drawPolygon(polygon);
+            graphicOverlay.endFill();
+            graphicOverlay.inputEnabled = true;
+            this.addChild(graphicOverlay);
+            var labelText = new Phaser.Text(this.game, startX + 50, startY + 55, text, { font: "18px Georgia", fill: "#FFFFFF", align: "left" });
+            this.addChild(labelText);
+            /* button close */
+            var buttonClose = new Phaser.Button(this.game, startX + 180, startY + 350, Sheet.ButtonClose, this.onButtonCloseClick, this, 1, 2);
+            buttonClose.name = Constants.HELP_CLOSE;
+            this.addChild(buttonClose);
+            this.updateTransform();
+        };
+        Help.prototype.onButtonCloseClick = function (event) {
+            this.event.dispatch(event);
+        };
+        return Help;
+    }(Phaser.Group));
+    Fabrique.Help = Help;
+})(Fabrique || (Fabrique = {}));
+var Fabrique;
+(function (Fabrique) {
     var Title = /** @class */ (function (_super) {
         __extends(Title, _super);
         function Title(game, x, y, text) {
@@ -3814,6 +3864,7 @@ var MortalKombat;
 (function (MortalKombat) {
     var Tutorial = Fabrique.Tutorial;
     var Settings = Fabrique.Settings;
+    var Help = Fabrique.Help;
     var Title = Fabrique.Title;
     var PanelIcons = Fabrique.PanelIcons;
     var Fighters = /** @class */ (function (_super) {
@@ -3905,6 +3956,12 @@ var MortalKombat;
                     }
                 case Constants.HELP:
                     {
+                        this.helpCreate();
+                        break;
+                    }
+                case Constants.HELP_CLOSE:
+                    {
+                        this.helpClose();
                         break;
                     }
                 case Constants.SELECT_FIGHTER:
@@ -3934,6 +3991,15 @@ var MortalKombat;
                 tweenTutorial.start();
             }
         };
+        Fighters.prototype.helpCreate = function () {
+            this.help = new Help(this.game, this.groupFighters, "ВЫБОР БОЙЦА.");
+            this.help.event.add(this.onButtonClick.bind(this));
+        };
+        Fighters.prototype.helpClose = function () {
+            this.help.removeChildren();
+            this.help.removeAll();
+            this.groupFighters.removeChild(this.help);
+        };
         Fighters.Name = "fighters";
         return Fighters;
     }(Phaser.State));
@@ -3943,6 +4009,7 @@ var MortalKombat;
 (function (MortalKombat) {
     var Tutorial = Fabrique.Tutorial;
     var Settings = Fabrique.Settings;
+    var Help = Fabrique.Help;
     var Title = Fabrique.Title;
     var Tower = Fabrique.Tower;
     var UpgradeCharacteristics = Fabrique.UpgradeCharacteristics;
@@ -4073,6 +4140,12 @@ var MortalKombat;
                     }
                 case Constants.HELP:
                     {
+                        this.helpCreate();
+                        break;
+                    }
+                case Constants.HELP_CLOSE:
+                    {
+                        this.helpClose();
                         break;
                     }
                 default:
@@ -4095,6 +4168,15 @@ var MortalKombat;
                 tweenTutorial.start();
             }
         };
+        Tournament.prototype.helpCreate = function () {
+            this.help = new Help(this.game, this.groupContent, "БАШНЯ.");
+            this.help.event.add(this.onButtonClick.bind(this));
+        };
+        Tournament.prototype.helpClose = function () {
+            this.help.removeChildren();
+            this.help.removeAll();
+            this.groupContent.removeChild(this.help);
+        };
         Tournament.Name = "tournament";
         return Tournament;
     }(Phaser.State));
@@ -4109,6 +4191,7 @@ var MortalKombat;
     var DialodFightWinsDied = Fabrique.DialodFightWinsDied;
     var Tutorial = Fabrique.Tutorial;
     var Settings = Fabrique.Settings;
+    var Help = Fabrique.Help;
     var Level = /** @class */ (function (_super) {
         __extends(Level, _super);
         function Level() {
@@ -4287,6 +4370,12 @@ var MortalKombat;
                     }
                 case Constants.HELP:
                     {
+                        this.helpCreate();
+                        break;
+                    }
+                case Constants.HELP_CLOSE:
+                    {
+                        this.helpClose();
                         break;
                     }
                 default:
@@ -4348,6 +4437,15 @@ var MortalKombat;
                 this.game.state.start(MortalKombat.GameOver.Name, true, false);
             else
                 this.game.state.start(MortalKombat.Tournament.Name, true, false);
+        };
+        Level.prototype.helpCreate = function () {
+            this.help = new Help(this.game, this.groupContent, "БИТВА.");
+            this.help.event.add(this.onButtonClick.bind(this));
+        };
+        Level.prototype.helpClose = function () {
+            this.help.removeChildren();
+            this.help.removeAll();
+            this.groupContent.removeChild(this.help);
         };
         Level.Name = "level";
         return Level;
@@ -4439,6 +4537,7 @@ var MortalKombat;
 /// <reference path="Fabrique\Objects\LifeBar.ts" />
 /// <reference path="Fabrique\Objects\PanelIcons.ts" />
 /// <reference path="Fabrique\Objects\Settings.ts" />
+/// <reference path="Fabrique\Objects\Help.ts" />
 /// <reference path="Fabrique\Objects\Title.ts" />
 /// <reference path="Fabrique\Objects\Tower.ts" />
 /// <reference path="Fabrique\Objects\Tutorial.ts" />
