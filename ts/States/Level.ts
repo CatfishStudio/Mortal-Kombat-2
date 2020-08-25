@@ -75,12 +75,21 @@ module MortalKombat {
 
             this.persEnemies = GameData.Data.getPersonage(GameData.Data.id_enemies[GameData.Data.tournamentProgress]);
             this.animEnemies = new AnimationFighter(this.game, this.persEnemies.id, this.persEnemies);
-            this.animEnemies.x = Constants.GAME_WIDTH - 25 - (this.animEnemies.width / 2);
-            this.animEnemies.y = Constants.GAME_HEIGHT - (this.animEnemies.height*2);
-            this.animEnemies.anchor.setTo(.0, .0);
-            this.animEnemies.scale.x = 1.5;
-            this.animEnemies.scale.y = 1.5;
-            this.animEnemies.scale.x *= -1;
+            if(GameData.Data.tournamentProgress < 11) {
+                this.animEnemies.x = Constants.GAME_WIDTH - 25 - (this.animEnemies.width / 2);
+                this.animEnemies.y = Constants.GAME_HEIGHT - (this.animEnemies.height*2);
+                this.animEnemies.anchor.setTo(.0, .0);
+                this.animEnemies.scale.x = 1.5;
+                this.animEnemies.scale.y = 1.5;
+                this.animEnemies.scale.x *= -1;
+            }else{
+                this.animEnemies.x = Constants.GAME_WIDTH - 135 - (this.animEnemies.width / 2);
+                this.animEnemies.y = Constants.GAME_HEIGHT - (this.animEnemies.height*2);
+                this.animEnemies.anchor.setTo(.0, .0);
+                this.animEnemies.scale.x = 1.5;
+                this.animEnemies.scale.y = 1.5;
+            }
+            
             this.groupContent.addChild(this.animEnemies);
 
             this.damageCounterEnemies = new DamageCounter(this.game, this.animEnemies.x + (this.animEnemies.width / 2) - 15, this.animEnemies.y - 15);
@@ -276,7 +285,7 @@ module MortalKombat {
             }
             GameData.Data.saveData = SocialVK.vkSaveData();
             if(GameData.Data.user_continue <= 0) this.game.state.start(GameOver.Name, true, false); 
-            else if(GameData.Data.tournamentProgress > 13) this.game.state.start(GameOver.Name, true, false); 
+            else if(GameData.Data.tournamentProgress > 12) this.game.state.start(GameOver.Name, true, false); 
             else this.game.state.start(Tournament.Name, true, false);
         }
 

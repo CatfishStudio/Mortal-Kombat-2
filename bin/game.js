@@ -2747,7 +2747,7 @@ var Fabrique;
             if (this.animationType === Constants.ANIMATION_TYPE_WIN)
                 this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animWin);
             this.animation.onComplete.add(this.onComplete, this);
-            if (this.animationType === Constants.ANIMATION_TYPE_LOSE)
+            if (this.animationType === Constants.ANIMATION_TYPE_LOSE && this.personageAnimation.id !== Constants.ID_SHAOKAHN && this.personageAnimation.id !== Constants.ID_GORO)
                 this.animation.play(10, true, true);
             else
                 this.animation.play(10, false, false);
@@ -2756,6 +2756,10 @@ var Fabrique;
             //console.log( (sprite as AnimationFighter).animation);
             if (this.animationType === Constants.ANIMATION_TYPE_BLOCK)
                 this.block = true;
+            if (this.animationType === Constants.ANIMATION_TYPE_LOSE && this.personageAnimation.id === Constants.ID_SHAOKAHN) {
+                this.alpha = 0;
+                return;
+            }
             if (this.animationType === Constants.ANIMATION_TYPE_STANCE || this.animationType === Constants.ANIMATION_TYPE_WIN || this.animationType === Constants.ANIMATION_TYPE_LOSE)
                 return;
             else {
@@ -3796,7 +3800,7 @@ var MortalKombat;
                     {
                         if (GameData.Data.user_continue <= 0)
                             this.game.state.start(MortalKombat.GameOver.Name, true, false);
-                        else if (GameData.Data.tournamentProgress > 13)
+                        else if (GameData.Data.tournamentProgress > 12)
                             this.game.state.start(MortalKombat.GameOver.Name, true, false);
                         else
                             this.game.state.start(MortalKombat.Tournament.Name, true, false);
@@ -4229,12 +4233,21 @@ var MortalKombat;
             this.groupContent.addChild(this.damageCounterUser);
             this.persEnemies = GameData.Data.getPersonage(GameData.Data.id_enemies[GameData.Data.tournamentProgress]);
             this.animEnemies = new AnimationFighter(this.game, this.persEnemies.id, this.persEnemies);
-            this.animEnemies.x = Constants.GAME_WIDTH - 25 - (this.animEnemies.width / 2);
-            this.animEnemies.y = Constants.GAME_HEIGHT - (this.animEnemies.height * 2);
-            this.animEnemies.anchor.setTo(.0, .0);
-            this.animEnemies.scale.x = 1.5;
-            this.animEnemies.scale.y = 1.5;
-            this.animEnemies.scale.x *= -1;
+            if (GameData.Data.tournamentProgress < 11) {
+                this.animEnemies.x = Constants.GAME_WIDTH - 25 - (this.animEnemies.width / 2);
+                this.animEnemies.y = Constants.GAME_HEIGHT - (this.animEnemies.height * 2);
+                this.animEnemies.anchor.setTo(.0, .0);
+                this.animEnemies.scale.x = 1.5;
+                this.animEnemies.scale.y = 1.5;
+                this.animEnemies.scale.x *= -1;
+            }
+            else {
+                this.animEnemies.x = Constants.GAME_WIDTH - 135 - (this.animEnemies.width / 2);
+                this.animEnemies.y = Constants.GAME_HEIGHT - (this.animEnemies.height * 2);
+                this.animEnemies.anchor.setTo(.0, .0);
+                this.animEnemies.scale.x = 1.5;
+                this.animEnemies.scale.y = 1.5;
+            }
             this.groupContent.addChild(this.animEnemies);
             this.damageCounterEnemies = new DamageCounter(this.game, this.animEnemies.x + (this.animEnemies.width / 2) - 15, this.animEnemies.y - 15);
             this.groupContent.addChild(this.damageCounterEnemies);
@@ -4433,7 +4446,7 @@ var MortalKombat;
             GameData.Data.saveData = SocialVK.vkSaveData();
             if (GameData.Data.user_continue <= 0)
                 this.game.state.start(MortalKombat.GameOver.Name, true, false);
-            else if (GameData.Data.tournamentProgress > 13)
+            else if (GameData.Data.tournamentProgress > 12)
                 this.game.state.start(MortalKombat.GameOver.Name, true, false);
             else
                 this.game.state.start(MortalKombat.Tournament.Name, true, false);
