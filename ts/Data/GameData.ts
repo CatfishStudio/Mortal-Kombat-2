@@ -31,8 +31,8 @@ module GameData {
         public static musicSelected:number = 2;
         public static musicList:any[][] = [
             [Sounds.Music1, 0.1],
-            [Sounds.Music2, 0.3],
-            [Sounds.Music3, 0.2]
+            [Sounds.Music2, 0.5],
+            [Sounds.Music3, 0.1]
         ];
         
         public static personages:IPersonage[]; // массив персонажей и их характеристик

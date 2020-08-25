@@ -2426,7 +2426,7 @@ var GameData;
         Data.musicSelected = 2;
         Data.musicList = [
             [Sounds.Music1, 0.1],
-            [Sounds.Music2, 0.3],
+            [Sounds.Music2, 0.5],
             [Sounds.Music3, 0.2]
         ];
         return Data;
@@ -3889,7 +3889,7 @@ var MortalKombat;
                 _this.game.sound.context.resume();
             });
             if (GameData.Data.music === undefined || GameData.Data.music === null) {
-                GameData.Data.music = this.game.add.audio(GameData.Data.musicList[0][0]);
+                GameData.Data.music = this.game.add.audio(GameData.Data.musicList[1][0]);
                 //GameData.Data.buttonSound = this.game.add.audio(Sounds.ButtonSound);
                 //GameData.Data.arrowSound = this.game.add.audio(Sounds.ArrowSound);
                 //GameData.Data.flipUpSound = this.game.add.audio(Sounds.CardFlipSound1);
@@ -3897,10 +3897,10 @@ var MortalKombat;
             }
             else {
                 GameData.Data.music.stop();
-                GameData.Data.music.key = GameData.Data.musicList[0][0];
+                GameData.Data.music.key = GameData.Data.musicList[1][0];
             }
             GameData.Data.music.loop = true;
-            GameData.Data.music.volume = GameData.Data.musicList[0][1];
+            GameData.Data.music.volume = GameData.Data.musicList[1][1];
             GameData.Data.music.play();
         };
         Menu.Name = "menu";
