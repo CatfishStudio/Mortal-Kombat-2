@@ -50,6 +50,10 @@ module MortalKombat {
                     Levels.levelsList.forEach((assetName: string)=>{
                         this.game.load.json(assetName, 'assets/levels/'+ assetName);
                     });
+
+                    Sounds.preloadList.forEach((assetName: string)=>{
+                        this.game.load.audio(assetName, ['assets/sounds/'+assetName+'.mp3', 'assets/sounds/'+assetName+'.ogg']);
+                    });
                 }
             });
         }

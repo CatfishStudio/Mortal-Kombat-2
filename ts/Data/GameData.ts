@@ -24,6 +24,17 @@ module GameData {
 
     export class Data {
         
+        public static voiceSound:Phaser.Sound;
+        public static playerSound:Phaser.Sound;
+        public static opponentSound:Phaser.Sound;
+        public static music:Phaser.Sound;
+        public static musicSelected:number = 2;
+        public static musicList:any[][] = [
+            [Sounds.Music1, 0.1],
+            [Sounds.Music2, 0.3],
+            [Sounds.Music3, 0.2]
+        ];
+        
         public static personages:IPersonage[]; // массив персонажей и их характеристик
         public static levels:string[][]; // массив уровней
         

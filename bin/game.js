@@ -1976,6 +1976,19 @@ var Images = /** @class */ (function () {
     ];
     return Images;
 }());
+var Sounds = /** @class */ (function () {
+    function Sounds() {
+    }
+    Sounds.Music1 = 'music1';
+    Sounds.Music2 = 'music2';
+    Sounds.Music3 = 'music3';
+    Sounds.preloadList = [
+        Sounds.Music1,
+        Sounds.Music2,
+        Sounds.Music3
+    ];
+    return Sounds;
+}());
 var Atlases = /** @class */ (function () {
     function Atlases() {
     }
@@ -2410,6 +2423,12 @@ var GameData;
             }
             return damage;
         };
+        Data.musicSelected = 2;
+        Data.musicList = [
+            [Sounds.Music1, 0.1],
+            [Sounds.Music2, 0.3],
+            [Sounds.Music3, 0.2]
+        ];
         return Data;
     }());
     GameData.Data = Data;
@@ -3650,6 +3669,9 @@ var MortalKombat;
                     Levels.levelsList.forEach(function (assetName) {
                         _this.game.load.json(assetName, 'assets/levels/' + assetName);
                     });
+                    Sounds.preloadList.forEach(function (assetName) {
+                        _this.game.load.audio(assetName, ['assets/sounds/' + assetName + '.mp3', 'assets/sounds/' + assetName + '.ogg']);
+                    });
                 }
             });
         };
@@ -3722,6 +3744,7 @@ var MortalKombat;
         }
         Menu.prototype.create = function () {
             GameData.Data.initPersonages(this.game);
+            this.initSounds();
             this.groupMenu = new Phaser.Group(this.game, this.stage);
             this.menuSprite = new Phaser.Sprite(this.game, -5, -5, Images.MenuImage);
             this.menuSprite.scale.set(1.025);
@@ -3858,6 +3881,27 @@ var MortalKombat;
                 this.groupButtons.addChild(buttonContinue);
                 this.tutorial.setText('Нажмите на кнопку\n"Продолжить"\nчтобы продолжить\n турнир.');
             }
+        };
+        Menu.prototype.initSounds = function () {
+            var _this = this;
+            // восстановление звука при запуске игры
+            this.game.input.onDown.addOnce(function () {
+                _this.game.sound.context.resume();
+            });
+            if (GameData.Data.music === undefined || GameData.Data.music === null) {
+                GameData.Data.music = this.game.add.audio(GameData.Data.musicList[0][0]);
+                //GameData.Data.buttonSound = this.game.add.audio(Sounds.ButtonSound);
+                //GameData.Data.arrowSound = this.game.add.audio(Sounds.ArrowSound);
+                //GameData.Data.flipUpSound = this.game.add.audio(Sounds.CardFlipSound1);
+                //GameData.Data.flipDownSound = this.game.add.audio(Sounds.CardFlipSound2);
+            }
+            else {
+                GameData.Data.music.stop();
+                GameData.Data.music.key = GameData.Data.musicList[0][0];
+            }
+            GameData.Data.music.loop = true;
+            GameData.Data.music.volume = GameData.Data.musicList[0][1];
+            GameData.Data.music.play();
         };
         Menu.Name = "menu";
         return Menu;
@@ -4535,6 +4579,7 @@ var MortalKombat;
 /// <reference path="Data\Config.ts" />
 /// <reference path="Data\Utilits.ts" />
 /// <reference path="Data\Images.ts" />
+/// <reference path="Data\Sounds.ts" />
 /// <reference path="Data\Atlases.ts" />
 /// <reference path="Data\Sheets.ts" />
 /// <reference path="Data\Characteristics.ts" />

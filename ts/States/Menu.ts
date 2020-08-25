@@ -22,6 +22,8 @@ module MortalKombat {
         public create() {
             GameData.Data.initPersonages(this.game);
 
+            this.initSounds();
+
             this.groupMenu = new Phaser.Group(this.game, this.stage);
             
             this.menuSprite = new Phaser.Sprite(this.game, -5,-5, Images.MenuImage)
@@ -185,6 +187,27 @@ module MortalKombat {
 
                 this.tutorial.setText('Нажмите на кнопку\n"Продолжить"\nчтобы продолжить\n турнир.')
             }
+        }
+
+        public initSounds():void{
+            // восстановление звука при запуске игры
+            this.game.input.onDown.addOnce(() => { 
+                this.game.sound.context.resume(); 
+            });
+
+            if(GameData.Data.music === undefined || GameData.Data.music === null){
+                GameData.Data.music = this.game.add.audio(GameData.Data.musicList[0][0]);
+                //GameData.Data.buttonSound = this.game.add.audio(Sounds.ButtonSound);
+                //GameData.Data.arrowSound = this.game.add.audio(Sounds.ArrowSound);
+                //GameData.Data.flipUpSound = this.game.add.audio(Sounds.CardFlipSound1);
+                //GameData.Data.flipDownSound = this.game.add.audio(Sounds.CardFlipSound2);
+            }else{
+                GameData.Data.music.stop();
+                GameData.Data.music.key = GameData.Data.musicList[0][0];
+            }
+            GameData.Data.music.loop = true;
+            GameData.Data.music.volume = GameData.Data.musicList[0][1];
+            GameData.Data.music.play();
         }
     }
 }
