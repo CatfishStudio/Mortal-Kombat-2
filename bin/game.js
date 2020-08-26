@@ -2451,11 +2451,11 @@ var GameData;
             }
             return damage;
         };
-        Data.musicSelected = 2;
+        Data.musicSelected = 1;
         Data.musicList = [
             [Sounds.music_menu, 0.4],
-            [Sounds.music_1, 0.1],
-            [Sounds.music_2, 0.1]
+            [Sounds.music_1, 0.4],
+            [Sounds.music_2, 0.4]
         ];
         return Data;
     }());
@@ -4337,6 +4337,7 @@ var MortalKombat;
             return _this;
         }
         Level.prototype.create = function () {
+            this.playMusic();
             this.groupContent = new Phaser.Group(this.game, this.stage);
             this.backgroundSprite = new Phaser.Sprite(this.game, 0, 0, GameData.Data.levels[GameData.Data.tournamentProgress][0]);
             this.groupContent.addChild(this.backgroundSprite);
@@ -4599,6 +4600,7 @@ var MortalKombat;
                 this.game.state.start(MortalKombat.GameOver.Name, true, false);
             else
                 this.game.state.start(MortalKombat.Tournament.Name, true, false);
+            this.playMenuMusic();
         };
         Level.prototype.helpCreate = function () {
             this.help = new Help(this.game, this.groupContent, "БИТВА.");
@@ -4632,6 +4634,26 @@ var MortalKombat;
                 GameData.Data.voiceSound.volume = 1.0;
                 GameData.Data.voiceSound.play();
             }
+        };
+        Level.prototype.playMusic = function () {
+            GameData.Data.music.stop();
+            GameData.Data.music.key = GameData.Data.musicList[GameData.Data.musicSelected][0];
+            GameData.Data.music.loop = true;
+            GameData.Data.music.volume = GameData.Data.musicList[GameData.Data.musicSelected][1];
+            if (Config.settingMusic)
+                GameData.Data.music.play();
+            if (GameData.Data.musicSelected === 1)
+                GameData.Data.musicSelected = 2;
+            else
+                GameData.Data.musicSelected = 1;
+        };
+        Level.prototype.playMenuMusic = function () {
+            GameData.Data.music.stop();
+            GameData.Data.music.key = GameData.Data.musicList[0][0];
+            GameData.Data.music.loop = true;
+            GameData.Data.music.volume = GameData.Data.musicList[0][1];
+            if (Config.settingMusic)
+                GameData.Data.music.play();
         };
         Level.Name = "level";
         return Level;

@@ -30,11 +30,11 @@ module GameData {
         public static playerSound:Phaser.Sound;
         public static opponentSound:Phaser.Sound;
         public static music:Phaser.Sound;
-        public static musicSelected:number = 2;
+        public static musicSelected:number = 1;
         public static musicList:any[][] = [
             [Sounds.music_menu, 0.4],
-            [Sounds.music_1, 0.1],
-            [Sounds.music_2, 0.1]
+            [Sounds.music_1, 0.4],
+            [Sounds.music_2, 0.4]
         ];
         
         public static personages:IPersonage[]; // массив персонажей и их характеристик

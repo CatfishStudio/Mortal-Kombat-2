@@ -37,6 +37,8 @@ module MortalKombat {
         }
 
         public create() {
+            this.playMusic();
+
             this.groupContent = new Phaser.Group(this.game, this.stage);
 
             this.backgroundSprite = new Phaser.Sprite(this.game, 0, 0, GameData.Data.levels[GameData.Data.tournamentProgress][0]);
@@ -302,6 +304,7 @@ module MortalKombat {
             if(GameData.Data.user_continue <= 0) this.game.state.start(GameOver.Name, true, false); 
             else if(GameData.Data.tournamentProgress > 12) this.game.state.start(GameOver.Name, true, false); 
             else this.game.state.start(Tournament.Name, true, false);
+            this.playMenuMusic();
         }
 
         private helpCreate() {
@@ -340,6 +343,24 @@ module MortalKombat {
                 GameData.Data.voiceSound.volume = 1.0;
                 GameData.Data.voiceSound.play();
             }
+        }
+
+        private playMusic():void {
+            GameData.Data.music.stop();
+            GameData.Data.music.key = GameData.Data.musicList[GameData.Data.musicSelected][0];
+            GameData.Data.music.loop = true;
+            GameData.Data.music.volume = GameData.Data.musicList[GameData.Data.musicSelected][1];
+            if(Config.settingMusic) GameData.Data.music.play();
+            if(GameData.Data.musicSelected === 1) GameData.Data.musicSelected = 2;
+            else GameData.Data.musicSelected = 1;
+        }
+
+        private playMenuMusic():void {
+            GameData.Data.music.stop();
+            GameData.Data.music.key = GameData.Data.musicList[0][0];
+            GameData.Data.music.loop = true;
+            GameData.Data.music.volume = GameData.Data.musicList[0][1];
+            if(Config.settingMusic) GameData.Data.music.play();
         }
     }
 }
