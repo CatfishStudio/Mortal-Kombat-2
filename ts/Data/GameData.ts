@@ -27,8 +27,8 @@ module GameData {
         public static buttonSound:Phaser.Sound;
         public static iconSound:Phaser.Sound;
         public static voiceSound:Phaser.Sound;
-        public static playerSound:Phaser.Sound;
-        public static opponentSound:Phaser.Sound;
+        public static userSound:Phaser.Sound;
+        public static enemieSound:Phaser.Sound;
         public static music:Phaser.Sound;
         public static musicSelected:number = 1;
         public static musicList:any[][] = [

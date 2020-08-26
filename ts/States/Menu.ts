@@ -71,6 +71,8 @@ module MortalKombat {
                 GameData.Data.buttonSound = this.game.add.audio(Sounds.button);
                 GameData.Data.iconSound = this.game.add.audio(Sounds.hit_move);
                 GameData.Data.voiceSound = this.game.add.audio(Sounds.fight);
+                GameData.Data.userSound = this.game.add.audio(Sounds.hit_block);
+                GameData.Data.enemieSound = this.game.add.audio(Sounds.hit_block);
             }else{
                 GameData.Data.music.stop();
                 GameData.Data.music.key = GameData.Data.musicList[0][0];

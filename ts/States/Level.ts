@@ -121,7 +121,7 @@ module MortalKombat {
         public onMatch(hitType:any, hitCount:number, statusAction:String):void
         {
             Utilits.Data.debugLog("LEVEL: match |", "type=" + hitType + " | count=" + hitCount + " | status=" + statusAction);
-            if(GameData.Data.tournamentProgress == 0 && this.tutorial.x != Constants.GAME_WIDTH)this.tutorial.x = Constants.GAME_WIDTH;
+            if(GameData.Data.tournamentProgress == 0 && this.tutorial.x != Constants.GAME_WIDTH) this.tutorial.x = Constants.GAME_WIDTH;
 
             if(hitType === null && hitCount=== null){
                 if(statusAction === Field.ACTION_PLAYER){
@@ -133,6 +133,7 @@ module MortalKombat {
                 }
                 this.checkGameOver(); // проверка завершения битвы
             }else{
+                this.playUserEnemiesSound(statusAction, hitType);
                 if(statusAction === Field.ACTION_PLAYER){ // Противник получает урон
                     let damageValue = GameData.Data.calcDamage(this.persUser, this.animEnemies.block, hitType, hitCount);
                     if(hitType === Constants.HAND)this.animUser.changeAnimation(Constants.ANIMATION_TYPE_HIT_HAND);
@@ -361,6 +362,57 @@ module MortalKombat {
             GameData.Data.music.loop = true;
             GameData.Data.music.volume = GameData.Data.musicList[0][1];
             if(Config.settingMusic) GameData.Data.music.play();
+        }
+
+        private playUserEnemiesSound(statusAction, hitType):void {
+            GameData.Data.userSound.loop = false;
+            GameData.Data.userSound.volume = 1.0;
+            GameData.Data.enemieSound.loop = false;
+            GameData.Data.enemieSound.volume = 1.0;
+            if(statusAction === Field.ACTION_PLAYER){ // Противник получает урон
+                if(hitType === Constants.HAND) GameData.Data.userSound.key = Sounds.hit_1_5;
+                if(hitType === Constants.LEG) GameData.Data.userSound.key = Sounds.hit_1_5;
+                if(hitType === Constants.TWIST) GameData.Data.userSound.key = Sounds.hit_1_5;
+                if(hitType === Constants.UPPERCUT) GameData.Data.userSound.key = Sounds.hit_1_5;
+                
+                if(hitType === Constants.BLOCK) {
+                    GameData.Data.enemieSound.key = Sounds.hit_block;
+                    if(Config.settingSound) {
+                        GameData.Data.enemieSound.play();
+                    }
+                }
+                else {
+                    if(this.persEnemies.id === Constants.ID_KITANA || this.persEnemies.id === Constants.ID_MILEENA) GameData.Data.enemieSound.key = Sounds.f_d_03;
+                    else GameData.Data.enemieSound.key = Sounds.m_d_03;
+
+                    if(Config.settingSound) {
+                        GameData.Data.userSound.play();
+                        GameData.Data.enemieSound.play();
+                    }
+                }
+            }else{ // Игрок получает урон
+                if(hitType === Constants.HAND) GameData.Data.enemieSound.key = Sounds.hit_1_5;
+                if(hitType === Constants.LEG) GameData.Data.enemieSound.key = Sounds.hit_1_5;
+                if(hitType === Constants.TWIST) GameData.Data.enemieSound.key = Sounds.hit_1_5;
+                if(hitType === Constants.UPPERCUT) GameData.Data.enemieSound.key = Sounds.hit_1_5;
+                
+                if(hitType === Constants.BLOCK) {
+                    GameData.Data.userSound.key = Sounds.hit_block;
+                    if(Config.settingSound) {
+                        GameData.Data.userSound.play();
+                    }
+                }
+                else { 
+                    if(this.persUser.id === Constants.ID_KITANA || this.persEnemies.id === Constants.ID_MILEENA) GameData.Data.userSound.key = Sounds.f_d_03;
+                    else GameData.Data.userSound.key = Sounds.m_d_03;
+
+                    if(Config.settingSound) {
+                        GameData.Data.userSound.play();
+                        GameData.Data.enemieSound.play();
+                    }
+                }
+            }
+            
         }
     }
 }
