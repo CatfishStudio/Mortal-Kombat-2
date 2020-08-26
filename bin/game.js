@@ -2227,7 +2227,7 @@ var GameData;
         /* инициализация новой игры */
         Data.initNewGame = function () {
             this.user_continue = 9;
-            this.user_upgrade_points = 0;
+            this.user_upgrade_points = 10;
             this.tournamentProgress = 0;
             this.id_enemies = [];
             this.saveData = "";
@@ -2453,7 +2453,7 @@ var GameData;
         };
         Data.musicSelected = 2;
         Data.musicList = [
-            [Sounds.music_menu, 0.3],
+            [Sounds.music_menu, 0.4],
             [Sounds.music_1, 0.1],
             [Sounds.music_2, 0.1]
         ];
@@ -3456,6 +3456,7 @@ var Fabrique;
             tween.start();
         };
         UpgradeCharacteristics.prototype.onButtonClick = function (event) {
+            this.playButtonSound();
             switch (event.name) {
                 case Constants.LEG:
                     {
@@ -3509,6 +3510,13 @@ var Fabrique;
                     }
                 default:
                     break;
+            }
+        };
+        UpgradeCharacteristics.prototype.playButtonSound = function () {
+            if (Config.settingSound) {
+                GameData.Data.iconSound.loop = false;
+                GameData.Data.iconSound.volume = 1.0;
+                GameData.Data.iconSound.play();
             }
         };
         UpgradeCharacteristics.prototype.removeUpgradeButtons = function () {
@@ -4234,6 +4242,7 @@ var MortalKombat;
             Utilits.Data.debugLog("TOURNAMENT - CHANGE USER PERSOHAGE", GameData.Data.user_personage);
         };
         Tournament.prototype.onButtonClick = function (event) {
+            this.playButtonSound();
             switch (event.name) {
                 case Constants.START:
                     {
@@ -4296,6 +4305,13 @@ var MortalKombat;
             this.help.removeChildren();
             this.help.removeAll();
             this.groupContent.removeChild(this.help);
+        };
+        Tournament.prototype.playButtonSound = function () {
+            if (Config.settingSound) {
+                GameData.Data.buttonSound.loop = false;
+                GameData.Data.buttonSound.volume = 0.5;
+                GameData.Data.buttonSound.play();
+            }
         };
         Tournament.Name = "tournament";
         return Tournament;

@@ -160,6 +160,7 @@ module Fabrique {
         }
 
         private onButtonClick(event) {
+            this.playButtonSound();
             switch (event.name) {
                 case Constants.LEG:
                     {
@@ -213,6 +214,14 @@ module Fabrique {
                     }  
                 default:
                     break;
+            }
+        }
+
+        private playButtonSound():void {
+            if(Config.settingSound){
+                GameData.Data.iconSound.loop = false;
+                GameData.Data.iconSound.volume = 1.0;
+                GameData.Data.iconSound.play();
             }
         }
 

@@ -32,7 +32,7 @@ module GameData {
         public static music:Phaser.Sound;
         public static musicSelected:number = 2;
         public static musicList:any[][] = [
-            [Sounds.music_menu, 0.3],
+            [Sounds.music_menu, 0.4],
             [Sounds.music_1, 0.1],
             [Sounds.music_2, 0.1]
         ];
@@ -74,7 +74,7 @@ module GameData {
         /* инициализация новой игры */
         public static initNewGame():void {
             this.user_continue = 9;
-            this.user_upgrade_points = 0;
+            this.user_upgrade_points = 10;
             this.tournamentProgress = 0;
             this.id_enemies = [];
             this.saveData = "";

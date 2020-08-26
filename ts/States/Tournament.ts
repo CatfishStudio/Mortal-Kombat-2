@@ -139,6 +139,7 @@ module MortalKombat {
         }
 
         private onButtonClick(event) {
+            this.playButtonSound();
             switch (event.name) {
                 case Constants.START:
                     {
@@ -206,6 +207,14 @@ module MortalKombat {
             this.help.removeChildren();
             this.help.removeAll();
             this.groupContent.removeChild(this.help);
+        }
+
+        private playButtonSound():void {
+            if(Config.settingSound){
+                GameData.Data.buttonSound.loop = false;
+                GameData.Data.buttonSound.volume = 0.5;
+                GameData.Data.buttonSound.play();
+            }
         }
     }
 
