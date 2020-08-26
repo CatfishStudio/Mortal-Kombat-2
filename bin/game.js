@@ -1809,9 +1809,9 @@ var Config = /** @class */ (function () {
     function Config() {
     }
     Config.buildDev = true;
-    Config.settintSound = true;
-    Config.settintMusic = true;
-    Config.settintTutorial = true;
+    Config.settingSound = true;
+    Config.settingMusic = true;
+    Config.settingTutorial = true;
     return Config;
 }());
 var Utilits;
@@ -3012,7 +3012,7 @@ var Fabrique;
             this.addChild(title);
             /* sound */
             var buttonSound;
-            if (Config.settintSound === true)
+            if (Config.settingSound === true)
                 buttonSound = new Phaser.Button(this.game, startX + 25, startY + 50, Images.ButtonOn, this.onButtonClick, this);
             else
                 buttonSound = new Phaser.Button(this.game, startX + 25, startY + 50, Images.ButtonOff, this.onButtonClick, this);
@@ -3022,7 +3022,7 @@ var Fabrique;
             this.addChild(labelSound);
             /* music */
             var buttonMusic;
-            if (Config.settintMusic === true)
+            if (Config.settingMusic === true)
                 buttonMusic = new Phaser.Button(this.game, startX + 155, startY + 50, Images.ButtonOn, this.onButtonClick, this);
             else
                 buttonMusic = new Phaser.Button(this.game, startX + 155, startY + 50, Images.ButtonOff, this.onButtonClick, this);
@@ -3032,7 +3032,7 @@ var Fabrique;
             this.addChild(labelMusic);
             /* tutorial */
             var buttonTutorial;
-            if (Config.settintTutorial === true)
+            if (Config.settingTutorial === true)
                 buttonTutorial = new Phaser.Button(this.game, startX + 25, startY + 100, Images.ButtonOn, this.onButtonClick, this);
             else
                 buttonTutorial = new Phaser.Button(this.game, startX + 25, startY + 100, Images.ButtonOff, this.onButtonClick, this);
@@ -3047,21 +3047,24 @@ var Fabrique;
             this.updateTransform();
         };
         Settings.prototype.onButtonCloseClick = function (event) {
+            this.playButtonSound();
             this.event.dispatch(event);
+            this.removeAll();
         };
         Settings.prototype.onButtonClick = function (event) {
+            this.playButtonSound();
             switch (event.name) {
                 case Constants.SOUND:
                     {
-                        if (Config.settintSound === true) {
-                            Config.settintSound = false;
+                        if (Config.settingSound === true) {
+                            Config.settingSound = false;
                             this.removeChild(event);
                             event = new Phaser.Button(this.game, event.x, event.y, Images.ButtonOff, this.onButtonClick, this);
                             event.name = Constants.SOUND;
                             this.addChild(event);
                         }
                         else {
-                            Config.settintSound = true;
+                            Config.settingSound = true;
                             this.removeChild(event);
                             event = new Phaser.Button(this.game, event.x, event.y, Images.ButtonOn, this.onButtonClick, this);
                             event.name = Constants.SOUND;
@@ -3071,9 +3074,9 @@ var Fabrique;
                     }
                 case Constants.MUSIC:
                     {
-                        if (Config.settintMusic === true) {
+                        if (Config.settingMusic === true) {
                             this.stopMusic();
-                            Config.settintMusic = false;
+                            Config.settingMusic = false;
                             this.removeChild(event);
                             event = new Phaser.Button(this.game, event.x, event.y, Images.ButtonOff, this.onButtonClick, this);
                             event.name = Constants.MUSIC;
@@ -3081,7 +3084,7 @@ var Fabrique;
                         }
                         else {
                             this.playMusic();
-                            Config.settintMusic = true;
+                            Config.settingMusic = true;
                             this.removeChild(event);
                             event = new Phaser.Button(this.game, event.x, event.y, Images.ButtonOn, this.onButtonClick, this);
                             event.name = Constants.MUSIC;
@@ -3091,15 +3094,15 @@ var Fabrique;
                     }
                 case Constants.TUTORIAL:
                     {
-                        if (Config.settintTutorial === true) {
-                            Config.settintTutorial = false;
+                        if (Config.settingTutorial === true) {
+                            Config.settingTutorial = false;
                             this.removeChild(event);
                             event = new Phaser.Button(this.game, event.x, event.y, Images.ButtonOff, this.onButtonClick, this);
                             event.name = Constants.TUTORIAL;
                             this.addChild(event);
                         }
                         else {
-                            Config.settintTutorial = true;
+                            Config.settingTutorial = true;
                             this.removeChild(event);
                             event = new Phaser.Button(this.game, event.x, event.y, Images.ButtonOn, this.onButtonClick, this);
                             event.name = Constants.TUTORIAL;
@@ -3116,6 +3119,13 @@ var Fabrique;
         };
         Settings.prototype.playMusic = function () {
             GameData.Data.music.play();
+        };
+        Settings.prototype.playButtonSound = function () {
+            if (Config.settingSound) {
+                GameData.Data.buttonSound.loop = false;
+                GameData.Data.buttonSound.volume = 0.5;
+                GameData.Data.buttonSound.play();
+            }
         };
         return Settings;
     }(Phaser.Group));
@@ -3808,6 +3818,24 @@ var MortalKombat;
             this.groupMenu.removeAll();
             this.game.stage.removeChildren();
         };
+        Menu.prototype.initSounds = function () {
+            var _this = this;
+            // восстановление звука при запуске игры
+            this.game.input.onDown.addOnce(function () {
+                _this.game.sound.context.resume();
+            });
+            if (GameData.Data.music === undefined || GameData.Data.music === null) {
+                GameData.Data.music = this.game.add.audio(GameData.Data.musicList[0][0]);
+                GameData.Data.buttonSound = this.game.add.audio(Sounds.button);
+            }
+            else {
+                GameData.Data.music.stop();
+                GameData.Data.music.key = GameData.Data.musicList[0][0];
+            }
+            GameData.Data.music.loop = true;
+            GameData.Data.music.volume = GameData.Data.musicList[0][1];
+            GameData.Data.music.play();
+        };
         Menu.prototype.createButtons = function () {
             this.groupButtons = new Phaser.Group(this.game, this.groupMenu);
             this.groupButtons.x = -500;
@@ -3841,7 +3869,7 @@ var MortalKombat;
             tweenButtons.to({ x: 0, y: 0 }, 500, 'Linear');
             tweenButtons.onComplete.add(function () {
                 _this.tween.start();
-                if (Config.settintTutorial === true)
+                if (Config.settingTutorial === true)
                     _this.tutorial.show((Constants.GAME_WIDTH / 2), (Constants.GAME_HEIGHT - 175));
             }, this);
             tweenButtons.start();
@@ -3850,6 +3878,7 @@ var MortalKombat;
             this.tween.start();
         };
         Menu.prototype.onButtonClick = function (event) {
+            this.playButtonSound();
             switch (event.name) {
                 case Constants.START:
                     {
@@ -3884,6 +3913,13 @@ var MortalKombat;
                     break;
             }
         };
+        Menu.prototype.playButtonSound = function () {
+            if (Config.settingSound) {
+                GameData.Data.buttonSound.loop = false;
+                GameData.Data.buttonSound.volume = 0.5;
+                GameData.Data.buttonSound.play();
+            }
+        };
         Menu.prototype.settingsCreate = function () {
             this.tutorial.x = Constants.GAME_WIDTH;
             this.tutorial.y = (Constants.GAME_HEIGHT - 175);
@@ -3894,7 +3930,7 @@ var MortalKombat;
             this.settings.removeChildren();
             this.settings.removeAll();
             this.groupMenu.removeChild(this.settings);
-            if (Config.settintTutorial === true) {
+            if (Config.settingTutorial === true) {
                 var tweenTutorial = this.game.add.tween(this.tutorial);
                 tweenTutorial.to({ x: (Constants.GAME_WIDTH / 2), y: (Constants.GAME_HEIGHT - 175) }, 500, 'Linear');
                 tweenTutorial.start();
@@ -3919,27 +3955,6 @@ var MortalKombat;
                 //this.tutorial.setText('Нажмите на кнопку\n"Продолжить"\nчтобы продолжить\n турнир.')
                 this.tutorial.setText('Продолжайте битву\nв турнире.\nПобеди Шао Кана.\nСпаси мир.');
             }
-        };
-        Menu.prototype.initSounds = function () {
-            var _this = this;
-            // восстановление звука при запуске игры
-            this.game.input.onDown.addOnce(function () {
-                _this.game.sound.context.resume();
-            });
-            if (GameData.Data.music === undefined || GameData.Data.music === null) {
-                GameData.Data.music = this.game.add.audio(GameData.Data.musicList[0][0]);
-                //GameData.Data.buttonSound = this.game.add.audio(Sounds.ButtonSound);
-                //GameData.Data.arrowSound = this.game.add.audio(Sounds.ArrowSound);
-                //GameData.Data.flipUpSound = this.game.add.audio(Sounds.CardFlipSound1);
-                //GameData.Data.flipDownSound = this.game.add.audio(Sounds.CardFlipSound2);
-            }
-            else {
-                GameData.Data.music.stop();
-                GameData.Data.music.key = GameData.Data.musicList[0][0];
-            }
-            GameData.Data.music.loop = true;
-            GameData.Data.music.volume = GameData.Data.musicList[0][1];
-            GameData.Data.music.play();
         };
         Menu.Name = "menu";
         return Menu;
@@ -3992,7 +4007,7 @@ var MortalKombat;
         Fighters.prototype.onCompleteVideo = function () {
             this.tween.start();
             this.title.show();
-            if (Config.settintTutorial === true)
+            if (Config.settingTutorial === true)
                 this.tutorial.show((Constants.GAME_WIDTH / 2), (Constants.GAME_HEIGHT - 175));
             this.backMenuButton = new Phaser.Button(this.game, -25, 5, Sheet.ButtonBackMenuMini, this.onButtonClick, this, 1, 2, 2, 2);
             this.backMenuButton.name = Constants.BACK_MENU;
@@ -4071,7 +4086,7 @@ var MortalKombat;
             this.settings.removeChildren();
             this.settings.removeAll();
             this.groupFighters.removeChild(this.settings);
-            if (Config.settintTutorial === true) {
+            if (Config.settingTutorial === true) {
                 var tweenTutorial = this.game.add.tween(this.tutorial);
                 tweenTutorial.to({ x: (Constants.GAME_WIDTH / 2), y: (Constants.GAME_HEIGHT - 175) }, 500, 'Linear');
                 tweenTutorial.start();
@@ -4141,7 +4156,7 @@ var MortalKombat;
         Tournament.prototype.onCompleteVideo = function () {
             this.tween.start();
             this.title.show();
-            if (Config.settintTutorial === true)
+            if (Config.settingTutorial === true)
                 this.tutorial.show(0, 150);
             this.tower.show(this.tower.x, 0);
             this.userUpgradeCharacteristics.show(50, this.userUpgradeCharacteristics.y);
@@ -4248,7 +4263,7 @@ var MortalKombat;
             this.settings.removeChildren();
             this.settings.removeAll();
             this.groupContent.removeChild(this.settings);
-            if (Config.settintTutorial === true) {
+            if (Config.settingTutorial === true) {
                 var tweenTutorial = this.game.add.tween(this.tutorial);
                 tweenTutorial.to({ x: 0, y: 150 }, 500, 'Linear');
                 tweenTutorial.start();
@@ -4342,7 +4357,7 @@ var MortalKombat;
             this.tutorial.x = Constants.GAME_WIDTH;
             this.tutorial.y = (Constants.GAME_HEIGHT - 175);
             this.groupContent.addChild(this.tutorial);
-            if (Config.settintTutorial === true && GameData.Data.tournamentProgress == 0)
+            if (Config.settingTutorial === true && GameData.Data.tournamentProgress == 0)
                 this.tutorial.show((Constants.GAME_WIDTH / 2), (Constants.GAME_HEIGHT - 175));
             this.dialog = new DialodFightWinsDied(this.game);
             this.dialog.event.add(this.onDialog, this);
@@ -4487,7 +4502,7 @@ var MortalKombat;
             this.settings.removeChildren();
             this.settings.removeAll();
             this.groupContent.removeChild(this.settings);
-            if (Config.settintTutorial === true && GameData.Data.tournamentProgress == 0) {
+            if (Config.settingTutorial === true && GameData.Data.tournamentProgress == 0) {
                 var tweenTutorial = this.game.add.tween(this.tutorial);
                 tweenTutorial.to({ x: (Constants.GAME_WIDTH / 2), y: (Constants.GAME_HEIGHT - 175) }, 500, 'Linear');
                 tweenTutorial.start();

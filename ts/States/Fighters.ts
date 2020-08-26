@@ -68,7 +68,7 @@ module MortalKombat {
         private onCompleteVideo():void{
             this.tween.start();
             this.title.show();
-            if(Config.settintTutorial === true) this.tutorial.show((Constants.GAME_WIDTH / 2), (Constants.GAME_HEIGHT - 175));
+            if(Config.settingTutorial === true) this.tutorial.show((Constants.GAME_WIDTH / 2), (Constants.GAME_HEIGHT - 175));
 
             this.backMenuButton = new Phaser.Button(this.game, -25, 5, Sheet.ButtonBackMenuMini, this.onButtonClick, this, 1, 2, 2, 2);
             this.backMenuButton.name = Constants.BACK_MENU;
@@ -160,7 +160,7 @@ module MortalKombat {
             this.settings.removeAll();
             this.groupFighters.removeChild(this.settings);
             
-            if(Config.settintTutorial === true){
+            if(Config.settingTutorial === true){
                 let tweenTutorial: Phaser.Tween = this.game.add.tween(this.tutorial);
                 tweenTutorial.to({ x: (Constants.GAME_WIDTH / 2), y: (Constants.GAME_HEIGHT - 175)}, 500, 'Linear');
                 tweenTutorial.start();

@@ -24,6 +24,7 @@ module GameData {
 
     export class Data {
         
+        public static buttonSound:Phaser.Sound;
         public static voiceSound:Phaser.Sound;
         public static playerSound:Phaser.Sound;
         public static opponentSound:Phaser.Sound;

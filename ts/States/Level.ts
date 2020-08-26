@@ -106,7 +106,7 @@ module MortalKombat {
             this.tutorial.x = Constants.GAME_WIDTH;
             this.tutorial.y = (Constants.GAME_HEIGHT - 175);
             this.groupContent.addChild(this.tutorial);
-            if(Config.settintTutorial === true && GameData.Data.tournamentProgress == 0) this.tutorial.show((Constants.GAME_WIDTH / 2), (Constants.GAME_HEIGHT - 175));
+            if(Config.settingTutorial === true && GameData.Data.tournamentProgress == 0) this.tutorial.show((Constants.GAME_WIDTH / 2), (Constants.GAME_HEIGHT - 175));
 
             this.dialog = new DialodFightWinsDied(this.game);
             this.dialog.event.add(this.onDialog, this);
@@ -246,7 +246,7 @@ module MortalKombat {
             this.settings.removeAll();
             this.groupContent.removeChild(this.settings);
             
-            if(Config.settintTutorial === true && GameData.Data.tournamentProgress == 0){
+            if(Config.settingTutorial === true && GameData.Data.tournamentProgress == 0){
                 let tweenTutorial: Phaser.Tween = this.game.add.tween(this.tutorial);
                 tweenTutorial.to({ x: (Constants.GAME_WIDTH / 2), y: (Constants.GAME_HEIGHT - 175)}, 500, 'Linear');
                 tweenTutorial.start();

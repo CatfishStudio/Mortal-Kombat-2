@@ -75,7 +75,7 @@ module MortalKombat {
             this.tween.start();
 
             this.title.show();
-            if(Config.settintTutorial === true) this.tutorial.show(0, 150);
+            if(Config.settingTutorial === true) this.tutorial.show(0, 150);
 
             this.tower.show(this.tower.x, 0);
             this.userUpgradeCharacteristics.show(50, this.userUpgradeCharacteristics.y);
@@ -190,7 +190,7 @@ module MortalKombat {
             this.settings.removeAll();
             this.groupContent.removeChild(this.settings);
             
-            if(Config.settintTutorial === true){
+            if(Config.settingTutorial === true){
                 let tweenTutorial: Phaser.Tween = this.game.add.tween(this.tutorial);
                 tweenTutorial.to({ x: 0, y: 150}, 500, 'Linear');
                 tweenTutorial.start();

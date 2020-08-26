@@ -60,6 +60,24 @@ module MortalKombat {
             this.game.stage.removeChildren();
         }
 
+        public initSounds():void{
+            // восстановление звука при запуске игры
+            this.game.input.onDown.addOnce(() => { 
+                this.game.sound.context.resume(); 
+            });
+
+            if(GameData.Data.music === undefined || GameData.Data.music === null){
+                GameData.Data.music = this.game.add.audio(GameData.Data.musicList[0][0]);
+                GameData.Data.buttonSound = this.game.add.audio(Sounds.button);
+            }else{
+                GameData.Data.music.stop();
+                GameData.Data.music.key = GameData.Data.musicList[0][0];
+            }
+            GameData.Data.music.loop = true;
+            GameData.Data.music.volume = GameData.Data.musicList[0][1];
+            GameData.Data.music.play();
+        }
+
         private createButtons():void{
             this.groupButtons = new Phaser.Group(this.game, this.groupMenu);
             this.groupButtons.x = -500;
@@ -101,7 +119,7 @@ module MortalKombat {
             tweenButtons.to({ x: 0, y: 0}, 500, 'Linear');
             tweenButtons.onComplete.add(() => {
                 this.tween.start();
-                if(Config.settintTutorial === true) this.tutorial.show((Constants.GAME_WIDTH / 2), (Constants.GAME_HEIGHT - 175));
+                if(Config.settingTutorial === true) this.tutorial.show((Constants.GAME_WIDTH / 2), (Constants.GAME_HEIGHT - 175));
             }, this);
             tweenButtons.start();
         }
@@ -112,6 +130,7 @@ module MortalKombat {
 
         
         private onButtonClick(event) {
+            this.playButtonSound();
             switch (event.name) {
                 case Constants.START:
                     {
@@ -144,6 +163,14 @@ module MortalKombat {
                     break;
             }
         }
+
+        private playButtonSound():void {
+            if(Config.settingSound){
+                GameData.Data.buttonSound.loop = false;
+                GameData.Data.buttonSound.volume = 0.5;
+                GameData.Data.buttonSound.play();
+            }
+        }
         
         private settingsCreate() {
             this.tutorial.x = Constants.GAME_WIDTH;
@@ -158,7 +185,7 @@ module MortalKombat {
             this.settings.removeAll();
             this.groupMenu.removeChild(this.settings);
             
-            if(Config.settintTutorial === true){
+            if(Config.settingTutorial === true){
                 let tweenTutorial: Phaser.Tween = this.game.add.tween(this.tutorial);
                 tweenTutorial.to({ x: (Constants.GAME_WIDTH / 2), y: (Constants.GAME_HEIGHT - 175)}, 500, 'Linear');
                 tweenTutorial.start();
@@ -191,25 +218,6 @@ module MortalKombat {
             }
         }
 
-        public initSounds():void{
-            // восстановление звука при запуске игры
-            this.game.input.onDown.addOnce(() => { 
-                this.game.sound.context.resume(); 
-            });
-
-            if(GameData.Data.music === undefined || GameData.Data.music === null){
-                GameData.Data.music = this.game.add.audio(GameData.Data.musicList[0][0]);
-                //GameData.Data.buttonSound = this.game.add.audio(Sounds.ButtonSound);
-                //GameData.Data.arrowSound = this.game.add.audio(Sounds.ArrowSound);
-                //GameData.Data.flipUpSound = this.game.add.audio(Sounds.CardFlipSound1);
-                //GameData.Data.flipDownSound = this.game.add.audio(Sounds.CardFlipSound2);
-            }else{
-                GameData.Data.music.stop();
-                GameData.Data.music.key = GameData.Data.musicList[0][0];
-            }
-            GameData.Data.music.loop = true;
-            GameData.Data.music.volume = GameData.Data.musicList[0][1];
-            GameData.Data.music.play();
-        }
+        
     }
 }
