@@ -91,11 +91,20 @@ module Fabrique {
 
         public show(x:number, y:number):void {
             if(this.thisIsPersonage){
+                /*
                 this.textValueCap1.text = Constants.DAMAGE_LEG + " x"+ GameData.Data.user_personage.leg;
                 this.textValueCap2.text = Constants.DAMAGE_HAND + " x"+ GameData.Data.user_personage.hand;
                 this.textValueCap3.text = Constants.DAMAGE_BLOCK + " x"+ GameData.Data.user_personage.block;
                 this.textValueCap4.text = Constants.DAMAGE_UPPERCUT + " x"+ GameData.Data.user_personage.uppercut;
                 this.textValueCap5.text = Constants.DAMAGE_TWIST + " x"+ GameData.Data.user_personage.twist;
+                this.upgradePoints.text = "Очки улучшений: " + GameData.Data.user_upgrade_points.toString();
+                */
+
+                this.textValueCap1.text = (Constants.DAMAGE_LEG* GameData.Data.user_personage.leg).toString();
+                this.textValueCap2.text = (Constants.DAMAGE_HAND*GameData.Data.user_personage.hand).toString();
+                this.textValueCap3.text = (Constants.DAMAGE_BLOCK*GameData.Data.user_personage.block).toString();
+                this.textValueCap4.text = (Constants.DAMAGE_UPPERCUT*GameData.Data.user_personage.uppercut).toString();
+                this.textValueCap5.text = (Constants.DAMAGE_TWIST*GameData.Data.user_personage.twist).toString();
                 this.upgradePoints.text = "Очки улучшений: " + GameData.Data.user_upgrade_points.toString();
 
                 if(GameData.Data.user_upgrade_points > 0){
@@ -234,11 +243,19 @@ module Fabrique {
                 this.removeChild(this.buttonUppercutPlus);
                 this.removeChild(this.buttonTwistPlus);
 
+                /*
                 this.textValueCap1.text = (Constants.DAMAGE_LEG* GameData.Data.user_personage.leg).toString() + " x"+ GameData.Data.user_personage.leg;
                 this.textValueCap2.text = (Constants.DAMAGE_HAND*GameData.Data.user_personage.hand).toString() + " x"+ GameData.Data.user_personage.hand;
                 this.textValueCap3.text = (Constants.DAMAGE_BLOCK*GameData.Data.user_personage.block).toString() + " x"+ GameData.Data.user_personage.block;
                 this.textValueCap4.text = (Constants.DAMAGE_UPPERCUT*GameData.Data.user_personage.uppercut).toString() + " x"+ GameData.Data.user_personage.uppercut;
                 this.textValueCap5.text = (Constants.DAMAGE_TWIST*GameData.Data.user_personage.twist).toString() + " x"+ GameData.Data.user_personage.twist;
+                */
+
+                this.textValueCap1.text = (Constants.DAMAGE_LEG* GameData.Data.user_personage.leg).toString();
+                this.textValueCap2.text = (Constants.DAMAGE_HAND*GameData.Data.user_personage.hand).toString();
+                this.textValueCap3.text = (Constants.DAMAGE_BLOCK*GameData.Data.user_personage.block).toString();
+                this.textValueCap4.text = (Constants.DAMAGE_UPPERCUT*GameData.Data.user_personage.uppercut).toString();
+                this.textValueCap5.text = (Constants.DAMAGE_TWIST*GameData.Data.user_personage.twist).toString();
 
                 this.textValueCap1.x = 150;
                 this.textValueCap2.x = 150;

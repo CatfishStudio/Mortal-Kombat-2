@@ -64,7 +64,26 @@ module MortalKombat {
             this.field.event.add(this.onMatch, this);
             this.field.createMatchField(valueJSON);
 
-            this.persUser = GameData.Data.user_personage;
+            //this.persUser = GameData.Data.user_personage;
+            this.persUser = <GameData.IPersonage>{};
+            this.persUser.id = GameData.Data.user_personage.id;
+            this.persUser.name = GameData.Data.user_personage.name;
+            this.persUser.hand = GameData.Data.user_personage.hand;
+            this.persUser.leg = GameData.Data.user_personage.leg;
+            this.persUser.block = GameData.Data.user_personage.block;
+            this.persUser.uppercut = GameData.Data.user_personage.uppercut;
+            this.persUser.twist = GameData.Data.user_personage.twist;
+            this.persUser.life = GameData.Data.user_personage.life;
+            this.persUser.animStance = GameData.Data.user_personage.animStance;
+            this.persUser.animHitHand = GameData.Data.user_personage.animHitHand;
+            this.persUser.animHitHandUppercut = GameData.Data.user_personage.animHitHandUppercut;
+            this.persUser.animHitLeg = GameData.Data.user_personage.animHitLeg;
+            this.persUser.animHitLegTwist = GameData.Data.user_personage.animHitLegTwist;
+            this.persUser.animBlock = GameData.Data.user_personage.animBlock;
+            this.persUser.animDamage = GameData.Data.user_personage.animDamage;
+            this.persUser.animLose = GameData.Data.user_personage.animLose;
+            this.persUser.animWin = GameData.Data.user_personage.animWin;
+
             this.animUser = new AnimationFighter(this.game, this.persUser.id, this.persUser);
             this.animUser.x = 100 - (this.animUser.width / 2);
             this.animUser.y = Constants.GAME_HEIGHT - (this.animUser.height*2);
@@ -75,7 +94,7 @@ module MortalKombat {
             this.damageCounterUser = new DamageCounter(this.game, this.animUser.x + (this.animUser.width / 2) - 15, this.animUser.y - 15);
             this.groupContent.addChild(this.damageCounterUser);
 
-            this.persEnemies = GameData.Data.getPersonage(GameData.Data.id_enemies[GameData.Data.tournamentProgress]);
+            this.persEnemies = GameData.Data.getNewPersonage(GameData.Data.id_enemies[GameData.Data.tournamentProgress]);
             this.animEnemies = new AnimationFighter(this.game, this.persEnemies.id, this.persEnemies);
             if(GameData.Data.tournamentProgress < 11) {
                 this.animEnemies.x = Constants.GAME_WIDTH - 25 - (this.animEnemies.width / 2);
@@ -115,6 +134,10 @@ module MortalKombat {
             this.groupContent.addChild(this.dialog);
             this.dialog.showFight();
             this.playSoundFight();
+
+            Utilits.Data.debugLog("PERS USER:", this.persUser);
+            Utilits.Data.debugLog("PERS ENEMIES:", this.persEnemies);
+            Utilits.Data.debugLog("PERSONAGER:", GameData.Data.personages);
         }
 
         /* Произошло событие match на поле */
@@ -296,7 +319,7 @@ module MortalKombat {
             Utilits.Data.debugLog("DIALOG EVENT:", event);
             if(event === DialodFightWinsDied.WINS){
                 if(this.persEnemies.id === Constants.ID_GORO) GameData.Data.user_upgrade_points += 5;
-                else GameData.Data.user_upgrade_points += 2;
+                else GameData.Data.user_upgrade_points += 1;
                 GameData.Data.tournamentProgress++;
             }else{
                 GameData.Data.user_continue--;

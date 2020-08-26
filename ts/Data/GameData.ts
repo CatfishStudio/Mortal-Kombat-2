@@ -109,6 +109,38 @@ module GameData {
         }
 
         /* получить данные персонажа по его ID */
+        public static getNewPersonage(personageID:string):IPersonage{
+            //let personageChange: IPersonage;
+            let personageChange: IPersonage = <IPersonage>{};
+            GameData.Data.personages.forEach((personage: GameData.IPersonage) => {
+                if(personage.id === personageID){
+                    //personageChange = personage;
+
+                    personageChange.id = personage.id;
+                    personageChange.name = personage.name;
+                    personageChange.hand = personage.hand;
+                    personageChange.leg = personage.leg;
+                    personageChange.block = personage.block;
+                    personageChange.uppercut = personage.uppercut;
+                    personageChange.twist = personage.twist;
+                    personageChange.life = personage.life;
+                    personageChange.animStance = personage.animStance;
+                    personageChange.animHitHand = personage.animHitHand;
+                    personageChange.animHitHandUppercut = personage.animHitHandUppercut;
+                    personageChange.animHitLeg = personage.animHitLeg;
+                    personageChange.animHitLegTwist = personage.animHitLegTwist;
+                    personageChange.animBlock = personage.animBlock;
+                    personageChange.animDamage = personage.animDamage;
+                    personageChange.animLose = personage.animLose;
+                    personageChange.animWin = personage.animWin;
+
+                    return;
+                }
+            });
+            return personageChange;
+        }
+
+        /* получить данные персонажа по его ID */
         public static getPersonage(personageID:string):IPersonage{
             let personageChange: IPersonage;
             GameData.Data.personages.forEach((personage: GameData.IPersonage) => {

@@ -2268,6 +2268,35 @@ var GameData;
             this.initLevels();
         };
         /* получить данные персонажа по его ID */
+        Data.getNewPersonage = function (personageID) {
+            //let personageChange: IPersonage;
+            var personageChange = {};
+            GameData.Data.personages.forEach(function (personage) {
+                if (personage.id === personageID) {
+                    //personageChange = personage;
+                    personageChange.id = personage.id;
+                    personageChange.name = personage.name;
+                    personageChange.hand = personage.hand;
+                    personageChange.leg = personage.leg;
+                    personageChange.block = personage.block;
+                    personageChange.uppercut = personage.uppercut;
+                    personageChange.twist = personage.twist;
+                    personageChange.life = personage.life;
+                    personageChange.animStance = personage.animStance;
+                    personageChange.animHitHand = personage.animHitHand;
+                    personageChange.animHitHandUppercut = personage.animHitHandUppercut;
+                    personageChange.animHitLeg = personage.animHitLeg;
+                    personageChange.animHitLegTwist = personage.animHitLegTwist;
+                    personageChange.animBlock = personage.animBlock;
+                    personageChange.animDamage = personage.animDamage;
+                    personageChange.animLose = personage.animLose;
+                    personageChange.animWin = personage.animWin;
+                    return;
+                }
+            });
+            return personageChange;
+        };
+        /* получить данные персонажа по его ID */
         Data.getPersonage = function (personageID) {
             var personageChange;
             GameData.Data.personages.forEach(function (personage) {
@@ -3398,11 +3427,19 @@ var Fabrique;
         };
         UpgradeCharacteristics.prototype.show = function (x, y) {
             if (this.thisIsPersonage) {
-                this.textValueCap1.text = Constants.DAMAGE_LEG + " x" + GameData.Data.user_personage.leg;
-                this.textValueCap2.text = Constants.DAMAGE_HAND + " x" + GameData.Data.user_personage.hand;
-                this.textValueCap3.text = Constants.DAMAGE_BLOCK + " x" + GameData.Data.user_personage.block;
-                this.textValueCap4.text = Constants.DAMAGE_UPPERCUT + " x" + GameData.Data.user_personage.uppercut;
-                this.textValueCap5.text = Constants.DAMAGE_TWIST + " x" + GameData.Data.user_personage.twist;
+                /*
+                this.textValueCap1.text = Constants.DAMAGE_LEG + " x"+ GameData.Data.user_personage.leg;
+                this.textValueCap2.text = Constants.DAMAGE_HAND + " x"+ GameData.Data.user_personage.hand;
+                this.textValueCap3.text = Constants.DAMAGE_BLOCK + " x"+ GameData.Data.user_personage.block;
+                this.textValueCap4.text = Constants.DAMAGE_UPPERCUT + " x"+ GameData.Data.user_personage.uppercut;
+                this.textValueCap5.text = Constants.DAMAGE_TWIST + " x"+ GameData.Data.user_personage.twist;
+                this.upgradePoints.text = "Очки улучшений: " + GameData.Data.user_upgrade_points.toString();
+                */
+                this.textValueCap1.text = (Constants.DAMAGE_LEG * GameData.Data.user_personage.leg).toString();
+                this.textValueCap2.text = (Constants.DAMAGE_HAND * GameData.Data.user_personage.hand).toString();
+                this.textValueCap3.text = (Constants.DAMAGE_BLOCK * GameData.Data.user_personage.block).toString();
+                this.textValueCap4.text = (Constants.DAMAGE_UPPERCUT * GameData.Data.user_personage.uppercut).toString();
+                this.textValueCap5.text = (Constants.DAMAGE_TWIST * GameData.Data.user_personage.twist).toString();
                 this.upgradePoints.text = "Очки улучшений: " + GameData.Data.user_upgrade_points.toString();
                 if (GameData.Data.user_upgrade_points > 0) {
                     this.textValueCap1.x = 125;
@@ -3535,11 +3572,18 @@ var Fabrique;
                 this.removeChild(this.buttonBlockPlus);
                 this.removeChild(this.buttonUppercutPlus);
                 this.removeChild(this.buttonTwistPlus);
-                this.textValueCap1.text = (Constants.DAMAGE_LEG * GameData.Data.user_personage.leg).toString() + " x" + GameData.Data.user_personage.leg;
-                this.textValueCap2.text = (Constants.DAMAGE_HAND * GameData.Data.user_personage.hand).toString() + " x" + GameData.Data.user_personage.hand;
-                this.textValueCap3.text = (Constants.DAMAGE_BLOCK * GameData.Data.user_personage.block).toString() + " x" + GameData.Data.user_personage.block;
-                this.textValueCap4.text = (Constants.DAMAGE_UPPERCUT * GameData.Data.user_personage.uppercut).toString() + " x" + GameData.Data.user_personage.uppercut;
-                this.textValueCap5.text = (Constants.DAMAGE_TWIST * GameData.Data.user_personage.twist).toString() + " x" + GameData.Data.user_personage.twist;
+                /*
+                this.textValueCap1.text = (Constants.DAMAGE_LEG* GameData.Data.user_personage.leg).toString() + " x"+ GameData.Data.user_personage.leg;
+                this.textValueCap2.text = (Constants.DAMAGE_HAND*GameData.Data.user_personage.hand).toString() + " x"+ GameData.Data.user_personage.hand;
+                this.textValueCap3.text = (Constants.DAMAGE_BLOCK*GameData.Data.user_personage.block).toString() + " x"+ GameData.Data.user_personage.block;
+                this.textValueCap4.text = (Constants.DAMAGE_UPPERCUT*GameData.Data.user_personage.uppercut).toString() + " x"+ GameData.Data.user_personage.uppercut;
+                this.textValueCap5.text = (Constants.DAMAGE_TWIST*GameData.Data.user_personage.twist).toString() + " x"+ GameData.Data.user_personage.twist;
+                */
+                this.textValueCap1.text = (Constants.DAMAGE_LEG * GameData.Data.user_personage.leg).toString();
+                this.textValueCap2.text = (Constants.DAMAGE_HAND * GameData.Data.user_personage.hand).toString();
+                this.textValueCap3.text = (Constants.DAMAGE_BLOCK * GameData.Data.user_personage.block).toString();
+                this.textValueCap4.text = (Constants.DAMAGE_UPPERCUT * GameData.Data.user_personage.uppercut).toString();
+                this.textValueCap5.text = (Constants.DAMAGE_TWIST * GameData.Data.user_personage.twist).toString();
                 this.textValueCap1.x = 150;
                 this.textValueCap2.x = 150;
                 this.textValueCap3.x = 150;
@@ -3882,7 +3926,7 @@ var MortalKombat;
             buttonInvite.name = Constants.INVITE;
             this.groupButtons.addChild(buttonInvite);
             //this.tutorial = new Tutorial(this.game, 'Нажмите на кнопку\n"Начать игру"\nчтобы начать\nновый турнир.');
-            this.tutorial = new Tutorial(this.game, 'Сразись с бойцами\nШао Кана. Победи его\nв турнире чтобы спасти\nземное царство.');
+            this.tutorial = new Tutorial(this.game, 'Сразись с бойцами\nШао Кана. Победи его\nна турнире чтобы спасти\nземное царство.');
             this.tutorial.x = Constants.GAME_WIDTH;
             this.tutorial.y = (Constants.GAME_HEIGHT - 175);
             this.groupMenu.addChild(this.tutorial);
@@ -3983,7 +4027,7 @@ var MortalKombat;
                 buttonContinue.name = Constants.CONTINUE;
                 this.groupButtons.addChild(buttonContinue);
                 //this.tutorial.setText('Нажмите на кнопку\n"Продолжить"\nчтобы продолжить\n турнир.')
-                this.tutorial.setText('Продолжайте битву\nв турнире.\nПобеди Шао Кана.\nСпаси земное царство.');
+                this.tutorial.setText('Продолжайте битву\nна турнире.\nПобеди Шао Кана.\nСпаси земное царство.');
             }
         };
         Menu.Name = "menu";
@@ -4367,7 +4411,25 @@ var MortalKombat;
             this.field = new Field(this.game, this.groupContent);
             this.field.event.add(this.onMatch, this);
             this.field.createMatchField(valueJSON);
-            this.persUser = GameData.Data.user_personage;
+            //this.persUser = GameData.Data.user_personage;
+            this.persUser = {};
+            this.persUser.id = GameData.Data.user_personage.id;
+            this.persUser.name = GameData.Data.user_personage.name;
+            this.persUser.hand = GameData.Data.user_personage.hand;
+            this.persUser.leg = GameData.Data.user_personage.leg;
+            this.persUser.block = GameData.Data.user_personage.block;
+            this.persUser.uppercut = GameData.Data.user_personage.uppercut;
+            this.persUser.twist = GameData.Data.user_personage.twist;
+            this.persUser.life = GameData.Data.user_personage.life;
+            this.persUser.animStance = GameData.Data.user_personage.animStance;
+            this.persUser.animHitHand = GameData.Data.user_personage.animHitHand;
+            this.persUser.animHitHandUppercut = GameData.Data.user_personage.animHitHandUppercut;
+            this.persUser.animHitLeg = GameData.Data.user_personage.animHitLeg;
+            this.persUser.animHitLegTwist = GameData.Data.user_personage.animHitLegTwist;
+            this.persUser.animBlock = GameData.Data.user_personage.animBlock;
+            this.persUser.animDamage = GameData.Data.user_personage.animDamage;
+            this.persUser.animLose = GameData.Data.user_personage.animLose;
+            this.persUser.animWin = GameData.Data.user_personage.animWin;
             this.animUser = new AnimationFighter(this.game, this.persUser.id, this.persUser);
             this.animUser.x = 100 - (this.animUser.width / 2);
             this.animUser.y = Constants.GAME_HEIGHT - (this.animUser.height * 2);
@@ -4376,7 +4438,7 @@ var MortalKombat;
             this.groupContent.addChild(this.animUser);
             this.damageCounterUser = new DamageCounter(this.game, this.animUser.x + (this.animUser.width / 2) - 15, this.animUser.y - 15);
             this.groupContent.addChild(this.damageCounterUser);
-            this.persEnemies = GameData.Data.getPersonage(GameData.Data.id_enemies[GameData.Data.tournamentProgress]);
+            this.persEnemies = GameData.Data.getNewPersonage(GameData.Data.id_enemies[GameData.Data.tournamentProgress]);
             this.animEnemies = new AnimationFighter(this.game, this.persEnemies.id, this.persEnemies);
             if (GameData.Data.tournamentProgress < 11) {
                 this.animEnemies.x = Constants.GAME_WIDTH - 25 - (this.animEnemies.width / 2);
@@ -4412,6 +4474,9 @@ var MortalKombat;
             this.groupContent.addChild(this.dialog);
             this.dialog.showFight();
             this.playSoundFight();
+            Utilits.Data.debugLog("PERS USER:", this.persUser);
+            Utilits.Data.debugLog("PERS ENEMIES:", this.persEnemies);
+            Utilits.Data.debugLog("PERSONAGER:", GameData.Data.personages);
         };
         /* Произошло событие match на поле */
         Level.prototype.onMatch = function (hitType, hitCount, statusAction) {
@@ -4599,7 +4664,7 @@ var MortalKombat;
                 if (this.persEnemies.id === Constants.ID_GORO)
                     GameData.Data.user_upgrade_points += 5;
                 else
-                    GameData.Data.user_upgrade_points += 2;
+                    GameData.Data.user_upgrade_points += 1;
                 GameData.Data.tournamentProgress++;
             }
             else {
