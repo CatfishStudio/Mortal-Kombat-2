@@ -102,7 +102,8 @@ module MortalKombat {
             this.panelIcons = new PanelIcons(this.game, this.groupFighters);
                         
             /* tutorial */
-            this.tutorial = new Tutorial(this.game, 'Нажмите на иконку\nбойца и на кнопку\n"Выбрать бойца');
+            //this.tutorial = new Tutorial(this.game, 'Нажмите на иконку\nбойца и на кнопку\n"Выбрать бойца');
+            this.tutorial = new Tutorial(this.game, 'Выбери бойца\nсудьба которого\nстать избранным.');
             this.tutorial.x = Constants.GAME_WIDTH;
             this.tutorial.y = (Constants.GAME_HEIGHT - 175);
             this.groupFighters.addChild(this.tutorial);
