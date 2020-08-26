@@ -105,12 +105,14 @@ module Fabrique {
                 case Constants.MUSIC:
                     {
                         if(Config.settintMusic === true){
+                            this.stopMusic();
                             Config.settintMusic = false;
                             this.removeChild(event);
                             event = new Phaser.Button(this.game, event.x, event.y, Images.ButtonOff, this.onButtonClick, this);
                             event.name = Constants.MUSIC;
                             this.addChild(event);
                         }else{
+                            this.playMusic();
                             Config.settintMusic = true;
                             this.removeChild(event);
                             event = new Phaser.Button(this.game, event.x, event.y, Images.ButtonOn, this.onButtonClick, this);
@@ -139,6 +141,14 @@ module Fabrique {
                 default:
                     break;
             }
+        }
+
+        private stopMusic():void {
+            GameData.Data.music.stop();
+        }
+
+        private playMusic():void {
+            GameData.Data.music.play();
         }
     }
 }

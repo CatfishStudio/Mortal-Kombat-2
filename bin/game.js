@@ -1979,13 +1979,41 @@ var Images = /** @class */ (function () {
 var Sounds = /** @class */ (function () {
     function Sounds() {
     }
-    Sounds.Music1 = 'music1';
-    Sounds.Music2 = 'music2';
-    Sounds.Music3 = 'music3';
+    Sounds.music_menu = 'music_menu';
+    Sounds.music_1 = 'music1';
+    Sounds.music_2 = 'music2';
+    Sounds.button = 'button';
+    Sounds.fight = 'fight';
+    Sounds.lost = 'Lost';
+    Sounds.wins = 'wins';
+    Sounds.hit_1_5 = 'hit_1_5';
+    Sounds.hit_2_4 = 'hit_2_4';
+    Sounds.hit_block = 'hit_block';
+    Sounds.hit_move = 'hit_move';
+    Sounds.f_01 = 'f_01';
+    Sounds.f_02 = 'f_02';
+    Sounds.f_d_03 = 'f_d_03';
+    Sounds.m_01 = 'm_01';
+    Sounds.m_02 = 'm_02';
+    Sounds.m_d_03 = 'm_d_03';
     Sounds.preloadList = [
-        Sounds.Music1,
-        Sounds.Music2,
-        Sounds.Music3
+        Sounds.music_menu,
+        Sounds.music_1,
+        Sounds.music_2,
+        Sounds.button,
+        Sounds.fight,
+        Sounds.lost,
+        Sounds.wins,
+        Sounds.hit_1_5,
+        Sounds.hit_2_4,
+        Sounds.hit_block,
+        Sounds.hit_move,
+        Sounds.f_01,
+        Sounds.f_02,
+        Sounds.f_d_03,
+        Sounds.m_01,
+        Sounds.m_02,
+        Sounds.m_d_03
     ];
     return Sounds;
 }());
@@ -2425,9 +2453,9 @@ var GameData;
         };
         Data.musicSelected = 2;
         Data.musicList = [
-            [Sounds.Music1, 0.1],
-            [Sounds.Music2, 0.5],
-            [Sounds.Music3, 0.2]
+            [Sounds.music_menu, 0.5],
+            [Sounds.music_1, 0.1],
+            [Sounds.music_2, 0.1]
         ];
         return Data;
     }());
@@ -3044,6 +3072,7 @@ var Fabrique;
                 case Constants.MUSIC:
                     {
                         if (Config.settintMusic === true) {
+                            this.stopMusic();
                             Config.settintMusic = false;
                             this.removeChild(event);
                             event = new Phaser.Button(this.game, event.x, event.y, Images.ButtonOff, this.onButtonClick, this);
@@ -3051,6 +3080,7 @@ var Fabrique;
                             this.addChild(event);
                         }
                         else {
+                            this.playMusic();
                             Config.settintMusic = true;
                             this.removeChild(event);
                             event = new Phaser.Button(this.game, event.x, event.y, Images.ButtonOn, this.onButtonClick, this);
@@ -3080,6 +3110,12 @@ var Fabrique;
                 default:
                     break;
             }
+        };
+        Settings.prototype.stopMusic = function () {
+            GameData.Data.music.stop();
+        };
+        Settings.prototype.playMusic = function () {
+            GameData.Data.music.play();
         };
         return Settings;
     }(Phaser.Group));
@@ -3787,7 +3823,8 @@ var MortalKombat;
             var buttonInvite = new Phaser.Button(this.game, 75, 550, Sheet.ButtonInvite, this.onButtonClick, this, 1, 2, 2, 2);
             buttonInvite.name = Constants.INVITE;
             this.groupButtons.addChild(buttonInvite);
-            this.tutorial = new Tutorial(this.game, 'Нажмите на кнопку\n"Начать игру"\nчтобы начать\nновый турнир.');
+            //this.tutorial = new Tutorial(this.game, 'Нажмите на кнопку\n"Начать игру"\nчтобы начать\nновый турнир.');
+            this.tutorial = new Tutorial(this.game, 'Сразись с бойцами\nШао Кана. Победи его\nв турнире чтобы\nспаси мир.');
             this.tutorial.x = Constants.GAME_WIDTH;
             this.tutorial.y = (Constants.GAME_HEIGHT - 175);
             this.groupMenu.addChild(this.tutorial);
@@ -3879,7 +3916,8 @@ var MortalKombat;
                 var buttonContinue = new Phaser.Button(this.game, 75, 400, Sheet.ButtonСontinueGame, this.onButtonClick, this, 1, 2);
                 buttonContinue.name = Constants.CONTINUE;
                 this.groupButtons.addChild(buttonContinue);
-                this.tutorial.setText('Нажмите на кнопку\n"Продолжить"\nчтобы продолжить\n турнир.');
+                //this.tutorial.setText('Нажмите на кнопку\n"Продолжить"\nчтобы продолжить\n турнир.')
+                this.tutorial.setText('Продолжайте битву\nв турнире.\nПобеди Шао Кана.\nСпаси мир.');
             }
         };
         Menu.prototype.initSounds = function () {
@@ -3889,7 +3927,7 @@ var MortalKombat;
                 _this.game.sound.context.resume();
             });
             if (GameData.Data.music === undefined || GameData.Data.music === null) {
-                GameData.Data.music = this.game.add.audio(GameData.Data.musicList[1][0]);
+                GameData.Data.music = this.game.add.audio(GameData.Data.musicList[0][0]);
                 //GameData.Data.buttonSound = this.game.add.audio(Sounds.ButtonSound);
                 //GameData.Data.arrowSound = this.game.add.audio(Sounds.ArrowSound);
                 //GameData.Data.flipUpSound = this.game.add.audio(Sounds.CardFlipSound1);
@@ -3897,10 +3935,10 @@ var MortalKombat;
             }
             else {
                 GameData.Data.music.stop();
-                GameData.Data.music.key = GameData.Data.musicList[1][0];
+                GameData.Data.music.key = GameData.Data.musicList[0][0];
             }
             GameData.Data.music.loop = true;
-            GameData.Data.music.volume = GameData.Data.musicList[1][1];
+            GameData.Data.music.volume = GameData.Data.musicList[0][1];
             GameData.Data.music.play();
         };
         Menu.Name = "menu";

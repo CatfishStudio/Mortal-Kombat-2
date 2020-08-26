@@ -80,7 +80,8 @@ module MortalKombat {
             buttonInvite.name = Constants.INVITE;
             this.groupButtons.addChild(buttonInvite);
 
-            this.tutorial = new Tutorial(this.game, 'Нажмите на кнопку\n"Начать игру"\nчтобы начать\nновый турнир.');
+            //this.tutorial = new Tutorial(this.game, 'Нажмите на кнопку\n"Начать игру"\nчтобы начать\nновый турнир.');
+            this.tutorial = new Tutorial(this.game, 'Сразись с бойцами\nШао Кана. Победи его\nв турнире чтобы\nспаси мир.');
             this.tutorial.x = Constants.GAME_WIDTH;
             this.tutorial.y = (Constants.GAME_HEIGHT - 175);
             this.groupMenu.addChild(this.tutorial);
@@ -185,7 +186,8 @@ module MortalKombat {
                 buttonContinue.name = Constants.CONTINUE;
                 this.groupButtons.addChild(buttonContinue);
 
-                this.tutorial.setText('Нажмите на кнопку\n"Продолжить"\nчтобы продолжить\n турнир.')
+                //this.tutorial.setText('Нажмите на кнопку\n"Продолжить"\nчтобы продолжить\n турнир.')
+                this.tutorial.setText('Продолжайте битву\nв турнире.\nПобеди Шао Кана.\nСпаси мир.');
             }
         }
 
@@ -196,17 +198,17 @@ module MortalKombat {
             });
 
             if(GameData.Data.music === undefined || GameData.Data.music === null){
-                GameData.Data.music = this.game.add.audio(GameData.Data.musicList[1][0]);
+                GameData.Data.music = this.game.add.audio(GameData.Data.musicList[0][0]);
                 //GameData.Data.buttonSound = this.game.add.audio(Sounds.ButtonSound);
                 //GameData.Data.arrowSound = this.game.add.audio(Sounds.ArrowSound);
                 //GameData.Data.flipUpSound = this.game.add.audio(Sounds.CardFlipSound1);
                 //GameData.Data.flipDownSound = this.game.add.audio(Sounds.CardFlipSound2);
             }else{
                 GameData.Data.music.stop();
-                GameData.Data.music.key = GameData.Data.musicList[1][0];
+                GameData.Data.music.key = GameData.Data.musicList[0][0];
             }
             GameData.Data.music.loop = true;
-            GameData.Data.music.volume = GameData.Data.musicList[1][1];
+            GameData.Data.music.volume = GameData.Data.musicList[0][1];
             GameData.Data.music.play();
         }
     }

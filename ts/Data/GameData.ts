@@ -30,9 +30,9 @@ module GameData {
         public static music:Phaser.Sound;
         public static musicSelected:number = 2;
         public static musicList:any[][] = [
-            [Sounds.Music1, 0.1],
-            [Sounds.Music2, 0.5],
-            [Sounds.Music3, 0.1]
+            [Sounds.music_menu, 0.5],
+            [Sounds.music_1, 0.1],
+            [Sounds.music_2, 0.1]
         ];
         
         public static personages:IPersonage[]; // массив персонажей и их характеристик
