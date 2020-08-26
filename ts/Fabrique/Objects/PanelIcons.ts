@@ -58,6 +58,7 @@ module Fabrique {
 
         private onChange(target, id): void {
             //Utilits.Data.debugLog('Change [target/type]:', [target, id]);
+            this.playIconSound();
 
             this.icons.forEach((iconsLine: Icon[]) => {
                 iconsLine.forEach((icon: Icon) => {
@@ -75,6 +76,14 @@ module Fabrique {
             let tween:Phaser.Tween = this.game.add.tween(this);
             tween.to({x: 245, y: 150}, 500, 'Linear');
             tween.start();
+        }
+
+        private playIconSound():void {
+            if(Config.settingSound){
+                GameData.Data.iconSound.loop = false;
+                GameData.Data.iconSound.volume = 1.0;
+                GameData.Data.iconSound.play();
+            }
         }
     }
 }

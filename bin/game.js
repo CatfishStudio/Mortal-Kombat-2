@@ -2453,7 +2453,7 @@ var GameData;
         };
         Data.musicSelected = 2;
         Data.musicList = [
-            [Sounds.music_menu, 0.5],
+            [Sounds.music_menu, 0.3],
             [Sounds.music_1, 0.1],
             [Sounds.music_2, 0.1]
         ];
@@ -2953,6 +2953,7 @@ var Fabrique;
         };
         PanelIcons.prototype.onChange = function (target, id) {
             //Utilits.Data.debugLog('Change [target/type]:', [target, id]);
+            this.playIconSound();
             this.icons.forEach(function (iconsLine) {
                 iconsLine.forEach(function (icon) {
                     icon.unselect();
@@ -2968,6 +2969,13 @@ var Fabrique;
             var tween = this.game.add.tween(this);
             tween.to({ x: 245, y: 150 }, 500, 'Linear');
             tween.start();
+        };
+        PanelIcons.prototype.playIconSound = function () {
+            if (Config.settingSound) {
+                GameData.Data.iconSound.loop = false;
+                GameData.Data.iconSound.volume = 1.0;
+                GameData.Data.iconSound.play();
+            }
         };
         return PanelIcons;
     }(Phaser.Group));
@@ -3827,6 +3835,7 @@ var MortalKombat;
             if (GameData.Data.music === undefined || GameData.Data.music === null) {
                 GameData.Data.music = this.game.add.audio(GameData.Data.musicList[0][0]);
                 GameData.Data.buttonSound = this.game.add.audio(Sounds.button);
+                GameData.Data.iconSound = this.game.add.audio(Sounds.hit_move);
             }
             else {
                 GameData.Data.music.stop();
@@ -3834,7 +3843,8 @@ var MortalKombat;
             }
             GameData.Data.music.loop = true;
             GameData.Data.music.volume = GameData.Data.musicList[0][1];
-            GameData.Data.music.play();
+            if (Config.settingMusic)
+                GameData.Data.music.play();
         };
         Menu.prototype.createButtons = function () {
             this.groupButtons = new Phaser.Group(this.game, this.groupMenu);
@@ -4040,6 +4050,7 @@ var MortalKombat;
             this.groupFighters.addChild(this.tutorial);
         };
         Fighters.prototype.onButtonClick = function (event) {
+            this.playButtonSound();
             switch (event.name) {
                 case Constants.BACK_MENU:
                     {
@@ -4075,6 +4086,13 @@ var MortalKombat;
                     }
                 default:
                     break;
+            }
+        };
+        Fighters.prototype.playButtonSound = function () {
+            if (Config.settingSound) {
+                GameData.Data.buttonSound.loop = false;
+                GameData.Data.buttonSound.volume = 0.5;
+                GameData.Data.buttonSound.play();
             }
         };
         Fighters.prototype.settingsCreate = function () {

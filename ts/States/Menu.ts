@@ -69,13 +69,14 @@ module MortalKombat {
             if(GameData.Data.music === undefined || GameData.Data.music === null){
                 GameData.Data.music = this.game.add.audio(GameData.Data.musicList[0][0]);
                 GameData.Data.buttonSound = this.game.add.audio(Sounds.button);
+                GameData.Data.iconSound = this.game.add.audio(Sounds.hit_move);
             }else{
                 GameData.Data.music.stop();
                 GameData.Data.music.key = GameData.Data.musicList[0][0];
             }
             GameData.Data.music.loop = true;
             GameData.Data.music.volume = GameData.Data.musicList[0][1];
-            GameData.Data.music.play();
+            if(Config.settingMusic) GameData.Data.music.play();
         }
 
         private createButtons():void{

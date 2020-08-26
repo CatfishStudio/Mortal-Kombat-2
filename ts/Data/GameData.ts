@@ -25,13 +25,14 @@ module GameData {
     export class Data {
         
         public static buttonSound:Phaser.Sound;
+        public static iconSound:Phaser.Sound;
         public static voiceSound:Phaser.Sound;
         public static playerSound:Phaser.Sound;
         public static opponentSound:Phaser.Sound;
         public static music:Phaser.Sound;
         public static musicSelected:number = 2;
         public static musicList:any[][] = [
-            [Sounds.music_menu, 0.5],
+            [Sounds.music_menu, 0.3],
             [Sounds.music_1, 0.1],
             [Sounds.music_2, 0.1]
         ];
