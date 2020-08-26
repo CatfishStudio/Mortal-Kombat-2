@@ -123,7 +123,7 @@ module MortalKombat {
                 else if(GameData.Data.user_upgrade_points < 5) this.tutorial.setText('Вам доступно ' + GameData.Data.user_upgrade_points + ' очка\nнераспределенного опыта');
                 else if(GameData.Data.user_upgrade_points > 5) this.tutorial.setText('Вам доступно ' + GameData.Data.user_upgrade_points + ' очков\nнераспределенного опыта');
                 else this.tutorial.setText('Вам доступно ' + GameData.Data.user_upgrade_points + ' очков\nнераспределенного опыта');
-            } else this.tutorial.setText('У вас осталось ' + GameData.Data.user_continue + ' попыток.\nНажмите на кнопку\n"Начать битву"');
+            } else this.tutorial.setText('У вас осталось ' + GameData.Data.user_continue + ' попыток\nчтобы победить Шао Кана\nи спасти земное царство');
 
             /* Upgrade */
             this.userUpgradeCharacteristics = new UpgradeCharacteristics(this.game, true);

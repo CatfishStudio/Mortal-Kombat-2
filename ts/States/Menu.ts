@@ -100,7 +100,7 @@ module MortalKombat {
             this.groupButtons.addChild(buttonInvite);
 
             //this.tutorial = new Tutorial(this.game, 'Нажмите на кнопку\n"Начать игру"\nчтобы начать\nновый турнир.');
-            this.tutorial = new Tutorial(this.game, 'Сразись с бойцами\nШао Кана. Победи его\nв турнире чтобы\nспаси мир.');
+            this.tutorial = new Tutorial(this.game, 'Сразись с бойцами\nШао Кана. Победи его\nв турнире чтобы спасти\nземное царство.');
             this.tutorial.x = Constants.GAME_WIDTH;
             this.tutorial.y = (Constants.GAME_HEIGHT - 175);
             this.groupMenu.addChild(this.tutorial);
@@ -215,7 +215,7 @@ module MortalKombat {
                 this.groupButtons.addChild(buttonContinue);
 
                 //this.tutorial.setText('Нажмите на кнопку\n"Продолжить"\nчтобы продолжить\n турнир.')
-                this.tutorial.setText('Продолжайте битву\nв турнире.\nПобеди Шао Кана.\nСпаси мир.');
+                this.tutorial.setText('Продолжайте битву\nв турнире.\nПобеди Шао Кана.\nСпаси земное царство.');
             }
         }
 

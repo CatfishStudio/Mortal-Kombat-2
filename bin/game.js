@@ -2227,7 +2227,7 @@ var GameData;
         /* инициализация новой игры */
         Data.initNewGame = function () {
             this.user_continue = 9;
-            this.user_upgrade_points = 10;
+            this.user_upgrade_points = 0;
             this.tournamentProgress = 0;
             this.id_enemies = [];
             this.saveData = "";
@@ -3870,7 +3870,7 @@ var MortalKombat;
             buttonInvite.name = Constants.INVITE;
             this.groupButtons.addChild(buttonInvite);
             //this.tutorial = new Tutorial(this.game, 'Нажмите на кнопку\n"Начать игру"\nчтобы начать\nновый турнир.');
-            this.tutorial = new Tutorial(this.game, 'Сразись с бойцами\nШао Кана. Победи его\nв турнире чтобы\nспаси мир.');
+            this.tutorial = new Tutorial(this.game, 'Сразись с бойцами\nШао Кана. Победи его\nв турнире чтобы спасти\nземное царство.');
             this.tutorial.x = Constants.GAME_WIDTH;
             this.tutorial.y = (Constants.GAME_HEIGHT - 175);
             this.groupMenu.addChild(this.tutorial);
@@ -3971,7 +3971,7 @@ var MortalKombat;
                 buttonContinue.name = Constants.CONTINUE;
                 this.groupButtons.addChild(buttonContinue);
                 //this.tutorial.setText('Нажмите на кнопку\n"Продолжить"\nчтобы продолжить\n турнир.')
-                this.tutorial.setText('Продолжайте битву\nв турнире.\nПобеди Шао Кана.\nСпаси мир.');
+                this.tutorial.setText('Продолжайте битву\nв турнире.\nПобеди Шао Кана.\nСпаси земное царство.');
             }
         };
         Menu.Name = "menu";
@@ -4229,7 +4229,7 @@ var MortalKombat;
                     this.tutorial.setText('Вам доступно ' + GameData.Data.user_upgrade_points + ' очков\nнераспределенного опыта');
             }
             else
-                this.tutorial.setText('У вас осталось ' + GameData.Data.user_continue + ' попыток.\nНажмите на кнопку\n"Начать битву"');
+                this.tutorial.setText('У вас осталось ' + GameData.Data.user_continue + ' попыток\nчтобы победить Шао Кана\nи спасти земное царство');
             /* Upgrade */
             this.userUpgradeCharacteristics = new UpgradeCharacteristics(this.game, true);
             this.userUpgradeCharacteristics.x = -500;
