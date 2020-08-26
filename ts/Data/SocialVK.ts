@@ -41,7 +41,7 @@ class SocialVK {
         jsonData += '}';
         jsonData += '}';
 
-        //VK.api('storage.set', { key: 'sfc_data', value: jsonData, global: 0 }, SocialVK.onVkDataSet, SocialVK.onVkSetDataError);
+        //VK.api('storage.set', { key: 'mk_data', value: jsonData, global: 0 }, SocialVK.onVkDataSet, SocialVK.onVkSetDataError);
 
         Utilits.Data.debugLog('VK SAVE DATA:', jsonData);
         return jsonData;
@@ -59,7 +59,7 @@ class SocialVK {
      * Загрузка данных с сервера VK
      */
     public static vkLoadData(onVkDataGet: any): void {
-        //VK.api('storage.get', { key: 'sfc_data' }, onVkDataGet, onVkDataGet);
+        //VK.api('storage.get', { key: 'mk_data' }, onVkDataGet, onVkDataGet);
     }
 
     public static onVkGetDataError(response: any): void {
