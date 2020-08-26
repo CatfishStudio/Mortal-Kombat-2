@@ -3844,6 +3844,7 @@ var MortalKombat;
                 GameData.Data.music = this.game.add.audio(GameData.Data.musicList[0][0]);
                 GameData.Data.buttonSound = this.game.add.audio(Sounds.button);
                 GameData.Data.iconSound = this.game.add.audio(Sounds.hit_move);
+                GameData.Data.voiceSound = this.game.add.audio(Sounds.fight);
             }
             else {
                 GameData.Data.music.stop();
@@ -4398,6 +4399,7 @@ var MortalKombat;
             this.dialog.event.add(this.onDialog, this);
             this.groupContent.addChild(this.dialog);
             this.dialog.showFight();
+            this.playSoundFight();
         };
         /* Произошло событие match на поле */
         Level.prototype.onMatch = function (hitType, hitCount, statusAction) {
@@ -4492,6 +4494,7 @@ var MortalKombat;
             this.game.stage.removeChildren();
         };
         Level.prototype.onButtonClick = function (event) {
+            this.playButtonSound();
             switch (event.name) {
                 case Constants.SURRENDER:
                     {
@@ -4499,6 +4502,7 @@ var MortalKombat;
                         this.animUser.changeAnimation(Constants.ANIMATION_TYPE_LOSE);
                         this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_WIN);
                         this.dialog.showDied();
+                        this.playSoundLost();
                         break;
                     }
                 case Constants.SETTINGS:
@@ -4527,6 +4531,13 @@ var MortalKombat;
                     break;
             }
         };
+        Level.prototype.playButtonSound = function () {
+            if (Config.settingSound) {
+                GameData.Data.buttonSound.loop = false;
+                GameData.Data.buttonSound.volume = 0.5;
+                GameData.Data.buttonSound.play();
+            }
+        };
         Level.prototype.settingsCreate = function () {
             this.tutorial.x = Constants.GAME_WIDTH;
             this.tutorial.y = (Constants.GAME_HEIGHT - 175);
@@ -4550,18 +4561,21 @@ var MortalKombat;
                 this.animUser.changeAnimation(Constants.ANIMATION_TYPE_WIN);
                 this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_LOSE);
                 this.dialog.showWins();
+                this.playSoundWin();
             }
             else if (this.persUser.life <= 0 && this.persEnemies.life > 0) { // Оппонент - победил
                 this.field.isGameOver();
                 this.animUser.changeAnimation(Constants.ANIMATION_TYPE_LOSE);
                 this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_WIN);
                 this.dialog.showDied();
+                this.playSoundLost();
             }
             else if (this.persUser.life <= 0 && this.persEnemies.life <= 0) { // Ничья
                 this.field.isGameOver();
                 this.animUser.changeAnimation(Constants.ANIMATION_TYPE_WIN);
                 this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_LOSE);
                 this.dialog.showWins();
+                this.playSoundWin();
             }
             else { // бой продолжается
             }
@@ -4569,7 +4583,10 @@ var MortalKombat;
         Level.prototype.onDialog = function (event) {
             Utilits.Data.debugLog("DIALOG EVENT:", event);
             if (event === DialodFightWinsDied.WINS) {
-                GameData.Data.user_upgrade_points++;
+                if (this.persEnemies.id === Constants.ID_GORO)
+                    GameData.Data.user_upgrade_points += 5;
+                else
+                    GameData.Data.user_upgrade_points += 2;
                 GameData.Data.tournamentProgress++;
             }
             else {
@@ -4591,6 +4608,30 @@ var MortalKombat;
             this.help.removeChildren();
             this.help.removeAll();
             this.groupContent.removeChild(this.help);
+        };
+        Level.prototype.playSoundFight = function () {
+            if (Config.settingSound) {
+                GameData.Data.voiceSound.key = Sounds.fight;
+                GameData.Data.voiceSound.loop = false;
+                GameData.Data.voiceSound.volume = 1.0;
+                GameData.Data.voiceSound.play();
+            }
+        };
+        Level.prototype.playSoundLost = function () {
+            if (Config.settingSound) {
+                GameData.Data.voiceSound.key = Sounds.lost;
+                GameData.Data.voiceSound.loop = false;
+                GameData.Data.voiceSound.volume = 1.0;
+                GameData.Data.voiceSound.play();
+            }
+        };
+        Level.prototype.playSoundWin = function () {
+            if (Config.settingSound) {
+                GameData.Data.voiceSound.key = Sounds.wins;
+                GameData.Data.voiceSound.loop = false;
+                GameData.Data.voiceSound.volume = 1.0;
+                GameData.Data.voiceSound.play();
+            }
         };
         Level.Name = "level";
         return Level;

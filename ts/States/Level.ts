@@ -112,6 +112,7 @@ module MortalKombat {
             this.dialog.event.add(this.onDialog, this);
             this.groupContent.addChild(this.dialog);
             this.dialog.showFight();
+            this.playSoundFight();
         }
 
         /* Произошло событие match на поле */
@@ -197,6 +198,7 @@ module MortalKombat {
         }
 
         private onButtonClick(event) {
+            this.playButtonSound();
             switch (event.name) {
                 case Constants.SURRENDER:
                     {
@@ -204,6 +206,7 @@ module MortalKombat {
                         this.animUser.changeAnimation(Constants.ANIMATION_TYPE_LOSE);
                         this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_WIN);
                         this.dialog.showDied();
+                        this.playSoundLost();
                         break;
                     }
                 case Constants.SETTINGS:
@@ -230,6 +233,14 @@ module MortalKombat {
                     }   
                 default:
                     break;
+            }
+        }
+
+        private playButtonSound():void {
+            if(Config.settingSound){
+                GameData.Data.buttonSound.loop = false;
+                GameData.Data.buttonSound.volume = 0.5;
+                GameData.Data.buttonSound.play();
             }
         }
 
@@ -260,16 +271,19 @@ module MortalKombat {
                 this.animUser.changeAnimation(Constants.ANIMATION_TYPE_WIN);
                 this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_LOSE);
                 this.dialog.showWins();
+                this.playSoundWin();
             }else if(this.persUser.life <= 0 && this.persEnemies.life > 0){ // Оппонент - победил
                 this.field.isGameOver();
                 this.animUser.changeAnimation(Constants.ANIMATION_TYPE_LOSE);
                 this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_WIN);
                 this.dialog.showDied();
+                this.playSoundLost();
             }else if(this.persUser.life <= 0 && this.persEnemies.life <= 0){ // Ничья
                 this.field.isGameOver();
                 this.animUser.changeAnimation(Constants.ANIMATION_TYPE_WIN);
                 this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_LOSE);
                 this.dialog.showWins();
+                this.playSoundWin();
             }else{ // бой продолжается
 
             }
@@ -278,7 +292,8 @@ module MortalKombat {
         private onDialog(event:any):void {
             Utilits.Data.debugLog("DIALOG EVENT:", event);
             if(event === DialodFightWinsDied.WINS){
-                GameData.Data.user_upgrade_points++;
+                if(this.persEnemies.id === Constants.ID_GORO) GameData.Data.user_upgrade_points += 5;
+                else GameData.Data.user_upgrade_points += 2;
                 GameData.Data.tournamentProgress++;
             }else{
                 GameData.Data.user_continue--;
@@ -298,6 +313,33 @@ module MortalKombat {
             this.help.removeChildren();
             this.help.removeAll();
             this.groupContent.removeChild(this.help);
+        }
+
+        private playSoundFight():void {
+            if(Config.settingSound){
+                GameData.Data.voiceSound.key = Sounds.fight;
+                GameData.Data.voiceSound.loop = false;
+                GameData.Data.voiceSound.volume = 1.0;
+                GameData.Data.voiceSound.play();
+            }
+        }
+
+        private playSoundLost():void {
+            if(Config.settingSound){
+                GameData.Data.voiceSound.key = Sounds.lost;
+                GameData.Data.voiceSound.loop = false;
+                GameData.Data.voiceSound.volume = 1.0;
+                GameData.Data.voiceSound.play();
+            }
+        }
+
+        private playSoundWin():void {
+            if(Config.settingSound){
+                GameData.Data.voiceSound.key = Sounds.wins;
+                GameData.Data.voiceSound.loop = false;
+                GameData.Data.voiceSound.volume = 1.0;
+                GameData.Data.voiceSound.play();
+            }
         }
     }
 }
