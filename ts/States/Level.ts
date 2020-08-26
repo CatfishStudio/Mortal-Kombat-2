@@ -387,7 +387,7 @@ module MortalKombat {
 
                     if(Config.settingSound) {
                         GameData.Data.userSound.play();
-                        GameData.Data.enemieSound.play();
+                        if(this.animEnemies.block === false) GameData.Data.enemieSound.play();
                     }
                 }
             }else{ // Игрок получает урон
@@ -407,8 +407,8 @@ module MortalKombat {
                     else GameData.Data.userSound.key = Sounds.m_d_03;
 
                     if(Config.settingSound) {
-                        GameData.Data.userSound.play();
                         GameData.Data.enemieSound.play();
+                        if(this.animUser.block === false) GameData.Data.userSound.play();
                     }
                 }
             }

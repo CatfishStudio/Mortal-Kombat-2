@@ -4694,7 +4694,8 @@ var MortalKombat;
                         GameData.Data.enemieSound.key = Sounds.m_d_03;
                     if (Config.settingSound) {
                         GameData.Data.userSound.play();
-                        GameData.Data.enemieSound.play();
+                        if (this.animEnemies.block === false)
+                            GameData.Data.enemieSound.play();
                     }
                 }
             }
@@ -4719,8 +4720,9 @@ var MortalKombat;
                     else
                         GameData.Data.userSound.key = Sounds.m_d_03;
                     if (Config.settingSound) {
-                        GameData.Data.userSound.play();
                         GameData.Data.enemieSound.play();
+                        if (this.animUser.block === false)
+                            GameData.Data.userSound.play();
                     }
                 }
             }
