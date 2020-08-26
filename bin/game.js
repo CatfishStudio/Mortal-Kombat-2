@@ -447,6 +447,7 @@ var Match3;
         };
         /* Обмен местами в массиве выбранных пользователем  объектов =================================== */
         Field.prototype.matchExchangeUnits = function () {
+            this.playSound();
             this.matchFieldBlocked = true;
             var iUnit1 = this.matchSelectUnit1.posColumnI;
             var jUnit1 = this.matchSelectUnit1.posRowJ;
@@ -487,6 +488,7 @@ var Match3;
             }
         };
         Field.prototype.matchBackExchangeUnits = function () {
+            this.playSound();
             var iUnit1 = this.matchSelectUnit1.posColumnI;
             var jUnit1 = this.matchSelectUnit1.posRowJ;
             var iUnit2 = this.matchSelectUnit2.posColumnI;
@@ -1726,6 +1728,13 @@ var Match3;
         };
         Field.prototype.timerPause = function (status) {
             this.timer.pauseTimer(status);
+        };
+        Field.prototype.playSound = function () {
+            if (Config.settingSound) {
+                GameData.Data.iconSound.loop = false;
+                GameData.Data.iconSound.volume = 1.0;
+                GameData.Data.iconSound.play();
+            }
         };
         Field.MATCH_COLUMNS = 6;
         Field.MATCH_ROWS = 6;

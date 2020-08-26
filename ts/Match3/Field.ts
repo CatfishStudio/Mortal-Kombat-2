@@ -292,7 +292,9 @@ module Match3 {
         /* Обмен местами в массиве выбранных пользователем  объектов =================================== */
         private matchExchangeUnits():void
         {
-            this.matchFieldBlocked = true;
+			this.playSound();
+
+			this.matchFieldBlocked = true;
             let iUnit1:number = this.matchSelectUnit1.posColumnI;
             let jUnit1:number = this.matchSelectUnit1.posRowJ;
             let iUnit2:number = this.matchSelectUnit2.posColumnI;
@@ -341,7 +343,9 @@ module Match3 {
 
         private matchBackExchangeUnits():void
         {
-            let iUnit1:number = this.matchSelectUnit1.posColumnI;
+			this.playSound();
+
+			let iUnit1:number = this.matchSelectUnit1.posColumnI;
             let jUnit1:number = this.matchSelectUnit1.posRowJ;
             let iUnit2:number = this.matchSelectUnit2.posColumnI;
             let jUnit2:number = this.matchSelectUnit2.posRowJ;
@@ -1663,5 +1667,13 @@ module Match3 {
 		public timerPause(status:boolean):void {
 			this.timer.pauseTimer(status);
 		}
+
+		private playSound():void {
+            if(Config.settingSound){
+                GameData.Data.iconSound.loop = false;
+                GameData.Data.iconSound.volume = 1.0;
+                GameData.Data.iconSound.play();
+            }
+        }
     }
 }
