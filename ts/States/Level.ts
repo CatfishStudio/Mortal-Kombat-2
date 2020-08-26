@@ -393,10 +393,10 @@ module MortalKombat {
             GameData.Data.enemieSound.loop = false;
             GameData.Data.enemieSound.volume = 1.0;
             if(statusAction === Field.ACTION_PLAYER){ // Противник получает урон
-                if(hitType === Constants.HAND) GameData.Data.userSound.key = Sounds.hit_1_5;
+                if(hitType === Constants.HAND) GameData.Data.userSound.key = Sounds.hit_2_4;
                 if(hitType === Constants.LEG) GameData.Data.userSound.key = Sounds.hit_1_5;
                 if(hitType === Constants.TWIST) GameData.Data.userSound.key = Sounds.hit_1_5;
-                if(hitType === Constants.UPPERCUT) GameData.Data.userSound.key = Sounds.hit_1_5;
+                if(hitType === Constants.UPPERCUT) GameData.Data.userSound.key = Sounds.hit_2_4;
                 
                 if(hitType === Constants.BLOCK) {
                     GameData.Data.enemieSound.key = Sounds.hit_block;
@@ -414,10 +414,10 @@ module MortalKombat {
                     }
                 }
             }else{ // Игрок получает урон
-                if(hitType === Constants.HAND) GameData.Data.enemieSound.key = Sounds.hit_1_5;
+                if(hitType === Constants.HAND) GameData.Data.enemieSound.key = Sounds.hit_2_4;
                 if(hitType === Constants.LEG) GameData.Data.enemieSound.key = Sounds.hit_1_5;
                 if(hitType === Constants.TWIST) GameData.Data.enemieSound.key = Sounds.hit_1_5;
-                if(hitType === Constants.UPPERCUT) GameData.Data.enemieSound.key = Sounds.hit_1_5;
+                if(hitType === Constants.UPPERCUT) GameData.Data.enemieSound.key = Sounds.hit_2_4;
                 
                 if(hitType === Constants.BLOCK) {
                     GameData.Data.userSound.key = Sounds.hit_block;

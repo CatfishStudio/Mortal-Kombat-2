@@ -155,11 +155,12 @@ module Fabrique {
                     }
                 }
             }else{
-                this.textValueCap1.text = (Constants.DAMAGE_LEG*GameData.Data.personages[GameData.Data.tournamentProgress].leg).toString();
-                this.textValueCap2.text = (Constants.DAMAGE_HAND*GameData.Data.personages[GameData.Data.tournamentProgress].hand).toString();
-                this.textValueCap3.text = (Constants.DAMAGE_BLOCK*GameData.Data.personages[GameData.Data.tournamentProgress].block).toString();
-                this.textValueCap4.text = (Constants.DAMAGE_UPPERCUT*GameData.Data.personages[GameData.Data.tournamentProgress].uppercut).toString();
-                this.textValueCap5.text = (Constants.DAMAGE_TWIST*GameData.Data.personages[GameData.Data.tournamentProgress].twist).toString();
+                let personageEnemies: GameData.IPersonage = GameData.Data.getPersonage(GameData.Data.id_enemies[GameData.Data.tournamentProgress]);
+                this.textValueCap1.text = (Constants.DAMAGE_LEG * personageEnemies.leg).toString();
+                this.textValueCap2.text = (Constants.DAMAGE_HAND * personageEnemies.hand).toString();
+                this.textValueCap3.text = (Constants.DAMAGE_BLOCK * personageEnemies.block).toString();
+                this.textValueCap4.text = (Constants.DAMAGE_UPPERCUT * personageEnemies.uppercut).toString();
+                this.textValueCap5.text = (Constants.DAMAGE_TWIST * personageEnemies.twist).toString();
                 this.upgradePoints.text = "";
             }            
 

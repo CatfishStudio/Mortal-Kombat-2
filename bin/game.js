@@ -3490,11 +3490,12 @@ var Fabrique;
                 }
             }
             else {
-                this.textValueCap1.text = (Constants.DAMAGE_LEG * GameData.Data.personages[GameData.Data.tournamentProgress].leg).toString();
-                this.textValueCap2.text = (Constants.DAMAGE_HAND * GameData.Data.personages[GameData.Data.tournamentProgress].hand).toString();
-                this.textValueCap3.text = (Constants.DAMAGE_BLOCK * GameData.Data.personages[GameData.Data.tournamentProgress].block).toString();
-                this.textValueCap4.text = (Constants.DAMAGE_UPPERCUT * GameData.Data.personages[GameData.Data.tournamentProgress].uppercut).toString();
-                this.textValueCap5.text = (Constants.DAMAGE_TWIST * GameData.Data.personages[GameData.Data.tournamentProgress].twist).toString();
+                var personageEnemies = GameData.Data.getPersonage(GameData.Data.id_enemies[GameData.Data.tournamentProgress]);
+                this.textValueCap1.text = (Constants.DAMAGE_LEG * personageEnemies.leg).toString();
+                this.textValueCap2.text = (Constants.DAMAGE_HAND * personageEnemies.hand).toString();
+                this.textValueCap3.text = (Constants.DAMAGE_BLOCK * personageEnemies.block).toString();
+                this.textValueCap4.text = (Constants.DAMAGE_UPPERCUT * personageEnemies.uppercut).toString();
+                this.textValueCap5.text = (Constants.DAMAGE_TWIST * personageEnemies.twist).toString();
                 this.upgradePoints.text = "";
             }
             var tween = this.game.add.tween(this);
@@ -4739,13 +4740,13 @@ var MortalKombat;
             GameData.Data.enemieSound.volume = 1.0;
             if (statusAction === Field.ACTION_PLAYER) { // Противник получает урон
                 if (hitType === Constants.HAND)
-                    GameData.Data.userSound.key = Sounds.hit_1_5;
+                    GameData.Data.userSound.key = Sounds.hit_2_4;
                 if (hitType === Constants.LEG)
                     GameData.Data.userSound.key = Sounds.hit_1_5;
                 if (hitType === Constants.TWIST)
                     GameData.Data.userSound.key = Sounds.hit_1_5;
                 if (hitType === Constants.UPPERCUT)
-                    GameData.Data.userSound.key = Sounds.hit_1_5;
+                    GameData.Data.userSound.key = Sounds.hit_2_4;
                 if (hitType === Constants.BLOCK) {
                     GameData.Data.enemieSound.key = Sounds.hit_block;
                     if (Config.settingSound) {
@@ -4766,13 +4767,13 @@ var MortalKombat;
             }
             else { // Игрок получает урон
                 if (hitType === Constants.HAND)
-                    GameData.Data.enemieSound.key = Sounds.hit_1_5;
+                    GameData.Data.enemieSound.key = Sounds.hit_2_4;
                 if (hitType === Constants.LEG)
                     GameData.Data.enemieSound.key = Sounds.hit_1_5;
                 if (hitType === Constants.TWIST)
                     GameData.Data.enemieSound.key = Sounds.hit_1_5;
                 if (hitType === Constants.UPPERCUT)
-                    GameData.Data.enemieSound.key = Sounds.hit_1_5;
+                    GameData.Data.enemieSound.key = Sounds.hit_2_4;
                 if (hitType === Constants.BLOCK) {
                     GameData.Data.userSound.key = Sounds.hit_block;
                     if (Config.settingSound) {
