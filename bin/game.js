@@ -2236,7 +2236,7 @@ var GameData;
         /* инициализация новой игры */
         Data.initNewGame = function () {
             this.user_continue = 9;
-            this.user_upgrade_points = 1;
+            this.user_upgrade_points = 0;
             this.tournamentProgress = 0;
             this.id_enemies = [];
             this.saveData = "";
@@ -4194,7 +4194,7 @@ var MortalKombat;
             }
         };
         Fighters.prototype.helpCreate = function () {
-            this.help = new Help(this.game, this.groupFighters, "ВЫБОР БОЙЦА.");
+            this.help = new Help(this.game, this.groupFighters, "ВЫБОР БОЙЦА.\n1. Нажмите на иконку персонажа.\n\nОбратите внимание на окно характеристик персонажа,\nданная информация поможет вам выбрать персонаж\nс наилучшими характеристиками.\n\n2. Нажмите кнопку \"Выбрать бойца\" чтобы перейти в\n    окно турнира.");
             this.help.event.add(this.onButtonClick.bind(this));
         };
         Fighters.prototype.helpClose = function () {
