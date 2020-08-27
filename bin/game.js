@@ -2779,8 +2779,10 @@ var Fabrique;
             this.block = false;
             this.stanceAnimation();
             this.blood = new Blood(this.game);
+            //this.blood.x = -100;
             this.blood.x = -100;
-            this.blood.y = this.y - 50;
+            //this.blood.y = this.y - 50;
+            this.blood.y = -50;
             this.addChild(this.blood);
         };
         AnimationFighter.prototype.stanceAnimation = function () {
