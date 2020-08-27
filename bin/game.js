@@ -4706,7 +4706,7 @@ var MortalKombat;
             this.playMenuMusic();
         };
         Level.prototype.helpCreate = function () {
-            this.help = new Help(this.game, this.groupContent, "БИТВА.");
+            this.help = new Help(this.game, this.groupContent, "- Чтобы победить у вашего противника должа закончится жизнь.\n\n- Чтобы нанести удар противнику вы должны собрать на поле\nв ряд 3-и и более фишек.\n\n- Удары наносятся по очереди, сначала вы потом ваш оппонент.\n\n- На принятие решения у вас есть 10-ть секунд, после чего\nход переходит к противнику.\n\n- Кнопка \"Сдаться\" прерывает битву, но в таком случае вам\nбудет записан проигрыш.");
             this.help.event.add(this.onButtonClick.bind(this));
         };
         Level.prototype.helpClose = function () {
