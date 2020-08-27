@@ -2557,12 +2557,13 @@ var SocialVK = /** @class */ (function () {
         jsonData += '"life": ' + GameData.Data.user_personage.life.toString();
         jsonData += '}';
         jsonData += '}';
-        try {
+        /*
+        try{
             VK.api('storage.set', { key: 'mk2q_data', value: jsonData, global: 0 }, SocialVK.onVkDataSet, SocialVK.onVkSetDataError);
-        }
-        catch (e) {
+        }catch (e){
             console.log(e);
         }
+        */
         Utilits.Data.debugLog('VK SAVE DATA:', jsonData);
         return jsonData;
     };
@@ -2576,12 +2577,13 @@ var SocialVK = /** @class */ (function () {
      * Загрузка данных с сервера VK --------------------------------------------------------------------------------------------
      */
     SocialVK.vkLoadData = function (onVkDataGet) {
-        try {
+        /*
+        try{
             VK.api('storage.get', { key: 'mk2q_data' }, onVkDataGet, onVkDataGet);
-        }
-        catch (e) {
+        }catch (e){
             console.log(e);
         }
+        */
     };
     SocialVK.LoadData = function (jsonData) {
         Utilits.Data.debugLog('jsonData', jsonData);
@@ -3864,10 +3866,10 @@ var MortalKombat;
             this.logo.x = (this.game.world.width / 2) - (this.logo.width / 2);
             this.logo.y = (this.game.world.height / 2) - (this.logo.height / 2);
             this.processText = this.game.add.text(325, 650, '. . . . . . . . . . . . . . . . . . . . . .', { font: "18px Georgia", fill: "#505050", align: "left" });
-            this.count = 7;
+            this.countProgress = 7;
             this.timer = this.game.time.create(false);
             this.timer.loop(1000, this.onTimerComplete, this);
-            this.timer.start(this.count);
+            this.timer.start(this.countProgress);
             this.game.load.onLoadStart.add(this.onLoadStart, this);
             this.game.load.onFileComplete.add(this.onFileComplete, this);
             this.game.load.onLoadComplete.add(this.onLoadComplete, this);
@@ -3877,13 +3879,13 @@ var MortalKombat;
             }
         };
         Preloader.prototype.onTimerComplete = function () {
-            this.count++;
-            if (this.count >= 7) {
+            this.countProgress++;
+            if (this.countProgress >= 7) {
                 this.processText.text = ". ";
-                this.count = 1;
+                this.countProgress = 1;
             }
             else {
-                for (var i = 0; i < this.count; i++) {
+                for (var i = 0; i < this.countProgress; i++) {
                     this.processText.text += ". ";
                 }
             }

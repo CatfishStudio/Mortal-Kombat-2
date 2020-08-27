@@ -13,7 +13,7 @@ module MortalKombat {
         private loadPercent: number = 0;
         private processText: Phaser.Text;
         private timer: Phaser.Timer;
-        private count: number;
+        private countProgress: number;
         
         constructor() {
             super();
@@ -31,10 +31,10 @@ module MortalKombat {
             this.logo.y = (this.game.world.height/2) - (this.logo.height / 2);
 
             this.processText = this.game.add.text(325, 650, '. . . . . . . . . . . . . . . . . . . . . .', { font: "18px Georgia", fill: "#505050", align: "left" });
-            this.count = 7;
+            this.countProgress = 7;
             this.timer = this.game.time.create(false);
             this.timer.loop(1000, this.onTimerComplete, this);
-            this.timer.start(this.count);
+            this.timer.start(this.countProgress);
             this.game.load.onLoadStart.add(this.onLoadStart, this);
             this.game.load.onFileComplete.add(this.onFileComplete, this);
             this.game.load.onLoadComplete.add(this.onLoadComplete, this);
@@ -46,12 +46,12 @@ module MortalKombat {
         }
 
         private onTimerComplete(): void {
-            this.count++;
-            if(this.count >= 7) {
+            this.countProgress++;
+            if(this.countProgress >= 7) {
                 this.processText.text = ". ";
-                this.count = 1;
+                this.countProgress = 1;
             } else {
-                for(let i:number = 0; i < this.count; i++){
+                for(let i:number = 0; i < this.countProgress; i++){
                     this.processText.text += ". ";
                 }
             }
