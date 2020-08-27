@@ -62,6 +62,7 @@ module Fabrique {
             this.animation.onComplete.add(this.onComplete, this);
             this.animation.onStart.addOnce(this.onStart, this);
             if(this.animationType === Constants.ANIMATION_TYPE_LOSE && this.personageAnimation.id !== Constants.ID_SHAOKAHN && this.personageAnimation.id !== Constants.ID_GORO) this.animation.play(10, true, true);
+            else if(this.animationType === Constants.ANIMATION_TYPE_STANCE) this.animation.play(10, true, false);
             else this.animation.play(10, false, false);
         }
 

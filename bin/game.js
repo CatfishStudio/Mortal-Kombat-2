@@ -2827,6 +2827,8 @@ var Fabrique;
             this.animation.onStart.addOnce(this.onStart, this);
             if (this.animationType === Constants.ANIMATION_TYPE_LOSE && this.personageAnimation.id !== Constants.ID_SHAOKAHN && this.personageAnimation.id !== Constants.ID_GORO)
                 this.animation.play(10, true, true);
+            else if (this.animationType === Constants.ANIMATION_TYPE_STANCE)
+                this.animation.play(10, true, false);
             else
                 this.animation.play(10, false, false);
         };
@@ -4526,11 +4528,13 @@ var MortalKombat;
             if (hitType === null && hitCount === null) {
                 if (statusAction === Field.ACTION_PLAYER) {
                     this.animUser.block = false; // сбросить блок игрока
-                    this.animUser.stanceAnimation();
+                    //this.animUser.stanceAnimation();
+                    this.animUser.changeAnimation(Constants.ANIMATION_TYPE_STANCE);
                 }
                 else {
                     this.animEnemies.block = false; // сбросить блок оппонента
-                    this.animEnemies.stanceAnimation();
+                    //this.animEnemies.stanceAnimation();
+                    this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_STANCE);
                 }
                 this.checkGameOver(); // проверка завершения битвы
             }
