@@ -54,7 +54,7 @@ class SocialVK {
     }
 
     public static onVkSetDataError(response: any): void {
-        //console.error('VK SET DATA ERROR:', response);
+        //Utilits.Data.debugLog('VK SET DATA ERROR:', response);
     }
 
     /**
