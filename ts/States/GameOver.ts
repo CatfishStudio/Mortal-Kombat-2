@@ -22,7 +22,7 @@ module MortalKombat {
 
             if(GameData.Data.tournamentProgress <= 12) {
                 this.groupContent.addChild(new Phaser.Sprite(this.game, 0, 0, Images.game_lose));
-                this.messageText = this.game.add.text(400, 100, 'Вы проиграли!\nУ вас не осталось попыток.\nВы можете начать игру заново, \nили получить 1 дополнительную попытку\nза приглашение друга в игру.', { font: "18px Georgia", fill: "#AAAAAA", align: "left" });
+                this.messageText = this.game.add.text(400, 100, 'Вы проиграли!\nУ вас не осталось попыток.\nВы можете начать игру заново, \nили получить 1-ну дополнительную попытку\nза приглашение друга в игру.', { font: "18px Georgia", fill: "#AAAAAA", align: "left" });
             } else { 
                 this.groupContent.addChild(new Phaser.Sprite(this.game, 0, 0, Images.game_win));
                 this.messageText = this.game.add.text(55, 500, 'Вы победили!\nВам удалось спасти\nземное царство от вторжения.', { font: "18px Georgia", fill: "#DDDDDD", align: "left" });

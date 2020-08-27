@@ -2857,10 +2857,10 @@ var Fabrique;
             if (GameData.Data.user_personage === undefined)
                 return;
             if (animation.name === GameData.Data.user_personage.id) {
-                Utilits.Data.debugLog("ANIMATION currentFrame", animation.currentFrame);
-                Utilits.Data.debugLog("SPRITE Type", sprite.animationType);
-                Utilits.Data.debugLog("SPRITE width", sprite.width);
-                Utilits.Data.debugLog("SPRITE height", sprite.height);
+                //Utilits.Data.debugLog("ANIMATION currentFrame", animation.currentFrame);
+                //Utilits.Data.debugLog("SPRITE Type", (sprite as AnimationFighter).animationType);
+                //Utilits.Data.debugLog("SPRITE width", sprite.width);
+                //Utilits.Data.debugLog("SPRITE height", sprite.height);
                 this.x = 100 - (sprite.width / 2);
                 this.y = Constants.GAME_HEIGHT - (sprite.height * 2) + 150;
             }
@@ -4724,7 +4724,7 @@ var MortalKombat;
             this.playMenuMusic();
         };
         Level.prototype.helpCreate = function () {
-            this.help = new Help(this.game, this.groupContent, "- Чтобы победить у вашего противника должа закончится жизнь.\n\n- Чтобы нанести удар противнику вы должны собрать на поле\nв ряд 3-и и более фишек.\n\n- Удары наносятся по очереди, сначала вы потом ваш оппонент.\n\n- На принятие решения у вас есть 10-ть секунд, после чего\nход переходит к противнику.\n\n- Кнопка \"Сдаться\" прерывает битву, но в таком случае вам\nбудет записан проигрыш.");
+            this.help = new Help(this.game, this.groupContent, "- Чтобы победить противника у него должа закончиться жизнь.\n\n- Чтобы нанести удар противнику вы должны собрать на поле\nв ряд 3-и и более фишек.\n\n- Удары наносятся по очереди, сначала вы потом ваш оппонент.\n\n- На принятие решения у вас есть 10-ть секунд, после чего\nход переходит к противнику.\n\n- Кнопка \"Сдаться\" завершает битву и вам будет засчитано\n поражение в битве.");
             this.help.event.add(this.onButtonClick.bind(this));
         };
         Level.prototype.helpClose = function () {
@@ -4858,7 +4858,7 @@ var MortalKombat;
             this.inviteButton.name = Constants.INVITE;
             if (GameData.Data.tournamentProgress <= 12) {
                 this.groupContent.addChild(new Phaser.Sprite(this.game, 0, 0, Images.game_lose));
-                this.messageText = this.game.add.text(400, 100, 'Вы проиграли!\nУ вас не осталось попыток.\nВы можете начать игру заново, \nили получить 1 дополнительную попытку\nза приглашение друга в игру.', { font: "18px Georgia", fill: "#AAAAAA", align: "left" });
+                this.messageText = this.game.add.text(400, 100, 'Вы проиграли!\nУ вас не осталось попыток.\nВы можете начать игру заново, \nили получить 1-ну дополнительную попытку\nза приглашение друга в игру.', { font: "18px Georgia", fill: "#AAAAAA", align: "left" });
             }
             else {
                 this.groupContent.addChild(new Phaser.Sprite(this.game, 0, 0, Images.game_win));
