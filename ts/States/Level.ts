@@ -145,6 +145,7 @@ module MortalKombat {
         {
             //Utilits.Data.debugLog("LEVEL: match |", "type=" + hitType + " | count=" + hitCount + " | status=" + statusAction);
             if(GameData.Data.tournamentProgress == 0 && this.tutorial.x != Constants.GAME_WIDTH) this.tutorial.x = Constants.GAME_WIDTH;
+            if(this.field.gameOver === true) return;
 
             if(hitType === null && hitCount=== null){
                 if(statusAction === Field.ACTION_PLAYER){

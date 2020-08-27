@@ -50,7 +50,7 @@ module Match3 {
         private modeAI:boolean;             // режим искуственного интелекта (по умолчанию отключен в начале)
         private matchLevelJSON:any;      // json игрового поля
 		private statusAction:String;    // статус активного игрока
-		private gameOver:boolean;		// флаг завершения боя
+		public gameOver:boolean;		// флаг завершения боя
 
         constructor(game:Phaser.Game, parent:any){
             super(game, parent);
