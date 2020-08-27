@@ -2510,12 +2510,12 @@ var SocialVK = /** @class */ (function () {
     SocialVK.vkWallPost = function () {
         if (GameData.Data.tournamentProgress > 0) {
             var postPers = GameData.Data.getPersonage(GameData.Data.id_enemies[GameData.Data.tournamentProgress - 1]);
-            //VK.api("wall.post", { message: 'Я одержал победу в схватке с ' + postPers.name + ' в игре Mortal Kombat 2 Quest.\nДрузья присоединяйтесь к игре https://vk.com/app0000000', attachments: 'photo-62618339_457239049' });
+            //VK.api("wall.post", { message: 'Я одержал победу в схватке с ' + postPers.name + ' в игре Mortal Kombat 2 Quest.\nДрузья присоединяйтесь к игре https://vk.com/app4693053', attachments: 'photo-62618339_457239049' });
         }
     };
     /* Пост на стену в соцсети */
     SocialVK.vkWallPostWin = function () {
-        //VK.api("wall.post", { message: 'Примите поздравления! Вы победили Шао Кана в игре Mortal Kombat 2 Quest.\nДрузья присоединяйтесь к игре https://vk.com/app0000000', attachments: 'photo-62618339_457239049' });
+        //VK.api("wall.post", { message: 'Примите поздравления! Вы победили Шао Кана в игре Mortal Kombat 2 Quest.\nДрузья присоединяйтесь к игре https://vk.com/app4693053', attachments: 'photo-62618339_457239049' });
     };
     /**
      * Сохранение данных на сервер VK --------------------------------------------------------------------------------------------
@@ -3982,6 +3982,7 @@ var MortalKombat;
                     }
                 case Constants.INVITE:
                     {
+                        SocialVK.vkInvite();
                         break;
                     }
                 default:
@@ -4859,6 +4860,7 @@ var MortalKombat;
                     }
                 case Constants.INVITE:
                     {
+                        SocialVK.vkInvite();
                         GameData.Data.user_continue += 1;
                         this.game.state.start(MortalKombat.Tournament.Name, true, false);
                         break;

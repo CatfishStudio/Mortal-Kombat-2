@@ -11,10 +11,15 @@
 <body>
         <div id="content"></div>
         <script type="text/javascript">
-                /* Initialization VKontakte */
-		VK.init({
-			apiId: 4693053
-		});
+                try {
+                        /* Initialization VKontakte */
+                        VK.init({
+                                apiId: 4693053
+                        });
+                }
+                catch (e) {
+                        console.log("VK API: is not work");
+                }
 		var game = new MortalKombat.Game.getInstance();
 		game.start();
 	</script>
