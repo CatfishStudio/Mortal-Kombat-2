@@ -4612,11 +4612,13 @@ var MortalKombat;
                     }
                 case Constants.HELP:
                     {
+                        this.field.timerPause(true);
                         this.helpCreate();
                         break;
                     }
                 case Constants.HELP_CLOSE:
                     {
+                        this.field.timerPause(false);
                         this.helpClose();
                         break;
                     }
@@ -4681,6 +4683,7 @@ var MortalKombat;
                 else
                     GameData.Data.user_upgrade_points += 1;
                 GameData.Data.tournamentProgress++;
+                SocialVK.vkWallPost();
             }
             else {
                 GameData.Data.user_continue--;
@@ -4836,6 +4839,7 @@ var MortalKombat;
                 this.messageText = this.game.add.text(55, 500, 'Вы победили!\nВам удалось спасти\nземное царство от вторжения.', { font: "18px Georgia", fill: "#DDDDDD", align: "left" });
                 this.closeButton.x = (Constants.GAME_WIDTH / 2) - (255 / 2);
                 this.inviteButton.alpha = 0;
+                SocialVK.vkWallPostWin();
             }
             this.groupContent.addChild(new Phaser.Sprite(this.game, 0, 0, Images.BackgroundImage));
             this.groupContent.addChild(this.messageText);

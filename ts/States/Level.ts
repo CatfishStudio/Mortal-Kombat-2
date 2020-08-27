@@ -249,11 +249,13 @@ module MortalKombat {
                     }
                 case Constants.HELP:
                     {
+                        this.field.timerPause(true);
                         this.helpCreate();
                         break;
                     }  
                 case Constants.HELP_CLOSE:
                     {
+                        this.field.timerPause(false);
                         this.helpClose();
                         break;
                     }   
