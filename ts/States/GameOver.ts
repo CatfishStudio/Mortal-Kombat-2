@@ -28,6 +28,7 @@ module MortalKombat {
                 this.messageText = this.game.add.text(55, 500, 'Вы победили!\nВам удалось спасти\nземное царство от вторжения.', { font: "18px Georgia", fill: "#DDDDDD", align: "left" });
                 this.closeButton.x = (Constants.GAME_WIDTH / 2) - (255 / 2);
                 this.inviteButton.alpha = 0;
+                SocialVK.vkWallPostWin();
             }
             this.groupContent.addChild(new Phaser.Sprite(this.game, 0, 0, Images.BackgroundImage));
             this.groupContent.addChild(this.messageText);

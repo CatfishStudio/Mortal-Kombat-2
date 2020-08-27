@@ -321,6 +321,7 @@ module MortalKombat {
                 if(this.persEnemies.id === Constants.ID_GORO) GameData.Data.user_upgrade_points += 5;
                 else GameData.Data.user_upgrade_points += 1;
                 GameData.Data.tournamentProgress++;
+                SocialVK.vkWallPost();
             }else{
                 GameData.Data.user_continue--;
             }
