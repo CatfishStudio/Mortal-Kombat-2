@@ -37,7 +37,7 @@ module Fabrique {
             graphicOverlay.inputEnabled = true;
             this.addChild(graphicOverlay);
 
-            let labelText:Phaser.Text = new Phaser.Text(this.game, startX+50, startY+55, text, { font: "18px Georgia", fill: "#FFFFFF", align: "left" });
+            let labelText:Phaser.Text = new Phaser.Text(this.game, startX+50, startY+35, text, { font: "18px Georgia", fill: "#FFFFFF", align: "left" });
             this.addChild(labelText);
 
             /* button close */

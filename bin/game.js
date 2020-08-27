@@ -3211,7 +3211,7 @@ var Fabrique;
             graphicOverlay.endFill();
             graphicOverlay.inputEnabled = true;
             this.addChild(graphicOverlay);
-            var labelText = new Phaser.Text(this.game, startX + 50, startY + 55, text, { font: "18px Georgia", fill: "#FFFFFF", align: "left" });
+            var labelText = new Phaser.Text(this.game, startX + 50, startY + 35, text, { font: "18px Georgia", fill: "#FFFFFF", align: "left" });
             this.addChild(labelText);
             /* button close */
             var buttonClose = new Phaser.Button(this.game, startX + 180, startY + 350, Sheet.ButtonClose, this.onButtonCloseClick, this, 1, 2);
@@ -4375,7 +4375,7 @@ var MortalKombat;
             }
         };
         Tournament.prototype.helpCreate = function () {
-            this.help = new Help(this.game, this.groupContent, "ТУРНИР.\n\n- В самом начале игры вам доступно 9-ть попыток.\nКаждое поражение в битве будет отнимать у вас по 1-й попытке.\nВы проиграете когда у вас запончится последняя попытка.\n\n- Каждая победа в битве дает вам 1 очко опыта.\nПолученные очки опыта вы можете потратить на прокачку\nхарактеристик своего персонажа.");
+            this.help = new Help(this.game, this.groupContent, "ТУРНИР.\n\n- В самом начале игры вам доступно 9-ть попыток.\nКаждое поражение в битве будет отнимать у вас по 1-й попытке.\nВы проиграете когда у вас запончится последняя попытка.\n\n- Каждая победа в битве дает вам 1 очко опыта.\nПолученные очки опыта вы можете потратить на прокачку\nхарактеристик вашего персонажа.\n\n- Чтобы начать бой нажмите на кнопку \"Начать битву\".");
             this.help.event.add(this.onButtonClick.bind(this));
         };
         Tournament.prototype.helpClose = function () {
