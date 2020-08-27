@@ -2550,7 +2550,7 @@ var SocialVK = /** @class */ (function () {
         //Utilits.Data.debugLog('VK SET DATA:', response);
     };
     SocialVK.onVkSetDataError = function (response) {
-        //console.error('VK SET DATA ERROR:', response);
+        //Utilits.Data.debugLog('VK SET DATA ERROR:', response);
     };
     /**
      * Загрузка данных с сервера VK --------------------------------------------------------------------------------------------
@@ -4040,7 +4040,7 @@ var MortalKombat;
             }
         };
         Menu.prototype.onVkDataGet = function (object) {
-            Utilits.Data.debugLog('ON VK DATA GET:', object.response.toString());
+            Utilits.Data.debugLog('ON VK DATA GET:', object);
             if (SocialVK.LoadData(object.response.toString()) === true) {
                 this.continueGame();
             }

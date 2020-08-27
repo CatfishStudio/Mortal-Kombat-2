@@ -321,7 +321,7 @@ module MortalKombat {
         private onDialog(event:any):void {
             //Utilits.Data.debugLog("DIALOG EVENT:", event);
             if(event === DialodFightWinsDied.WINS){
-                if(this.persEnemies.id === Constants.ID_GORO) GameData.Data.user_upgrade_points += 5;
+                if(this.persEnemies.id === Constants.ID_GORO) GameData.Data.user_upgrade_points += 1;
                 else GameData.Data.user_upgrade_points += 1;
                 GameData.Data.tournamentProgress++;
                 SocialVK.vkWallPost();
