@@ -8,13 +8,13 @@ class SocialVK {
     public static vkWallPost(): void {
         if (GameData.Data.tournamentProgress > 0) {
             let postPers: GameData.IPersonage =  GameData.Data.getPersonage(GameData.Data.id_enemies[GameData.Data.tournamentProgress-1]);
-            //VK.api("wall.post", { message: 'Я одержал победу в схватке с ' + postPers.name + ' в игре Mortal Kombat 2 Quest.\nДрузья присоединяйтесь к игре https://vk.com/app0000000', attachments: 'photo-62618339_457239049' });
+            //VK.api("wall.post", { message: 'Я одержал победу в схватке с ' + postPers.name + ' в игре Mortal Kombat 2 Quest.\nДрузья присоединяйтесь к игре https://vk.com/app4693053', attachments: 'photo-62618339_457239049' });
         }
     }
 
     /* Пост на стену в соцсети */
     public static vkWallPostWin(): void {
-        //VK.api("wall.post", { message: 'Примите поздравления! Вы победили Шао Кана в игре Mortal Kombat 2 Quest.\nДрузья присоединяйтесь к игре https://vk.com/app0000000', attachments: 'photo-62618339_457239049' });
+        //VK.api("wall.post", { message: 'Примите поздравления! Вы победили Шао Кана в игре Mortal Kombat 2 Quest.\nДрузья присоединяйтесь к игре https://vk.com/app4693053', attachments: 'photo-62618339_457239049' });
     }
 
     /**

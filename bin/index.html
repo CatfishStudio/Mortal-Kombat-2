@@ -4,12 +4,17 @@
         <title>MortalKombat</title>
         <meta charset="utf-8" />
         <link rel="stylesheet" href="css/default.css" type="text/css" />
+        <script src="//vk.com/js/api/xd_connection.js?2" type="text/javascript"></script>
         <script src="phaser/phaser.min.js"></script>
         <script src="game.js"></script>
 </head>
 <body>
         <div id="content"></div>
-	<script type="text/javascript">
+        <script type="text/javascript">
+                /* Initialization VKontakte */
+		VK.init({
+			apiId: 4693053
+		});
 		var game = new MortalKombat.Game.getInstance();
 		game.start();
 	</script>
