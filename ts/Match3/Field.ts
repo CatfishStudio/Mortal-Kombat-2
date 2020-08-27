@@ -370,7 +370,7 @@ module Match3 {
             this.tween1.start();
             this.tween2.start();
 
-            Utilits.Data.debugLog("matchBackExchangeUnits", "Tween: START");
+            //Utilits.Data.debugLog("matchBackExchangeUnits", "Tween: START");
         }
 
         private matchSelectUnitsClear():void
@@ -1661,7 +1661,7 @@ module Match3 {
 			this.timer.destroyTimer();
 			this.timer.event.remove(this.onTimerEnd);
 			this.removeChild(this.timer);
-			Utilits.Data.debugLog("GAME:", "OVER");
+			//Utilits.Data.debugLog("GAME:", "OVER");
 		}
 
 		public timerPause(status:boolean):void {

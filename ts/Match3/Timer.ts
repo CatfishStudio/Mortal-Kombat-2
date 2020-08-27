@@ -51,7 +51,7 @@ module Match3 {
             if (this.count === 0) {
                 this.event.dispatch(Timer.TIMER_END);
                 this.count = 10;
-                Utilits.Data.debugLog("TIMER:", "ON COMPLETE");
+                //Utilits.Data.debugLog("TIMER:", "ON COMPLETE");
             }
         }
 
@@ -68,7 +68,7 @@ module Match3 {
         public pauseTimer(value: boolean = true): void {
             if (value === true) this.timer.stop(false);
             else this.timer.start(this.count);
-            Utilits.Data.debugLog("TIMER PAUSE:", value);
+            //Utilits.Data.debugLog("TIMER PAUSE:", value);
             this.status = Timer.STATUS_PAUSE;
         }
 
@@ -76,7 +76,7 @@ module Match3 {
             this.timer.stop(false);
             this.count = 10;
             this.setMessage("............................");
-            Utilits.Data.debugLog("TIMER:", "STOP");
+            //Utilits.Data.debugLog("TIMER:", "STOP");
             this.status = Timer.STATUS_STOP;
         }
 
@@ -89,7 +89,7 @@ module Match3 {
             this.timer.destroy();
             this.count = 0;
             this.setMessage("............................");
-            Utilits.Data.debugLog("TIMER:", "STOP");
+            //Utilits.Data.debugLog("TIMER:", "STOP");
             this.status = Timer.STATUS_STOP;
         }
 

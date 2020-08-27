@@ -1,22 +1,24 @@
 class SocialVK {
+    /* Пригласить */
     public static vkInvite(): void {
         //VK.callMethod("showInviteBox");
     }
 
+    /* Пост на стену в соцсети */
     public static vkWallPost(): void {
-        //if (GameData.Data.progressIndex > 0) {
-        //    let postPers: GameData.IPersonage = GameData.Data.personages[GameData.Data.tournamentListIds[GameData.Data.progressIndex - 1]];
-            //VK.api("wall.post", { message: 'Я одержал победу в схватке с ' + postPers.name + ' в игре Street Fighter Cards.\nДрузья присоединяйтесь к игре https://vk.com/app5883565', attachments: 'photo-62618339_456239021' });
-        //}
+        if (GameData.Data.tournamentProgress > 0) {
+            let postPers: GameData.IPersonage =  GameData.Data.getPersonage(GameData.Data.id_enemies[GameData.Data.tournamentProgress-1]);
+            //VK.api("wall.post", { message: 'Я одержал победу в схватке с ' + postPers.name + ' в игре Mortal Kombat 2 Quest.\nДрузья присоединяйтесь к игре https://vk.com/app0000000', attachments: 'photo-62618339_457239049' });
+        }
     }
 
-
+    /* Пост на стену в соцсети */
     public static vkWallPostWin(): void {
-        //VK.api("wall.post", { message: 'Примите поздравления! Вы победили всех соперников в игре Street Fighter Cards.\nДрузья присоединяйтесь к игре https://vk.com/app5883565', attachments: 'photo-62618339_456239022' });
+        //VK.api("wall.post", { message: 'Примите поздравления! Вы победили Шао Кана в игре Mortal Kombat 2 Quest.\nДрузья присоединяйтесь к игре https://vk.com/app0000000', attachments: 'photo-62618339_457239049' });
     }
 
     /**
-     * Сохранение данных на сервер VK
+     * Сохранение данных на сервер VK --------------------------------------------------------------------------------------------
      */
     public static vkSaveData(): string {
         let jsonData: string = '{';
@@ -41,7 +43,7 @@ class SocialVK {
         jsonData += '}';
         jsonData += '}';
 
-        //VK.api('storage.set', { key: 'mk_data', value: jsonData, global: 0 }, SocialVK.onVkDataSet, SocialVK.onVkSetDataError);
+        //VK.api('storage.set', { key: 'mk2q_data', value: jsonData, global: 0 }, SocialVK.onVkDataSet, SocialVK.onVkSetDataError);
 
         Utilits.Data.debugLog('VK SAVE DATA:', jsonData);
         return jsonData;
@@ -56,14 +58,10 @@ class SocialVK {
     }
 
     /**
-     * Загрузка данных с сервера VK
+     * Загрузка данных с сервера VK --------------------------------------------------------------------------------------------
      */
     public static vkLoadData(onVkDataGet: any): void {
-        //VK.api('storage.get', { key: 'mk_data' }, onVkDataGet, onVkDataGet);
-    }
-
-    public static onVkGetDataError(response: any): void {
-        console.error('VK GET DATA ERROR:', response);
+        //VK.api('storage.get', { key: 'mk2q_data' }, onVkDataGet, onVkDataGet);
     }
 
     public static LoadData(jsonData: string): boolean {

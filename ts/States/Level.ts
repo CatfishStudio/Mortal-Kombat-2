@@ -143,7 +143,7 @@ module MortalKombat {
         /* Произошло событие match на поле */
         public onMatch(hitType:any, hitCount:number, statusAction:String):void
         {
-            Utilits.Data.debugLog("LEVEL: match |", "type=" + hitType + " | count=" + hitCount + " | status=" + statusAction);
+            //Utilits.Data.debugLog("LEVEL: match |", "type=" + hitType + " | count=" + hitCount + " | status=" + statusAction);
             if(GameData.Data.tournamentProgress == 0 && this.tutorial.x != Constants.GAME_WIDTH) this.tutorial.x = Constants.GAME_WIDTH;
 
             if(hitType === null && hitCount=== null){
@@ -291,7 +291,7 @@ module MortalKombat {
         }
 
         private checkGameOver():void {
-            Utilits.Data.debugLog("LIFE:", this.persUser.life + " | " + this.persEnemies.life);
+            Utilits.Data.debugLog("LIFE:", "User = " + this.persUser.life + " | Enemies = " + this.persEnemies.life);
             if(this.persUser.life > 0 && this.persEnemies.life <= 0){ // Пользователь - победил
                 this.field.isGameOver();
                 this.animUser.changeAnimation(Constants.ANIMATION_TYPE_WIN);
@@ -316,7 +316,7 @@ module MortalKombat {
         }
 
         private onDialog(event:any):void {
-            Utilits.Data.debugLog("DIALOG EVENT:", event);
+            //Utilits.Data.debugLog("DIALOG EVENT:", event);
             if(event === DialodFightWinsDied.WINS){
                 if(this.persEnemies.id === Constants.ID_GORO) GameData.Data.user_upgrade_points += 5;
                 else GameData.Data.user_upgrade_points += 1;

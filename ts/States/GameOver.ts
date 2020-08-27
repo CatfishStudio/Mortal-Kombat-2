@@ -55,6 +55,7 @@ module MortalKombat {
                     }
                 case Constants.INVITE:
                     {
+                        SocialVK.vkInvite();
                         GameData.Data.user_continue += 1;
                         this.game.state.start(Tournament.Name, true, false);
                         break;

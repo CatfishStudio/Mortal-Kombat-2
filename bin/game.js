@@ -85,7 +85,7 @@ var Match3;
             if (this.count === 0) {
                 this.event.dispatch(Timer.TIMER_END);
                 this.count = 10;
-                Utilits.Data.debugLog("TIMER:", "ON COMPLETE");
+                //Utilits.Data.debugLog("TIMER:", "ON COMPLETE");
             }
         };
         Timer.prototype.run = function () {
@@ -102,14 +102,14 @@ var Match3;
                 this.timer.stop(false);
             else
                 this.timer.start(this.count);
-            Utilits.Data.debugLog("TIMER PAUSE:", value);
+            //Utilits.Data.debugLog("TIMER PAUSE:", value);
             this.status = Timer.STATUS_PAUSE;
         };
         Timer.prototype.stopTimer = function () {
             this.timer.stop(false);
             this.count = 10;
             this.setMessage("............................");
-            Utilits.Data.debugLog("TIMER:", "STOP");
+            //Utilits.Data.debugLog("TIMER:", "STOP");
             this.status = Timer.STATUS_STOP;
         };
         Timer.prototype.resetTimer = function () {
@@ -120,7 +120,7 @@ var Match3;
             this.timer.destroy();
             this.count = 0;
             this.setMessage("............................");
-            Utilits.Data.debugLog("TIMER:", "STOP");
+            //Utilits.Data.debugLog("TIMER:", "STOP");
             this.status = Timer.STATUS_STOP;
         };
         Timer.prototype.setMessage = function (value) {
@@ -509,7 +509,7 @@ var Match3;
             this.tween2.onComplete.add(this.matchSelectUnitsClear, this);
             this.tween1.start();
             this.tween2.start();
-            Utilits.Data.debugLog("matchBackExchangeUnits", "Tween: START");
+            //Utilits.Data.debugLog("matchBackExchangeUnits", "Tween: START");
         };
         Field.prototype.matchSelectUnitsClear = function () {
             if (this.tween1 === undefined || this.tween2 === undefined) {
@@ -1724,7 +1724,7 @@ var Match3;
             this.timer.destroyTimer();
             this.timer.event.remove(this.onTimerEnd);
             this.removeChild(this.timer);
-            Utilits.Data.debugLog("GAME:", "OVER");
+            //Utilits.Data.debugLog("GAME:", "OVER");
         };
         Field.prototype.timerPause = function (status) {
             this.timer.pauseTimer(status);
@@ -2502,20 +2502,23 @@ var GameData;
 var SocialVK = /** @class */ (function () {
     function SocialVK() {
     }
+    /* Пригласить */
     SocialVK.vkInvite = function () {
         //VK.callMethod("showInviteBox");
     };
+    /* Пост на стену в соцсети */
     SocialVK.vkWallPost = function () {
-        //if (GameData.Data.progressIndex > 0) {
-        //    let postPers: GameData.IPersonage = GameData.Data.personages[GameData.Data.tournamentListIds[GameData.Data.progressIndex - 1]];
-        //VK.api("wall.post", { message: 'Я одержал победу в схватке с ' + postPers.name + ' в игре Street Fighter Cards.\nДрузья присоединяйтесь к игре https://vk.com/app5883565', attachments: 'photo-62618339_456239021' });
-        //}
+        if (GameData.Data.tournamentProgress > 0) {
+            var postPers = GameData.Data.getPersonage(GameData.Data.id_enemies[GameData.Data.tournamentProgress - 1]);
+            //VK.api("wall.post", { message: 'Я одержал победу в схватке с ' + postPers.name + ' в игре Mortal Kombat 2 Quest.\nДрузья присоединяйтесь к игре https://vk.com/app0000000', attachments: 'photo-62618339_457239049' });
+        }
     };
+    /* Пост на стену в соцсети */
     SocialVK.vkWallPostWin = function () {
-        //VK.api("wall.post", { message: 'Примите поздравления! Вы победили всех соперников в игре Street Fighter Cards.\nДрузья присоединяйтесь к игре https://vk.com/app5883565', attachments: 'photo-62618339_456239022' });
+        //VK.api("wall.post", { message: 'Примите поздравления! Вы победили Шао Кана в игре Mortal Kombat 2 Quest.\nДрузья присоединяйтесь к игре https://vk.com/app0000000', attachments: 'photo-62618339_457239049' });
     };
     /**
-     * Сохранение данных на сервер VK
+     * Сохранение данных на сервер VK --------------------------------------------------------------------------------------------
      */
     SocialVK.vkSaveData = function () {
         var jsonData = '{';
@@ -2539,7 +2542,7 @@ var SocialVK = /** @class */ (function () {
         jsonData += '"life": ' + GameData.Data.user_personage.life.toString();
         jsonData += '}';
         jsonData += '}';
-        //VK.api('storage.set', { key: 'sfc_data', value: jsonData, global: 0 }, SocialVK.onVkDataSet, SocialVK.onVkSetDataError);
+        //VK.api('storage.set', { key: 'mk2q_data', value: jsonData, global: 0 }, SocialVK.onVkDataSet, SocialVK.onVkSetDataError);
         Utilits.Data.debugLog('VK SAVE DATA:', jsonData);
         return jsonData;
     };
@@ -2550,13 +2553,10 @@ var SocialVK = /** @class */ (function () {
         //console.error('VK SET DATA ERROR:', response);
     };
     /**
-     * Загрузка данных с сервера VK
+     * Загрузка данных с сервера VK --------------------------------------------------------------------------------------------
      */
     SocialVK.vkLoadData = function (onVkDataGet) {
-        //VK.api('storage.get', { key: 'sfc_data' }, onVkDataGet, onVkDataGet);
-    };
-    SocialVK.onVkGetDataError = function (response) {
-        console.error('VK GET DATA ERROR:', response);
+        //VK.api('storage.get', { key: 'mk2q_data' }, onVkDataGet, onVkDataGet);
     };
     SocialVK.LoadData = function (jsonData) {
         Utilits.Data.debugLog('jsonData', jsonData);
@@ -4013,7 +4013,14 @@ var MortalKombat;
         };
         Menu.prototype.continueGame = function () {
             /* Загрузка сохраненных данных */
-            var loadData = SocialVK.LoadData(GameData.Data.saveData);
+            Utilits.Data.debugLog("SAVE DATA:", GameData.Data.saveData);
+            var loadData = false;
+            if (GameData.Data.saveData !== undefined) {
+                loadData = SocialVK.LoadData(GameData.Data.saveData);
+            }
+            else {
+                SocialVK.vkLoadData(this.onVkDataGet.bind(this));
+            }
             if (loadData === true) {
                 var buttonStart = new Phaser.Button(this.game, 75, 475, Sheet.ButtonStartNewGame, this.onButtonClick, this, 1, 2);
                 buttonStart.name = Constants.START;
@@ -4029,6 +4036,12 @@ var MortalKombat;
                 this.groupButtons.addChild(buttonContinue);
                 //this.tutorial.setText('Нажмите на кнопку\n"Продолжить"\nчтобы продолжить\n турнир.')
                 this.tutorial.setText('Продолжайте битву\nна турнире.\nПобеди Шао Кана.\nСпаси земное царство.');
+            }
+        };
+        Menu.prototype.onVkDataGet = function (object) {
+            Utilits.Data.debugLog('ON VK DATA GET:', object.response.toString());
+            if (SocialVK.LoadData(object.response.toString()) === true) {
+                this.continueGame();
             }
         };
         Menu.Name = "menu";
@@ -4481,7 +4494,7 @@ var MortalKombat;
         };
         /* Произошло событие match на поле */
         Level.prototype.onMatch = function (hitType, hitCount, statusAction) {
-            Utilits.Data.debugLog("LEVEL: match |", "type=" + hitType + " | count=" + hitCount + " | status=" + statusAction);
+            //Utilits.Data.debugLog("LEVEL: match |", "type=" + hitType + " | count=" + hitCount + " | status=" + statusAction);
             if (GameData.Data.tournamentProgress == 0 && this.tutorial.x != Constants.GAME_WIDTH)
                 this.tutorial.x = Constants.GAME_WIDTH;
             if (hitType === null && hitCount === null) {
@@ -4634,7 +4647,7 @@ var MortalKombat;
             }
         };
         Level.prototype.checkGameOver = function () {
-            Utilits.Data.debugLog("LIFE:", this.persUser.life + " | " + this.persEnemies.life);
+            Utilits.Data.debugLog("LIFE:", "User = " + this.persUser.life + " | Enemies = " + this.persEnemies.life);
             if (this.persUser.life > 0 && this.persEnemies.life <= 0) { // Пользователь - победил
                 this.field.isGameOver();
                 this.animUser.changeAnimation(Constants.ANIMATION_TYPE_WIN);
@@ -4660,7 +4673,7 @@ var MortalKombat;
             }
         };
         Level.prototype.onDialog = function (event) {
-            Utilits.Data.debugLog("DIALOG EVENT:", event);
+            //Utilits.Data.debugLog("DIALOG EVENT:", event);
             if (event === DialodFightWinsDied.WINS) {
                 if (this.persEnemies.id === Constants.ID_GORO)
                     GameData.Data.user_upgrade_points += 5;

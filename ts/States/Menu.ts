@@ -160,7 +160,7 @@ module MortalKombat {
                     }
                 case Constants.INVITE:
                     {
-                        
+                        SocialVK.vkInvite();
                         break;
                     }                
                 default:
@@ -198,7 +198,14 @@ module MortalKombat {
 
         private continueGame(){
             /* Загрузка сохраненных данных */
-            let loadData = SocialVK.LoadData(GameData.Data.saveData);
+            Utilits.Data.debugLog("SAVE DATA:", GameData.Data.saveData);
+
+            let loadData:boolean = false;
+            if(GameData.Data.saveData !== undefined){
+                loadData = SocialVK.LoadData(GameData.Data.saveData);
+            }else{
+                SocialVK.vkLoadData(this.onVkDataGet.bind(this));
+            }            
 
             if(loadData === true){
                 let buttonStart = new Phaser.Button(this.game, 75, 475, Sheet.ButtonStartNewGame, this.onButtonClick, this, 1, 2);
@@ -222,6 +229,11 @@ module MortalKombat {
             }
         }
 
-        
+        private onVkDataGet(object: any):void {
+            Utilits.Data.debugLog('ON VK DATA GET:', object.response.toString());            
+            if(SocialVK.LoadData(object.response.toString()) === true){
+                this.continueGame();
+            }
+        }
     }
 }
