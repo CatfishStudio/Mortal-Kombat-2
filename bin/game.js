@@ -4194,7 +4194,7 @@ var MortalKombat;
             }
         };
         Fighters.prototype.helpCreate = function () {
-            this.help = new Help(this.game, this.groupFighters, "ВЫБОР БОЙЦА.\n1. Нажмите на иконку персонажа.\n\nОбратите внимание на окно характеристик персонажа,\nданная информация поможет вам выбрать персонаж\nс наилучшими характеристиками.\n\n2. Нажмите кнопку \"Выбрать бойца\" чтобы перейти в\n    окно турнира.");
+            this.help = new Help(this.game, this.groupFighters, "ВЫБОР БОЙЦА.\n\n1. Нажмите на иконку персонажа.\n\nОбратите внимание на окно характеристик персонажа,\nданная информация поможет вам выбрать персонаж\nс наилучшими характеристиками.\n\n2. Нажмите кнопку \"Выбрать бойца\" чтобы перейти в\n    окно турнира.");
             this.help.event.add(this.onButtonClick.bind(this));
         };
         Fighters.prototype.helpClose = function () {
@@ -4375,7 +4375,7 @@ var MortalKombat;
             }
         };
         Tournament.prototype.helpCreate = function () {
-            this.help = new Help(this.game, this.groupContent, "БАШНЯ.");
+            this.help = new Help(this.game, this.groupContent, "ТУРНИР.\n\n- В самом начале игры вам доступно 9-ть попыток.\nКаждое поражение в битве будет отнимать у вас по 1-й попытке.\nВы проиграете когда у вас запончится последняя попытка.\n\n- Каждая победа в битве дает вам 1 очко опыта.\nПолученные очки опыта вы можете потратить на прокачку\nхарактеристик своего персонажа.");
             this.help.event.add(this.onButtonClick.bind(this));
         };
         Tournament.prototype.helpClose = function () {

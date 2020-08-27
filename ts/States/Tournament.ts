@@ -203,7 +203,7 @@ module MortalKombat {
         }
 
         private helpCreate() {
-            this.help = new Help(this.game, this.groupContent, "БАШНЯ.");
+            this.help = new Help(this.game, this.groupContent, "ТУРНИР.\n\n- В самом начале игры вам доступно 9-ть попыток.\nКаждое поражение в битве будет отнимать у вас по 1-й попытке.\nВы проиграете когда у вас запончится последняя попытка.\n\n- Каждая победа в битве дает вам 1 очко опыта.\nПолученные очки опыта вы можете потратить на прокачку\nхарактеристик вашего персонажа.");
             this.help.event.add(this.onButtonClick.bind(this));
         }
 
