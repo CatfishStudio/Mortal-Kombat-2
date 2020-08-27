@@ -118,15 +118,10 @@ module MortalKombat {
             this.tutorial.x = -500;
             this.tutorial.y = 150;
             this.groupContent.addChild(this.tutorial);
-            if(GameData.Data.user_upgrade_points > 0) {
-                if(GameData.Data.user_upgrade_points === 1) this.tutorial.setText('Вам доступно ' + GameData.Data.user_upgrade_points + ' очко\nнераспределенного опыта');
-                else if(GameData.Data.user_upgrade_points < 5) this.tutorial.setText('Вам доступно ' + GameData.Data.user_upgrade_points + ' очка\nнераспределенного опыта');
-                else if(GameData.Data.user_upgrade_points > 5) this.tutorial.setText('Вам доступно ' + GameData.Data.user_upgrade_points + ' очков\nнераспределенного опыта');
-                else this.tutorial.setText('Вам доступно ' + GameData.Data.user_upgrade_points + ' очков\nнераспределенного опыта');
-            } else this.tutorial.setText('У вас осталось ' + GameData.Data.user_continue + ' попыток\nчтобы победить Шао Кана\nи спасти земное царство');
-
+            this.updateTutorial();
+            
             /* Upgrade */
-            this.userUpgradeCharacteristics = new UpgradeCharacteristics(this.game, true);
+            this.userUpgradeCharacteristics = new UpgradeCharacteristics(this.game, true, this);
             this.userUpgradeCharacteristics.x = -500;
             this.userUpgradeCharacteristics.y = 300;
             this.groupContent.addChild(this.userUpgradeCharacteristics);
@@ -136,6 +131,15 @@ module MortalKombat {
             this.groupContent.addChild(this.enemyUpgradeCharacteristics);
 
             Utilits.Data.debugLog("TOURNAMENT - CHANGE USER PERSOHAGE", GameData.Data.user_personage);
+        }
+
+        public updateTutorial():void {
+            if(GameData.Data.user_upgrade_points > 0) {
+                if(GameData.Data.user_upgrade_points === 1) this.tutorial.setText('Вам доступно ' + GameData.Data.user_upgrade_points + ' очко\nнераспределенного опыта');
+                else if(GameData.Data.user_upgrade_points < 5) this.tutorial.setText('Вам доступно ' + GameData.Data.user_upgrade_points + ' очка\nнераспределенного опыта');
+                else if(GameData.Data.user_upgrade_points > 5) this.tutorial.setText('Вам доступно ' + GameData.Data.user_upgrade_points + ' очков\nнераспределенного опыта');
+                else this.tutorial.setText('Вам доступно ' + GameData.Data.user_upgrade_points + ' очков\nнераспределенного опыта');
+            } else this.tutorial.setText('У вас осталось ' + GameData.Data.user_continue + ' попыток\nчтобы победить Шао Кана\nи спасти земное царство');
         }
 
         private onButtonClick(event) {

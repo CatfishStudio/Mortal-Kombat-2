@@ -2236,7 +2236,7 @@ var GameData;
         /* инициализация новой игры */
         Data.initNewGame = function () {
             this.user_continue = 9;
-            this.user_upgrade_points = 0;
+            this.user_upgrade_points = 1;
             this.tournamentProgress = 0;
             this.id_enemies = [];
             this.saveData = "";
@@ -3369,10 +3369,12 @@ var Fabrique;
 (function (Fabrique) {
     var UpgradeCharacteristics = /** @class */ (function (_super) {
         __extends(UpgradeCharacteristics, _super);
-        function UpgradeCharacteristics(game, thisIsPersonage) {
+        function UpgradeCharacteristics(game, thisIsPersonage, tournament) {
             if (thisIsPersonage === void 0) { thisIsPersonage = true; }
+            if (tournament === void 0) { tournament = null; }
             var _this = _super.call(this, game) || this;
             _this.thisIsPersonage = thisIsPersonage;
+            _this.tournament = tournament;
             _this.updateTransform();
             _this.init();
             return _this;
@@ -3568,6 +3570,7 @@ var Fabrique;
         };
         UpgradeCharacteristics.prototype.removeUpgradeButtons = function () {
             if (GameData.Data.user_upgrade_points == 0) {
+                this.tournament.updateTutorial();
                 this.removeChild(this.buttonLegPlus);
                 this.removeChild(this.buttonHandPlus);
                 this.removeChild(this.buttonBlockPlus);
@@ -4289,6 +4292,19 @@ var MortalKombat;
             this.tutorial.x = -500;
             this.tutorial.y = 150;
             this.groupContent.addChild(this.tutorial);
+            this.updateTutorial();
+            /* Upgrade */
+            this.userUpgradeCharacteristics = new UpgradeCharacteristics(this.game, true, this);
+            this.userUpgradeCharacteristics.x = -500;
+            this.userUpgradeCharacteristics.y = 300;
+            this.groupContent.addChild(this.userUpgradeCharacteristics);
+            this.enemyUpgradeCharacteristics = new UpgradeCharacteristics(this.game, false);
+            this.enemyUpgradeCharacteristics.x = Constants.GAME_WIDTH + 500;
+            this.enemyUpgradeCharacteristics.y = 300;
+            this.groupContent.addChild(this.enemyUpgradeCharacteristics);
+            Utilits.Data.debugLog("TOURNAMENT - CHANGE USER PERSOHAGE", GameData.Data.user_personage);
+        };
+        Tournament.prototype.updateTutorial = function () {
             if (GameData.Data.user_upgrade_points > 0) {
                 if (GameData.Data.user_upgrade_points === 1)
                     this.tutorial.setText('Вам доступно ' + GameData.Data.user_upgrade_points + ' очко\nнераспределенного опыта');
@@ -4301,16 +4317,6 @@ var MortalKombat;
             }
             else
                 this.tutorial.setText('У вас осталось ' + GameData.Data.user_continue + ' попыток\nчтобы победить Шао Кана\nи спасти земное царство');
-            /* Upgrade */
-            this.userUpgradeCharacteristics = new UpgradeCharacteristics(this.game, true);
-            this.userUpgradeCharacteristics.x = -500;
-            this.userUpgradeCharacteristics.y = 300;
-            this.groupContent.addChild(this.userUpgradeCharacteristics);
-            this.enemyUpgradeCharacteristics = new UpgradeCharacteristics(this.game, false);
-            this.enemyUpgradeCharacteristics.x = Constants.GAME_WIDTH + 500;
-            this.enemyUpgradeCharacteristics.y = 300;
-            this.groupContent.addChild(this.enemyUpgradeCharacteristics);
-            Utilits.Data.debugLog("TOURNAMENT - CHANGE USER PERSOHAGE", GameData.Data.user_personage);
         };
         Tournament.prototype.onButtonClick = function (event) {
             this.playButtonSound();
@@ -4681,7 +4687,7 @@ var MortalKombat;
             //Utilits.Data.debugLog("DIALOG EVENT:", event);
             if (event === DialodFightWinsDied.WINS) {
                 if (this.persEnemies.id === Constants.ID_GORO)
-                    GameData.Data.user_upgrade_points += 5;
+                    GameData.Data.user_upgrade_points += 1;
                 else
                     GameData.Data.user_upgrade_points += 1;
                 GameData.Data.tournamentProgress++;

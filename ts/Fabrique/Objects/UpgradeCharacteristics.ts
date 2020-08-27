@@ -28,10 +28,12 @@ module Fabrique {
         private upgradePoints:Phaser.Text;
 
         private thisIsPersonage:boolean;
+        private tournament:any;
         
-        constructor(game:Phaser.Game, thisIsPersonage:boolean = true){
+        constructor(game:Phaser.Game, thisIsPersonage:boolean = true, tournament:any = null){
             super(game);
             this.thisIsPersonage = thisIsPersonage;
+            this.tournament = tournament;
             this.updateTransform();
             this.init();
         }
@@ -238,6 +240,7 @@ module Fabrique {
         private removeUpgradeButtons()
         {
             if(GameData.Data.user_upgrade_points == 0){
+                this.tournament.updateTutorial();
                 this.removeChild(this.buttonLegPlus);
                 this.removeChild(this.buttonHandPlus);
                 this.removeChild(this.buttonBlockPlus);
