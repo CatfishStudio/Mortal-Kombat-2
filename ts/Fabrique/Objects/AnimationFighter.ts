@@ -88,10 +88,10 @@ module Fabrique {
         private onStart(sprite, animation): void {
             if(GameData.Data.user_personage === undefined) return;
             if(animation.name === GameData.Data.user_personage.id){
-                Utilits.Data.debugLog("ANIMATION currentFrame", animation.currentFrame);
-                Utilits.Data.debugLog("SPRITE Type", (sprite as AnimationFighter).animationType);
-                Utilits.Data.debugLog("SPRITE width", sprite.width);
-                Utilits.Data.debugLog("SPRITE height", sprite.height);
+                //Utilits.Data.debugLog("ANIMATION currentFrame", animation.currentFrame);
+                //Utilits.Data.debugLog("SPRITE Type", (sprite as AnimationFighter).animationType);
+                //Utilits.Data.debugLog("SPRITE width", sprite.width);
+                //Utilits.Data.debugLog("SPRITE height", sprite.height);
 
                 this.x = 100 - (sprite.width / 2);
                 this.y = Constants.GAME_HEIGHT - (sprite.height*2) + 150;

@@ -2236,8 +2236,8 @@ var GameData;
         /* инициализация новой игры */
         Data.initNewGame = function () {
             this.user_continue = 9;
-            this.user_upgrade_points = 100; ////0;
-            this.tournamentProgress = 11; /////0;
+            this.user_upgrade_points = 0;
+            this.tournamentProgress = 0;
             this.id_enemies = [];
             this.saveData = "";
             var listIDs = [
