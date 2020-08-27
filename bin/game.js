@@ -2236,8 +2236,8 @@ var GameData;
         /* инициализация новой игры */
         Data.initNewGame = function () {
             this.user_continue = 9;
-            this.user_upgrade_points = 0;
-            this.tournamentProgress = 0;
+            this.user_upgrade_points = 100; ////0;
+            this.tournamentProgress = 11; /////0;
             this.id_enemies = [];
             this.saveData = "";
             var listIDs = [
@@ -2844,11 +2844,10 @@ var Fabrique;
                 return;
             else {
                 if (this.block === false)
-                    this.stanceAnimation();
+                    this.changeAnimation(Constants.ANIMATION_TYPE_STANCE); //this.stanceAnimation();
                 else
                     this.blockAnimation();
             }
-            this.updateTransform();
         };
         AnimationFighter.prototype.showBlood = function () {
             if (this.block === false)
@@ -4528,12 +4527,10 @@ var MortalKombat;
             if (hitType === null && hitCount === null) {
                 if (statusAction === Field.ACTION_PLAYER) {
                     this.animUser.block = false; // сбросить блок игрока
-                    //this.animUser.stanceAnimation();
                     this.animUser.changeAnimation(Constants.ANIMATION_TYPE_STANCE);
                 }
                 else {
                     this.animEnemies.block = false; // сбросить блок оппонента
-                    //this.animEnemies.stanceAnimation();
                     this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_STANCE);
                 }
                 this.checkGameOver(); // проверка завершения битвы

@@ -75,10 +75,9 @@ module Fabrique {
             }
             if(this.animationType === Constants.ANIMATION_TYPE_STANCE || this.animationType === Constants.ANIMATION_TYPE_WIN || this.animationType === Constants.ANIMATION_TYPE_LOSE) return;
             else {
-                if(this.block === false) this.stanceAnimation();
+                if(this.block === false) this.changeAnimation(Constants.ANIMATION_TYPE_STANCE); //this.stanceAnimation();
                 else this.blockAnimation();
             }
-            this.updateTransform();
         }
 
         public showBlood():void
