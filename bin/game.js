@@ -1817,7 +1817,7 @@ var Constants = /** @class */ (function () {
 var Config = /** @class */ (function () {
     function Config() {
     }
-    Config.buildDev = true;
+    Config.buildDev = false;
     Config.settingSound = true;
     Config.settingMusic = true;
     Config.settingTutorial = true;
@@ -2504,18 +2504,33 @@ var SocialVK = /** @class */ (function () {
     }
     /* Пригласить */
     SocialVK.vkInvite = function () {
-        //VK.callMethod("showInviteBox");
+        try {
+            VK.callMethod("showInviteBox");
+        }
+        catch (e) {
+            console.log(e);
+        }
     };
     /* Пост на стену в соцсети */
     SocialVK.vkWallPost = function () {
-        if (GameData.Data.tournamentProgress > 0) {
-            var postPers = GameData.Data.getPersonage(GameData.Data.id_enemies[GameData.Data.tournamentProgress - 1]);
-            //VK.api("wall.post", { message: 'Я одержал победу в схватке с ' + postPers.name + ' в игре Mortal Kombat 2 Quest.\nДрузья присоединяйтесь к игре https://vk.com/app4693053', attachments: 'photo-62618339_457239049' });
+        try {
+            if (GameData.Data.tournamentProgress > 0) {
+                var postPers = GameData.Data.getPersonage(GameData.Data.id_enemies[GameData.Data.tournamentProgress - 1]);
+                VK.api("wall.post", { message: 'Я одержал победу в схватке с ' + postPers.name + ' в игре Mortal Kombat 2 Quest.\nДрузья присоединяйтесь к игре https://vk.com/app4693053', attachments: 'photo-62618339_457239049' });
+            }
+        }
+        catch (e) {
+            console.log(e);
         }
     };
     /* Пост на стену в соцсети */
     SocialVK.vkWallPostWin = function () {
-        //VK.api("wall.post", { message: 'Примите поздравления! Вы победили Шао Кана в игре Mortal Kombat 2 Quest.\nДрузья присоединяйтесь к игре https://vk.com/app4693053', attachments: 'photo-62618339_457239049' });
+        try {
+            VK.api("wall.post", { message: 'Примите поздравления! Вы победили Шао Кана в игре Mortal Kombat 2 Quest.\nДрузья присоединяйтесь к игре https://vk.com/app4693053', attachments: 'photo-62618339_457239049' });
+        }
+        catch (e) {
+            console.log(e);
+        }
     };
     /**
      * Сохранение данных на сервер VK --------------------------------------------------------------------------------------------
@@ -2542,7 +2557,12 @@ var SocialVK = /** @class */ (function () {
         jsonData += '"life": ' + GameData.Data.user_personage.life.toString();
         jsonData += '}';
         jsonData += '}';
-        //VK.api('storage.set', { key: 'mk2q_data', value: jsonData, global: 0 }, SocialVK.onVkDataSet, SocialVK.onVkSetDataError);
+        try {
+            VK.api('storage.set', { key: 'mk2q_data', value: jsonData, global: 0 }, SocialVK.onVkDataSet, SocialVK.onVkSetDataError);
+        }
+        catch (e) {
+            console.log(e);
+        }
         Utilits.Data.debugLog('VK SAVE DATA:', jsonData);
         return jsonData;
     };
@@ -2556,7 +2576,12 @@ var SocialVK = /** @class */ (function () {
      * Загрузка данных с сервера VK --------------------------------------------------------------------------------------------
      */
     SocialVK.vkLoadData = function (onVkDataGet) {
-        //VK.api('storage.get', { key: 'mk2q_data' }, onVkDataGet, onVkDataGet);
+        try {
+            VK.api('storage.get', { key: 'mk2q_data' }, onVkDataGet, onVkDataGet);
+        }
+        catch (e) {
+            console.log(e);
+        }
     };
     SocialVK.LoadData = function (jsonData) {
         Utilits.Data.debugLog('jsonData', jsonData);
@@ -2779,9 +2804,7 @@ var Fabrique;
             this.block = false;
             this.stanceAnimation();
             this.blood = new Blood(this.game);
-            //this.blood.x = -100;
             this.blood.x = -100;
-            //this.blood.y = this.y - 50;
             this.blood.y = -50;
             this.addChild(this.blood);
         };
@@ -4861,18 +4884,19 @@ var MortalKombat;
             if (GameData.Data.tournamentProgress <= 12) {
                 this.groupContent.addChild(new Phaser.Sprite(this.game, 0, 0, Images.game_lose));
                 this.messageText = this.game.add.text(400, 100, 'Вы проиграли!\nУ вас не осталось попыток.\nВы можете начать игру заново, \nили получить 1-ну дополнительную попытку\nза приглашение друга в игру.', { font: "18px Georgia", fill: "#AAAAAA", align: "left" });
+                this.groupContent.addChild(new Phaser.Sprite(this.game, 0, 0, Images.BackgroundImage));
+                this.groupContent.addChild(this.messageText);
+                this.groupContent.addChild(this.closeButton);
+                this.groupContent.addChild(this.inviteButton);
             }
             else {
                 this.groupContent.addChild(new Phaser.Sprite(this.game, 0, 0, Images.game_win));
                 this.messageText = this.game.add.text(55, 500, 'Вы победили!\nВам удалось спасти\nземное царство от вторжения.', { font: "18px Georgia", fill: "#DDDDDD", align: "left" });
                 this.closeButton.x = (Constants.GAME_WIDTH / 2) - (255 / 2);
-                this.inviteButton.alpha = 0;
-                SocialVK.vkWallPostWin();
+                this.groupContent.addChild(new Phaser.Sprite(this.game, 0, 0, Images.BackgroundImage));
+                this.groupContent.addChild(this.messageText);
+                this.groupContent.addChild(this.closeButton);
             }
-            this.groupContent.addChild(new Phaser.Sprite(this.game, 0, 0, Images.BackgroundImage));
-            this.groupContent.addChild(this.messageText);
-            this.groupContent.addChild(this.closeButton);
-            this.groupContent.addChild(this.inviteButton);
         };
         GameOver.prototype.shutdown = function () {
             this.groupContent.removeChildren();
@@ -4887,6 +4911,8 @@ var MortalKombat;
             switch (event.name) {
                 case Constants.CLOSE:
                     {
+                        if (GameData.Data.tournamentProgress > 12)
+                            SocialVK.vkWallPostWin();
                         this.game.state.start(MortalKombat.Menu.Name, true, false);
                         break;
                     }

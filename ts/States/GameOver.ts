@@ -23,18 +23,18 @@ module MortalKombat {
             if(GameData.Data.tournamentProgress <= 12) {
                 this.groupContent.addChild(new Phaser.Sprite(this.game, 0, 0, Images.game_lose));
                 this.messageText = this.game.add.text(400, 100, 'Вы проиграли!\nУ вас не осталось попыток.\nВы можете начать игру заново, \nили получить 1-ну дополнительную попытку\nза приглашение друга в игру.', { font: "18px Georgia", fill: "#AAAAAA", align: "left" });
+                this.groupContent.addChild(new Phaser.Sprite(this.game, 0, 0, Images.BackgroundImage));
+                this.groupContent.addChild(this.messageText);
+                this.groupContent.addChild(this.closeButton);            
+                this.groupContent.addChild(this.inviteButton);
             } else { 
                 this.groupContent.addChild(new Phaser.Sprite(this.game, 0, 0, Images.game_win));
                 this.messageText = this.game.add.text(55, 500, 'Вы победили!\nВам удалось спасти\nземное царство от вторжения.', { font: "18px Georgia", fill: "#DDDDDD", align: "left" });
                 this.closeButton.x = (Constants.GAME_WIDTH / 2) - (255 / 2);
-                this.inviteButton.alpha = 0;
-                SocialVK.vkWallPostWin();
+                this.groupContent.addChild(new Phaser.Sprite(this.game, 0, 0, Images.BackgroundImage));
+                this.groupContent.addChild(this.messageText);
+                this.groupContent.addChild(this.closeButton); 
             }
-            this.groupContent.addChild(new Phaser.Sprite(this.game, 0, 0, Images.BackgroundImage));
-            this.groupContent.addChild(this.messageText);
-            
-            this.groupContent.addChild(this.closeButton);            
-            this.groupContent.addChild(this.inviteButton);
         }
 
         public shutdown(){
@@ -51,6 +51,7 @@ module MortalKombat {
             switch (event.name) {
                 case Constants.CLOSE:
                     {
+                        if(GameData.Data.tournamentProgress > 12) SocialVK.vkWallPostWin();
                         this.game.state.start(Menu.Name, true, false);
                         break;
                     }
