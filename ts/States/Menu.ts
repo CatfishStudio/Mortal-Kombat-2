@@ -231,8 +231,12 @@ module MortalKombat {
 
         private onVkDataGet(object: any):void {
             Utilits.Data.debugLog('ON VK DATA GET:', object);            
-            if(SocialVK.LoadData(object.response.toString()) === true){
-                this.continueGame();
+            try{
+                if(SocialVK.LoadData(object.response.toString()) === true){
+                    this.continueGame();
+                }
+            }catch (e){
+                console.log(e);
             }
         }
     }
