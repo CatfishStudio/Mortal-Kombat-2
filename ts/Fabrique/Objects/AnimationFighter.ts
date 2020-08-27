@@ -24,23 +24,14 @@ module Fabrique {
             this.addChild(this.blood);
         }
 
-        /*
-        public winAnimation():void{
-            this.animation.stop();
-            this.animation.onComplete.removeAll();
-            this.animation.destroy();
-            this.animationType = Constants.ANIMATION_TYPE_STANCE;
-            this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animWin);
-            this.animation.onComplete.add(this.onComplete, this);
-            this.animation.play(10, true, false);
-        }
-        */
-
         public stanceAnimation()
         {
             this.animationType = Constants.ANIMATION_TYPE_STANCE;
             this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animStance);
             this.animation.onComplete.add(this.onComplete, this);
+            this.animation.onStart.addOnce(this.onStart, this);
+            //this.animation.enableUpdate = true;
+            //this.animation.onUpdate.add(this.onUpdate, this);
             this.animation.play(10, true, false);
         }
 
@@ -69,6 +60,7 @@ module Fabrique {
             if(this.animationType === Constants.ANIMATION_TYPE_LOSE) this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animLose);
             if(this.animationType === Constants.ANIMATION_TYPE_WIN) this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animWin);
             this.animation.onComplete.add(this.onComplete, this);
+            this.animation.onStart.addOnce(this.onStart, this);
             if(this.animationType === Constants.ANIMATION_TYPE_LOSE && this.personageAnimation.id !== Constants.ID_SHAOKAHN && this.personageAnimation.id !== Constants.ID_GORO) this.animation.play(10, true, true);
             else this.animation.play(10, false, false);
         }
@@ -85,7 +77,7 @@ module Fabrique {
                 if(this.block === false) this.stanceAnimation();
                 else this.blockAnimation();
             }
-            
+            this.updateTransform();
         }
 
         public showBlood():void
@@ -93,5 +85,27 @@ module Fabrique {
             if(this.block === false) this.blood.show();
         }
 
+        private onStart(sprite, animation): void {
+            if(GameData.Data.user_personage === undefined) return;
+            if(animation.name === GameData.Data.user_personage.id){
+                Utilits.Data.debugLog("ANIMATION currentFrame", animation.currentFrame);
+                Utilits.Data.debugLog("SPRITE Type", (sprite as AnimationFighter).animationType);
+                Utilits.Data.debugLog("SPRITE width", sprite.width);
+                Utilits.Data.debugLog("SPRITE height", sprite.height);
+
+                this.x = 100 - (sprite.width / 2);
+                this.y = Constants.GAME_HEIGHT - (sprite.height*2) + 150;
+            }else{
+                this.x = Constants.GAME_WIDTH - 125 - (sprite.width / 2);
+                this.y = Constants.GAME_HEIGHT - (sprite.height*2) + 150;
+            }
+        }
+
+        private onUpdate(sprite, frame): void {
+            if(GameData.Data.user_personage === undefined) return;
+            if(sprite.name === GameData.Data.user_personage.id){
+                Utilits.Data.debugLog("FRAME", frame);
+            }
+        }
     }
 }
