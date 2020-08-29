@@ -7,11 +7,13 @@ module Fabrique {
         private personageAnimation: GameData.IPersonage;
         private animationType: string;
         private blood: Blood;
-        public block: boolean;        
+        public block: boolean;
+        private enableAnimationUpdate:boolean;        
 
-        constructor(game: Phaser.Game, personageiD: string, personage: GameData.IPersonage) {
+        constructor(game: Phaser.Game, personageiD: string, personage: GameData.IPersonage, enableAnimationUpdate: boolean = false) {
             super(game, 0, 0, personageiD, 1);
             this.personageAnimation = personage;
+            this.enableAnimationUpdate = enableAnimationUpdate;
             this.init();
         }
 
@@ -30,8 +32,10 @@ module Fabrique {
             this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animStance);
             this.animation.onComplete.add(this.onComplete, this);
             this.animation.onStart.addOnce(this.onStart, this);
-            //this.animation.enableUpdate = true;
-            //this.animation.onUpdate.add(this.onUpdate, this);
+            if(this.enableAnimationUpdate){
+                this.animation.enableUpdate = true;
+                this.animation.onUpdate.add(this.onUpdate, this);
+            }
             this.animation.play(10, true, false);
         }
 
@@ -61,6 +65,10 @@ module Fabrique {
             if(this.animationType === Constants.ANIMATION_TYPE_WIN) this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animWin);
             this.animation.onComplete.add(this.onComplete, this);
             this.animation.onStart.addOnce(this.onStart, this);
+            if(this.enableAnimationUpdate){
+                this.animation.enableUpdate = true;
+                this.animation.onUpdate.add(this.onUpdate, this);
+            }
             if(this.animationType === Constants.ANIMATION_TYPE_LOSE && this.personageAnimation.id !== Constants.ID_SHAOKAHN && this.personageAnimation.id !== Constants.ID_GORO) this.animation.play(10, true, true);
             else if(this.animationType === Constants.ANIMATION_TYPE_STANCE) this.animation.play(10, true, false);
             else this.animation.play(10, false, false);
@@ -76,7 +84,10 @@ module Fabrique {
             if(this.animationType === Constants.ANIMATION_TYPE_STANCE || this.animationType === Constants.ANIMATION_TYPE_WIN || this.animationType === Constants.ANIMATION_TYPE_LOSE) return;
             else {
                 if(this.block === false) this.changeAnimation(Constants.ANIMATION_TYPE_STANCE); //this.stanceAnimation();
-                else this.blockAnimation();
+                else {
+                    this.changeAnimation(Constants.ANIMATION_TYPE_STANCE);
+                    this.blockAnimation();
+                }
             }
         }
 
@@ -87,12 +98,11 @@ module Fabrique {
 
         private onStart(sprite, animation): void {
             if(GameData.Data.user_personage === undefined) return;
+            Utilits.Data.debugLog("ANIMATION currentFrame", animation.currentFrame);
+            Utilits.Data.debugLog("SPRITE Type", (sprite as AnimationFighter).animationType);
+            Utilits.Data.debugLog("SPRITE width", sprite.width);
+            Utilits.Data.debugLog("SPRITE height", sprite.height);
             if(animation.name === GameData.Data.user_personage.id){
-                //Utilits.Data.debugLog("ANIMATION currentFrame", animation.currentFrame);
-                //Utilits.Data.debugLog("SPRITE Type", (sprite as AnimationFighter).animationType);
-                //Utilits.Data.debugLog("SPRITE width", sprite.width);
-                //Utilits.Data.debugLog("SPRITE height", sprite.height);
-
                 this.x = 100 - (sprite.width / 2);
                 this.y = Constants.GAME_HEIGHT - (sprite.height*2) + 150;
             }else{
@@ -103,9 +113,13 @@ module Fabrique {
 
         private onUpdate(sprite, frame): void {
             if(GameData.Data.user_personage === undefined) return;
+            Utilits.Data.debugLog("FRAME", frame);
             if(sprite.name === GameData.Data.user_personage.id){
-                Utilits.Data.debugLog("FRAME", frame);
+                this.y = Constants.GAME_HEIGHT - (sprite.height*2) + 150;
+            }else{
+                this.y = Constants.GAME_HEIGHT - (sprite.height*2) + 150;
             }
+           
         }
     }
 }

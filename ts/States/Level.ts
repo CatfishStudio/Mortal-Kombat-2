@@ -84,7 +84,7 @@ module MortalKombat {
             this.persUser.animLose = GameData.Data.user_personage.animLose;
             this.persUser.animWin = GameData.Data.user_personage.animWin;
 
-            this.animUser = new AnimationFighter(this.game, this.persUser.id, this.persUser);
+            this.animUser = new AnimationFighter(this.game, this.persUser.id, this.persUser, false);
             this.animUser.x = 100 - (this.animUser.width / 2);
             this.animUser.y = Constants.GAME_HEIGHT - (this.animUser.height*2);
             this.animUser.scale.x = 1.5;
@@ -95,7 +95,7 @@ module MortalKombat {
             this.groupContent.addChild(this.damageCounterUser);
 
             this.persEnemies = GameData.Data.getNewPersonage(GameData.Data.id_enemies[GameData.Data.tournamentProgress]);
-            this.animEnemies = new AnimationFighter(this.game, this.persEnemies.id, this.persEnemies);
+            this.animEnemies = new AnimationFighter(this.game, this.persEnemies.id, this.persEnemies, false);
             if(GameData.Data.tournamentProgress < 11) {
                 this.animEnemies.x = Constants.GAME_WIDTH - 25 - (this.animEnemies.width / 2);
                 this.animEnemies.y = Constants.GAME_HEIGHT - (this.animEnemies.height*2);
@@ -110,7 +110,6 @@ module MortalKombat {
                 this.animEnemies.scale.x = 1.5;
                 this.animEnemies.scale.y = 1.5;
             }
-            
             this.groupContent.addChild(this.animEnemies);
 
             this.damageCounterEnemies = new DamageCounter(this.game, this.animEnemies.x + (this.animEnemies.width / 2) - 15, this.animEnemies.y - 15);

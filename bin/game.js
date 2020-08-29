@@ -1817,7 +1817,7 @@ var Constants = /** @class */ (function () {
 var Config = /** @class */ (function () {
     function Config() {
     }
-    Config.buildDev = false;
+    Config.buildDev = true;
     Config.settingSound = true;
     Config.settingMusic = true;
     Config.settingTutorial = true;
@@ -2796,9 +2796,11 @@ var Fabrique;
     var Blood = Fabrique.Blood;
     var AnimationFighter = /** @class */ (function (_super) {
         __extends(AnimationFighter, _super);
-        function AnimationFighter(game, personageiD, personage) {
+        function AnimationFighter(game, personageiD, personage, enableAnimationUpdate) {
+            if (enableAnimationUpdate === void 0) { enableAnimationUpdate = false; }
             var _this = _super.call(this, game, 0, 0, personageiD, 1) || this;
             _this.personageAnimation = personage;
+            _this.enableAnimationUpdate = enableAnimationUpdate;
             _this.init();
             return _this;
         }
@@ -2815,8 +2817,10 @@ var Fabrique;
             this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animStance);
             this.animation.onComplete.add(this.onComplete, this);
             this.animation.onStart.addOnce(this.onStart, this);
-            //this.animation.enableUpdate = true;
-            //this.animation.onUpdate.add(this.onUpdate, this);
+            if (this.enableAnimationUpdate) {
+                this.animation.enableUpdate = true;
+                this.animation.onUpdate.add(this.onUpdate, this);
+            }
             this.animation.play(10, true, false);
         };
         AnimationFighter.prototype.blockAnimation = function () {
@@ -2852,6 +2856,10 @@ var Fabrique;
                 this.animation = this.animations.add(this.personageAnimation.id, this.personageAnimation.animWin);
             this.animation.onComplete.add(this.onComplete, this);
             this.animation.onStart.addOnce(this.onStart, this);
+            if (this.enableAnimationUpdate) {
+                this.animation.enableUpdate = true;
+                this.animation.onUpdate.add(this.onUpdate, this);
+            }
             if (this.animationType === Constants.ANIMATION_TYPE_LOSE && this.personageAnimation.id !== Constants.ID_SHAOKAHN && this.personageAnimation.id !== Constants.ID_GORO)
                 this.animation.play(10, true, true);
             else if (this.animationType === Constants.ANIMATION_TYPE_STANCE)
@@ -2872,8 +2880,10 @@ var Fabrique;
             else {
                 if (this.block === false)
                     this.changeAnimation(Constants.ANIMATION_TYPE_STANCE); //this.stanceAnimation();
-                else
+                else {
+                    this.changeAnimation(Constants.ANIMATION_TYPE_STANCE);
                     this.blockAnimation();
+                }
             }
         };
         AnimationFighter.prototype.showBlood = function () {
@@ -2883,11 +2893,11 @@ var Fabrique;
         AnimationFighter.prototype.onStart = function (sprite, animation) {
             if (GameData.Data.user_personage === undefined)
                 return;
+            Utilits.Data.debugLog("ANIMATION currentFrame", animation.currentFrame);
+            Utilits.Data.debugLog("SPRITE Type", sprite.animationType);
+            Utilits.Data.debugLog("SPRITE width", sprite.width);
+            Utilits.Data.debugLog("SPRITE height", sprite.height);
             if (animation.name === GameData.Data.user_personage.id) {
-                //Utilits.Data.debugLog("ANIMATION currentFrame", animation.currentFrame);
-                //Utilits.Data.debugLog("SPRITE Type", (sprite as AnimationFighter).animationType);
-                //Utilits.Data.debugLog("SPRITE width", sprite.width);
-                //Utilits.Data.debugLog("SPRITE height", sprite.height);
                 this.x = 100 - (sprite.width / 2);
                 this.y = Constants.GAME_HEIGHT - (sprite.height * 2) + 150;
             }
@@ -2899,8 +2909,12 @@ var Fabrique;
         AnimationFighter.prototype.onUpdate = function (sprite, frame) {
             if (GameData.Data.user_personage === undefined)
                 return;
+            Utilits.Data.debugLog("FRAME", frame);
             if (sprite.name === GameData.Data.user_personage.id) {
-                Utilits.Data.debugLog("FRAME", frame);
+                this.y = Constants.GAME_HEIGHT - (sprite.height * 2) + 150;
+            }
+            else {
+                this.y = Constants.GAME_HEIGHT - (sprite.height * 2) + 150;
             }
         };
         return AnimationFighter;
@@ -4522,7 +4536,7 @@ var MortalKombat;
             this.persUser.animDamage = GameData.Data.user_personage.animDamage;
             this.persUser.animLose = GameData.Data.user_personage.animLose;
             this.persUser.animWin = GameData.Data.user_personage.animWin;
-            this.animUser = new AnimationFighter(this.game, this.persUser.id, this.persUser);
+            this.animUser = new AnimationFighter(this.game, this.persUser.id, this.persUser, false);
             this.animUser.x = 100 - (this.animUser.width / 2);
             this.animUser.y = Constants.GAME_HEIGHT - (this.animUser.height * 2);
             this.animUser.scale.x = 1.5;
@@ -4531,7 +4545,7 @@ var MortalKombat;
             this.damageCounterUser = new DamageCounter(this.game, this.animUser.x + (this.animUser.width / 2) - 15, this.animUser.y - 15);
             this.groupContent.addChild(this.damageCounterUser);
             this.persEnemies = GameData.Data.getNewPersonage(GameData.Data.id_enemies[GameData.Data.tournamentProgress]);
-            this.animEnemies = new AnimationFighter(this.game, this.persEnemies.id, this.persEnemies);
+            this.animEnemies = new AnimationFighter(this.game, this.persEnemies.id, this.persEnemies, false);
             if (GameData.Data.tournamentProgress < 11) {
                 this.animEnemies.x = Constants.GAME_WIDTH - 25 - (this.animEnemies.width / 2);
                 this.animEnemies.y = Constants.GAME_HEIGHT - (this.animEnemies.height * 2);
