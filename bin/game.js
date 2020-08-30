@@ -1817,7 +1817,7 @@ var Constants = /** @class */ (function () {
 var Config = /** @class */ (function () {
     function Config() {
     }
-    Config.buildDev = true;
+    Config.buildDev = false;
     Config.settingSound = true;
     Config.settingMusic = true;
     Config.settingTutorial = true;
