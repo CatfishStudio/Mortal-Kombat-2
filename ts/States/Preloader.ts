@@ -20,7 +20,7 @@ module MortalKombat {
         }
         
         public init(config: IPreloaderConfig) {
-            console.log("Mortal Kombat 2 Quest - Version - 1.0.0");
+            console.log("Mortal Kombat 2 Quest - Version - " + Config.version);
             this.config = config;
         }
         

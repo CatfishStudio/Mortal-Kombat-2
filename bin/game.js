@@ -1821,6 +1821,7 @@ var Config = /** @class */ (function () {
     Config.settingSound = true;
     Config.settingMusic = true;
     Config.settingTutorial = true;
+    Config.version = "1.0.3";
     return Config;
 }());
 var Utilits;
@@ -3872,7 +3873,7 @@ var MortalKombat;
             return _this;
         }
         Preloader.prototype.init = function (config) {
-            console.log("Mortal Kombat 2 Quest - Version - 1.0.0");
+            console.log("Mortal Kombat 2 Quest - Version - " + Config.version);
             this.config = config;
         };
         Preloader.prototype.preload = function () {
@@ -4000,21 +4001,49 @@ var MortalKombat;
             this.groupButtons.y = 0;
             this.groupButtons.visible = false;
             this.groupButtons.addChild(new Phaser.Sprite(this.game, 35, 80, Images.LogoImage));
-            var buttonStart = new Phaser.Button(this.game, 75, 400, Sheet.ButtonStartNewGame, this.onButtonClick, this, 1, 2);
-            buttonStart.name = Constants.START;
-            this.groupButtons.addChild(buttonStart);
-            var buttonSettings = new Phaser.Button(this.game, 75, 475, Sheet.ButtonSettings, this.onButtonClick, this, 1, 2, 2, 2);
-            buttonSettings.name = Constants.SETTINGS;
-            this.groupButtons.addChild(buttonSettings);
-            var buttonInvite = new Phaser.Button(this.game, 75, 550, Sheet.ButtonInvite, this.onButtonClick, this, 1, 2, 2, 2);
-            buttonInvite.name = Constants.INVITE;
-            this.groupButtons.addChild(buttonInvite);
-            //this.tutorial = new Tutorial(this.game, 'Нажмите на кнопку\n"Начать игру"\nчтобы начать\nновый турнир.');
+            if (GameData.Data.saveData !== undefined) {
+                SocialVK.LoadData(GameData.Data.saveData);
+                this.buttonContinue = new Phaser.Button(this.game, 75, 400, Sheet.ButtonСontinueGame, this.onButtonClick, this, 1, 2);
+                this.buttonContinue.name = Constants.CONTINUE;
+                this.groupButtons.addChild(this.buttonContinue);
+            }
+            else {
+                SocialVK.vkLoadData(this.onVkDataGet.bind(this));
+            }
+            this.buttonStart = new Phaser.Button(this.game, 75, 400, Sheet.ButtonStartNewGame, this.onButtonClick, this, 1, 2);
+            this.buttonStart.name = Constants.START;
+            this.groupButtons.addChild(this.buttonStart);
+            this.buttonSettings = new Phaser.Button(this.game, 75, 475, Sheet.ButtonSettings, this.onButtonClick, this, 1, 2, 2, 2);
+            this.buttonSettings.name = Constants.SETTINGS;
+            this.groupButtons.addChild(this.buttonSettings);
+            this.buttonInvite = new Phaser.Button(this.game, 75, 550, Sheet.ButtonInvite, this.onButtonClick, this, 1, 2, 2, 2);
+            this.buttonInvite.name = Constants.INVITE;
+            this.groupButtons.addChild(this.buttonInvite);
             this.tutorial = new Tutorial(this.game, 'Сразись с бойцами\nШао Кана. Победи его\nна турнире чтобы спасти\nземное царство.');
+            if (GameData.Data.saveData !== undefined)
+                this.tutorial.setText('Продолжайте битву\nна турнире.\nПобеди Шао Кана.\nСпаси земное царство.');
             this.tutorial.x = Constants.GAME_WIDTH;
             this.tutorial.y = (Constants.GAME_HEIGHT - 175);
             this.groupMenu.addChild(this.tutorial);
-            this.continueGame();
+        };
+        Menu.prototype.onVkDataGet = function (object) {
+            console.log(object);
+            try {
+                if (SocialVK.LoadData(object.response.toString()) === true) {
+                    this.buttonContinue = new Phaser.Button(this.game, 75, 400, Sheet.ButtonСontinueGame, this.onButtonClick, this, 1, 2);
+                    this.buttonContinue.name = Constants.CONTINUE;
+                    this.groupButtons.addChild(this.buttonContinue);
+                    this.buttonStart.x = 75;
+                    this.buttonStart.y = 475;
+                    this.buttonSettings.x = 75;
+                    this.buttonSettings.y = 550;
+                    this.buttonInvite.x = 75;
+                    this.buttonInvite.y = 625;
+                }
+            }
+            catch (e) {
+                console.log(e);
+            }
         };
         Menu.prototype.onCompleteVideo = function () {
             var _this = this;
@@ -4093,44 +4122,6 @@ var MortalKombat;
                 var tweenTutorial = this.game.add.tween(this.tutorial);
                 tweenTutorial.to({ x: (Constants.GAME_WIDTH / 2), y: (Constants.GAME_HEIGHT - 175) }, 500, 'Linear');
                 tweenTutorial.start();
-            }
-        };
-        Menu.prototype.continueGame = function () {
-            /* Загрузка сохраненных данных */
-            Utilits.Data.debugLog("SAVE DATA:", GameData.Data.saveData);
-            var loadData = false;
-            if (GameData.Data.saveData !== undefined) {
-                loadData = SocialVK.LoadData(GameData.Data.saveData);
-            }
-            else {
-                SocialVK.vkLoadData(this.onVkDataGet.bind(this));
-            }
-            if (loadData === true) {
-                var buttonStart = new Phaser.Button(this.game, 75, 475, Sheet.ButtonStartNewGame, this.onButtonClick, this, 1, 2);
-                buttonStart.name = Constants.START;
-                this.groupButtons.addChild(buttonStart);
-                var buttonSettings = new Phaser.Button(this.game, 75, 550, Sheet.ButtonSettings, this.onButtonClick, this, 1, 2, 2, 2);
-                buttonSettings.name = Constants.SETTINGS;
-                this.groupButtons.addChild(buttonSettings);
-                var buttonInvite = new Phaser.Button(this.game, 75, 625, Sheet.ButtonInvite, this.onButtonClick, this, 1, 2, 2, 2);
-                buttonInvite.name = Constants.INVITE;
-                this.groupButtons.addChild(buttonInvite);
-                var buttonContinue = new Phaser.Button(this.game, 75, 400, Sheet.ButtonСontinueGame, this.onButtonClick, this, 1, 2);
-                buttonContinue.name = Constants.CONTINUE;
-                this.groupButtons.addChild(buttonContinue);
-                //this.tutorial.setText('Нажмите на кнопку\n"Продолжить"\nчтобы продолжить\n турнир.')
-                this.tutorial.setText('Продолжайте битву\nна турнире.\nПобеди Шао Кана.\nСпаси земное царство.');
-            }
-        };
-        Menu.prototype.onVkDataGet = function (object) {
-            Utilits.Data.debugLog('ON VK DATA GET:', object);
-            try {
-                if (SocialVK.LoadData(object.response.toString()) === true) {
-                    this.continueGame();
-                }
-            }
-            catch (e) {
-                console.log(e);
             }
         };
         Menu.Name = "menu";
@@ -4588,7 +4579,7 @@ var MortalKombat;
         Level.prototype.onMatch = function (hitType, hitCount, statusAction) {
             //Utilits.Data.debugLog("LEVEL: match |", "type=" + hitType + " | count=" + hitCount + " | status=" + statusAction);
             if (GameData.Data.tournamentProgress == 0 && this.tutorial.x != Constants.GAME_WIDTH)
-                this.tutorial.x = Constants.GAME_WIDTH;
+                this.tutorial.x = Constants.GAME_WIDTH + 50;
             if (this.field.gameOver === true)
                 return;
             if (hitType === null && hitCount === null) {
