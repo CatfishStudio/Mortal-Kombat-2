@@ -130,7 +130,7 @@ module MortalKombat {
         }
 
         private onVkDataGet(object: any):void {
-            console.log(object);
+            //console.log(object);
             try{
                 if(SocialVK.LoadData(object.response.toString()) === true){
                     this.buttonContinue = new Phaser.Button(this.game, 75, 400, Sheet.ButtonСontinueGame, this.onButtonClick, this, 1, 2);
@@ -175,6 +175,7 @@ module MortalKombat {
             switch (event.name) {
                 case Constants.START:
                     {
+                        GameData.Data.initPersonages(this.game);
                         this.game.state.start(Fighters.Name, true, false);
                         break;
                     }

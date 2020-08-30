@@ -1821,7 +1821,7 @@ var Config = /** @class */ (function () {
     Config.settingSound = true;
     Config.settingMusic = true;
     Config.settingTutorial = true;
-    Config.version = "1.0.3";
+    Config.version = "1.0.4";
     return Config;
 }());
 var Utilits;
@@ -2598,7 +2598,7 @@ var SocialVK = /** @class */ (function () {
             if (key === 'enemies')
                 GameData.Data.id_enemies = value;
             if (key === 'personage') {
-                GameData.Data.user_personage = GameData.Data.getPersonage(value.id);
+                GameData.Data.user_personage = GameData.Data.getNewPersonage(value.id);
                 GameData.Data.user_personage.hand = value.hand;
                 GameData.Data.user_personage.leg = value.leg;
                 GameData.Data.user_personage.block = value.block;
@@ -3045,7 +3045,7 @@ var Fabrique;
             this.windowCharacteristics = new Fabrique.WindowCharacteristics(this.game, -225, 375);
             this.windowCharacteristics.showCharacteristics(this.defaultFighterID);
             this.addChild(this.windowCharacteristics);
-            GameData.Data.user_personage = GameData.Data.getPersonage(this.defaultFighterID);
+            GameData.Data.user_personage = GameData.Data.getNewPersonage(this.defaultFighterID);
         };
         PanelIcons.prototype.onChange = function (target, id) {
             //Utilits.Data.debugLog('Change [target/type]:', [target, id]);
@@ -4031,7 +4031,7 @@ var MortalKombat;
             this.groupMenu.addChild(this.tutorial);
         };
         Menu.prototype.onVkDataGet = function (object) {
-            console.log(object);
+            //console.log(object);
             try {
                 if (SocialVK.LoadData(object.response.toString()) === true) {
                     this.buttonContinue = new Phaser.Button(this.game, 75, 400, Sheet.ButtonСontinueGame, this.onButtonClick, this, 1, 2);
@@ -4073,6 +4073,7 @@ var MortalKombat;
             switch (event.name) {
                 case Constants.START:
                     {
+                        GameData.Data.initPersonages(this.game);
                         this.game.state.start(MortalKombat.Fighters.Name, true, false);
                         break;
                     }

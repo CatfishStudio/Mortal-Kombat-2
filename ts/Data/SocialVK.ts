@@ -95,7 +95,7 @@ class SocialVK {
             if (key === 'progress') GameData.Data.tournamentProgress = value;
             if (key === 'enemies') GameData.Data.id_enemies = value;
             if (key === 'personage') {
-                GameData.Data.user_personage = GameData.Data.getPersonage(value.id);
+                GameData.Data.user_personage = GameData.Data.getNewPersonage(value.id);
                 GameData.Data.user_personage.hand = value.hand;
                 GameData.Data.user_personage.leg = value.leg;
                 GameData.Data.user_personage.block = value.block;
