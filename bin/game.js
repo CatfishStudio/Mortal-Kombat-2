@@ -2558,33 +2558,31 @@ var SocialVK = /** @class */ (function () {
         jsonData += '"life": ' + GameData.Data.user_personage.life.toString();
         jsonData += '}';
         jsonData += '}';
-        /*
-        try{
+        try {
             VK.api('storage.set', { key: 'mk2q_data', value: jsonData, global: 0 }, SocialVK.onVkDataSet, SocialVK.onVkSetDataError);
-        }catch (e){
+        }
+        catch (e) {
             console.log(e);
         }
-        */
         Utilits.Data.debugLog('VK SAVE DATA:', jsonData);
         return jsonData;
     };
     SocialVK.onVkDataSet = function (response) {
-        //Utilits.Data.debugLog('VK SET DATA:', response);
+        //console.log(response);
     };
     SocialVK.onVkSetDataError = function (response) {
-        //Utilits.Data.debugLog('VK SET DATA ERROR:', response);
+        //console.log(response);
     };
     /**
      * Загрузка данных с сервера VK --------------------------------------------------------------------------------------------
      */
     SocialVK.vkLoadData = function (onVkDataGet) {
-        /*
-        try{
+        try {
             VK.api('storage.get', { key: 'mk2q_data' }, onVkDataGet, onVkDataGet);
-        }catch (e){
+        }
+        catch (e) {
             console.log(e);
         }
-        */
     };
     SocialVK.LoadData = function (jsonData) {
         Utilits.Data.debugLog('jsonData', jsonData);
@@ -4001,15 +3999,6 @@ var MortalKombat;
             this.groupButtons.y = 0;
             this.groupButtons.visible = false;
             this.groupButtons.addChild(new Phaser.Sprite(this.game, 35, 80, Images.LogoImage));
-            if (GameData.Data.saveData !== undefined) {
-                SocialVK.LoadData(GameData.Data.saveData);
-                this.buttonContinue = new Phaser.Button(this.game, 75, 400, Sheet.ButtonСontinueGame, this.onButtonClick, this, 1, 2);
-                this.buttonContinue.name = Constants.CONTINUE;
-                this.groupButtons.addChild(this.buttonContinue);
-            }
-            else {
-                SocialVK.vkLoadData(this.onVkDataGet.bind(this));
-            }
             this.buttonStart = new Phaser.Button(this.game, 75, 400, Sheet.ButtonStartNewGame, this.onButtonClick, this, 1, 2);
             this.buttonStart.name = Constants.START;
             this.groupButtons.addChild(this.buttonStart);
@@ -4019,6 +4008,21 @@ var MortalKombat;
             this.buttonInvite = new Phaser.Button(this.game, 75, 550, Sheet.ButtonInvite, this.onButtonClick, this, 1, 2, 2, 2);
             this.buttonInvite.name = Constants.INVITE;
             this.groupButtons.addChild(this.buttonInvite);
+            if (GameData.Data.saveData !== undefined) {
+                SocialVK.LoadData(GameData.Data.saveData);
+                this.buttonContinue = new Phaser.Button(this.game, 75, 400, Sheet.ButtonСontinueGame, this.onButtonClick, this, 1, 2);
+                this.buttonContinue.name = Constants.CONTINUE;
+                this.groupButtons.addChild(this.buttonContinue);
+                this.buttonStart.x = 75;
+                this.buttonStart.y = 475;
+                this.buttonSettings.x = 75;
+                this.buttonSettings.y = 550;
+                this.buttonInvite.x = 75;
+                this.buttonInvite.y = 625;
+            }
+            else {
+                SocialVK.vkLoadData(this.onVkDataGet.bind(this));
+            }
             this.tutorial = new Tutorial(this.game, 'Сразись с бойцами\nШао Кана. Победи его\nна турнире чтобы спасти\nземное царство.');
             if (GameData.Data.saveData !== undefined)
                 this.tutorial.setText('Продолжайте битву\nна турнире.\nПобеди Шао Кана.\nСпаси земное царство.');

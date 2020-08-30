@@ -56,37 +56,33 @@ class SocialVK {
         jsonData += '}';
         jsonData += '}';
 
-        /*
         try{
             VK.api('storage.set', { key: 'mk2q_data', value: jsonData, global: 0 }, SocialVK.onVkDataSet, SocialVK.onVkSetDataError);
         }catch (e){
             console.log(e);
         }
-        */
 
         Utilits.Data.debugLog('VK SAVE DATA:', jsonData);
         return jsonData;
     }
 
     public static onVkDataSet(response: any): void {
-        //Utilits.Data.debugLog('VK SET DATA:', response);
+        //console.log(response);
     }
 
     public static onVkSetDataError(response: any): void {
-        //Utilits.Data.debugLog('VK SET DATA ERROR:', response);
+        //console.log(response);
     }
 
     /**
      * Загрузка данных с сервера VK --------------------------------------------------------------------------------------------
      */
     public static vkLoadData(onVkDataGet: any): void {
-        /*
         try{
             VK.api('storage.get', { key: 'mk2q_data' }, onVkDataGet, onVkDataGet);
         }catch (e){
             console.log(e);
         }
-        */
     }
 
     public static LoadData(jsonData: string): boolean {

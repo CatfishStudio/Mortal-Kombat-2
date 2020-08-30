@@ -14,6 +14,11 @@ module MortalKombat {
         private tween:Phaser.Tween;
         private tutorial:Tutorial;
         private settings:Settings;
+
+        private buttonContinue:Phaser.Button;
+        private buttonStart:Phaser.Button;
+        private buttonSettings:Phaser.Button;
+        private buttonInvite:Phaser.Button; 
         
         constructor() {
             super();
@@ -90,25 +95,57 @@ module MortalKombat {
 
             this.groupButtons.addChild(new Phaser.Sprite(this.game, 35, 80, Images.LogoImage));
             
-            let buttonStart = new Phaser.Button(this.game, 75, 400, Sheet.ButtonStartNewGame, this.onButtonClick, this, 1, 2);
-            buttonStart.name = Constants.START;
-            this.groupButtons.addChild(buttonStart);
+            this.buttonStart = new Phaser.Button(this.game, 75, 400, Sheet.ButtonStartNewGame, this.onButtonClick, this, 1, 2);
+            this.buttonStart.name = Constants.START;
+            this.groupButtons.addChild(this.buttonStart);
             
-            let buttonSettings = new Phaser.Button(this.game, 75, 475, Sheet.ButtonSettings, this.onButtonClick, this, 1, 2, 2, 2);
-            buttonSettings.name = Constants.SETTINGS;
-            this.groupButtons.addChild(buttonSettings);
+            this.buttonSettings = new Phaser.Button(this.game, 75, 475, Sheet.ButtonSettings, this.onButtonClick, this, 1, 2, 2, 2);
+            this.buttonSettings.name = Constants.SETTINGS;
+            this.groupButtons.addChild(this.buttonSettings);
             
-            let buttonInvite = new Phaser.Button(this.game, 75, 550, Sheet.ButtonInvite, this.onButtonClick, this, 1, 2, 2, 2);
-            buttonInvite.name = Constants.INVITE;
-            this.groupButtons.addChild(buttonInvite);
+            this.buttonInvite = new Phaser.Button(this.game, 75, 550, Sheet.ButtonInvite, this.onButtonClick, this, 1, 2, 2, 2);
+            this.buttonInvite.name = Constants.INVITE;
+            this.groupButtons.addChild(this.buttonInvite);
 
-            //this.tutorial = new Tutorial(this.game, 'Нажмите на кнопку\n"Начать игру"\nчтобы начать\nновый турнир.');
+            if(GameData.Data.saveData !== undefined){
+                SocialVK.LoadData(GameData.Data.saveData);
+                this.buttonContinue = new Phaser.Button(this.game, 75, 400, Sheet.ButtonСontinueGame, this.onButtonClick, this, 1, 2);
+                this.buttonContinue.name = Constants.CONTINUE;
+                this.groupButtons.addChild(this.buttonContinue);
+                this.buttonStart.x = 75;
+                this.buttonStart.y = 475;
+                this.buttonSettings.x = 75;
+                this.buttonSettings.y = 550;
+                this.buttonInvite.x = 75;
+                this.buttonInvite.y = 625;
+            }else{
+                SocialVK.vkLoadData(this.onVkDataGet.bind(this));
+            }  
+
             this.tutorial = new Tutorial(this.game, 'Сразись с бойцами\nШао Кана. Победи его\nна турнире чтобы спасти\nземное царство.');
+            if(GameData.Data.saveData !== undefined) this.tutorial.setText('Продолжайте битву\nна турнире.\nПобеди Шао Кана.\nСпаси земное царство.');
             this.tutorial.x = Constants.GAME_WIDTH;
             this.tutorial.y = (Constants.GAME_HEIGHT - 175);
             this.groupMenu.addChild(this.tutorial);
+        }
 
-            this.continueGame();
+        private onVkDataGet(object: any):void {
+            console.log(object);
+            try{
+                if(SocialVK.LoadData(object.response.toString()) === true){
+                    this.buttonContinue = new Phaser.Button(this.game, 75, 400, Sheet.ButtonСontinueGame, this.onButtonClick, this, 1, 2);
+                    this.buttonContinue.name = Constants.CONTINUE;
+                    this.groupButtons.addChild(this.buttonContinue);
+                    this.buttonStart.x = 75;
+                    this.buttonStart.y = 475;
+                    this.buttonSettings.x = 75;
+                    this.buttonSettings.y = 550;
+                    this.buttonInvite.x = 75;
+                    this.buttonInvite.y = 625;
+                }
+            }catch (e){
+                console.log(e);
+            }
         }
 
         private onCompleteVideo():void {
@@ -196,48 +233,5 @@ module MortalKombat {
             }
         }
 
-        private continueGame(){
-            /* Загрузка сохраненных данных */
-            Utilits.Data.debugLog("SAVE DATA:", GameData.Data.saveData);
-
-            let loadData:boolean = false;
-            if(GameData.Data.saveData !== undefined){
-                loadData = SocialVK.LoadData(GameData.Data.saveData);
-            }else{
-                SocialVK.vkLoadData(this.onVkDataGet.bind(this));
-            }            
-
-            if(loadData === true){
-                let buttonStart = new Phaser.Button(this.game, 75, 475, Sheet.ButtonStartNewGame, this.onButtonClick, this, 1, 2);
-                buttonStart.name = Constants.START;
-                this.groupButtons.addChild(buttonStart);
-                
-                let buttonSettings = new Phaser.Button(this.game, 75, 550, Sheet.ButtonSettings, this.onButtonClick, this, 1, 2, 2, 2);
-                buttonSettings.name = Constants.SETTINGS;
-                this.groupButtons.addChild(buttonSettings);
-                
-                let buttonInvite = new Phaser.Button(this.game, 75, 625, Sheet.ButtonInvite, this.onButtonClick, this, 1, 2, 2, 2);
-                buttonInvite.name = Constants.INVITE;
-                this.groupButtons.addChild(buttonInvite);
-
-                let buttonContinue = new Phaser.Button(this.game, 75, 400, Sheet.ButtonСontinueGame, this.onButtonClick, this, 1, 2);
-                buttonContinue.name = Constants.CONTINUE;
-                this.groupButtons.addChild(buttonContinue);
-
-                //this.tutorial.setText('Нажмите на кнопку\n"Продолжить"\nчтобы продолжить\n турнир.')
-                this.tutorial.setText('Продолжайте битву\nна турнире.\nПобеди Шао Кана.\nСпаси земное царство.');
-            }
-        }
-
-        private onVkDataGet(object: any):void {
-            Utilits.Data.debugLog('ON VK DATA GET:', object);            
-            try{
-                if(SocialVK.LoadData(object.response.toString()) === true){
-                    this.continueGame();
-                }
-            }catch (e){
-                console.log(e);
-            }
-        }
     }
 }
