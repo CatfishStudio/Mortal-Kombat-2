@@ -123,7 +123,7 @@ module MortalKombat {
 
             /* tutorial */
             this.tutorial = new Tutorial(this.game, 'Соберите 3-и фишки\nв ряд чтобы\nнанести удар');
-            this.tutorial.x = Constants.GAME_WIDTH;
+            this.tutorial.x = Constants.GAME_WIDTH + 50;
             this.tutorial.y = (Constants.GAME_HEIGHT - 175);
             this.groupContent.addChild(this.tutorial);
             if(Config.settingTutorial === true && GameData.Data.tournamentProgress == 0) this.tutorial.show((Constants.GAME_WIDTH / 2), (Constants.GAME_HEIGHT - 175));
