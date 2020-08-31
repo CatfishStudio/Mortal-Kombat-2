@@ -429,7 +429,7 @@ module MortalKombat {
                     }
                 }
                 else { 
-                    if(this.persUser.id === Constants.ID_KITANA || this.persEnemies.id === Constants.ID_MILEENA) GameData.Data.userSound.key = Sounds.f_d_03;
+                    if(this.persUser.id === Constants.ID_KITANA || this.persUser.id === Constants.ID_MILEENA) GameData.Data.userSound.key = Sounds.f_d_03;
                     else GameData.Data.userSound.key = Sounds.m_d_03;
 
                     if(Config.settingSound) {
