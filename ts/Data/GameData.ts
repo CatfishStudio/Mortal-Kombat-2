@@ -205,11 +205,11 @@ module GameData {
         /* Прокачка врагов */
         public static enemiesUpgrade():void
         {
-            let count = 0;
+            let count = 1;
             let personage: IPersonage;
             this.id_enemies.forEach((personageID: string) => {
                 personage = this.getPersonage(personageID);
-                personage.life = personage.life + (50 * count);
+                personage.life = personage.life + (75 * (count-1));
                 for(let i = 0; i < count; i++)
                 {
                     if(this.checkAccessPersonageUpgrade(personageID)===false){
