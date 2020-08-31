@@ -5,5 +5,5 @@ class Config {
     public static settingMusic:boolean = true;
     public static settingTutorial:boolean = true;
 
-    public static version:string = "1.0.4";
+    public static version:string = "1.0.5";
 }

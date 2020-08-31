@@ -1821,7 +1821,7 @@ var Config = /** @class */ (function () {
     Config.settingSound = true;
     Config.settingMusic = true;
     Config.settingTutorial = true;
-    Config.version = "1.0.4";
+    Config.version = "1.0.5";
     return Config;
 }());
 var Utilits;
@@ -2368,11 +2368,11 @@ var GameData;
         /* Прокачка врагов */
         Data.enemiesUpgrade = function () {
             var _this = this;
-            var count = 0;
+            var count = 1;
             var personage;
             this.id_enemies.forEach(function (personageID) {
                 personage = _this.getPersonage(personageID);
-                personage.life = personage.life + (50 * count);
+                personage.life = personage.life + (75 * (count - 1));
                 for (var i = 0; i < count; i++) {
                     if (_this.checkAccessPersonageUpgrade(personageID) === false) {
                         Utilits.Data.debugLog("NOT AVAILABLE - UPGRADE PERSONAGE CHARACTERISTICS", _this.getPersonage(personageID));
@@ -4566,7 +4566,7 @@ var MortalKombat;
             this.groupContent.addChild(this.enemiesLifebar);
             /* tutorial */
             this.tutorial = new Tutorial(this.game, 'Соберите 3-и фишки\nв ряд чтобы\nнанести удар');
-            this.tutorial.x = Constants.GAME_WIDTH;
+            this.tutorial.x = Constants.GAME_WIDTH + 50;
             this.tutorial.y = (Constants.GAME_HEIGHT - 175);
             this.groupContent.addChild(this.tutorial);
             if (Config.settingTutorial === true && GameData.Data.tournamentProgress == 0)
@@ -4887,7 +4887,7 @@ var MortalKombat;
                     }
                 }
                 else {
-                    if (this.persUser.id === Constants.ID_KITANA || this.persEnemies.id === Constants.ID_MILEENA)
+                    if (this.persUser.id === Constants.ID_KITANA || this.persUser.id === Constants.ID_MILEENA)
                         GameData.Data.userSound.key = Sounds.f_d_03;
                     else
                         GameData.Data.userSound.key = Sounds.m_d_03;
