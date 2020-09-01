@@ -2,9 +2,9 @@
     "id": "mileena",
     "name": "Mileena",
     "leg": 1,
-    "hand": 2,
-    "block": 2,
+    "hand": 1,
+    "block": 3,
     "uppercut": 1,
-    "twist": 1,
+    "twist": 2,
     "life": 200
 }

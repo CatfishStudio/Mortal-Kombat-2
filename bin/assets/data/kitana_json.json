@@ -4,7 +4,7 @@
     "leg": 1,
     "hand": 1,
     "block": 3,
-    "uppercut": 1,
+    "uppercut": 2,
     "twist": 1,
     "life": 200
 }
