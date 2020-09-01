@@ -81,7 +81,7 @@ module MortalKombat {
             this.userUpgradeCharacteristics.show(50, this.userUpgradeCharacteristics.y);
             this.enemyUpgradeCharacteristics.show(600, this.enemyUpgradeCharacteristics.y);
 
-            this.backButton = new Phaser.Button(this.game, -25, 5, Sheet.ButtonBackMini, this.onButtonClick, this, 1, 2, 2, 2);
+            this.backButton = new Phaser.Button(this.game, -25, 5, Sheet.ButtonBackMenuMini, this.onButtonClick, this, 1, 2, 2, 2);
             this.backButton.name = Constants.BACK_MENU;
             this.groupContent.addChild(this.backButton);
 
@@ -153,8 +153,9 @@ module MortalKombat {
                 
                 case Constants.BACK_MENU:
                     {
-                        if(GameData.Data.tournamentProgress === 0) this.game.state.start(Fighters.Name, true, false);
-                        else this.game.state.start(Menu.Name, true, false);
+                        //if(GameData.Data.tournamentProgress === 0) this.game.state.start(Fighters.Name, true, false);
+                        //else this.game.state.start(Menu.Name, true, false);
+                        this.game.state.start(Menu.Name, true, false);
                         break;
                     }
                 case Constants.SETTINGS:

@@ -1821,7 +1821,7 @@ var Config = /** @class */ (function () {
     Config.settingSound = true;
     Config.settingMusic = true;
     Config.settingTutorial = true;
-    Config.version = "1.0.5";
+    Config.version = "1.0.6";
     return Config;
 }());
 var Utilits;
@@ -4343,7 +4343,7 @@ var MortalKombat;
             this.tower.show(this.tower.x, 0);
             this.userUpgradeCharacteristics.show(50, this.userUpgradeCharacteristics.y);
             this.enemyUpgradeCharacteristics.show(600, this.enemyUpgradeCharacteristics.y);
-            this.backButton = new Phaser.Button(this.game, -25, 5, Sheet.ButtonBackMini, this.onButtonClick, this, 1, 2, 2, 2);
+            this.backButton = new Phaser.Button(this.game, -25, 5, Sheet.ButtonBackMenuMini, this.onButtonClick, this, 1, 2, 2, 2);
             this.backButton.name = Constants.BACK_MENU;
             this.groupContent.addChild(this.backButton);
             this.settingsButton = new Phaser.Button(this.game, (Constants.GAME_WIDTH / 2) - (255 / 2), 5, Sheet.ButtonSettings, this.onButtonClick, this, 1, 2, 2, 2);
@@ -4409,10 +4409,9 @@ var MortalKombat;
                     }
                 case Constants.BACK_MENU:
                     {
-                        if (GameData.Data.tournamentProgress === 0)
-                            this.game.state.start(MortalKombat.Fighters.Name, true, false);
-                        else
-                            this.game.state.start(MortalKombat.Menu.Name, true, false);
+                        //if(GameData.Data.tournamentProgress === 0) this.game.state.start(Fighters.Name, true, false);
+                        //else this.game.state.start(Menu.Name, true, false);
+                        this.game.state.start(MortalKombat.Menu.Name, true, false);
                         break;
                     }
                 case Constants.SETTINGS:
