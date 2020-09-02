@@ -1821,7 +1821,7 @@ var Config = /** @class */ (function () {
     Config.settingSound = true;
     Config.settingMusic = true;
     Config.settingTutorial = true;
-    Config.version = "1.0.6";
+    Config.version = "1.0.7";
     return Config;
 }());
 var Utilits;
@@ -2517,7 +2517,35 @@ var SocialVK = /** @class */ (function () {
         try {
             if (GameData.Data.tournamentProgress > 0) {
                 var postPers = GameData.Data.getPersonage(GameData.Data.id_enemies[GameData.Data.tournamentProgress - 1]);
-                VK.api("wall.post", { message: 'Я одержал победу в схватке с ' + postPers.name + ' в игре Mortal Kombat 2 Quest.\nДрузья присоединяйтесь к игре https://vk.com/app4693053', attachments: 'photo-62618339_457239049' });
+                if (postPers.id === Constants.ID_BARAKA)
+                    VK.api("wall.post", { message: 'Я одержал победу в схватке с ' + postPers.name + ' в игре Mortal Kombat 2 Quest.\nДрузья присоединяйтесь к игре https://vk.com/app4693053', attachments: 'photo-62618339_457239055' });
+                if (postPers.id === Constants.ID_GORO)
+                    VK.api("wall.post", { message: 'Я одержал победу в схватке с ' + postPers.name + ' в игре Mortal Kombat 2 Quest.\nДрузья присоединяйтесь к игре https://vk.com/app4693053', attachments: 'photo-62618339_457239056' });
+                if (postPers.id === Constants.ID_JAX)
+                    VK.api("wall.post", { message: 'Я одержал победу в схватке с ' + postPers.name + ' в игре Mortal Kombat 2 Quest.\nДрузья присоединяйтесь к игре https://vk.com/app4693053', attachments: 'photo-62618339_457239057' });
+                if (postPers.id === Constants.ID_JOHNYCAGE)
+                    VK.api("wall.post", { message: 'Я одержал победу в схватке с ' + postPers.name + ' в игре Mortal Kombat 2 Quest.\nДрузья присоединяйтесь к игре https://vk.com/app4693053', attachments: 'photo-62618339_457239058' });
+                if (postPers.id === Constants.ID_KITANA)
+                    VK.api("wall.post", { message: 'Я одержал победу в схватке с ' + postPers.name + ' в игре Mortal Kombat 2 Quest.\nДрузья присоединяйтесь к игре https://vk.com/app4693053', attachments: 'photo-62618339_457239059' });
+                if (postPers.id === Constants.ID_KUNGLAO)
+                    VK.api("wall.post", { message: 'Я одержал победу в схватке с ' + postPers.name + ' в игре Mortal Kombat 2 Quest.\nДрузья присоединяйтесь к игре https://vk.com/app4693053', attachments: 'photo-62618339_457239060' });
+                if (postPers.id === Constants.ID_LIUKANG)
+                    VK.api("wall.post", { message: 'Я одержал победу в схватке с ' + postPers.name + ' в игре Mortal Kombat 2 Quest.\nДрузья присоединяйтесь к игре https://vk.com/app4693053', attachments: 'photo-62618339_457239061' });
+                if (postPers.id === Constants.ID_MILEENA)
+                    VK.api("wall.post", { message: 'Я одержал победу в схватке с ' + postPers.name + ' в игре Mortal Kombat 2 Quest.\nДрузья присоединяйтесь к игре https://vk.com/app4693053', attachments: 'photo-62618339_457239062' });
+                if (postPers.id === Constants.ID_RAIDEN)
+                    VK.api("wall.post", { message: 'Я одержал победу в схватке с ' + postPers.name + ' в игре Mortal Kombat 2 Quest.\nДрузья присоединяйтесь к игре https://vk.com/app4693053', attachments: 'photo-62618339_457239063' });
+                if (postPers.id === Constants.ID_REPTILE)
+                    VK.api("wall.post", { message: 'Я одержал победу в схватке с ' + postPers.name + ' в игре Mortal Kombat 2 Quest.\nДрузья присоединяйтесь к игре https://vk.com/app4693053', attachments: 'photo-62618339_457239064' });
+                if (postPers.id === Constants.ID_SCORPION)
+                    VK.api("wall.post", { message: 'Я одержал победу в схватке с ' + postPers.name + ' в игре Mortal Kombat 2 Quest.\nДрузья присоединяйтесь к игре https://vk.com/app4693053', attachments: 'photo-62618339_457239065' });
+                if (postPers.id === Constants.ID_SHANGTSUNG)
+                    VK.api("wall.post", { message: 'Я одержал победу в схватке с ' + postPers.name + ' в игре Mortal Kombat 2 Quest.\nДрузья присоединяйтесь к игре https://vk.com/app4693053', attachments: 'photo-62618339_457239066' });
+                if (postPers.id === Constants.ID_SHAOKAHN)
+                    VK.api("wall.post", { message: 'Я одержал победу в схватке с ' + postPers.name + ' в игре Mortal Kombat 2 Quest.\nДрузья присоединяйтесь к игре https://vk.com/app4693053', attachments: 'photo-62618339_457239067' });
+                if (postPers.id === Constants.ID_SUBZERO)
+                    VK.api("wall.post", { message: 'Я одержал победу в схватке с ' + postPers.name + ' в игре Mortal Kombat 2 Quest.\nДрузья присоединяйтесь к игре https://vk.com/app4693053', attachments: 'photo-62618339_457239068' });
+                //VK.api("wall.post", { message: 'Я одержал победу в схватке с ' + postPers.name + ' в игре Mortal Kombat 2 Quest.\nДрузья присоединяйтесь к игре https://vk.com/app4693053', attachments: 'photo-62618339_457239049' });
             }
         }
         catch (e) {
@@ -2527,7 +2555,7 @@ var SocialVK = /** @class */ (function () {
     /* Пост на стену в соцсети */
     SocialVK.vkWallPostWin = function () {
         try {
-            VK.api("wall.post", { message: 'Примите поздравления! Вы победили Шао Кана в игре Mortal Kombat 2 Quest.\nДрузья присоединяйтесь к игре https://vk.com/app4693053', attachments: 'photo-62618339_457239049' });
+            VK.api("wall.post", { message: 'Примите поздравления! Вы победили Шао Кана в игре Mortal Kombat 2 Quest.\nДрузья присоединяйтесь к игре https://vk.com/app4693053', attachments: 'photo-62618339_457239069' });
         }
         catch (e) {
             console.log(e);
@@ -4206,7 +4234,6 @@ var MortalKombat;
             /* panel icons */
             this.panelIcons = new PanelIcons(this.game, this.groupFighters);
             /* tutorial */
-            //this.tutorial = new Tutorial(this.game, 'Нажмите на иконку\nбойца и на кнопку\n"Выбрать бойца');
             this.tutorial = new Tutorial(this.game, 'Выбери бойца\nсудьба которого\nстать избранным.');
             this.tutorial.x = Constants.GAME_WIDTH;
             this.tutorial.y = (Constants.GAME_HEIGHT - 175);
@@ -4409,8 +4436,6 @@ var MortalKombat;
                     }
                 case Constants.BACK_MENU:
                     {
-                        //if(GameData.Data.tournamentProgress === 0) this.game.state.start(Fighters.Name, true, false);
-                        //else this.game.state.start(Menu.Name, true, false);
                         this.game.state.start(MortalKombat.Menu.Name, true, false);
                         break;
                     }
