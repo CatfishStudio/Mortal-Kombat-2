@@ -292,7 +292,7 @@ module GameData {
         }
 
         /* Расчитать урон */
-        public static calcDamage(pers:GameData.IPersonage, block:boolean, hitType:any, hitCount:number):number
+        public static calcDamage(pers:GameData.IPersonage, statusBlock:boolean, parameterBlock:number, hitType:any, hitCount:number):number
         {
             let damage:number = 0;
             
@@ -311,8 +311,8 @@ module GameData {
             if(hitType === Constants.UPPERCUT && hitCount === 4) damage = (pers.uppercut + 1) * Constants.DAMAGE_UPPERCUT;
             if(hitType === Constants.UPPERCUT && hitCount >= 5) damage = (pers.uppercut + 2) * Constants.DAMAGE_UPPERCUT;
 
-            if(block === true){
-                damage = damage - (pers.block * Constants.DAMAGE_BLOCK);
+            if(statusBlock === true){
+                damage = damage - (parameterBlock * Constants.DAMAGE_BLOCK);
                 if(damage < 0) damage = 0;
             }
             return damage;

@@ -1821,7 +1821,7 @@ var Config = /** @class */ (function () {
     Config.settingSound = true;
     Config.settingMusic = true;
     Config.settingTutorial = true;
-    Config.version = "1.0.8";
+    Config.version = "1.0.9";
     return Config;
 }());
 var Utilits;
@@ -2455,7 +2455,7 @@ var GameData;
             Utilits.Data.debugLog('LEVELS:', this.levels);
         };
         /* Расчитать урон */
-        Data.calcDamage = function (pers, block, hitType, hitCount) {
+        Data.calcDamage = function (pers, statusBlock, parameterBlock, hitType, hitCount) {
             var damage = 0;
             if (hitType === Constants.BLOCK)
                 return damage;
@@ -2483,8 +2483,8 @@ var GameData;
                 damage = (pers.uppercut + 1) * Constants.DAMAGE_UPPERCUT;
             if (hitType === Constants.UPPERCUT && hitCount >= 5)
                 damage = (pers.uppercut + 2) * Constants.DAMAGE_UPPERCUT;
-            if (block === true) {
-                damage = damage - (pers.block * Constants.DAMAGE_BLOCK);
+            if (statusBlock === true) {
+                damage = damage - (parameterBlock * Constants.DAMAGE_BLOCK);
                 if (damage < 0)
                     damage = 0;
             }
@@ -4625,7 +4625,7 @@ var MortalKombat;
             else {
                 this.playUserEnemiesSound(statusAction, hitType);
                 if (statusAction === Field.ACTION_PLAYER) { // Противник получает урон
-                    var damageValue = GameData.Data.calcDamage(this.persUser, this.animEnemies.block, hitType, hitCount);
+                    var damageValue = GameData.Data.calcDamage(this.persUser, this.animEnemies.block, this.persEnemies.block, hitType, hitCount);
                     if (hitType === Constants.HAND)
                         this.animUser.changeAnimation(Constants.ANIMATION_TYPE_HIT_HAND);
                     if (hitType === Constants.LEG)
@@ -4645,7 +4645,7 @@ var MortalKombat;
                     this.enemiesLifebar.lifeUpdate(this.persEnemies.life);
                 }
                 else { // Игрок получает урон
-                    var damageValue = GameData.Data.calcDamage(this.persEnemies, this.animUser.block, hitType, hitCount);
+                    var damageValue = GameData.Data.calcDamage(this.persEnemies, this.animUser.block, this.persUser.block, hitType, hitCount);
                     if (hitType === Constants.HAND)
                         this.animEnemies.changeAnimation(Constants.ANIMATION_TYPE_HIT_HAND);
                     if (hitType === Constants.LEG)
